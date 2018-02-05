@@ -1,0 +1,252 @@
+setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/ElectionsEconomy")
+library("arm")
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
+library("ggplot2")
+library("bayesplot")
+theme_set(bayesplot::theme_default(base_family = "sans"))
+
+
+## Graphing the bread and peace model
+
+hibbs <- read.table("hibbs.dat", header=TRUE)
+colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
+
+
+pdf("hibbsdots.pdf", height=4.5, width=7.5)
+n <- nrow(hibbs)
+par(mar=c(0,0,1.2,0))
+left <- -.3
+right <- -.28
+center <- -.07
+f <- .17
+plot(c(left-.31,center+.23), c(-3.3,n+3), type="n", bty="n", xaxt="n", yaxt="n", xlab="", ylab="", xaxs="i", yaxs="i")
+mtext("Forecasting elections from the economy", 3, 0, cex=1.2)
+with(hibbs, {
+  for (i in 1:n){
+    ii <- order(growth)[i]
+    text(left-.3, i, paste (inc[ii], " vs. ", other[ii], " (", year[ii], ")", sep=""), adj=0, cex=.8)
+    points(center+f*(vote[ii]-50)/10, i, pch=20)
+    if (i>1){
+      if (floor(growth[ii]) != floor(growth[order(growth)[i-1]])){
+        lines(c(left-.3,center+.22), rep(i-.5,2), lwd=.5, col="darkgray")
+      }
+    }
+  }
+})
+lines(center+f*c(-.65,1.3), rep(0,2), lwd=.5)
+for (tick in seq(-.5,1,.5)){
+  lines(center + f*rep(tick,2), c(0,-.2), lwd=.5)
+  text(center + f*tick, -.5, paste(50+10*tick,"%",sep=""), cex=.8)
+}
+lines(rep(center,2), c(0,n+.5), lty=2, lwd=.5)
+text(center+.05, n+1.5, "Incumbent party's share of the popular vote", cex=.8)
+lines(c(center-.088,center+.19), rep(n+1,2), lwd=.5)
+text(right, n+1.5, "Income growth", adj=.5, cex=.8)
+lines(c(right-.05,right+.05), rep(n+1,2), lwd=.5)
+text(right, 16.15, "more than 4%", cex=.8)
+text(right, 14, "3% to 4%", cex=.8)
+text(right, 10.5, "2% to 3%", cex=.8)
+text(right, 7, "1% to 2%", cex=.8)
+text(right, 3.5, "0% to 1%", cex=.8)
+text(right, .85, "negative", cex=.8)
+text(left-.3, -2.3, "Above matchups are all listed as incumbent party's candidate vs.\ other party's candidate.\nIncome growth is a weighted measure over the four years preceding the election.  Vote share excludes third parties.", adj=0, cex=.7)
+dev.off()
+
+pdf("hibbsscatter.pdf", height=4.5, width=5)
+par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
+plot(c(-.7, 4.5), c(43,63), type="n", xlab="Avg recent growth in personal income", ylab="Incumbent party's vote share", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Forecasting the election from the economy      ", bty="l")
+axis(1, 0:4, paste(0:4,"%",sep=""), mgp=c(2,.5,0))
+axis(2, seq(45,60,5), paste(seq(45,60,5),"%",sep=""), mgp=c(2,.5,0))
+with(hibbs, text(growth, vote, year, cex=.8))
+abline(50, 0, lwd=.5, col="gray")
+dev.off()
+
+M1 <- lm(vote ~ growth, data = hibbs)
+display(M1)
+
+pdf("hibbsline.pdf", height=4.5, width=5)
+par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
+plot(c(-.7, 4.5), c(43,63), type="n", xlab="Avg recent growth in personal income", ylab="Incumbent party's vote share", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and linear fit", bty="l")
+axis(1, 0:4, paste(0:4,"%",sep=""), mgp=c(2,.5,0))
+axis(2, seq(45,60,5), paste(seq(45,60,5),"%",sep=""), mgp=c(2,.5,0))
+with(hibbs, points(growth, vote, pch=20))
+abline(50, 0, lwd=.5, col="gray")
+abline(coef(M1), col="gray15")
+text(2.7, 53.5, paste("y =", fround(coef(M1)[1],1), "+", fround(coef(M1)[2],1), "x"), adj=0, col="gray15")
+dev.off()
+
+
+print(coef(M1)["growth"] + c(-1,1)*qt(.975,13)*se.coef(M1)["growth"])
+
+## Prediction given 2% growth
+pdf("hibbspredict.pdf", height=3.5, width=6)
+par(mar=c(3,3,3,1), mgp=c(1.7,.5,0), tck=-.01)
+mu <- 52.3
+sigma <- 3.8
+curve (dnorm(x,mu,sigma), ylim=c(0,.11), from=35, to=70, bty="n",
+  xaxt="n", yaxt="n", yaxs="i",
+  xlab="Clinton share of the two-party vote", ylab="",
+  main="Probability forecast of Hillary Clinton vote share in 2016,\nbased on 2% rate of economic growth")
+x <- seq (50,65,.1)
+polygon(c(min(x),x,max(x)), c(0,dnorm(x,mu,sigma),0),
+  col="darkgray", border="black")
+axis(1, seq(40,65,5), paste(seq(40,65,5),"%",sep=""))
+text(51, .035, "Predicted\n73% chance of\nClinton victory", adj=0)
+dev.off()
+
+## Use Stan
+
+## Fit the model
+M2 <- stan_glm(vote ~ growth, data = hibbs)
+print(M2)
+prior_summary(M2)
+
+## Extract the simulations
+sims <- as.matrix(M2)
+a <- sims[,1]
+b <- sims[,2]
+sigma <- sims[,3]
+n_sims <- nrow(sims)
+
+print(median(a))
+print(1.483*median(abs(a - median(a))))
+
+## Do a prediction "manually"
+y_hat <- a + 2.0 * b
+y_pred <- rnorm(n_sims, y_hat, sigma)
+
+Median <- median(y_pred)
+MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
+win_prob <- mean(y_pred > 50)
+cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
+  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="")
+
+
+pdf("hibbspredict_bayes_1.pdf", height=4, width=10)
+par(mfrow=c(1,2), mar=c(3,2,3,0), mgp=c(1.5,.5,0), tck=-.01)
+hist(a, ylim=c(0,1000), xlab="a", ylab="", main="Posterior simulations of the intercept, a,\nand posterior median +/- 1 and 2 std err", cex.axis=.9, cex.lab=.9, yaxt="n", col="gray90")
+abline(v=median(a), lwd=2)
+arrows(median(a) - 1.483*median(abs(a - median(a))), 550, median(a) + 1.483*median(abs(a - median(a))), 550, length=.1, code=3, lwd=2)
+arrows(median(a) - 2*1.483*median(abs(a - median(a))), 250, median(a) + 2*1.483*median(abs(a - median(a))), 250, length=.1, code=3, lwd=2)
+hist(b, ylim=c(0,1000), xlab="b", ylab="", main="Posterior simulations of the slope, b,\nand posterior median +/- 1 and 2 std err", cex.axis=.9, cex.lab=.9, yaxt="n", col="gray90")
+abline(v=median(b), lwd=2)
+arrows(median(b) - 1.483*median(abs(b - median(b))), 550, median(b) + 1.483*median(abs(b - median(b))), 550, length=.1, code=3, lwd=2)
+arrows(median(b) - 2*1.483*median(abs(b - median(b))), 250, median(b) + 2*1.483*median(abs(b - median(b))), 250, length=.1, code=3, lwd=2)
+dev.off()
+
+
+pdf("hibbspredict_bayes_2a.pdf", height=4.5, width=5)
+par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
+plot(a, b, xlab="a", ylab="b", main="Posterior draws of the regression coefficients a, b          ", bty="l", pch=20, cex=.2)
+dev.off()
+
+
+# ggplot version
+ggplot(data.frame(a = sims[, 1], b = sims[, 2]), aes(a, b)) +
+  geom_point(size = 1) +
+  labs(title = "Posterior draws of the regression coefficients a, b")
+
+
+
+pdf("hibbspredict_bayes_2b.pdf", height=4.5, width=5)
+par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
+plot(c(-.7, 4.5), c(43,63), type="n", xlab="Avg recent growth in personal income", ylab="Incumbent party's vote share", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and 100 posterior draws of the line, y = a + bx           ", bty="l")
+axis(1, 0:4, paste(0:4,"%",sep=""), mgp=c(2,.5,0))
+axis(2, seq(45,60,5), paste(seq(45,60,5),"%",sep=""), mgp=c(2,.5,0))
+for (i in 1:100){
+  abline(a[i], b[i], lwd=.5)
+}
+abline(50, 0, lwd=.5, col="gray")
+with(hibbs, {
+  points(growth, vote, pch=20, cex=1.5, col="white")
+  points(growth, vote, pch=20)
+})
+dev.off()
+
+# ggplot version
+ggplot(hibbs, aes(x = growth, y = vote)) +
+  geom_abline(
+    intercept = sims[1:100, 1],
+    slope = sims[1:100, 2],
+    size = 0.1
+  ) +
+  geom_abline(
+    intercept = mean(sims[, 1]),
+    slope = mean(sims[, 2])
+  ) +
+  geom_point(color = "white", size = 3) +
+  geom_point(color = "black", size = 2) +
+  labs(
+    x = "Avg recent growth in personal income",
+    y ="Incumbent party's vote share",
+    title = "Data and 100 posterior draws of the line, y = a + bx"
+  ) +
+  scale_x_continuous(
+    limits = c(-.7, 4.5),
+    breaks = 0:4,
+    labels = paste(0:4, "%", sep = "")
+  ) +
+  scale_y_continuous(
+    limits = c(43, 63),
+    breaks = seq(45, 60, 5),
+    labels = paste(seq(45, 60, 5), "%", sep = "")
+  )
+
+
+## Add more uncertainty
+x <- rnorm(n_sims, 2.0, 0.3)
+y_hat <- a + b*x
+y_pred <- rnorm(n_sims, y_hat, sigma)
+
+Median <- median(y_pred)
+MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
+win_prob <- mean(y_pred > 50)
+cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
+  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="")
+
+## Use the posterior_predict function from rstanarm
+new_data <- data.frame(growth = 2.0)
+y_pred <- posterior_predict(M2, new_data)
+
+new_data_grid <- data.frame(growth = seq(-2.0, 4.0, 0.5))
+y_pred_grid <- posterior_predict(M2, new_data_grid)
+
+
+pdf("hibbspredict_bayes_3.pdf", height=3.5, width=6)
+par(mar=c(3,3,3,1), mgp=c(1.7,.5,0), tck=-.01)
+hist(y_pred, breaks=seq(floor(min(y_pred)), ceiling(max(y_pred)),1), xlim=c(35,70), xaxt="n", yaxt="n", yaxs="i", bty="n",
+  xlab="Clinton share of the two-party vote", ylab="",
+  main="Bayesian simulations of Hillary Clinton vote share,\nbased on 2% rate of economic growth")
+axis(1, seq(40,65,5), paste(seq(40,65,5),"%",sep=""))
+dev.off()
+
+# ggplot version (using bayesplot's mcmc_hist)
+mcmc_hist(y_pred, binwidth = 1) +
+  xlim(35, 70) +
+  labs(
+    x ="Clinton share of the two-party vote",
+    title = "Bayesian simulations of Hillary Clinton vote share,\nbased on 2% rate of economic growth"
+  ) +
+  theme(axis.line.y = element_blank())
+
+
+## Hypothetical forecast and data
+
+theta_hat_prior <- 0.524
+se_prior <- 0.041
+
+n <- 400
+y <- 190
+theta_hat_data <- y/n
+se_data <- sqrt((y/n)*(1-y/n)/n)
+
+theta_hat_bayes <-
+  (theta_hat_prior / se_prior^2 + theta_hat_data / se_data^2) /
+  (1 / se_prior^2 + 1 / se_data^2)
+
+se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
+
+## Ramp up the data variance
+se_data <- .075
+print((theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2)/(1/se_prior^2 + 1/se_data^2))

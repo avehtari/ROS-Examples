@@ -1,0 +1,80 @@
+setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/ElectionsEconomy")
+source("hibbs.R")
+
+## contour plots etc of simple likelihoods
+
+trans3d <- function(x,y,z, pmat) {
+       tr <- cbind(x,y,z,1) %*% pmat
+       list(x = tr[,1]/tr[,4], y= tr[,2]/tr[,4])
+     }
+
+# 2 parameters
+
+M1 <- lm(vote ~ growth)
+display(M1)
+summ <- summary(M1)
+
+dmvnorm <- function (y, mu, Sigma, log=FALSE){
+  # multivariate normal density
+  n <- nrow(Sigma)
+  logdens <- -(n/2)*log(2*pi*det(Sigma)) - t(y-mu)%*%solve(Sigma)%*%(y-mu)/2
+  return (logdens)
+#  return (ifelse (log, logdens, exp(logdens)))
+}
+
+rng.x <- summ$coef[1,1] + summ$coef[1,2]*c(-4,4)
+rng.y <- summ$coef[2,1] + summ$coef[2,2]*c(-4,4)
+x <- seq(rng.x[1], rng.x[2], length=30)
+y <- seq(rng.y[1], rng.y[2], length=30)
+z <- array(NA, c(length(x),length(y)))
+for (i.x in 1:length(x))
+  for (i.y in 1:length(y))
+    z[i.x,i.y] <- dmvnorm(c(x[i.x],y[i.y]), summ$coef[,1], summ$cov.unscaled*summ$sigma^2, log=TRUE)
+z <- exp(z-max(z))
+
+pdf("hill_2a.pdf", height=4, width=5)
+par(mar=c(0, 0, 0, 0))
+persp(x, y, z,
+  xlim=c(rng.x[1]-.15*(rng.x[2]-rng.x[1]), rng.x[2]), ylim=c(rng.y[1]-.15*(rng.y[2]-rng.y[1]), rng.y[2]),
+  xlab="a", ylab="b", zlab="likelihood", d=2, box=FALSE, axes=TRUE, expand=.6) -> res
+text(trans3d(mean(rng.x), rng.y[1]-.12*(rng.y[2]-rng.y[1]), 0, pm = res), expression(beta[0]))
+text(trans3d(rng.x[1]-.08*(rng.x[2]-rng.x[1]), mean(rng.y), 0, pm = res), expression(beta[1]))
+mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
+dev.off()
+
+pdf("hill_2b.pdf", height=5, width=5)
+par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a) %+-% 1, " std err,  ", hat(b) %+-% 1, " std err)")), type="n")
+lines(rep(summ$coef[1,1], 2), summ$coef[2,1] + c(-1,1)*summ$coef[2,2], col="gray20")
+lines(summ$coef[1,1] + c(-1,1)*summ$coef[1,2], rep(summ$coef[2,1], 2), col="gray20")
+points(summ$coef[1,1], summ$coef[2,1], pch=19)
+dev.off()
+
+
+pdf("hill_2c.pdf", height=5, width=5)
+par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a), ", ", hat(b), ") and covariance matrix")), type="n")
+points(summ$coef[1,1], summ$coef[2,1], pch=19)
+rho <- summ$cov.unscaled[1,2]/sqrt(summ$cov.unscaled[1,1]*summ$cov.unscaled[2,2])
+aa <- seq(-1,1,length=500)
+bb <- sqrt(1-aa^2)
+xx <- summ$coef[1,1] + summ$coef[1,2]*(aa*sqrt(1+rho)-bb*sqrt(1-rho))
+yy <- summ$coef[2,1] + summ$coef[2,2]*(aa*sqrt(1+rho)+bb*sqrt(1-rho))
+lines (xx, yy)
+xx <- summ$coef[1,1] + summ$coef[1,2]*(aa*sqrt(1+rho)+bb*sqrt(1-rho))
+yy <- summ$coef[2,1] + summ$coef[2,2]*(aa*sqrt(1+rho)-bb*sqrt(1-rho))
+lines (xx, yy)
+dev.off()
+
+
+M3 <- stan_glm(vote ~ growth, prior=NULL, prior_intercept=NULL, prior_aux=NULL)
+sims <- as.data.frame(M3)
+a <- sims[,1]
+b <- sims[,2]
+
+
+pdf("hill_3c.pdf", height=5, width=5)
+par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(rng.x, rng.y, xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n")
+points(a, b, pch=20, cex=.2)
+dev.off()

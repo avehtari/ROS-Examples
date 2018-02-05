@@ -1,0 +1,13 @@
+The following variables are included in the NSW data set from the Dehejia/Wahba paper.
+The dataset you are given only includes
+
+1.	sample: 1 = NSW; 2 = CPS; 3 = PSID.
+2.	treat: 1 = experimental treatment group (NSW); 0 = comparison group (either from CPS or PSID)   Treatment took place in 1976/1977.
+3.	age  = age in years
+4.	educ = years of schooling
+5.	black: 1 if black; 0 otherwise.
+6.	hisp: 1 if Hispanic; 0 otherwise.
+7.	married: 1 if married; 0 otherwise.
+8.	nodegree: 1 if no high school diploma; 0 otherwise.
+9.	re74, re75, re78: real earnings in 1974, 1975 and 1978
+10.	educ_cat = 4 category education variable (1=<hs, 2=hs, 3=sm college, 4=college)

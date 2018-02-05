@@ -1,0 +1,10 @@
+"nom" "resultats 00h45" "resultats 10h00" "rapport"
+"Benoit Hamon" 454041 582014 0.7801
+"Manuel Valls" 388603 498114 0.7801
+"Arnaud Montebourg" 218885 280519 0.7803
+"Vincent Peillon"  85575 109678 0.7802
+"Francois de Rugy" 48521 62124 0.7801
+"Sylvia Pinel" 24657 31542 0.7817
+"Jean-Luc Bennahmias" 12609 16172 0.7797
+"Blancs et nuls" 16235 20815 0.7800
+"Votants" 1249126 1600978 0.780

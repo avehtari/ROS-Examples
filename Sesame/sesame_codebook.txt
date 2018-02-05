@@ -1,0 +1,53 @@
+Code book with variable names for Sesame Street data
+
+id : subject identification number
+
+site :     1 = Three to five year old disadvantaged children from inner city areas in various parts of the country.
+           2 = Four year old advantaged suburban children.
+           3 = Advantaged rural children.
+           4 = Disadvantaged rural children.
+           5 = Disadvantaged Spanish speaking children.
+
+sex   male=1, female=2
+
+age   age in months
+
+viewcat  frequency of viewing
+              1=rarely watched the show
+              2=once or twice a week
+              3=three to five times a week
+              4=watched the show on average more than 5 times a week
+
+setting:    setting in which Sesame Street was viewed, 1=home 2=school
+
+viewenc :  treatment condition    1=child encouraged to watch,  2=child not encouraged to watch
+
+encour:  treatment condition 0=child not encouraged to watch, 1=child encouraged to watch
+
+regular:  frequency of viewing:  0=rarely watched the show, 1= watched once/week or greater
+
+prebody :  pretest on knowledge of body parts (scores range from 0-32)
+
+prelet :  pretest on letters (scores range from 0-58)
+
+preform : pretest on forms (scores range from 0-20)
+
+prenumb : pretest on numbers (scores range from 0-54)
+
+prerelat : pretest on relational terms (scores range from 0-17)
+
+preclasf : pretest on classification skills
+
+postbody : posttest on knowledge of body parts (0-32)
+
+postlet :  posttest on letters (0-58)
+
+postform :  posttest on forms (0-20)
+
+postnumb : posttest on numbers (0-54)
+
+postrelat : posttest on relational terms (0-17)
+
+postclasf:  posttest on classification skills
+
+peabody:  mental age score obtained from administration of the Peabody Picture Vocabulary test as a pretest measure of vocabulary maturity
