@@ -20,8 +20,8 @@ for (s in 1:n_sims){
   n_girls[s] <- rbinom(1, 400, 0.488)}
 
 #' **Plot for the book**
-#+ girls1.pdf, eval=FALSE, include=FALSE
-pdf("girls1.pdf", height=3.5, width=5.5)
+#+ eval=FALSE, include=FALSE
+pdf(here("ProbabilitySimulation/figs","girls1.pdf") height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist(n_girls, main="", xaxt="n", yaxt="n")
@@ -66,8 +66,8 @@ for (s in 1:n_sims){
 }
 
 #' **Plot for the book**
-#+ girls2.pdf, eval=FALSE, include=FALSE
-pdf("girls2.pdf", height=3.5, width=5.5)
+#+ eval=FALSE, include=FALSE
+pdf(here("ProbabilitySimulation/figs","girls2.pdf") height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist (n_girls, main="", xaxt="n", yaxt="n", mgp=c(1.5,.5,0))
@@ -84,8 +84,8 @@ y3 <- rbinom(n_sims, 20, 0.6)
 y4 <- rpois(n_sims, 5)
 
 #' **Plot for the book**
-#+ 4dists.pdf, eval=FALSE, include=FALSE
-pdf("4dists.pdf", height=7, width=10)
+#+ eval=FALSE, include=FALSE
+pdf(here("ProbabilitySimulation/figs","4dists.pdf") height=7, width=10)
 #+
 par(mar=c(4,3,4,3),  mgp=c(1.5,.5,0), tck=-.01)
 par(mfrow=c(2,2))

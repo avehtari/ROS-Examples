@@ -51,7 +51,7 @@ z <- exp(z-max(z))
 
 
 #' **More graphs for the bread and peace model**
-#+ hill_2a.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
 #+
 par(mar=c(0, 0, 0, 0))
@@ -64,7 +64,7 @@ mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ hill_2b.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
@@ -75,7 +75,7 @@ points(summ$coef[1,1], summ$coef[2,1], pch=19)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ hill_2c.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
@@ -99,7 +99,7 @@ sims <- as.data.frame(M3)
 a <- sims[,1]
 b <- sims[,2]
 
-#+ hill_3c.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)

@@ -45,7 +45,7 @@ for (i in 1:n_plotted){
 
 ## Graph
 
-pdf("sampledata4.pdf", height=5, width=8)
+pdf(here("Storable/figs","sampledata4.pdf") height=5, width=8)
 par(mfrow=c(2,3), mgp=c(1.5,.5,0), tck=-.01)
 for (i in 1:n_plotted){
   sims <- as.matrix(fit[[i]])

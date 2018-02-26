@@ -29,8 +29,8 @@ lm_2 <- stan_glm(final ~ midterm, data=exams)
 print(lm_2)
 
 #' **Plot for the book**
-#+ FakeMidtermFinal1.pdf, eval=FALSE, include=FALSE
-pdf("FakeMidtermFinal1.pdf", height=4, width=4)
+#+ eval=FALSE, include=FALSE
+pdf(here("FakeMidtermFinal/figs","FakeMidtermFinal1.pdf"), height=4, width=4)
 #+
 par(mar=c(3, 3, 2, 1), mgp=c(1.7, .5, 0), tck=-.01)
 par(pty="s")

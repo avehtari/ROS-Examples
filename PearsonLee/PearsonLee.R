@@ -28,7 +28,7 @@ display(lm_1)
 ab_hat <- coef(lm_1)
 
 #' **Plots for the paper/book**
-#+ PearsonLee1.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, 1), mgp=c(1.7, .5, 0), tck=-.01)
@@ -45,7 +45,7 @@ for (i in x){
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ PearsonLee2.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
 #+
 mother_height_jitt <- mother_height + runif(n, -0.5, 0.5)
@@ -64,7 +64,7 @@ for (i in x){
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ PearsonLee3a.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # plot for the paper/book
 pdf(here("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
 #+
@@ -86,7 +86,7 @@ mtext("Mothers' and daughters' heights,\naverage of data, and fitted regression 
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ PearsonLee3b.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # plot for the paper/book
 pdf(here("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
 #+
@@ -110,7 +110,7 @@ mtext("The fitted regression line and the average of the data      ", side=3, li
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ PearsonLee4a.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # plot for the paper/book
 pdf(here("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
 #+
@@ -128,7 +128,7 @@ mtext(paste("The line, y =", round(ab_hat[1]), "+", fround(ab_hat[2], 2), "x"), 
 dev.off()
 
 # plot for the paper/book
-#+ PearsonLee4b.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)

@@ -31,8 +31,8 @@ fit <- lm(y ~ x, data=fake)
 display(fit)
 
 #' **Plot for the book**
-#+ simple.pdf, eval=FALSE, include=FALSE
-pdf("simple.pdf", height=4, width=5.5)
+#+ eval=FALSE, include=FALSE
+pdf(here("Simplest/figs","simple.pdf") height=4, width=5.5)
 #+
 par(mar=c(3,3,1,1), mgp=c(1.7,.5,0), tck=-.01)
 plot(fake$x, fake$y, main="Data and fitted regression line", bty="l", pch=20)
@@ -81,8 +81,8 @@ fit <- lm(y ~ x)
 display(fit)
 
 #' **Plot for the book**
-#+ simplest_1.pdf, eval=FALSE, include=FALSE
-pdf("simplest_1.pdf", height=4, width=5)
+#+ eval=FALSE, include=FALSE
+pdf(here("Simplest/figs","simplest_1.pdf") height=4, width=5)
 #+
 par(mar=c(3,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 plot(x, y, xlab="Indicator, x", ylab="y", bty="l", xaxt="n", main="Regression on an indicator is the same\nas computing a difference in means",  pch=19, cex=.5)

@@ -11,7 +11,7 @@ for (i in 1:n_rep){
   conf[i,] <- y + c(-2, -.67, .67, 2) * sigma
 }
 
-pdf("coverage.pdf", height=4, width=8)
+pdf(here("Coverage/figs","coverage.pdf") height=4, width=8)
 par(mar=c(3,3,0,0), mgp=c(1.5,.5,0), tck=-.01)
 plot(c(-2, n_rep+2), range(conf), bty="l", xlab="Simulation", ylab="Estimate, 50%, and 95% confidence interval", xaxs="i", yaxt="n", type="n")
 axis(2, seq(-10,20,10))

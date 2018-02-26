@@ -34,14 +34,14 @@ a_hat <- median(sims2$a)
 b_hat <- median(sims2$b)
 
 ## Plots
-pdf("golf0.pdf", height=5, width=7)
+pdf(here("Golf/figs","golf0.pdf") height=5, width=7)
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Data on putts in pro golf")
 segments(x, y/n + se, x, y/n-se, lwd=.5)
 text(x + .4, y/n + se + .02, paste(y, "/", n,sep=""), cex=.6, col="gray40") 
 dev.off()
 
-pdf("golf1.pdf", height=5, width=7)
+pdf(here("Golf/figs","golf1.pdf") height=5, width=7)
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Fitted logistic regression")
 segments(x, y/n + se, x, y/n-se, lwd=.5)
@@ -49,7 +49,7 @@ curve(invlogit(a_hat + b_hat*x), from=0, to=1.1*max(x), add=TRUE)
 text(10.6, .57, paste("Logistic regression,\n    a = ", fround(a_hat, 2), ", b = ", fround(b_hat, 2), sep=""))
 dev.off()
 
-pdf("golf2.pdf", height=5, width=7)
+pdf(here("Golf/figs","golf2.pdf") height=5, width=7)
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Custom nonlinear model fit in Stan")
 segments(x, y/n + se, x, y/n-se, lwd=.5)
@@ -60,7 +60,7 @@ text(18.5, .26, paste("Geometry-based model,\n sigma = ", fround(sigma_hat*180/p
 dev.off()
 
 
-pdf("golf2a.pdf", height=5, width=7)
+pdf(here("Golf/figs","golf2a.pdf") height=5, width=7)
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Custom nonlinear model fit in Stan")
 segments(x, y/n + se, x, y/n-se, lwd=.5)
@@ -73,7 +73,7 @@ for (s in sample(n_sims, 20)){
 text(18.5, .26, "Geometry-based model,\n post draws of sigma")
 dev.off()
 
-pdf("golf3.pdf", height=5, width=7)
+pdf(here("Golf/figs","golf3.pdf") height=5, width=7)
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Two models fit to the golf putting data")
 segments(x, y/n + se, x, y/n-se, lwd=.5)

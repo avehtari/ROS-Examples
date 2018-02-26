@@ -10,7 +10,7 @@ unemp$y <- unemp$unemployed.pct
 
 ## plot the unemployment rate
 
-pdf("unemployment1.pdf", height=3, width=4.5)
+pdf(here("Unemployment/figs","unemployment1.pdf") height=3, width=4.5)
 par(mar=c(3,3,1,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(unemp$year, unemp$y, type="l", ylab="Unemployment rate", xlab="Year", yaxs="i",
   ylim=c(0, max(unemp$y)*1.05), xaxt="n", yaxt="n", bty="l")
@@ -35,7 +35,7 @@ n_sims <- nrow(y_rep)
 
 ## plot the simulated unemployment rate series
 
-pdf("unemployment2.pdf", height=4.5, width=7.5)
+pdf(here("Unemployment/figs","unemployment2.pdf") height=4.5, width=7.5)
 par(mar=c(1,1,3,.1), mgp=c(2,.5,0), tck=-.01)
 par(mfrow=c(3,5))
 for (s in sort(sample(n_sims, 15))){

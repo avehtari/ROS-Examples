@@ -1,13 +1,26 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Congress")
+#' ---
+#' title: "Regression and Other Stories: Congress"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Predictive uncertainty for congressional elections
+#' 
+#' -------------
+#' 
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 library("arm")
 library("rstanarm")
+options(mc.cores = parallel::detectCores())
 
-# Simulation example from section 7.2 of ARM
-
+#' **Load and pre-process data**
 congress <- vector("list", 49)
 for (i in 1:49){
   year <- 1896 + 2*(i-1)
-  file <- paste("cong3/", year, ".asc", sep="")
+  file <- here("Congress/data",paste(year, ".asc", sep=""))
   data_year <- matrix(scan(file), byrow=TRUE, ncol=5)
   data_year <- cbind(rep(year, nrow(data_year)), data_year)
   congress[[i]] <- data_year
@@ -39,8 +52,7 @@ contested90 <- v90>.1 & v90<.9
 inc90 <- cong90[,4]
 inc90[inc90 == -9] <- 0
 
-# cleaned
-
+#' Impute uncontested elections
 uncontested_adj <- function(vote){
   vote[vote < 0.1] <- 0.25
   vote[vote > 0.9] <- 0.75
@@ -50,73 +62,27 @@ v86_adj <- uncontested_adj(v86)
 v88_adj <- uncontested_adj(v88)
 v90_adj <- uncontested_adj(v90)
 
-# regression predicting 1988 from 1986
-
+#' **Regression predicting 1988 from 1986**
 data_88 <- data.frame(vote=v88_adj, past_vote=v86_adj, inc=inc88)
 fit_88 <- stan_glm(vote ~ past_vote + inc, data=data_88)
 print(fit_88, digits=2)
 
+#' **Simulation for inferences and predictions of new data points**</br>
+#' **Predict from 1988 to 1990**
 data_90 <- data.frame(past_vote=v88_adj, incumbency=inc90)
+#' **Simulate predictive simulations of the vector of new outcomes**
 pred_90 <- posterior_predict(fit_88, data=data_90)
 
-
-
-# pull out the estimate of beta, its covariance matrix, and the estimated residual sd
-
-n <- sum(!is.na(vote_88+vote_86+incumbency_88))
-k <- 3
-beta_hat <- coef(fit_88)
-V_beta <- summary(fit_88,correlation=TRUE)$cov.unscaled
-sd_hat <- sigma.hat(fit_88)
-
-# Crude estimate of how many Dems will win
-
-n_new <- length(v88)
-v88_adjusted <- ifelse(v88<.1, .25, ifelse(v88>.9, .75, v88))
-v88_adjusted <- ifelse(is.na(v88), .5, v88_adjusted)
-X_new <- cbind(rep(1,n_new), v88_adjusted, inc90)
-y_hat_new <- as.vector(beta_hat %*% t(X_new))
-dems_new_crude <- sum(y_hat_new[!is.na(v90)] > .5) +
-  .5*sum(y_hat_new[!is.na(v90)]==.5)
-print(dems_new_crude)
-
-# Now, more appropriate simulation-based predictions for 1990 from 1988
-
-# First, get simulations from the post distribution of beta and sigma
-n_sims <- 1000
-sigma <- rep(NA, n_sims)
-beta <- array(NA, c(n_sims,k))
-dimnames(beta) <- list(NULL, names(beta_hat))
-for(s in 1:n_sims){
-  sigma[s] <- sd_hat*sqrt((n-k)/rchisq(1,n-k))
-  beta[s,] <- mvrnorm(1, beta_hat, V_beta*sigma[s]^2)
+#' **Simulate the number of elections predicted to be won by the Democrats in 1990**
+dems_pred <- rowSums(pred_90 > 0.5)
+#' Alternately calculate that sum in a loop
+n_sims <- 4000
+dems_pred <- rep(NA, n_sims)
+for (s in 1:n_sims) {
+  dems_pred[s] <- sum(pred_90[s,] > 0.5)
 }
 
-# Now, set up the simulations for all the districts
-y_new <- array(NA, c(n_sims,n_new))
-ok <- contested90 & !is.na(v90)
-y_new[,ok] <- beta %*% t(X_new[ok,]) + rnorm(n_sims*sum(ok), 0, sigma)
-y_new[,v90<.1] <- 0
-y_new[,v90>.9] <- 1
-y_new[,is.na(v90)] <- NA
-
-# How many districts are contested?
-print(sum(ok))
-
-# Transform from continuous vote into Democratic or Republican seat
-winner_new <- ifelse(y_new>.5, "Democrat", "Republican")
-dems_new <- rep(NA, n_sims)
-
-# For each simulation, sum over all the districts
-for(s in 1:n_sims){
-  dems_new[s] <- sum(winner_new[s,]=="Democrat", na.rm=TRUE)
-}
-
-# Finally:  our posterior mean and sd of how many districts the Dems will win
-print(c(mean(dems_new), sqrt(var(dems_new))))
-
-# Just for laffs, you can sum in the other direction and get Pr(Dem win) for each district
-prob_dem_new <- rep(NA, n_new)
-for(i in 1:n_new){
-  prob_dem_new[i] <- mean(winner_new[,i]=="Democrat")
-}
+#' **Our posterior mean and sd of how many districts the Dems will win**
+print(c(mean(dems_pred), sqrt(var(dems_pred))),digits=2)
+#' **Histogram of how many districts the Dems will win**
+hist(dems_pred)

@@ -33,7 +33,7 @@ height_jitter_add <- runif(n, -.2, .2)
 lm_0 <- lm(earn ~ height, data=earnings)
 display(lm_0)
 
-#+ heights1a, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
 pdf(here("Earnings/figs","heights1a.pdf"), height=8.5, width=11)
 # plot linear model
@@ -46,8 +46,7 @@ abline(0,0,col="gray")
 axis(2, c(0,100000,200000), c("0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
 dev.off()
 
-#+ fig1a
-# plot linear model, ggplot version
+#' plot linear model, ggplot version
 gg_earnings <- ggplot(earnings, aes(x = height + height_jitter_add, y = earn)) +
   geom_point(alpha = 0.75) +
   geom_hline(yintercept = 0, color = "darkgray") +
@@ -57,7 +56,7 @@ gg_earnings <- ggplot(earnings, aes(x = height + height_jitter_add, y = earn)) +
 gg_earnings
 
 
-#+ heights1b, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
 # plot extrapolation
 pdf(here("Earnings/figs","heights1b.pdf"), height=8.5, width=11)
@@ -69,8 +68,8 @@ intercept <- coef(lm_0)[1]
 axis(2, c(intercept,0,100000,200000), c(round(intercept,-2),"0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
 dev.off()
 
-#+ fig1b
-# plot extrapolation, ggplot version, modifying the gg_earnings object we already created
+# plot extrapolation, ggplot version, modifying the gg_earnings object
+# we already created
 gg_earnings +
   ylim(-70000, 200000) +
   xlim(0, 80) +
@@ -82,7 +81,7 @@ lm_1 <- lm(earn ~ height + male, data=earnings)
 display(lm_1)
 coef1 <- coef(lm_1)
 
-#+ heights2, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
 pdf(here("Earnings/figs","heights2.pdf"), height=8.5, width=11)
 par(mar=c(6,6,5,2)+.1)
@@ -95,7 +94,6 @@ abline(coef1[1]+coef1[3], coef1[2], col="blue", lwd=2)
 text(68, coef1[1]+coef1[3] + coef1[2]*65, "men:\ny = -2 000 + 450x", cex=3, adj=0, col="blue")
 dev.off()
 
-#+ fig2
 # include male/female, ggplot version
 ggplot(earnings, aes(height, earn)) +
   geom_blank() +
@@ -128,7 +126,7 @@ lm_2 <- lm(earn ~ height + male + height*male, data=earnings)
 display(lm_2)
 coef2 <- coef(lm_2)
 
-#+ heights3, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
 pdf(here("Earnings/figs","heights3.pdf"), height=8.5, width=11)
 par(mar=c(6,6,5,2)+.1)
@@ -140,7 +138,6 @@ abline(coef2[1]+coef2[3], coef2[2]+coef2[4], col="blue", lwd=2)
 text(68, coef2[1]+coef2[3] + (coef2[2]+coef2[4])*66, "men:\ny = -22 000 + 740x", cex=3, adj=0, col="blue")
 dev.off()
 
-#+ fig3
 # include interaction, ggplot version
 ggplot(earnings, aes(height, earn)) +
   geom_blank() +
@@ -195,7 +192,7 @@ M_1 <- stan_glm(log_earn ~ height + male, data = earnings)
 sims <- as.matrix(M_1)
 n_sims <- nrow(sims)
 
-#+ heights.log1a, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
 postscript(here("Earnings/figs","heights.log1a.ps"), horizontal=TRUE)
 par(mar=c(6,6,4,2)+.1)
@@ -209,7 +206,6 @@ for (i in subset){
 curve(coef(M_1)[1] + coef(M_1)[2]*x, add=TRUE)
 dev.off()
 
-#+ fig.log1a
 # Bayesian model on log scale, ggplot version
 subset <- sample(n_sims, 10)
 ggplot(earnings, aes(height, log_earn)) +

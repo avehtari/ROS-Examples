@@ -36,7 +36,7 @@ print(mean(delay[ok & !censored & !peacekeepers]))
 print(median(delay[ok & !censored & peacekeepers]))
 print(median(delay[ok & !censored & !peacekeepers]))
 
-pdf("peacekeeping_1.pdf", height=4, width=10)
+pdf(here("Peacekeeping/figs","peacekeeping_1.pdf") height=4, width=10)
 par(mfrow=c(1,2), mar=c(3,5,3,0), mgp=c(1.5,.5,0), tck=-.01)
 subset <- ok & peacekeepers
 hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("With peacekeeping:  ", round(100*mean(censored[subset])), "% of countries stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
@@ -48,7 +48,7 @@ dev.off()
 ok2 <- ok & !is.na(badness)
 badness2 <- badness/2 + 8
 
-pdf("peacekeeping_2.pdf", height=5, width=7)
+pdf(here("Peacekeeping/figs","peacekeeping_2.pdf") height=5, width=7)
 par(mar=c(3,4,2,0), tck=-.01, mgp=c(1.7,.5,0))
 plot(badness2[ok2], delay[ok2], type="n", xlab="Pre-treatment measure of problems with the country", ylab="Delay (in years) before return of conflict\n(open circles indicate conflict has not yet returned)", bty="n", xaxt="n")
 axis(1, quantile(badness2[ok2], c(.05, .95)), c("not so bad", "really bad"))
@@ -60,7 +60,7 @@ points(badness2[ok2&!peacekeepers&censored], delay[ok2&!peacekeepers&censored], 
 mtext("Peacekeeping (red) is associated with slightly longer periods without war", line=1)
 dev.off()
 
-pdf("peacekeeping_3.pdf", height=4, width=10)
+pdf(here("Peacekeeping/figs","peacekeeping_3.pdf") height=4, width=10)
 par(mfrow=c(1,2), mar=c(3,4,2,0), tck=-.01, mgp=c(1.7,.5,0))
 ok2a <- ok&peacekeepers
 plot(badness2[ok2], delay[ok2], type="n", xlab="Pre-treatment measure of problems with the country", ylab="Delay (in years) before return of conflict\n(open circles where conflict did not return)", bty="n", xaxt="n")

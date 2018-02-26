@@ -24,7 +24,7 @@ hibbs <- read.table(here("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
 
 #' ### Graphing the bread and peace model
-#+ hibbsdots.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbsdots.pdf"), height=4.5, width=7.5)
 #+
 n <- nrow(hibbs)
@@ -67,7 +67,7 @@ text(left-.3, -2.3, "Above matchups are all listed as incumbent party's candidat
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ hibbsscatter.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbsscatter.pdf"), height=4.5, width=5)
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
@@ -84,7 +84,7 @@ M1 <- lm(vote ~ growth, data = hibbs)
 display(M1)
 
 #' **Plot regression line**
-#+ hibbsline.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbsline.pdf"), height=4.5, width=5)
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
@@ -102,7 +102,7 @@ dev.off()
 print(coef(M1)["growth"] + c(-1,1)*qt(.975,13)*se.coef(M1)["growth"])
 
 #' **Prediction given 2% growth**
-#+ hibbspredict.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbspredict.pdf"), height=3.5, width=6)
 #+
 par(mar=c(3,3,3,1), mgp=c(1.7,.5,0), tck=-.01)
@@ -147,7 +147,7 @@ win_prob <- mean(y_pred > 50)
 cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
   with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="")
 
-#+ hibbspredict_bayes_1.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10)
 #+
 par(mfrow=c(1,2), mar=c(3,2,3,0), mgp=c(1.5,.5,0), tck=-.01)
@@ -163,7 +163,7 @@ arrows(median(b) - 2*1.483*median(abs(b - median(b))), 250, median(b) + 2*1.483*
 dev.off()
 
 
-#+ hibbspredict_bayes_2a.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbspredict_bayes_2a.pdf"), height=4.5, width=5)
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
@@ -176,7 +176,7 @@ ggplot(data.frame(a = sims[, 1], b = sims[, 2]), aes(a, b)) +
   geom_point(size = 1) +
   labs(title = "Posterior draws of the regression coefficients a, b")
 
-#+ hibbspredict_bayes_2b.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbspredict_bayes_2b.pdf"), height=4.5, width=5)
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
@@ -242,7 +242,7 @@ y_pred <- posterior_predict(M2, new_data)
 new_data_grid <- data.frame(growth = seq(-2.0, 4.0, 0.5))
 y_pred_grid <- posterior_predict(M2, new_data_grid)
 
-#+ hibbspredict_bayes_3.pdf, eval=FALSE, include=FALSE
+#+ eval=FALSE, include=FALSE
 pdf(here("ElectionsEconomy/figs","hibbspredict_bayes_3.pdf"), height=3.5, width=6)
 #+
 par(mar=c(3,3,3,1), mgp=c(1.7,.5,0), tck=-.01)

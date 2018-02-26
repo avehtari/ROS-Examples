@@ -27,6 +27,7 @@ print(vitals[1:5,])
 
 #' ### Simulating uncertainty for linear predictors and predicted values
 
+#' **Predict weight (in pounds) from height (in inches)**<br/>
 #' **Bayesian regression**
 fit_1 <- stan_glm(weight ~ height, data=vitals)
 print(fit_1)
@@ -43,6 +44,7 @@ postpred_2 <- posterior_predict(fit_2, newdata=new)
 
 #' ### Indicator variables
 
+#' **Predict weight (in pounds) from height (in inches)**<br/>
 #' **Classical regression**
 M_1 <- lm(weight ~ height, data=vitals)
 display(M_1, digits=1)
@@ -59,27 +61,30 @@ cat("Predicted weight for a 66-inch-tall person is", round(mean(pred)), "pounds 
 vitals$c_height <- vitals$height - 66
 display(lm(weight ~ c_height, data=vitals), digits=1)
 
-#' **Including a binary variable in a regression (classical)**
+#' **Including a binary variable in a regression -- classical**
 M_2 <- lm(weight ~ c_height + female, data=vitals)
 display(M_2, digits=1)
 coefs_2 <- coef(M_2)
 predicted <- coefs_2[1] + coefs_2[2]*4 + coefs_2[3]*1
 
-#' **Including a binary variable in a regression (Bayesian)**
+#' **Including a binary variable in a regression -- Bayesian**
 M_2a <- stan_glm(weight ~ c_height + female, data=vitals)
 new <- data.frame(c_height=4, female=1)
 pred <- posterior_predict(M_2a, newdata=new)
 print(mean(pred))
 
-#' **Using indicator variables for multiple levels of a categorical predictor**
+#' **Using indicator variables for multiple levels of a categorical predictor**<br/>
+#' Include ethnicity in the regression as a factor
 M_3 <- lm(weight ~ c_height + female + factor(ethnicity), data=vitals)
 display(M_3, digits=1)
 
+#' Choose the baseline category by setting the levels
 vitals$eth <- factor(vitals$ethnicity,
   levels=c("white", "black", "hispanic", "other"))
 M_4 <- lm(weight ~ c_height + female + eth, data=vitals)
 display(M_4)
 
+#' Alternatively create indicators for the four ethnic groups directly:
 vitals$eth_white <- ifelse(vitals$ethnicity=="white", 1, 0)
 vitals$eth_black <- ifelse(vitals$ethnicity=="black", 1, 0)
 vitals$eth_hispanic <- ifelse(vitals$ethnicity=="hispanic", 1, 0)
