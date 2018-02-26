@@ -1,16 +1,33 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/ElectionsEconomy")
-source("hibbs.R")
+#' ---
+#' title: "Regression and Other Stories: Elections Economy"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
 
-## contour plots etc of simple likelihoods
+#' Present uncertainty in parameter estimates
+#' 
+#' -------------
+#' 
 
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
+library("arm")
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
+
+#' **Load data**
+hibbs <- read.table(here("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
+
+#' Contour plots etc of simple likelihoods
 trans3d <- function(x,y,z, pmat) {
        tr <- cbind(x,y,z,1) %*% pmat
        list(x = tr[,1]/tr[,4], y= tr[,2]/tr[,4])
      }
 
-# 2 parameters
-
-M1 <- lm(vote ~ growth)
+#' 2 parameters
+M1 <- lm(vote ~ growth, data = hibbs)
 display(M1)
 summ <- summary(M1)
 
@@ -32,7 +49,11 @@ for (i.x in 1:length(x))
     z[i.x,i.y] <- dmvnorm(c(x[i.x],y[i.y]), summ$coef[,1], summ$cov.unscaled*summ$sigma^2, log=TRUE)
 z <- exp(z-max(z))
 
-pdf("hill_2a.pdf", height=4, width=5)
+
+#' **More graphs for the bread and peace model**
+#+ hill_2a.pdf, eval=FALSE, include=FALSE
+pdf(here("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
+#+
 par(mar=c(0, 0, 0, 0))
 persp(x, y, z,
   xlim=c(rng.x[1]-.15*(rng.x[2]-rng.x[1]), rng.x[2]), ylim=c(rng.y[1]-.15*(rng.y[2]-rng.y[1]), rng.y[2]),
@@ -40,18 +61,23 @@ persp(x, y, z,
 text(trans3d(mean(rng.x), rng.y[1]-.12*(rng.y[2]-rng.y[1]), 0, pm = res), expression(beta[0]))
 text(trans3d(rng.x[1]-.08*(rng.x[2]-rng.x[1]), mean(rng.y), 0, pm = res), expression(beta[1]))
 mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-pdf("hill_2b.pdf", height=5, width=5)
+#+ hill_2b.pdf, eval=FALSE, include=FALSE
+pdf(here("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
+#+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a) %+-% 1, " std err,  ", hat(b) %+-% 1, " std err)")), type="n")
 lines(rep(summ$coef[1,1], 2), summ$coef[2,1] + c(-1,1)*summ$coef[2,2], col="gray20")
 lines(summ$coef[1,1] + c(-1,1)*summ$coef[1,2], rep(summ$coef[2,1], 2), col="gray20")
 points(summ$coef[1,1], summ$coef[2,1], pch=19)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-
-pdf("hill_2c.pdf", height=5, width=5)
+#+ hill_2c.pdf, eval=FALSE, include=FALSE
+pdf(here("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
+#+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a), ", ", hat(b), ") and covariance matrix")), type="n")
 points(summ$coef[1,1], summ$coef[2,1], pch=19)
@@ -64,17 +90,20 @@ lines (xx, yy)
 xx <- summ$coef[1,1] + summ$coef[1,2]*(aa*sqrt(1+rho)+bb*sqrt(1-rho))
 yy <- summ$coef[2,1] + summ$coef[2,2]*(aa*sqrt(1+rho)-bb*sqrt(1-rho))
 lines (xx, yy)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-
-M3 <- stan_glm(vote ~ growth, prior=NULL, prior_intercept=NULL, prior_aux=NULL)
+#' **Uniform prior**
+M3 <- stan_glm(vote ~ growth, prior=NULL, prior_intercept=NULL, prior_aux=NULL, data = hibbs)
 sims <- as.data.frame(M3)
 a <- sims[,1]
 b <- sims[,2]
 
-
-pdf("hill_3c.pdf", height=5, width=5)
+#+ hill_3c.pdf, eval=FALSE, include=FALSE
+pdf(here("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
+#+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n")
 points(a, b, pch=20, cex=.2)
+#+ eval=FALSE, include=FALSE
 dev.off()

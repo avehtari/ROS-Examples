@@ -1,4 +1,4 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Vitals")
+library("here")
 
 read.columns <- function(filename, columns){
   start <- min(columns)
@@ -12,22 +12,22 @@ read.columns <- function(filename, columns){
 }
 
 # Read in the raw data
-height_feet <- read.columns("wfw90.dat", 144)
-height_inches <- read.columns("wfw90.dat", 145:146)
-weight <- read.columns("wfw90.dat", 147:149)
-income_exact <- read.columns("wfw90.dat", 203:208)
-income_approx <- read.columns("wfw90.dat", 209:210)
-sex <- read.columns("wfw90.dat", 219)
-race <- read.columns("wfw90.dat", 198)
-hisp <- read.columns("wfw90.dat", 200)
-ed <- read.columns("wfw90.dat", 190:191)
-momed <- read.columns("wfw90.dat", 192:193)
-fathed <- read.columns("wfw90.dat", 194:195)
-walk <- read.columns("wfw90.dat", 139:140)
-exer <- read.columns("wfw90.dat", 142)
-smokenow <- read.columns("wfw90.dat", 150)
-tense <- read.columns("wfw90.dat", 133)
-angry <- read.columns("wfw90.dat", 133)
+height_feet <- read.columns(here("Vitals/data","wfw90.dat"), 144)
+height_inches <- read.columns(here("Vitals/data","wfw90.dat"), 145:146)
+weight <- read.columns(here("Vitals/data","wfw90.dat"), 147:149)
+income_exact <- read.columns(here("Vitals/data","wfw90.dat"), 203:208)
+income_approx <- read.columns(here("Vitals/data","wfw90.dat"), 209:210)
+sex <- read.columns(here("Vitals/data","wfw90.dat"), 219)
+race <- read.columns(here("Vitals/data","wfw90.dat"), 198)
+hisp <- read.columns(here("Vitals/data","wfw90.dat"), 200)
+ed <- read.columns(here("Vitals/data","wfw90.dat"), 190:191)
+momed <- read.columns(here("Vitals/data","wfw90.dat"), 192:193)
+fathed <- read.columns(here("Vitals/data","wfw90.dat"), 194:195)
+walk <- read.columns(here("Vitals/data","wfw90.dat"), 139:140)
+exer <- read.columns(here("Vitals/data","wfw90.dat"), 142)
+smokenow <- read.columns(here("Vitals/data","wfw90.dat"), 150)
+tense <- read.columns(here("Vitals/data","wfw90.dat"), 133)
+angry <- read.columns(here("Vitals/data","wfw90.dat"), 133)
 
 # Take a look and fix up
 
@@ -64,4 +64,4 @@ angry <- ifelse(angry>7, NA, angry)
 
 height_weight_data <- cbind(height, weight, female, income, ethnicity, education,
   mother_education, father_education, walk, exercise, smokenow, tense, angry)
-write.csv(height_weight_data, "vitals.csv")
+write.csv(height_weight_data, here("Vitals/data","vitals.csv"))

@@ -1,8 +1,22 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/SexRatio")
-library("rstanarm")
+#' ---
+#' title: "Regression and Other Stories: Beauty and sex ratio"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Example where an informative prior makes a difference
+#' 
+#' -------------
+#' 
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 library("arm")
+library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
+#' **Informative priors**
 theta_hat_prior <- 0
 se_prior <- 0.25
 theta_hat_data <- 8
@@ -11,14 +25,19 @@ se_data <- 3
 theta_hat_bayes <- (theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2)/(1/se_prior^2 + 1/se_data^2)
 se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
 
+#' **Data**
 x <- seq(-2,2,1)
 y <- c(50, 44, 50, 47, 56)
 sexratio <- data.frame(x, y)
 
+#' **Classical regression**
 fit <- lm(y ~ x, data = sexratio)
 display(fit)
 
+#' **Plot for the book**
+#+ sexratio_bayes_1.pdf, eval=FALSE, include=FALSE
 pdf("sexratio_bayes_1.pdf", height=4, width=10)
+#+
 par(mfrow=c(1,2), mar=c(3,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 plot(x, y, ylim=c(43, 57), xlab="Attractiveness of parent", ylab="Percentage of girl babies", bty="l", yaxt="n", main="Data on beauty and sex ratio",  pch=19, cex=1)
 axis(2, c(45,50,55), paste(c(45,50,55), "%", sep=""))
@@ -26,14 +45,15 @@ plot(x, y, ylim=c(43, 57), xlab="Attractiveness of parent", ylab="Percentage of 
 axis(2, c(45,50,55), paste(c(45,50,55), "%", sep=""))
 abline(coef(fit)[1], coef(fit)[2])
 text(1, 52.2, paste("y = ", fround(coef(fit)[1], 1), " + ", fround(coef(fit)[2], 1), " x\n(Std err of slope is ", fround(se.coef(fit)[2], 1), ")", sep=""))
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-
+#' **Bayesian regression with weakly informative prior**
 fit_default <- stan_glm(y ~ x, data = sexratio)
-prior_summary(fit_flat)
+prior_summary(fit_default)
 print(fit_default)
 
-
+#' **Bayesian regression with informative prior**
 fit_post <-
   stan_glm(
     y ~ x,
@@ -44,9 +64,10 @@ fit_post <-
 prior_summary(fit_post)
 print(fit_post)
 
-
-
+#' **Plot for the book**
+#+ sexratio_bayes_2.pdf, eval=FALSE, include=FALSE
 pdf("sexratio_bayes_2.pdf", height=8, width=10)
+#+
 par(mfrow=c(2,2), mar=c(5,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 fit_bayes <- list(as.data.frame(fit_default), as.data.frame(fit_post))
 for (k in 1:2){
@@ -61,4 +82,5 @@ for (k in 1:2){
   }
   abline(coef_est[1], coef_est[2], lwd=2)
 }
+#+ eval=FALSE, include=FALSE
 dev.off()

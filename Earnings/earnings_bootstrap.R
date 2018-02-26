@@ -1,37 +1,52 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Earnings")
+#' ---
+#' title: "Regression and Other Stories: Earnings"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Bootstrapping to simulate the sampling distribution
+#' 
+#' -------------
+#' 
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 library("arm")
 
-## classical regressions and graphs for earnings example
+#' **Load data**
+earnings <- read.csv(here("Earnings/data","earnings.csv"))
+earnings_all <- read.csv(here("Earnings/data","earnings.csv"))
+earnings_all$positive <- earnings_all$earn > 0
+#' only non-zero earnings
+earnings <- earnings_all[earnings_all$positive, ]
+n <- nrow(earnings)
+earn <- earnings$earn
+male <- earnings$male
+print(earnings[1:10,])
 
-earnings_clean <- read.csv("earnings.csv")
-n <- nrow(earnings_clean)
+#' **Median of women's earnings, divided by the median of men's earnings**
+print(median(earn[male==0]) / median(earn[male==1]))
 
-earn <- earnings_clean$earn
-height <- earnings_clean$height
-male <- earnings_clean$male
-
-colnames(height_data) <- c("ID", "earn", "height", "male")
-print(height_data[1:10,])
-
-print(mean(height[male]) / mean(height[!male]))
-
-n <- length(height)
+#' **A single bootstrap sample**
+n <- length(earn)
 boot <- sample(n, replace=TRUE)
-height_boot <- height[boot]
+earn_boot <- earn[boot]
 male_boot <- male[boot]
-ratio_boot <- mean(height_boot[male_boot]) / mean(height_boot[!male_boot])
+ratio_boot <- median(earn_boot[male_boot==0]) / median(earn_boot[male_boot==1])
 
+#' **A set of bootstrap simulations**
 Boot_ratio <- function(data){
   n <- nrow(data)
   boot <- sample(n, replace=TRUE)
-  height_boot <- data$height[boot]
+  earn_boot <- data$earn[boot]
   male_boot <- data$male[boot]
-  ratio_boot <- mean(height_boot[male_boot]) / mean(height_boot[!male_boot])
+  ratio_boot <- median(earn_boot[male_boot==0]) / median(earn_boot[male_boot==1])
   return(ratio_boot)
 }
+n_sims <- 10000
+output <- replicate(n_sims, Boot_ratio(data=earnings))
 
-n_sims <- 100
-output <- replicate(n_sims, Boot_ratio(data=earnings_clean))
-
+#' **Summarize the results graphically and numerically**
 hist(output)
 print(sd(output))

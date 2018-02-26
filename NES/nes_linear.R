@@ -52,13 +52,14 @@ yrs <- seq(1972,2000,4)
 
 coef_names <- c("Intercept", "Ideology", "Black", "Age_30_44", "Age_45_64", "Age_65_up", "Education", "Female", "Income")
 
-postscript("c:/books/multilevel/partyid.1.ps", horizontal=TRUE, height=2.7, width=6)
-par(mfrow=c(2,5), mar=c(3,4,2,0))
+pdf("partyid_1.pdf", height=2.5, width=7.5)
+par(mfrow=c(2,5), mar=c(2,3,2,2), tck=-.02, mgp=c(2,.7,0))
 for (k in 1:9){
-  plot(range(yrs), range(0,summary[k,1,]+.67*summary[k,2,],summary[k,1,]-.67*summary[k,2,]), type="n", xlab="year", ylab="Coefficient", main=coef_names[k], mgp=c(1.2,.2,0), cex.main=1, cex.axis=1, cex.lab=1, tcl=-.1 )
-  abline(0,0,lwd=.5, lty=2)
-  points(yrs, summary[k,1,], pch=20, cex=.5)
-  segments(yrs, summary[k,1,]-.67*summary[k,2,], yrs, summary[k,1,]+.67*summary[k,2,], lwd=.5)
+  plot(range(yrs), range(0,summary[k,1,]+.67*summary[k,2,],summary[k,1,]-.67*summary[k,2,]), type="n", xlab="", ylab="Coefficient", main=coef_names[k], mgp=c(1.2,.2,0), cex.main=1, cex.axis=1, cex.lab=1, tcl=-.1, bty="l", xaxt="n")
+  axis(1, c(1972,1986,2000), mgp=c(.5,.3,0))
+  abline(0,0, lty=2)
+  points(yrs, summary[k,1,], pch=20)
+  segments(yrs, summary[k,1,]-.67*summary[k,2,], yrs, summary[k,1,]+.67*summary[k,2,])
 }
 dev.off()
 

@@ -21,79 +21,108 @@ new <- data.frame(income=5)
 linpred <- posterior_linpred(stan_fit_1, transform=TRUE, newdata=new)
 predict <- posterior_predict(stan_fit_1, newdata=new)
 
+## fake data
+data <- data.frame(rvote=rep(c(0,1), 10), income=1:20)
+stan_fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
+new <- data.frame(income=5)
+predict <- posterior_predict(stan_fit_1, newdata=new)
 
-postscript ("c:/books/multilevel/income1a.ps", horizontal=T, height=4, width=5)
-yr <- 1992
-  ok <- nes.year==yr & presvote<3
-  vote <- presvote[ok] - 1
-  income <- data$income[ok]
-  fit.1 <- glm.all (vote ~ income, family=binomial(link="logit"))
-  curve (invlogit(fit.1$coef[1] + fit.1$coef[2]*x), 1, 5, ylim=c(-.01,1.01),
-         xlim=c(-2,8), xaxt="n", xaxs="i", mgp=c(2,.5,0),
-         ylab="Pr (Republican vote)", xlab="Income", lwd=4)
-  curve (invlogit(fit.1$coef[1] + fit.1$coef[2]*x), -2, 8, lwd=.5, add=T)
-  axis (1, 1:5, mgp=c(2,.5,0))
-  mtext ("(poor)", 1, 1.5, at=1, adj=.5)
-  mtext ("(rich)", 1, 1.5, at=5, adj=.5)
-  points (jitt (income, .3), jitt (vote, .04), pch=20, cex=.1)
+
+n <- nrow(nes92)
+income_jitt <- nes92$income + runif(n, -.2, .2)
+vote_jitt <- nes92$vote + ifelse(nes92$vote==0, runif(n, .005, .05), runif(n, -.05, -.005))
+
+pdf("income1a.pdf", height=2.8, width=3.8)
+par(mar=c(3,3,1,.1), tck=-.01, mgp=c(1.7, .3, 0))
+ok <- nes92$presvote<3
+vote <- nes92$presvote[ok] - 1
+income <- nes92$income[ok]
+curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), 1, 5, ylim=c(0,1),
+  xlim=c(-2,8), xaxt="n", xaxs="i", 
+  ylab="Pr (Republican vote)", xlab="Income", lwd=4, yaxs="i")
+curve(invlogit(fit_1$coef[1] + fit_1$coef[2]*x), -2, 8, lwd=.5, add=TRUE)
+axis(1, 1:5)
+mtext("(poor)", 1, 1.2, at=1, adj=.5)
+mtext("(rich)", 1, 1.2, at=5, adj=.5)
+points(income_jitt, vote_jitt, pch=20, cex=.1)
 dev.off()
 
-postscript ("c:/books/multilevel/income1b.ps", horizontal=T, height=4, width=5)
-  curve (invlogit(fit.1$coef[1] + fit.1$coef[2]*x), .5, 5.5, ylim=c(-.01,1.01),
-         xlim=c(.5,5.5), xaxt="n", xaxs="i", mgp=c(2,.5,0),
-         ylab="Pr (Republican vote)", xlab="Income", lwd=1)
-  for (j in 1:20){
-    curve (invlogit(fit.1$beta[j,1] + fit.1$beta[j,2]*x), col="gray", lwd=.5, add=T)
-  }
-  curve (invlogit(fit.1$coef[1] + fit.1$coef[2]*x), add=T)
-  axis (1, 1:5, mgp=c(2,.5,0))
-  mtext ("(poor)", 1, 1.5, at=1, adj=.5)
-  mtext ("(rich)", 1, 1.5, at=5, adj=.5)
-  points (jitt (income, .3), jitt (vote, .04), pch=20, cex=.1)
+pdf("income1b.pdf", height=2.8, width=3.8)
+par(mar=c(3,3,1,.1), tck=-.01, mgp=c(1.7, .3, 0))
+ok <- nes92$presvote<3
+vote <- nes92$presvote[ok] - 1
+income <- nes92$income[ok]
+curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, ylim=c(0,1),
+  xlim=c(.5, 5.5), xaxt="n", xaxs="i", 
+  ylab="Pr (Republican vote)", xlab="Income", yaxs="i")
+axis(1, 1:5)
+mtext("(poor)", 1, 1.2, at=1, adj=.5)
+mtext("(rich)", 1, 1.2, at=5, adj=.5)
+sims_1 <- as.matrix(stan_fit_1)
+n_sims <- nrow(sims_1)
+for (j in sample(n_sims, 20)){
+  curve(invlogit(sims_1[j,1] +sims_1[j,2]*x), .5, 5.5, lwd=.5, col="gray", add=TRUE)
+}
+curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, add=TRUE)
+points(income_jitt, vote_jitt, pch=20, cex=.1)
 dev.off()
 
 # series of regressions
 
-income.year <- NULL
-income.coef <- NULL
-income.se <- NULL
-for (yr in seq(1952,2000,4)){
-  ok <- nes.year==yr & presvote<3
-  vote <- data$presvote[ok] - 1
-  income <- data$income[ok]
-  fit.1 <- glm (vote ~ income, family=binomial(link="logit"))
-  income.year <- c (income.year, yr)
-  income.coef <- c (income.coef, fit.1$coef[2])
-  income.se <- c (income.se, fit.1$summary.coef[2,2])
-  curve (invlogit(fit.1$coef[1] + fit.1$coef[2]*x), ylim=c(0,1),
-         xlim=c(.1,5.9), yaxs="i", xaxs="i",
-         ylab="Pr (Republican vote)", xlab="Income")
-  for (i in 1:5)
-    lines (i + c(-.4,.4), rep(mean(vote[income==i],na.rm=T),2))
+yrs <- seq(1952, 2000, 4)
+n_yrs <- length(yrs)
+fits <- array(NA, c(n_yrs, 3), dimnames <- list(yrs, c("year", "coef", "se")))
+for (j in 1:n_yrs){
+  yr <- yrs[j]
+  ok <- nes$year==yr & nes$presvote<3
+  vote <- nes$presvote[ok] - 1
+  income <- nes$income[ok]
+  fit_1 <- glm(vote ~ income, family=binomial(link="logit"))
+  fits[j,] <- c(yr, coef(fit_1)[2], se.coef(fit_1)[2])
 }
 
-postscript ("c:/books/multilevel/incomeseries.ps", horizontal=T, height=4, width=5)
-plot (income.year, income.coef, xlim=c(1950,2000), ylim=range(income.coef+income.se, income.coef-income.se), mgp=c(2,.5,0), pch=20,
-         ylab="Coefficient of income", xlab="Year")
-for (i in 1:length(income.year)){
-  lines (rep(income.year[i],2), income.coef[i]+income.se[i]*c(-1,1), lwd=.5)
+pdf("incomeseries.pdf", height=3.4, width=4.9)
+par(mar=c(3,2.5,1,.2), tck=-.01, mgp=c(1.5, .3, 0))
+plot (fits[,"year"], fits[,"coef"], xlim=c(1950,2000), ylim=range(fits[,"coef"]-fits[,"se"], fits[,"coef"]+fits[,"se"]),
+  pch=20, ylab="Coefficient of income", xlab="Year", bty="l")
+for (j in 1:n_yrs){
+  lines(rep(fits[j,"year"], 2), fits[j,"coef"] + fits[j,"se"]*c(-1,1), lwd=.5)
 }
-abline (0,0,lwd=.5, lty=2)
+abline(0,0,lwd=.5, lty=2)
 dev.off()
 
 # using "black" as a predictor for hwk assignment in chap 5
 
-vote <- rvote
-
-for (yr in seq (1956,1972,4)){
-#  glm.1 <- glm (rvote ~ female + black + factor(age.discrete) + educ1 + income, subset=(year==yr), family=binomial(link="logit"))
-  glm.1 <- glm (vote ~ female + black + income, subset=(year==yr), family=binomial(link="logit"))
-  display (glm.1)
+fits_2 <- array(NA, c(n_yrs, 4, 2, 2), dimnames <- list(yrs, c("Intercept", "female", "black", "income"), c("coef", "se"), c("glm", "bayes")))
+for (j in 1:n_yrs){
+  print(yrs[j])
+  fit_glm <- glm(rvote ~ female + black + income, subset=(year==yrs[j]), family=binomial(link="logit"), data=nes)
+  fits_2[j,,1,1] <- coef(fit_glm)
+  fits_2[j,,2,1] <- se.coef(fit_glm)
+  fit_bayes <- stan_glm(rvote ~ female + black + income, subset=(year==yrs[j]), family=binomial(link="logit"), data=nes)
+  sims <- as.matrix(fit_bayes)
+  fits_2[j,,1,2] <- apply(sims, 2, mean)
+  fits_2[j,,2,2] <- apply(sims, 2, sd)
+  n_sims <- dim(sims)
+  display(fit_glm)
+  print(fit_bayes)
 }
 
-glm.1 <- glm (rvote ~ black, subset=(nes.year==1960), family=binomial(link="logit"))
-display (glm.1)
-glm.1 <- glm (rvote ~ black, subset=(nes.year==1964), family=binomial(link="logit"))
-display (glm.1)
-glm.1 <- glm (rvote ~ black, subset=(nes.year==1968), family=binomial(link="logit"))
-display (glm.1)
+pdf("separation_compare.pdf", height=2.8, width=8.3)
+par(mfrow=c(2,5), mar=c(3,3,0,1), tck=-.02, mgp=c(1.2,.3,0), oma=c(0,0,3,0))
+for (k in 1:2){
+  plot(0,0,xlab="",ylab="",xaxt="n",yaxt="n",bty="n",type="n")
+  text(0, 0, if (k==1) "Maximum\nlikelihood\nestimate,\nfrom glm()" else "Bayes estimate\nwith default prior,\nfrom stan_glm()", cex=1.3)
+  for (l in 1:4){
+    rng <- range(fits_2[,l,"coef",] - fits_2[,l,"se",], fits_2[,l,"coef",] + fits_2[,l,"se",])
+    if (l==3) rng <- c(-18, 1)
+    plot(yrs, fits_2[,l,"coef",k], ylim=rng, ylab="Coefficient", xlab=if (k==2) "Year" else "", bty="l", xaxt="n", pch=20)
+    axis(1, c(1960, 1980, 2000))
+    abline(0,0,lwd=.5,lty=2)
+    for (j in 1:n_yrs){
+      lines(rep(yrs[j], 2), c(fits_2[j,l,"coef",k] - fits_2[j,l,"se",k], fits_2[j,l,"coef",k] + fits_2[j,l,"se",k]), lwd=.5)
+    }
+    if (k==1) mtext(dimnames(fits_2)[[2]][l], 3, 1.5, cex=.8)
+  }
+}
+dev.off()

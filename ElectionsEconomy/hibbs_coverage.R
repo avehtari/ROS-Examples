@@ -1,21 +1,36 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/ElectionsEconomy")
+#' ---
+#' title: "Regression and Other Stories: Elections Economy -- model checking"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Checking the model-fitting procedure using fake-data simulation.
+#' 
+#' -------------
+#' 
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
-hibbs <- read.table("hibbs.dat", header=TRUE)
+#' **Load data**
+hibbs <- read.table(here("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 
-## Fake data simulation to check confidence interval coverage
-
+#' **Step 1: Creating the pretend world**
 a <- 46.2
 b <- 3.1
 sigma <- 3.8
 x <- hibbs$growth
 n <- length(x)
 
+#' **Step 2: Simulating fake data**
 y <- a + b*x + rnorm(n, 0, sigma)
 fake <- data.frame(x, y)
 
+#' **Step 3: Fitting the model and comparing fitted to pretend values**
 fit <- lm(y ~ x, data=fake)
 display(fit)
 
@@ -27,6 +42,7 @@ cover_95 <- abs(b - b_hat) < 2*b_se
 cat(paste("68% coverage: ", cover_68, "\n"))
 cat(paste("95% coverage: ", cover_95, "\n"))
 
+#' **Step 4:  Embedding the simulation in a loop**
 n_fake <- 1000
 cover_68 <- rep(NA, n_fake)
 cover_95 <- rep(NA, n_fake)
@@ -42,6 +58,7 @@ for (s in 1:n_fake){
 cat(paste("68% coverage: ", mean(cover_68), "\n"))
 cat(paste("95% coverage: ", mean(cover_95), "\n"))
 
+#' Same as previous, but confidence interval is computed using Student's t
 n_fake <- 1000
 cover_68 <- rep(NA, n_fake)
 cover_95 <- rep(NA, n_fake)
