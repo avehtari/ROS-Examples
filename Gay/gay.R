@@ -149,7 +149,7 @@ for (j in 1:2){
 
 #' **New graphs**
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay10.pdf") height=4, width=10)
+pdf(here("Gay/figs","gay10.pdf"), height=4, width=10)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfrow=c(1,2))
@@ -163,7 +163,7 @@ for (j in 1:2){
 dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay11.pdf") height=10, width=7)
+pdf(here("Gay/figs","gay11.pdf"), height=10, width=7)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(4,2), oma=c(0,0,2.5,0))
@@ -188,7 +188,7 @@ dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay12.pdf") height=8, width=10)
+pdf(here("Gay/figs","gay12.pdf"), height=8, width=10)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(2,2))
@@ -203,7 +203,7 @@ dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay13.pdf") height=5.5, width=7)
+pdf(here("Gay/figs","gay13.pdf"), height=5.5, width=7)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(2,2), oma=c(0,0,2.5,0))

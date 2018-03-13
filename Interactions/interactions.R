@@ -1,6 +1,6 @@
 setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Interactions")
 
-pdf(here("Interactions/figs","interactions_male.pdf") height=4, width=6)
+pdf(here("Interactions/figs","interactions_male.pdf"), height=4, width=6)
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(0,12.5),c(0,.25), type="n", xaxs="i", yaxs="i",
   xlab="Home radon exposure (pCi/L)", ylab="Probability of lung cancer", bty="l", main="Example of an interaction") 

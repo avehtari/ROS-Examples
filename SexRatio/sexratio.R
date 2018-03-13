@@ -36,7 +36,7 @@ display(fit)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("SexRatio/figs","sexratio_bayes_1.pdf") height=4, width=10)
+pdf(here("SexRatio/figs","sexratio_bayes_1.pdf"), height=4, width=10)
 #+
 par(mfrow=c(1,2), mar=c(3,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 plot(x, y, ylim=c(43, 57), xlab="Attractiveness of parent", ylab="Percentage of girl babies", bty="l", yaxt="n", main="Data on beauty and sex ratio",  pch=19, cex=1)
@@ -66,7 +66,7 @@ print(fit_post)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("SexRatio/figs","sexratio_bayes_2.pdf") height=8, width=10)
+pdf(here("SexRatio/figs","sexratio_bayes_2.pdf"), height=8, width=10)
 #+
 par(mfrow=c(2,2), mar=c(5,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 fit_bayes <- list(as.data.frame(fit_default), as.data.frame(fit_post))

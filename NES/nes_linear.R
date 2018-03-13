@@ -32,7 +32,7 @@ yrs <- seq(1972,2000,4)
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(here("NES/figs","partyid_1.pdf") height=2.5, width=7.5)
+pdf(here("NES/figs","partyid_1.pdf"), height=2.5, width=7.5)
 #+
 coef_names <- c("Intercept", "Ideology", "Black", "Age_30_44", "Age_45_64", "Age_65_up", "Education", "Female", "Income")
 par(mfrow=c(2,5), mar=c(2,3,2,2), tck=-.02, mgp=c(2,.7,0))

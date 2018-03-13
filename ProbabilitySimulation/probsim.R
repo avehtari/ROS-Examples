@@ -21,7 +21,7 @@ for (s in 1:n_sims){
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("ProbabilitySimulation/figs","girls1.pdf") height=3.5, width=5.5)
+pdf(here("ProbabilitySimulation/figs","girls1.pdf"), height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist(n_girls, main="", xaxt="n", yaxt="n")
@@ -67,7 +67,7 @@ for (s in 1:n_sims){
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("ProbabilitySimulation/figs","girls2.pdf") height=3.5, width=5.5)
+pdf(here("ProbabilitySimulation/figs","girls2.pdf"), height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist (n_girls, main="", xaxt="n", yaxt="n", mgp=c(1.5,.5,0))
@@ -85,7 +85,7 @@ y4 <- rpois(n_sims, 5)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("ProbabilitySimulation/figs","4dists.pdf") height=7, width=10)
+pdf(here("ProbabilitySimulation/figs","4dists.pdf"), height=7, width=10)
 #+
 par(mar=c(4,3,4,3),  mgp=c(1.5,.5,0), tck=-.01)
 par(mfrow=c(2,2))
