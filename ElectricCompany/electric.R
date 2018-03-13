@@ -1,79 +1,80 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/ElectricCompany")
+#' ---
+#' title: "Regression and Other Stories: Electric Company"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
 
-# # analysis of "electric company" data
+#' Analysis of "Electric company" data
+#' 
+#' -------------
+#' 
 
-electric <- read.table("electric.dat", header=TRUE)
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 
-# plot of raw data
+#' **Load data**
+electric <- read.table(here("ElectricCompany/data","electric.dat"), header=TRUE)
 
-postscript("c:/books/multilevel/electricdata.ps", horizontal=FALSE, height=7, width=6)
+#' **Plot of raw data**
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","electricdata.ps"), horizontal=FALSE, height=7, width=6)
+#+
 onlytext <- function (string){
   plot(0:1, 0:1, bty='n', type='n', xaxt='n', yaxt='n', xlab='', ylab='')
   text(0.5, 0.5, string, cex=1.2, font=2)
 }
 nf<- layout(matrix(c(0,1:14), 5, 3, byrow=TRUE), c(5, 10, 10), c(1, 5, 5, 5, 5), TRUE)
-#layout.show(nf)
-
 par(mar=c(.2, .2, .2, .2))
-
 onlytext('Test scores in control classes')
 onlytext('Test scores in treated classes')
-
 par(mar=c(1, 1, 1, 1), lwd=0.7)
-
 attach.all(electric)
 for (j in 1:4){
   onlytext(paste('Grade', j))
-
   hist(control.Posttest[Grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
   axis(side=1, seq(0,125,50), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0)
   text(2, 6.5, paste("mean =", round(mean(control.Posttest[Grade==j]))), adj=0)
   text(2, 5, paste("  sd =", round(sd(control.Posttest[Grade==j]))), adj=0)
-
   hist(treated.Posttest[Grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
   axis(side=1, seq(0,125,50), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0)
   text(2, 6.5, paste("mean =", round(mean(treated.Posttest[Grade==j]))), adj=0)
   text(2, 5, paste("  sd =", round(sd(treated.Posttest[Grade==j]))), adj=0)
 }
-
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-# plot the data the other way
-
-postscript("c:/books/multilevel/electricdata.horizontal.ps", horizontal=F, height=6, width=7)
+#' **Plot the data the other way**
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","electricdata.horizontal.ps"), horizontal=F, height=6, width=7)
+#+
 onlytext<-function(string){
   plot(0:1, 0:1, bty='n', type='n', xaxt='n', yaxt='n', xlab='', ylab='')
   text(0.5, 0.5, string, cex=1.2, font=2)
 }
 nf<-layout(matrix(c(0,1:14), 3, 5, byrow=FALSE), c(5, 10, 10, 10, 10), c(1, 5, 5), TRUE)
-#layout.show(nf)
-
 par(mar=c(.2, .2, .2, .2))
-
 onlytext('Control\nclasses')
 onlytext('Treated\nclasses')
-
 par(mar=c(.2,.4,.2,.4), lwd=.5)
-
 attach.all(electric)
 for (j in 1:4){
   onlytext(paste('Grade', j))
-
   hist(control.Posttest[Grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
   axis(side=1, seq(50,100,25), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0, lty="blank")
   lines(rep(mean(control.Posttest[Grade==j]),2), c(0,11), lwd=2)
-
   hist(treated.Posttest[Grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
   axis(side=1, seq(50,100,25), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0, lty="blank")
   lines(rep(mean(treated.Posttest[Grade==j]),2), c(0,11), lwd=2)
 }
-
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-
-
+#' **Another plot**
 attach.all(electric)
-postscript("c:/books/multilevel/electricscatter1a.ps", horizontal=T, height=4)
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","electricscatter1a.ps"), horizontal=T, height=4)
+#+
 par(mfrow=c(1,4), pty="s")
 x.range <- cbind(c(5,40,40,40), c(25,125,125,125))
 for (j in 1:4){
@@ -81,7 +82,6 @@ for (j in 1:4){
   x <- c(treated.Pretest[ok], control.Pretest[ok])
   y <- c(treated.Posttest[ok], control.Posttest[ok])
   t <- rep(c(1,0), rep(sum(ok),2))
-#  plot(x.range[j,], c(40,125), type="n", main=paste("grade",j), xaxs="i", yaxs="i",
   plot(c(0,125), c(0,125), type="n", main=paste("grade",j), xaxs="i", yaxs="i",
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
@@ -92,16 +92,19 @@ for (j in 1:4){
   points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
   points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
 }
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-postscript("c:/books/multilevel/electricscatter1b.ps", horizontal=T, height=4)
+#' **Yet another plot**
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","electricscatter1b.ps"), horizontal=T, height=4)
+#+
 par(mfrow=c(1,4), pty="s")
 for (j in 1:4){
   ok <- Grade==j
   x <- c(treated.Pretest[ok], control.Pretest[ok])
   y <- c(treated.Posttest[ok], control.Posttest[ok])
   t <- rep(c(1,0), rep(sum(ok),2))
-#  plot(x,y, type="n", main=paste("grade",j),
     plot(c(0,125),c(0,125), type="n", main=paste("grade",j),
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
@@ -112,16 +115,19 @@ for (j in 1:4){
   points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
   points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
 }
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-postscript("c:/books/multilevel/electricscatter2.ps", horizontal=T, height=4)
+#' **Plot more**
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","electricscatter2.ps"), horizontal=T, height=4)
+#+
 par(mfrow=c(1,4), pty="s")
 for (j in 1:4){
   ok <- Grade==j
   x <- c(treated.Pretest[ok], control.Pretest[ok])
   y <- c(treated.Posttest[ok], control.Posttest[ok])
   t <- rep(c(1,0), rep(sum(ok),2))
-#  plot(x,y, type="n", main=paste("grade",j), xaxs="i", yaxs="i",
   plot(c(0,125),c(0,125), type="n", main=paste("grade",j), xaxs="i", yaxs="i",
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
@@ -132,36 +138,43 @@ for (j in 1:4){
   points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
   points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
 }
+#+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Linear model**
 attach.all(electric)
 post.test <- c(treated.Posttest, control.Posttest)
 pre.test <- c(treated.Pretest, control.Pretest)
 grade <- rep(Grade, 2)
 treatment <- rep(c(1,0), rep(length(treated.Posttest),2))
 n <- length(post.test)
-
 display(lm(post.test ~ treatment + pre.test + treatment:pre.test, subset=(grade==4)))
 
+#' **Another linear model**
 lm.4 <- lm(formula = post.test ~ treatment + pre.test + treatment * pre.test, subset = (grade==4))
 n.sims <- 1000
 sim.4 <- sim(lm.4, n.sims)
-postscript("c:/books/multilevel/grade4.interactions.ps", horizontal=T, height=3.8, width=5)
+
+#' **Plot linear model**
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","grade4.interactions.ps"), horizontal=T, height=3.8, width=5)
+#+
 plot(0, 0, xlim=range(pre.test[grade==4]), ylim=c(-5,10),
        xlab="pre-test", ylab="treatment effect", main="treatment effect in grade 4")
 abline(0, 0, lwd=.5, lty=2)
 for (i in 1:20)
   curve(sim.4$beta[i,2] + sim.4$beta[i,4]*x, lwd=.5, col="gray", add=T)
 curve(lm.4$coef[2] + lm.4$coef[4]*x, lwd=.5, add=T)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Mean effect**
 effect <- array(NA, c(n.sims, sum(grade==4)))
 for (i in 1:n.sims)
   effect[i,] <- sim.4$beta[i,2] + sim.4$beta[i,4]*pre.test[grade==4]
 mean.effect <- rowMeans(effect)
 
-# plot regression results
-
+#' **Plot repeated regression results**
 est1 <- rep(NA,4)
 est2 <- rep(NA,4)
 se1 <- rep(NA,4)
@@ -174,18 +187,19 @@ for (k in 1:4){
   se1[k] <- summary(lm.1)$coef[2,2]
   se2[k] <- summary(lm.2)$coef[2,2]
 }
-regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", "c:/books/multilevel/electric.ests.ps")
+regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", here("ElectricCompany/figs","electric.ests.ps"))
 
-# analyze replace/supplement
-
+#' **Analyze replace/supplement**
 supp <- c(as.numeric(electric[,"Supplement."])-1, rep(NA,nrow(electric)))
 # supp=0 for replace, 1 for supplement, NA for control
 
+#' **Plot replace/supplement**
+#+ eval=FALSE, include=FALSE
+postscript(here("ElectricCompany/figs","electricsupp1.ps"), horizontal=T, height=2.6)
+#+
 jitter.binary <- function (a, jitt=.05){
   a + (1-2*a)*runif(length(a), 0, jitt)
 }
-
-postscript("c:/books/multilevel/electricsupp1.ps", horizontal=T, height=2.6)
 par(mfrow=c(1,4))
 for (k in 1:4){
   cat(paste("grade",k,":\n"))
@@ -207,6 +221,8 @@ for (k in 1:4){
   est1[k] <- lm.supp$coef[2]
   se1[k] <- summary(lm.supp)$coef[2,2]
 }
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", "c:/books/multilevel/electricsupp2.ps")
+#+ eval=FALSE, include=FALSE
+regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", here("ElectricCompany/figs","electricsupp2.ps"))
