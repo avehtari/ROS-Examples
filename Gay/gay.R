@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' blah blah
+#' Nonlinear models (Loess, B-spline, GP-spline, and BART) and
+#' political attitudes as a function of age
 #' 
 #' -------------
 #' 
