@@ -1,6 +1,23 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/FrenchElection")
+#' ---
+#' title: "Regression and Other Stories: French Election"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' French Election data
+#' 
+#' -------------
+#'
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 library("arm")
-ps <- read.table("ps_primaire.txt", header=TRUE)
+
+#' **Load data**
+ps <- read.table(here("FrenchElection/data","ps_primaire.txt"), header=TRUE)
+
+#* **Analyze**
 J <- nrow(ps)
 n1 <- ps[J,2]
 n2 <- ps[J,3] - ps[J,2]
