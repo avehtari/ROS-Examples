@@ -229,7 +229,7 @@ ggplot(earnings, aes(height, log_earn)) +
 fit_1a <- stan_glm(positive ~ height + male,
                    family = binomial(link = "logit"),
                    data = earnings_all)
-sims_1a <- as.matrix(fit_1a)§
+sims_1a <- as.matrix(fit_1a)
 
 #' **Bayesian model on log scale**
 fit_1b <- stan_glm(log_earn ~ height + male, data = earnings)
