@@ -68,8 +68,8 @@ intercept <- coef(lm_0)[1]
 axis(2, c(intercept,0,100000,200000), c(round(intercept,-2),"0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
 dev.off()
 
-# plot extrapolation, ggplot version, modifying the gg_earnings object
-# we already created
+#' Plot extrapolation, ggplot version, modifying the gg_earnings object
+#' we already created
 gg_earnings +
   ylim(-70000, 200000) +
   xlim(0, 80) +
@@ -94,7 +94,7 @@ abline(coef1[1]+coef1[3], coef1[2], col="blue", lwd=2)
 text(68, coef1[1]+coef1[3] + coef1[2]*65, "men:\ny = -2 000 + 450x", cex=3, adj=0, col="blue")
 dev.off()
 
-# include male/female, ggplot version
+#' include male/female, ggplot version
 ggplot(earnings, aes(height, earn)) +
   geom_blank() +
   geom_abline(
@@ -138,7 +138,7 @@ abline(coef2[1]+coef2[3], coef2[2]+coef2[4], col="blue", lwd=2)
 text(68, coef2[1]+coef2[3] + (coef2[2]+coef2[4])*66, "men:\ny = -22 000 + 740x", cex=3, adj=0, col="blue")
 dev.off()
 
-# include interaction, ggplot version
+#' include interaction, ggplot version
 ggplot(earnings, aes(height, earn)) +
   geom_blank() +
   geom_abline(
@@ -206,7 +206,7 @@ for (i in subset){
 curve(coef(M_1)[1] + coef(M_1)[2]*x, add=TRUE)
 dev.off()
 
-# Bayesian model on log scale, ggplot version
+#' Bayesian model on log scale, ggplot version
 subset <- sample(n_sims, 10)
 ggplot(earnings, aes(height, log_earn)) +
   geom_jitter(height = 0, width = 0.25) +
