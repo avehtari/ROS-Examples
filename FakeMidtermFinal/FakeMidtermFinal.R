@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Fake midterm and final exam"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 

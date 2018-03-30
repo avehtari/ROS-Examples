@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Beauty and sex ratio"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 

@@ -9,9 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Andrew Gelman, Aki Vehtari" />
+<meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2018-02-25" />
+<meta name="date" content="2018-03-17" />
 
 <title>Regression and Other Stories: Elections Economy – model checking</title>
 
@@ -120,8 +120,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Regression and Other Stories: Elections Economy – model checking</h1>
-<h4 class="author"><em>Andrew Gelman, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-02-25</em></h4>
+<h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
+<h4 class="date"><em>2018-03-17</em></h4>
 
 </div>
 
@@ -149,18 +149,18 @@ fake &lt;- data.frame(x, y)</code></pre>
 display(fit)</code></pre>
 <pre><code>## lm(formula = y ~ x, data = fake)
 ##             coef.est coef.se
-## (Intercept) 45.40     1.44  
-## x            3.73     0.62  
+## (Intercept) 46.09     1.90  
+## x            2.63     0.82  
 ## ---
 ## n = 16, k = 2
-## residual sd = 3.34, R-Squared = 0.72</code></pre>
+## residual sd = 4.41, R-Squared = 0.43</code></pre>
 <pre class="r"><code>b_hat &lt;- coef(fit)[&quot;x&quot;]
 b_se &lt;- se.coef(fit)[&quot;x&quot;]
 
 cover_68 &lt;- abs(b - b_hat) &lt; b_se
 cover_95 &lt;- abs(b - b_hat) &lt; 2*b_se
 cat(paste(&quot;68% coverage: &quot;, cover_68, &quot;\n&quot;))</code></pre>
-<pre><code>## 68% coverage:  FALSE</code></pre>
+<pre><code>## 68% coverage:  TRUE</code></pre>
 <pre class="r"><code>cat(paste(&quot;95% coverage: &quot;, cover_95, &quot;\n&quot;))</code></pre>
 <pre><code>## 95% coverage:  TRUE</code></pre>
 <p><strong>Step 4: Embedding the simulation in a loop</strong></p>
@@ -177,9 +177,9 @@ for (s in 1:n_fake){
   cover_95[s] &lt;- abs(b - b_hat) &lt; 2*b_se
 }
 cat(paste(&quot;68% coverage: &quot;, mean(cover_68), &quot;\n&quot;))</code></pre>
-<pre><code>## 68% coverage:  0.662</code></pre>
+<pre><code>## 68% coverage:  0.655</code></pre>
 <pre class="r"><code>cat(paste(&quot;95% coverage: &quot;, mean(cover_95), &quot;\n&quot;))</code></pre>
-<pre><code>## 95% coverage:  0.922</code></pre>
+<pre><code>## 95% coverage:  0.929</code></pre>
 <p>Same as previous, but confidence interval is computed using Student’s t</p>
 <pre class="r"><code>n_fake &lt;- 1000
 cover_68 &lt;- rep(NA, n_fake)
@@ -196,9 +196,9 @@ for (s in 1:n_fake){
   cover_95[s] &lt;- abs(b - b_hat) &lt; t_95 * b_se
 }
 cat(paste(&quot;68% coverage: &quot;, mean(cover_68), &quot;\n&quot;))</code></pre>
-<pre><code>## 68% coverage:  0.671</code></pre>
+<pre><code>## 68% coverage:  0.659</code></pre>
 <pre class="r"><code>cat(paste(&quot;95% coverage: &quot;, mean(cover_95), &quot;\n&quot;))</code></pre>
-<pre><code>## 95% coverage:  0.946</code></pre>
+<pre><code>## 95% coverage:  0.936</code></pre>
 
 
 
