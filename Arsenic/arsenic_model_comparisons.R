@@ -1,10 +1,23 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Arsenic")
+#' ---
+#' title: "Regression and Other Stories: Arsenic"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Building a logistic regression model: wells in Bangladesh
+#' 
+#' -------------
+#' 
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("here")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("arm")
 library("loo")
 
-wells <- read.csv("wells.csv")
+wells <- read.csv(here("Arsenic/data","wells.csv"))
 n <- nrow(wells)
 
 fit_3 <- glm(y ~ dist100 + arsenic,
