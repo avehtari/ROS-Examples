@@ -11,7 +11,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
@@ -20,7 +21,7 @@ library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 
 #' **Load data**
-hibbs <- read.table(here("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
 
 #' ### Graphing the bread and peace model
