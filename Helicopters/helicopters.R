@@ -11,10 +11,11 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 
 #' **Load data**
-helicopters <- read.table(here("Helicopters/data","helicopters.txt"), header=TRUE)
+helicopters <- read.table(root("Helicopters/data","helicopters.txt"), header=TRUE)
 
 #' **Display the example data**
 print(helicopters)

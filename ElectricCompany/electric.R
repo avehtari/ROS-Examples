@@ -11,14 +11,15 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 
 #' **Load data**
-electric <- read.table(here("ElectricCompany/data","electric.dat"), header=TRUE)
+electric <- read.table(root("ElectricCompany/data","electric.dat"), header=TRUE)
 
 #' **Plot of raw data**
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","electricdata.ps"), horizontal=FALSE, height=7, width=6)
+postscript(root("ElectricCompany/figs","electricdata.ps"), horizontal=FALSE, height=7, width=6)
 #+
 onlytext <- function (string){
   plot(0:1, 0:1, bty='n', type='n', xaxt='n', yaxt='n', xlab='', ylab='')
@@ -46,7 +47,7 @@ dev.off()
 
 #' **Plot the data the other way**
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","electricdata.horizontal.ps"), horizontal=F, height=6, width=7)
+postscript(root("ElectricCompany/figs","electricdata.horizontal.ps"), horizontal=F, height=6, width=7)
 #+
 onlytext<-function(string){
   plot(0:1, 0:1, bty='n', type='n', xaxt='n', yaxt='n', xlab='', ylab='')
@@ -73,7 +74,7 @@ dev.off()
 #' **Another plot**
 attach.all(electric)
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","electricscatter1a.ps"), horizontal=T, height=4)
+postscript(root("ElectricCompany/figs","electricscatter1a.ps"), horizontal=T, height=4)
 #+
 par(mfrow=c(1,4), pty="s")
 x.range <- cbind(c(5,40,40,40), c(25,125,125,125))
@@ -97,7 +98,7 @@ dev.off()
 
 #' **Yet another plot**
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","electricscatter1b.ps"), horizontal=T, height=4)
+postscript(root("ElectricCompany/figs","electricscatter1b.ps"), horizontal=T, height=4)
 #+
 par(mfrow=c(1,4), pty="s")
 for (j in 1:4){
@@ -120,7 +121,7 @@ dev.off()
 
 #' **Plot more**
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","electricscatter2.ps"), horizontal=T, height=4)
+postscript(root("ElectricCompany/figs","electricscatter2.ps"), horizontal=T, height=4)
 #+
 par(mfrow=c(1,4), pty="s")
 for (j in 1:4){
@@ -157,7 +158,7 @@ sim.4 <- sim(lm.4, n.sims)
 
 #' **Plot linear model**
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","grade4.interactions.ps"), horizontal=T, height=3.8, width=5)
+postscript(root("ElectricCompany/figs","grade4.interactions.ps"), horizontal=T, height=3.8, width=5)
 #+
 plot(0, 0, xlim=range(pre.test[grade==4]), ylim=c(-5,10),
        xlab="pre-test", ylab="treatment effect", main="treatment effect in grade 4")
@@ -187,7 +188,7 @@ for (k in 1:4){
   se1[k] <- summary(lm.1)$coef[2,2]
   se2[k] <- summary(lm.2)$coef[2,2]
 }
-regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", here("ElectricCompany/figs","electric.ests.ps"))
+regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", root("ElectricCompany/figs","electric.ests.ps"))
 
 #' **Analyze replace/supplement**
 supp <- c(as.numeric(electric[,"Supplement."])-1, rep(NA,nrow(electric)))
@@ -195,7 +196,7 @@ supp <- c(as.numeric(electric[,"Supplement."])-1, rep(NA,nrow(electric)))
 
 #' **Plot replace/supplement**
 #+ eval=FALSE, include=FALSE
-postscript(here("ElectricCompany/figs","electricsupp1.ps"), horizontal=T, height=2.6)
+postscript(root("ElectricCompany/figs","electricsupp1.ps"), horizontal=T, height=2.6)
 #+
 jitter.binary <- function (a, jitt=.05){
   a + (1-2*a)*runif(length(a), 0, jitt)
@@ -225,4 +226,4 @@ for (k in 1:4){
 dev.off()
 
 #+ eval=FALSE, include=FALSE
-regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", here("ElectricCompany/figs","electricsupp2.ps"))
+regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", root("ElectricCompany/figs","electricsupp2.ps"))

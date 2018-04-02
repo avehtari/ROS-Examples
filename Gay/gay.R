@@ -12,7 +12,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
 library("rstan")
 library("mgcv")
@@ -22,7 +23,7 @@ library("dbarts")
 
 #' **Define common plot functions**
 gay_plot <- function(fit=NULL, question=NULL, title=NULL, pdf=FALSE) {
-  if (pdf) pdf(here("Gay/figs",paste("gay", index, ".pdf", sep="")), height=4.5, width=6)
+  if (pdf) pdf(root("Gay/figs",paste("gay", index, ".pdf", sep="")), height=4.5, width=6)
   par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
   plot(gay_sum[[j]]$age, gay_sum[[j]]$y/gay_sum[[j]]$n, ylim=c(0,.65), yaxs="i", xlab="Age", ylab=question, yaxt="n", bty="l", type="n", main=title)
   axis(2, seq(0,1,.2), c("0","20%","40%","60%","80%","100%"))
@@ -92,7 +93,7 @@ pdf=FALSE
 for (j in 1:2){
   
   # Prepare the data
-  gay[[j]] <- read.csv(here("Gay/data","naes04.csv"))
+  gay[[j]] <- read.csv(root("Gay/data","naes04.csv"))
   gay[[j]] <- gay[[j]][!is.na(gay[[j]][,"age"]) & !is.na(gay[[j]][,variable[j]]),]
   gay[[j]]$age[gay[[j]]$age>90] <- 91
   y <- as.character(gay[[j]][,variable[j]])
@@ -149,7 +150,7 @@ for (j in 1:2){
 
 #' **New graphs**
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay10.pdf"), height=4, width=10)
+pdf(root("Gay/figs","gay10.pdf"), height=4, width=10)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfrow=c(1,2))
@@ -163,7 +164,7 @@ for (j in 1:2){
 dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay11.pdf"), height=10, width=7)
+pdf(root("Gay/figs","gay11.pdf"), height=10, width=7)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(4,2), oma=c(0,0,2.5,0))
@@ -188,7 +189,7 @@ dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay12.pdf"), height=8, width=10)
+pdf(root("Gay/figs","gay12.pdf"), height=8, width=10)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(2,2))
@@ -203,7 +204,7 @@ dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(here("Gay/figs","gay13.pdf"), height=5.5, width=7)
+pdf(root("Gay/figs","gay13.pdf"), height=5.5, width=7)
 #+
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(2,2), oma=c(0,0,2.5,0))

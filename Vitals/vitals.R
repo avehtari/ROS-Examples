@@ -11,13 +11,14 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
 #' **Load data**
-vitals_full <- read.csv(here("Vitals/data","vitals.csv"))
+vitals_full <- read.csv(root("Vitals/data","vitals.csv"))
 minidata <- vitals_full[, c("weight","height","female","ethnicity","exercise","smokenow")]
 ok <- apply(is.na(minidata), 1, sum) == 0
 vitals <- minidata[ok,]

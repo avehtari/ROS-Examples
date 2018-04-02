@@ -11,6 +11,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
@@ -32,7 +34,7 @@ display(fit)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("Simplest/figs","simple.pdf"), height=4, width=5.5)
+pdf(root("Simplest/figs","simple.pdf"), height=4, width=5.5)
 #+
 par(mar=c(3,3,1,1), mgp=c(1.7,.5,0), tck=-.01)
 plot(fake$x, fake$y, main="Data and fitted regression line", bty="l", pch=20)
@@ -82,7 +84,7 @@ display(fit)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("Simplest/figs","simplest_1.pdf"), height=4, width=5)
+pdf(root("Simplest/figs","simplest_1.pdf"), height=4, width=5)
 #+
 par(mar=c(3,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 plot(x, y, xlab="Indicator, x", ylab="y", bty="l", xaxt="n", main="Regression on an indicator is the same\nas computing a difference in means",  pch=19, cex=.5)

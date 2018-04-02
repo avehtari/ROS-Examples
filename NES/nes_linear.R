@@ -11,11 +11,12 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("foreign")
 
 #' **Load data**
-data <- read.table(here("NES/data","nes.dat"))
+data <- read.table(root("NES/data","nes.dat"))
 
 #' **Partyid model to illustrate repeated model use (secret weapon)**
 regress_year <- function (yr) {
@@ -32,7 +33,7 @@ yrs <- seq(1972,2000,4)
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(here("NES/figs","partyid_1.pdf"), height=2.5, width=7.5)
+pdf(root("NES/figs","partyid_1.pdf"), height=2.5, width=7.5)
 #+
 coef_names <- c("Intercept", "Ideology", "Black", "Age_30_44", "Age_45_64", "Age_65_up", "Education", "Female", "Income")
 par(mfrow=c(2,5), mar=c(2,3,2,2), tck=-.02, mgp=c(2,.7,0))

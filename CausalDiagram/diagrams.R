@@ -1,6 +1,6 @@
 setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/CausalDiagram")
 
-pdf(here("CausalDiagram/figs","diagram1.pdf"), height=4.5, width=10)
+pdf(root("CausalDiagram/figs","diagram1.pdf"), height=4.5, width=10)
 par(mar=c(0,0,0,0))
 plot(c(-.5,4), c(0,1.8), xlab="", ylab="", xaxt="n", yaxt="n", bty="n", type="n")
 text(0, 1, "x", cex=2.4)

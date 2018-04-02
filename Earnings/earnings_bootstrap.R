@@ -11,12 +11,13 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 
 #' **Load data**
-earnings <- read.csv(here("Earnings/data","earnings.csv"))
-earnings_all <- read.csv(here("Earnings/data","earnings.csv"))
+earnings <- read.csv(root("Earnings/data","earnings.csv"))
+earnings_all <- read.csv(root("Earnings/data","earnings.csv"))
 earnings_all$positive <- earnings_all$earn > 0
 #' only non-zero earnings
 earnings <- earnings_all[earnings_all$positive, ]

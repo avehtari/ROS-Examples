@@ -11,11 +11,12 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 
 #' **Load data**
-ps <- read.table(here("FrenchElection/data","ps_primaire.txt"), header=TRUE)
+ps <- read.table(root("FrenchElection/data","ps_primaire.txt"), header=TRUE)
 
 #* **Analyze**
 J <- nrow(ps)

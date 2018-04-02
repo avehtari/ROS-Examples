@@ -11,13 +11,14 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
 #' **Load data**
-hibbs <- read.table(here("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
 
 #' Contour plots etc of simple likelihoods
@@ -52,7 +53,7 @@ z <- exp(z-max(z))
 
 #' **More graphs for the bread and peace model**
 #+ eval=FALSE, include=FALSE
-pdf(here("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
+pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
 #+
 par(mar=c(0, 0, 0, 0))
 persp(x, y, z,
@@ -65,7 +66,7 @@ mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
 dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(here("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
+pdf(root("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a) %+-% 1, " std err,  ", hat(b) %+-% 1, " std err)")), type="n")
@@ -76,7 +77,7 @@ points(summ$coef[1,1], summ$coef[2,1], pch=19)
 dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(here("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
+pdf(root("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a), ", ", hat(b), ") and covariance matrix")), type="n")
@@ -100,7 +101,7 @@ a <- sims[,1]
 b <- sims[,2]
 
 #+ eval=FALSE, include=FALSE
-pdf(here("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
+pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n")

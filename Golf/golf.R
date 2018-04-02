@@ -11,14 +11,15 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstan")
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
 #' **Set up the data**
-golf <- read.table(here("Golf/data","golf.txt"), header=TRUE, skip=2)
+golf <- read.table(root("Golf/data","golf.txt"), header=TRUE, skip=2)
 x <- golf$x
 y <- golf$y
 n <- golf$n
@@ -29,7 +30,7 @@ se <- sqrt((y/n)*(1-y/n)/n)
 
 #' **Plot data**
 #+ eval=FALSE, include=FALSE
-pdf(here("Golf/figs","golf0.pdf"), height=5, width=7)
+pdf(root("Golf/figs","golf0.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Data on putts in pro golf")
@@ -39,9 +40,9 @@ text(x + .4, y/n + se + .02, paste(y, "/", n,sep=""), cex=.6, col="gray40")
 dev.off()
 
 #' **Fit the geometry based nonlinear model**
-writeLines(readLines(here("Golf","golf1.stan")))
+writeLines(readLines(root("Golf","golf1.stan")))
 #+ results='hide'
-fit1 <- stan(here("Golf","golf1.stan"))
+fit1 <- stan(root("Golf","golf1.stan"))
 #+
 print(fit1)
 
@@ -50,9 +51,9 @@ sims1 <- extract(fit1)
 sigma_hat <- median(sims1$sigma)
 
 #' **Fit naive logistic regression**
-writeLines(readLines(here("Golf","golf_logistic.stan")))
+writeLines(readLines(root("Golf","golf_logistic.stan")))
 #+ results='hide'
-fit2 <- stan(here("Golf","golf_logistic.stan"))
+fit2 <- stan(root("Golf","golf_logistic.stan"))
 #+
 print(fit2)
 
@@ -63,7 +64,7 @@ b_hat <- median(sims2$b)
 
 #' **Plot logistic regression result**
 #+ eval=FALSE, include=FALSE
-pdf(here("Golf/figs","golf1.pdf"), height=5, width=7)
+pdf(root("Golf/figs","golf1.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Fitted logistic regression")
@@ -75,7 +76,7 @@ dev.off()
 
 #' **Plot geometry based model result**
 #+ eval=FALSE, include=FALSE
-pdf(here("Golf/figs","golf2.pdf"), height=5, width=7)
+pdf(root("Golf/figs","golf2.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Custom nonlinear model fit in Stan")
@@ -89,7 +90,7 @@ dev.off()
 
 #' **Plot geometry based model posterior draws of sigma**
 #+ eval=FALSE, include=FALSE
-pdf(here("Golf/figs","golf2a.pdf"), height=5, width=7)
+pdf(root("Golf/figs","golf2a.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Custom nonlinear model fit in Stan")
@@ -106,7 +107,7 @@ dev.off()
 
 #' **Plot two models in same figure**
 #+ eval=FALSE, include=FALSE
-pdf(here("Golf/figs","golf3.pdf"), height=5, width=7)
+pdf(root("Golf/figs","golf3.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02), xaxs="i", yaxs="i", pch=20, bty="l", xlab="Distance from hole (feet)", ylab="Probability of success", main="Two models fit to the golf putting data")

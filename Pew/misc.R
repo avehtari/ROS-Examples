@@ -116,7 +116,7 @@ ideology <- ifelse(ideology0==2, 5, # Very conservative
 ideology.label <- c("Very liberal", "Liberal", "Moderate", "Conservative", "Very conservative")
 n.ideology <- max(ideology, na.rm=TRUE)
 
-pdf(here("Pew/figs","pid.pdf"), height=4.5, width=5.5)
+pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5)
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")
 axis(1, 1:n.inc, rep("",n.inc))
@@ -138,7 +138,7 @@ for (i in 1:n.pid){
 mtext("Self-declared party identification, by income", side=3, line=1, cex=1.2)
 dev.off()
 
-pdf(here("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
+pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")
 axis(1, 1:n.inc, rep("",n.inc))

@@ -11,7 +11,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
@@ -20,7 +21,7 @@ library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 
 #' **Load data**
-earnings_all <- read.csv(here("Earnings/data","earnings.csv"))
+earnings_all <- read.csv(root("Earnings/data","earnings.csv"))
 earnings_all$positive <- earnings_all$earn > 0
 # only non-zero earnings
 earnings <- earnings_all[earnings_all$positive, ]
@@ -35,7 +36,7 @@ display(lm_0)
 
 #+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
-pdf(here("Earnings/figs","heights1a.pdf"), height=8.5, width=11)
+pdf(root("Earnings/figs","heights1a.pdf"), height=8.5, width=11)
 # plot linear model
 par(mar=c(6,6,4,2)+.1)
 plot(earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings",
@@ -59,7 +60,7 @@ gg_earnings
 #+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
 # plot extrapolation
-pdf(here("Earnings/figs","heights1b.pdf"), height=8.5, width=11)
+pdf(root("Earnings/figs","heights1b.pdf"), height=8.5, width=11)
 par(mar=c(6,6,4,2)+.1)
 plot(xlim=c(0,max(earnings$height)), ylim=c(-70000,200000), earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10", cex.main=3, main="Extrapolation")
 abline(coef(lm_0), lwd=2)
@@ -83,7 +84,7 @@ coef1 <- coef(lm_1)
 
 #+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
-pdf(here("Earnings/figs","heights2.pdf"), height=8.5, width=11)
+pdf(root("Earnings/figs","heights2.pdf"), height=8.5, width=11)
 par(mar=c(6,6,5,2)+.1)
 plot(range(earnings$height), range(predict(lm_1)), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10",
       cex.main=3, main="Fitted regression, displayed as\nseparate lines for men and women", bty="l")
@@ -128,7 +129,7 @@ coef2 <- coef(lm_2)
 
 #+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
-pdf(here("Earnings/figs","heights3.pdf"), height=8.5, width=11)
+pdf(root("Earnings/figs","heights3.pdf"), height=8.5, width=11)
 par(mar=c(6,6,5,2)+.1)
 plot(range(earnings$height), range(predict(lm_2)), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10", cex.main=3, main="Fitted regression with interactions,\nseparate lines for men and women", bty="l")
 axis(2, c(20000,30000), cex.axis=3)
@@ -194,7 +195,7 @@ n_sims <- nrow(sims)
 
 #+ eval=FALSE, include=FALSE
 # figure for the book, don't display in the report
-postscript(here("Earnings/figs","heights.log1a.ps"), horizontal=TRUE)
+postscript(root("Earnings/figs","heights.log1a.ps"), horizontal=TRUE)
 par(mar=c(6,6,4,2)+.1)
 plot(earnings$height + runif(n,-.2,.2), earnings$log_earn, xlab="height", ylab="log (earnings)", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10",
       cex.main=3, main="Log regression, plotted on log scale")

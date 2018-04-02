@@ -13,7 +13,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
@@ -24,7 +25,7 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 #' The data came originally as an Excel file (ProfEvaltnsBeautyPublic.xls)
 #' which was saved to a .csv file (comma-separated values).<br/>
 #' Read the data into R, including the variable names (headers)
-data <- read.csv(here("Beauty/data","ProfEvaltnsBeautyPublic.csv"), header=TRUE)
+data <- read.csv(root("Beauty/data","ProfEvaltnsBeautyPublic.csv"), header=TRUE)
 # Rename the two variables for convenience
 data$beauty <- data$btystdave
 data$eval <- data$courseevaluation

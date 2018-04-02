@@ -11,7 +11,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
@@ -20,7 +21,7 @@ options(mc.cores = parallel::detectCores())
 congress <- vector("list", 49)
 for (i in 1:49){
   year <- 1896 + 2*(i-1)
-  file <- here("Congress/data",paste(year, ".asc", sep=""))
+  file <- root("Congress/data",paste(year, ".asc", sep=""))
   data_year <- matrix(scan(file), byrow=TRUE, ncol=5)
   data_year <- cbind(rep(year, nrow(data_year)), data_year)
   congress[[i]] <- data_year

@@ -12,12 +12,13 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library(here)
-library(HistData)
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("HistData")
 library("arm")
 
 #' **Load data**
-heights <- read.table(here("PearsonLee/data","Heights.txt"), header=TRUE)
+heights <- read.table(root("PearsonLee/data","Heights.txt"), header=TRUE)
 daughter_height <- heights$daughter_height
 mother_height <- heights$mother_height
 n <- length(mother_height)
@@ -29,7 +30,7 @@ ab_hat <- coef(lm_1)
 
 #' **Plots for the paper/book**
 #+ eval=FALSE, include=FALSE
-pdf(here("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
+pdf(root("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, 1), mgp=c(1.7, .5, 0), tck=-.01)
 par(pty="s")
@@ -46,7 +47,7 @@ for (i in x){
 dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(here("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
+pdf(root("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
 #+
 mother_height_jitt <- mother_height + runif(n, -0.5, 0.5)
 daughter_height_jitt <- daughter_height + runif(n, -0.5, 0.5)
@@ -66,7 +67,7 @@ dev.off()
 
 #+ eval=FALSE, include=FALSE
 # plot for the paper/book
-pdf(here("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
+pdf(root("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 par(pty="s")
@@ -88,7 +89,7 @@ dev.off()
 
 #+ eval=FALSE, include=FALSE
 # plot for the paper/book
-pdf(here("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
+pdf(root("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 par(pty="s")
@@ -112,7 +113,7 @@ dev.off()
 
 #+ eval=FALSE, include=FALSE
 # plot for the paper/book
-pdf(here("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
+pdf(root("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 plot(c(0, 100), c(0, 100), xlab="", ylab="", xaxt="n", yaxt="n", bty="n", type="n")
@@ -129,7 +130,7 @@ dev.off()
 
 # plot for the paper/book
 #+ eval=FALSE, include=FALSE
-pdf(here("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
+pdf(root("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 plot(c(0, 100), c(0, 100), xlab="", ylab="", xaxt="n", yaxt="n", bty="n", type="n")

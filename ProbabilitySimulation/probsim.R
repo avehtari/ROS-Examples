@@ -9,6 +9,11 @@
 #' -------------
 #' 
 
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+
 #' **How many girls in 400 births?**
 n_girls <- rbinom(1, 400, 0.488)
 print(n_girls)
@@ -21,7 +26,7 @@ for (s in 1:n_sims){
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("ProbabilitySimulation/figs","girls1.pdf"), height=3.5, width=5.5)
+pdf(root("ProbabilitySimulation/figs","girls1.pdf"), height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist(n_girls, main="", xaxt="n", yaxt="n")
@@ -67,7 +72,7 @@ for (s in 1:n_sims){
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("ProbabilitySimulation/figs","girls2.pdf"), height=3.5, width=5.5)
+pdf(root("ProbabilitySimulation/figs","girls2.pdf"), height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist (n_girls, main="", xaxt="n", yaxt="n", mgp=c(1.5,.5,0))
@@ -85,7 +90,7 @@ y4 <- rpois(n_sims, 5)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
-pdf(here("ProbabilitySimulation/figs","4dists.pdf"), height=7, width=10)
+pdf(root("ProbabilitySimulation/figs","4dists.pdf"), height=7, width=10)
 #+
 par(mar=c(4,3,4,3),  mgp=c(1.5,.5,0), tck=-.01)
 par(mfrow=c(2,2))

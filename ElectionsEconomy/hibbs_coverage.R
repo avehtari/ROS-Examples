@@ -11,13 +11,14 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
 #' **Load data**
-hibbs <- read.table(here("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 
 #' **Step 1: Creating the pretend world**
 a <- 46.2

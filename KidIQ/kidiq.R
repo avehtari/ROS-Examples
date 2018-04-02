@@ -11,7 +11,8 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
@@ -21,7 +22,7 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 library("foreign")
 
 #' **Load children's test scores data**
-kidiq <- read.dta(file=here("KidIQ/data","kidiq.dta"))
+kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 
 #' ### A single predictor
 #' 
@@ -159,7 +160,7 @@ sims_3 <- as.matrix(stan_fit_3)
 n_sims_3 <- nrow(sims_3)
 
 #+ eval=FALSE, include=FALSE
-pdf(here("KidIQ/figs","kidiq.betasim2.pdf"), height=3.5, width=9)
+pdf(root("KidIQ/figs","kidiq.betasim2.pdf"), height=3.5, width=9)
 #+
 par(mar=c(3,3,1,3), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfrow=c(1,2))
