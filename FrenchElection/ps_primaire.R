@@ -18,7 +18,7 @@ library("arm")
 #' **Load data**
 ps <- read.table(root("FrenchElection/data","ps_primaire.txt"), header=TRUE)
 
-#* **Analyze**
+#' **Analyze**
 J <- nrow(ps)
 n1 <- ps[J,2]
 n2 <- ps[J,3] - ps[J,2]

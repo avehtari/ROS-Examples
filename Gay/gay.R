@@ -87,7 +87,7 @@ gay_GP <- as.list(rep(NA, 2))
 gay_bart <- as.list(rep(NA, 2))
 gay_spline_2 <- as.list(rep(NA, 2))
 
-#' **Loop over two different questions*
+#' **Loop over two different questions**
 # by default don't save pdf's to file, change this to TRUE if you want to save pdf's
 pdf=FALSE
 for (j in 1:2){

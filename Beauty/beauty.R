@@ -184,7 +184,7 @@ display(lm_6)
 lm_7 <- lm(eval ~ beauty + female + nonenglish + lower, data=data)
 display(lm_7)
 
-# ### Go back to simple model, add course indicators
+#' ### Go back to simple model, add course indicators
 
 #' Create the course index variable
 courses <- data[, 18:47]   # (indicators for the 30 courses)
