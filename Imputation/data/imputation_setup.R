@@ -1,12 +1,24 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Imputation")
+#' ---
+#' title: "Regression and Other Stories: Imputation"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
 
-## Read in data from wave 3 of the Social Indicators Survey
+#' Prepare data set for imputation example
+#' 
+#' -------------
+#' 
 
-wave3 <- read.table("siswave3v4impute3.csv", header=TRUE, sep=",")
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+
+#' Read in data from wave 3 of the Social Indicators Survey
+wave3 <- read.table(root("Imputation/data","siswave3v4impute3.csv"), header=TRUE, sep=",")
 n <- nrow(wave3)
 
-# Helpful little functions
-
+#' Helpful little functions
 random_imp <- function(a) {
   missing <- is.na(a)
   n_missing <- sum(missing)
@@ -15,15 +27,14 @@ random_imp <- function(a) {
   imputed[missing] <- sample(a_obs, n_missing)
   return(imputed)
 }
-
 topcode <- function(a, top) {
   return(ifelse(a > top, top, a))
 }
 
-# missing codes:  -9: refused/dk to say if you have this source
+# Missing codes:  -9: refused/dk to say if you have this source
 #                 -5: you said you had it but refused/dk the amount
 
-# earnings variables:
+# Earnings variables:
 
 # rearn:  respondent's earnings
 # tearn:  spouse's earnings
@@ -40,7 +51,7 @@ topcode <- function(a, top) {
 # welfare:  public assistance for entire family
 # charity:  income received from charity for entire family
 
-# demographics:
+# Demographics:
 
 # earners:  #earners in family (0,1,2)
 # sex:  male=1, female=2
@@ -56,7 +67,6 @@ topcode <- function(a, top) {
 # marrcoh:  0=single, 1=married/cohabitating
 # workmos:  primary earner's months worked last year
 # workhrs:  primary earner's hours/week worked last year
-
 white <- ifelse(wave3$race == 1, 1, 0)
 white[is.na(wave3$race)] <- 0
 male <- ifelse(wave3$sex == 1, 1, 0)
@@ -68,9 +78,7 @@ no_earners <- ifelse(earners == 0, 1, 0)
 workhrs <- wave3$workhrs
 workhrs_top <- topcode(workhrs, 40)
 
-# set up some simplified variables to work with
-
-
+#' Set up some simplified variables to work with
 na_fix <- function(a) {
   ifelse(a < 0 | a == 999999, NA, a)
 }
@@ -91,21 +99,18 @@ assistance <-
   na_fix(wave3$unemp) + na_fix(wave3$ssi) + na_fix(wave3$welfare) + na_fix(wave3$charity)
 other <- na_fix(wave3$alimony) + na_fix(wave3$giftmon)
 
-# summary variables for various income supports
-
+#' Summary variables for various income supports
 any_unemp <- is_any(wave3$unemp)
 any_ssi <- is_any(wave3$ssi)
 any_welfare <- is_any(wave3$welfare)
 any_charity <- is_any(wave3$charity)
 
-# transforming and topcoding the different sources of income
-
+#' Transforming and topcoding the different sources of income
 earnings <- earnings/1000
 retirement <- retirement/1000
 interest <- interest/1000
 assistance <- assistance/1000
 other <- other/1000
-
 earnings_top <- topcode(earnings, 100)
 retirement_top <- topcode(retirement, 100)
 interest_top <- topcode(interest, 100)
