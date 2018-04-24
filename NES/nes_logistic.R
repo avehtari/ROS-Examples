@@ -1,38 +1,54 @@
-# coefficient for black in 1964 to illustrate nonidentifiability of logistic regression for chap 5 hwk
+#' ---
+#' title: "Regression and Other Stories: National election study"
+#' author: "Andrew Gelman, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
 
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/NES")
+#' Logistic regression
+#' 
+#' -------------
+#' 
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
+library("foreign")
 
-nes <- read.table("nes.dat", header=TRUE)
+#' **Load data**
+nes <- read.table(root("NES/data","nes.dat"), header=TRUE)
+
+#' Use first only data from 1992 and remove missing data
 ok <- nes$year==1992 & !is.na(nes$rvote) & !is.na(nes$dvote) & (nes$rvote==1 | nes$dvote==1)
 nes92 <- nes[ok,]
 
-# logistic regression of vote preference on income
-
+#' **Logistic regression of vote preference on income**
 fit_1 <- glm(rvote ~ income, family=binomial(link="logit"), data=nes92)
 display(fit_1)
 stan_fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=nes92)
 print(stan_fit_1)
 
-# predictions
+#' Predictions
 new <- data.frame(income=5)
 linpred <- posterior_linpred(stan_fit_1, transform=TRUE, newdata=new)
 predict <- posterior_predict(stan_fit_1, newdata=new)
 
-## fake data
+#' **Fake data example**
 data <- data.frame(rvote=rep(c(0,1), 10), income=1:20)
-stan_fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
+stan_fit_f <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
 new <- data.frame(income=5)
-predict <- posterior_predict(stan_fit_1, newdata=new)
+predict <- posterior_predict(stan_fit_f, newdata=new)
 
-
+#' **Plot jittered data and prediction from the logistic regression**
+#+ eval=FALSE, include=FALSE
+pdf(root("NES/figs","income1a.pdf"), height=2.8, width=3.8)
+#+
 n <- nrow(nes92)
 income_jitt <- nes92$income + runif(n, -.2, .2)
-vote_jitt <- nes92$vote + ifelse(nes92$vote==0, runif(n, .005, .05), runif(n, -.05, -.005))
-
-pdf("income1a.pdf", height=2.8, width=3.8)
+vote_jitt <- nes92$rvote + ifelse(nes92$rvote==0, runif(n, .005, .05), runif(n, -.05, -.005))
 par(mar=c(3,3,1,.1), tck=-.01, mgp=c(1.7, .3, 0))
 ok <- nes92$presvote<3
 vote <- nes92$presvote[ok] - 1
@@ -45,9 +61,13 @@ axis(1, 1:5)
 mtext("(poor)", 1, 1.2, at=1, adj=.5)
 mtext("(rich)", 1, 1.2, at=5, adj=.5)
 points(income_jitt, vote_jitt, pch=20, cex=.1)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-pdf("income1b.pdf", height=2.8, width=3.8)
+#' **Plot jittered data and prediction with uncertainties**
+#+ eval=FALSE, include=FALSE
+pdf(root("NES/figs","income1b.pdf"), height=2.8, width=3.8)
+#+
 par(mar=c(3,3,1,.1), tck=-.01, mgp=c(1.7, .3, 0))
 ok <- nes92$presvote<3
 vote <- nes92$presvote[ok] - 1
@@ -65,10 +85,10 @@ for (j in sample(n_sims, 20)){
 }
 curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, add=TRUE)
 points(income_jitt, vote_jitt, pch=20, cex=.1)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-# series of regressions
-
+#' **Series of regressions for different years**
 yrs <- seq(1952, 2000, 4)
 n_yrs <- length(yrs)
 fits <- array(NA, c(n_yrs, 3), dimnames <- list(yrs, c("year", "coef", "se")))
@@ -81,7 +101,10 @@ for (j in 1:n_yrs){
   fits[j,] <- c(yr, coef(fit_1)[2], se.coef(fit_1)[2])
 }
 
-pdf("incomeseries.pdf", height=3.4, width=4.9)
+#' **Plot the series of regression**
+#+ eval=FALSE, include=FALSE
+pdf(root("NES/figs","incomeseries.pdf"), height=3.4, width=4.9)
+#+
 par(mar=c(3,2.5,1,.2), tck=-.01, mgp=c(1.5, .3, 0))
 plot (fits[,"year"], fits[,"coef"], xlim=c(1950,2000), ylim=range(fits[,"coef"]-fits[,"se"], fits[,"coef"]+fits[,"se"]),
   pch=20, ylab="Coefficient of income", xlab="Year", bty="l")
@@ -89,10 +112,12 @@ for (j in 1:n_yrs){
   lines(rep(fits[j,"year"], 2), fits[j,"coef"] + fits[j,"se"]*c(-1,1), lwd=.5)
 }
 abline(0,0,lwd=.5, lty=2)
+#+ eval=FALSE, include=FALSE
 dev.off()
 
-# using "black" as a predictor for hwk assignment in chap 5
-
+#' **Illustrate nonidentifiability of logistic regression**<br>
+#' Use "black" as a predictor (nonidentifiability in 1964)
+#+ results='hide'
 fits_2 <- array(NA, c(n_yrs, 4, 2, 2), dimnames <- list(yrs, c("Intercept", "female", "black", "income"), c("coef", "se"), c("glm", "bayes")))
 for (j in 1:n_yrs){
   print(yrs[j])
@@ -108,7 +133,10 @@ for (j in 1:n_yrs){
   print(fit_bayes)
 }
 
-pdf("separation_compare.pdf", height=2.8, width=8.3)
+#' **Plot illustration on nonidentifiability of logistic regression**
+#+ eval=FALSE, include=FALSE
+pdf(root("NES/figs","separation_compare.pdf"), height=2.8, width=8.3)
+#+ fig.width=9, fig.height=6
 par(mfrow=c(2,5), mar=c(3,3,0,1), tck=-.02, mgp=c(1.2,.3,0), oma=c(0,0,3,0))
 for (k in 1:2){
   plot(0,0,xlab="",ylab="",xaxt="n",yaxt="n",bty="n",type="n")
@@ -125,4 +153,5 @@ for (k in 1:2){
     if (k==1) mtext(dimnames(fits_2)[[2]][l], 3, 1.5, cex=.8)
   }
 }
+#+ eval=FALSE, include=FALSE
 dev.off()
