@@ -13,7 +13,6 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("ggplot2")
@@ -27,54 +26,48 @@ kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 #' ### A single predictor
 #' 
 
-#' **A single binary predictor -- classical regression **
-fit_1 <- lm(kid_score ~ mom_hs, data=kidiq)
-display(fit_1)
+#' **A single binary predictor **
+#+ results='hide'
+fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq)
+#+
+print(fit_1)
 
-#' **A single continuous predictor -- classical regression **
-fit_2 <- lm(kid_score ~ mom_iq, data=kidiq)
-display(fit_2)
+#' **A single continuous predictor **
+#+ results='hide'
+fit_2 <- stan_glm(kid_score ~ mom_iq, data=kidiq)
+#+
+print(fit_2)
 
 #' **Displaying a regression line as a function of one input variable**
 plot(kidiq$mom_iq, kidiq$kid_score, xlab="Mother IQ score", ylab="Child test score")
-abline(coef(fit_2)[1], coef(fit_2)[2])
+abline(coef(fit_2))
+# or
+#abline(coef(fit_2)[1], coef(fit_2)[2])
+# or
+#curve(cbind(1,x) %*% coef(fit_2), add=TRUE)
 
-#' Alternately
-plot(kidiq$mom_iq, kidiq$kid_score, xlab="Mother IQ score", ylab="Child test score")
-curve(cbind(1,x) %*% coef(fit_2), add=TRUE)
-
-#' ggplot version
+#' **ggplot version**
 ggplot(kidiq, aes(mom_iq, kid_score)) +
   geom_point() +
-  geom_abline(
-    intercept = coef(fit_2)[1],
-    slope = coef(fit_2)[2]
-  ) +
-  labs(
-    x = "Mother IQ score",
-    y = "Child test score"
-  )
+  geom_abline(intercept = coef(fit_2)[1], slope = coef(fit_2)[2]) +
+  labs(x = "Mother IQ score", y = "Child test score")
 
 #' ### Two predictors
 #' 
 
-#' **Classical regression**
-fit_3 <- lm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-
-#' **Alternative displays in R**
-display(fit_3)
+#' **Linear regression**
+#+ results='hide'
+fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
+#+
 print(fit_3)
-summary(fit_3)
 
-#' **Bayesian regression**
-stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-print(stan_fit_3)
+#' **Alternative display**
+summary(fit_3)
 
 #' ### Graphical displays of data and fitted models
 #' 
 
 #' **Two fitted regression lines -- model with no interaction**
-fit_3 <- lm(kid_score ~ mom_hs + mom_iq, data=kidiq)
 colors <- ifelse(kidiq$mom_hs==1, "black", "gray")
 plot(kidiq$mom_iq, kidiq$kid_score,
   xlab="Mother IQ score", ylab="Child test score", col=colors, pch=20)
@@ -82,22 +75,21 @@ b_hat <- coef(fit_3)
 abline(b_hat[1] + b_hat[2], b_hat[3], col="black")
 abline(b_hat[1], b_hat[3], col="gray")
 
-#' ggplot version
+#' **ggplot version**
 ggplot(kidiq, aes(mom_iq, kid_score)) +
   geom_point(aes(color = factor(mom_hs)), show.legend = FALSE) +
   geom_abline(
     intercept = c(coef(fit_3)[1], coef(fit_3)[1] + coef(fit_3)[2]),
     slope = coef(fit_3)[3],
-    color = c("gray", "black")
-  ) +
+    color = c("gray", "black")) +
   scale_color_manual(values = c("gray", "black")) +
-  labs(
-    x = "Mother IQ score",
-    y = "Child test score"
-  )
+  labs(x = "Mother IQ score", y = "Child test score")
 
 #' **Two fitted regression lines -- model with interaction**
-fit_4 <- lm(kid_score ~ mom_hs + mom_iq + mom_hs:mom_iq, data=kidiq)
+#+ results='hide'
+fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_hs:mom_iq, data=kidiq)
+#+
+print(fit_4)
 colors <- ifelse(kidiq$mom_hs==1, "black", "gray")
 plot(kidiq$mom_iq, kidiq$kid_score,
   xlab="Mother IQ score", ylab="Child test score", col=colors, pch=20)
@@ -111,21 +103,16 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
   geom_abline(
     intercept = c(coef(fit_4)[1], sum(coef(fit_4)[1:2])),
     slope = c(coef(fit_4)[3], sum(coef(fit_4)[3:4])),
-    color = c("gray", "black")
-  ) +
+    color = c("gray", "black")) +
   scale_color_manual(values = c("gray", "black")) +
-  labs(
-    x = "Mother IQ score",
-    y = "Child test score"
-  )
+  labs(x = "Mother IQ score", y = "Child test score")
 
 #' ### Displaying uncertainty in the fitted regression
 #' 
 
 #' **A single continuous predictor **
-stan_fit_2 <- stan_glm(kid_score ~ mom_iq, data = kidiq)
-print(stan_fit_2)
-sims_2 <- as.matrix(stan_fit_2)
+print(fit_2)
+sims_2 <- as.matrix(fit_2)
 n_sims_2 <- nrow(sims_2)
 subset <- sample(n_sims_2, 10)
 plot(kidiq$mom_iq, kidiq$kid_score,
@@ -142,21 +129,15 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
     intercept = sims_2[subset, 1],
     slope = sims_2[subset, 2],
     color = "gray",
-    size = 0.25
-  ) +
+    size = 0.25) +
   geom_abline(
-    intercept = coef(stan_fit_2)[1],
-    slope = coef(stan_fit_2)[2],
-    size = 0.75
-  ) +
-  labs(
-    x = "Mother IQ score",
-    y = "Child test score"
-  )
+    intercept = coef(fit_2)[1],
+    slope = coef(fit_2)[2],
+    size = 0.75) +
+  labs(x = "Mother IQ score", y = "Child test score")
 
 #' **Two predictors **
-stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-sims_3 <- as.matrix(stan_fit_3)
+sims_3 <- as.matrix(fit_3)
 n_sims_3 <- nrow(sims_3)
 
 #+ eval=FALSE, include=FALSE
@@ -186,3 +167,34 @@ for (i in subset){
 curve(cbind(1, x, mom_iq_bar) %*% coef(stan_fit_3), col="black", add=TRUE)
 #+ eval=FALSE, include=FALSE
 dev.off()
+
+#+ **Center predictors to have zero mean**
+kidiq$c_mom_hs <- kidiq$mom_hs - mean(kidiq$mom_hs)
+kidiq$c_mom_iq <- kidiq$mom_iq - mean(kidiq$mom_iq)
+#+ results='hide'
+fit_4c <- stan_glm(kid_score ~ c_mom_hs + c_mom_iq + c_mom_hs:c_mom_iq, data=kidiq)
+#+
+print(fit_4c)
+
+#+ **Center predictors based on a reference point**
+kidiq$c2_mom_hs <- kidiq$mom_hs - 0.5
+kidiq$c2_mom_iq <- kidiq$mom_iq - 100
+#+ results='hide'
+fit_4c2 <- stan_glm(kid_score ~ c2_mom_hs + c2_mom_iq + c2_mom_hs:c2_mom_iq, data=kidiq)
+#+
+print(fit_4c2)
+
+#+ **Center and scale predictors to have zero mean and sd=1/2**
+kidiq$z_mom_hs <- (kidiq$mom_hs - mean(kidiq$mom_hs))/(2*sd(kidiq$mom_hs))
+kidiq$z_mom_iq <- (kidiq$mom_iq - mean(kidiq$mom_iq))/(2*sd(kidiq$mom_iq))
+#+ results='hide'
+fit_4z <- stan_glm(kid_score ~ z_mom_hs + z_mom_iq + z_mom_hs:z_mom_iq, data=kidiq)
+#+
+print(fit_4z)
+
+
+#+ **Predict using working status of mother**
+#+ results='hide'
+fit_5 <- stan_glm(kid_score ~ as.factor(mom_work), data=kidiq)
+#+
+print(fit_5)

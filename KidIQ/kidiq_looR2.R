@@ -1,5 +1,5 @@
 #' ---
-#' title: "Regression and Other Stories: KidIQ cross-validation"
+#' title: "Regression and Other Stories: KidIQ LOO-R2"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
@@ -22,8 +22,8 @@ library("foreign")
 kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 
 #' ### Estimate the predictive performance of a model using LOO-CV
-stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-loo_3 <- loo(stan_fit_3)
+fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq, seed=1507)
+loo_3 <- loo(fit_3)
 print(loo_3)
 
 #' **Add five pure noise predictors to the data
@@ -34,11 +34,11 @@ kidiqr$noise <- array(rnorm(5*n), c(n,5))
 
 #' ### Compare different models with LOO-CV
 #' 
-#' **Bayesian regression with additional noise predictors**
-stan_fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr)
+#' **Linear regression with additional noise predictors**
+fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr, seed=1507)
 
-#' **Bayesian regression with interaction**
-stan_fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs, data=kidiq)
+#' **Lienar regression with interaction**
+fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs, data=kidiq, seed=1507)
 
 #' ### R2 without and with LOO-CV
 R2 <- function(fit) {
@@ -59,9 +59,11 @@ looR2 <- function(fit) {
 }
 #' **R2 without LOO-CV**<br>
 #' R2 increases when five noise predictors are addded
-round(R2(stan_fit_3),2)
-round(R2(stan_fit_3n),2)
+round(R2(fit_3),2)
+round(R2(fit_3n),2)
 #' **R2 with LOO-CV**<br>
 #' R2 decreases when five noise predictors are addded
-round(looR2(stan_fit_3),2)
-round(looR2(stan_fit_3n),2)
+round(looR2(fit_3),2)
+round(looR2(fit_3n),2)
+#' R2 increases when interaction is addded
+round(looR2(fit_4),2)
