@@ -13,7 +13,6 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("ggplot2")
@@ -80,9 +79,13 @@ abline(50, 0, lwd=.5, col="gray")
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#' ### Classical regression
-M1 <- lm(vote ~ growth, data = hibbs)
-display(M1)
+#' ### Linear regression
+M1 <- stan_glm(vote ~ growth, data = hibbs)
+print(M1)
+prior_summary(M1)
+
+#' **Posterior interval**
+round(posterior_interval(M1),1)
 
 #' **Plot regression line**
 #+ eval=FALSE, include=FALSE
@@ -98,9 +101,6 @@ abline(coef(M1), col="gray15")
 text(2.7, 53.5, paste("y =", fround(coef(M1)[1],1), "+", fround(coef(M1)[2],1), "x"), adj=0, col="gray15")
 #+ eval=FALSE, include=FALSE
 dev.off()
-
-#' **Confidence interval**
-print(coef(M1)["growth"] + c(-1,1)*qt(.975,13)*se.coef(M1)["growth"])
 
 #' **Prediction given 2% growth**
 #+ eval=FALSE, include=FALSE
@@ -121,20 +121,16 @@ text(51, .035, "Predicted\n73% chance of\nClinton victory", adj=0)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#' ### Bayesian regression
-
-#' **Fit the model**
-M2 <- stan_glm(vote ~ growth, data = hibbs)
-print(M2)
-prior_summary(M2)
+#' ### Illustrate computations
 
 #' **Extract the simulations**
-sims <- as.matrix(M2)
+sims <- as.matrix(M1)
 a <- sims[,1]
 b <- sims[,2]
 sigma <- sims[,3]
 n_sims <- nrow(sims)
 
+#' **Median and mean absolute deviation (MAD)**
 print(median(a))
 print(1.483*median(abs(a - median(a))))
 
@@ -146,7 +142,7 @@ Median <- median(y_pred)
 MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
 win_prob <- mean(y_pred > 50)
 cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
-  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="")
+  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="", "\n")
 
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10)
@@ -162,7 +158,6 @@ arrows(median(b) - 1.483*median(abs(b - median(b))), 550, median(b) + 1.483*medi
 arrows(median(b) - 2*1.483*median(abs(b - median(b))), 250, median(b) + 2*1.483*median(abs(b - median(b))), 250, length=.1, code=3, lwd=2)
 #+ eval=FALSE, include=FALSE
 dev.off()
-
 
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_2a.pdf"), height=4.5, width=5)
@@ -234,14 +229,14 @@ Median <- median(y_pred)
 MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
 win_prob <- mean(y_pred > 50)
 cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
-  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="")
+  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="", "\n")
 
 #' Use the posterior_predict function from rstanarm
 new_data <- data.frame(growth = 2.0)
-y_pred <- posterior_predict(M2, new_data)
+y_pred <- posterior_predict(M1, new_data)
 
 new_data_grid <- data.frame(growth = seq(-2.0, 4.0, 0.5))
-y_pred_grid <- posterior_predict(M2, new_data_grid)
+y_pred_grid <- posterior_predict(M1, new_data_grid)
 
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_3.pdf"), height=3.5, width=6)
@@ -259,7 +254,7 @@ mcmc_hist(y_pred, binwidth = 1) +
   xlim(35, 70) +
   labs(
     x ="Clinton share of the two-party vote",
-    title = "Bayesian simulations of Hillary Clinton vote share,\nbased on 2% rate of economic growth"
+    title = "Simulations of Hillary Clinton vote share,\nbased on 2% rate of economic growth"
   ) +
   theme(axis.line.y = element_blank())
 
@@ -283,3 +278,9 @@ se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
 #' Ramp up the data variance
 se_data <- .075
 print((theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2)/(1/se_prior^2 + 1/se_data^2))
+
+
+#' ### Comparison to `lm()`
+M1a <- lm(vote ~ growth, data=hibbs)
+print(M1a)
+summary(M1a)

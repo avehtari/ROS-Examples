@@ -13,7 +13,6 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
@@ -28,51 +27,59 @@ x <- hibbs$growth
 n <- length(x)
 
 #' **Step 2: Simulating fake data**
+set.seed(1)
 y <- a + b*x + rnorm(n, 0, sigma)
 fake <- data.frame(x, y)
 
 #' **Step 3: Fitting the model and comparing fitted to pretend values**
-fit <- lm(y ~ x, data=fake)
-display(fit)
+#+ results='hide'
+fit <- stan_glm(y ~ x, data = fake)
+#+
+print(fit)
 
-b_hat <- coef(fit)["x"]
-b_se <- se.coef(fit)["x"]
-
-cover_68 <- abs(b - b_hat) < b_se
-cover_95 <- abs(b - b_hat) < 2*b_se
-cat(paste("68% coverage: ", cover_68, "\n"))
-cat(paste("95% coverage: ", cover_95, "\n"))
+pi50 <- posterior_interval(fit, prob = 0.5)['x',]
+pi90 <- posterior_interval(fit, prob = 0.9)['x',]
+cover_50 <- as.numeric(b > pi50[1] & b < pi50[2])
+cover_90 <- as.numeric(b > pi90[1] & b < pi90[2])
+cat(paste("50% coverage: ", cover_50, "\n"))
+cat(paste("90% coverage: ", cover_90, "\n"))
 
 #' **Step 4:  Embedding the simulation in a loop**
+#+ results='hide'
 n_fake <- 1000
+cover_50 <- rep(NA, n_fake)
 cover_68 <- rep(NA, n_fake)
+cover_68b <- rep(NA, n_fake)
+cover_90 <- rep(NA, n_fake)
 cover_95 <- rep(NA, n_fake)
+cover_95b <- rep(NA, n_fake)
+pb <- txtProgressBar(min=0, max=n_fake, initial=0, style=3)
 for (s in 1:n_fake){
+  setTxtProgressBar(pb, s)
+  set.seed(s)
   y <- a + b*x + rnorm(n, 0, sigma)
   fake <- data.frame(x, y)
-  fit <- lm(y ~ x, data=fake)
-  b_hat <- coef(fit)["x"]
-  b_se <- se.coef(fit)["x"]
-  cover_68[s] <- abs(b - b_hat) < b_se
-  cover_95[s] <- abs(b - b_hat) < 2*b_se
+  output <- capture.output(
+      fit <- stan_glm(y ~ x, data = fake, warmup = 500, iter = 1500, refresh = 0,
+                      save_warmup = FALSE, cores = 1, open_progress = FALSE,
+                      seed = s))
+  pi50 <- posterior_interval(fit, prob = 0.5)['x',]
+  pi68 <- posterior_interval(fit, prob = 0.68)['x',]
+  pi90 <- posterior_interval(fit, prob = 0.9)['x',]
+  pi95 <- posterior_interval(fit, prob = 0.95)['x',]
+  cover_50[s] <- as.numeric(b > pi50[1] & b < pi50[2])
+  cover_68[s] <- as.numeric(b > pi68[1] & b < pi68[2])
+  cover_90[s] <- as.numeric(b > pi90[1] & b < pi90[2])
+  cover_95[s] <- as.numeric(b > pi95[1] & b < pi95[2])
+  cover_68b[s] <- as.numeric(abs(b-coef(fit)['x']) < se(fit)['x'])
+  cover_95b[s] <- as.numeric(abs(b-coef(fit)['x']) < 2*se(fit)['x'])
 }
+close(pb)
+#+
+cat(paste("50% coverage: ", mean(cover_50), "\n"))
 cat(paste("68% coverage: ", mean(cover_68), "\n"))
+cat(paste("90% coverage: ", mean(cover_90), "\n"))
 cat(paste("95% coverage: ", mean(cover_95), "\n"))
+cat(paste("68% coverage: ", mean(cover_68b), "\n"))
+cat(paste("95% coverage: ", mean(cover_95b), "\n"))
 
-#' Same as previous, but confidence interval is computed using Student's t
-n_fake <- 1000
-cover_68 <- rep(NA, n_fake)
-cover_95 <- rep(NA, n_fake)
-t_68 <- qt(0.84, n - 2)
-t_95 <- qt(0.975, n - 2)
-for (s in 1:n_fake){
-  y <- a + b*x + rnorm(n, 0, sigma)
-  fake <- data.frame(x, y)
-  fit <- lm(y ~ x, data=fake)
-  b_hat <- coef(fit)["x"]
-  b_se <- se.coef(fit)["x"]
-  cover_68[s] <- abs(b - b_hat) < t_68 * b_se
-  cover_95[s] <- abs(b - b_hat) < t_95 * b_se
-}
-cat(paste("68% coverage: ", mean(cover_68), "\n"))
-cat(paste("95% coverage: ", mean(cover_95), "\n"))
