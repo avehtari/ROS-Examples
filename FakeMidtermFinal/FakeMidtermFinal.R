@@ -11,12 +11,14 @@
 
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
 #' **Simulate fake data**
 N <- 1000
+# set the random seed to get reproducible results
+# change the seed to experiment with variation due to random noise
+set.seed(2243)
 true_ability <- rnorm(N, 50, 10)
 noise_1 <- rnorm(N, 0, 10)
 noise_2 <- rnorm(N, 0, 10)
@@ -24,9 +26,9 @@ midterm <- true_ability + noise_1
 final <- true_ability + noise_2
 exams <- data.frame(midterm, final)
 
-#' **Classical regression**
-lm_2 <- stan_glm(final ~ midterm, data=exams)
-print(lm_2)
+#' **Linear regression**
+fit_1 <- stan_glm(final ~ midterm, data=exams)
+print(fit_1)
 
 #' **Plot for the book**
 #+ eval=FALSE, include=FALSE
@@ -42,6 +44,6 @@ for (i in x){
   abline(h=i, col="gray70", lty=2)
   abline(v=i, col="gray70", lty=2)
 }
-abline(coef(lm_2)[1], coef(lm_2)[2])
+abline(coef(fit_1))
 #+ eval=FALSE, include=FALSE
 dev.off()
