@@ -15,7 +15,6 @@
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("HistData")
-library("arm")
 
 #' **Load data**
 heights <- read.table(root("PearsonLee/data","Heights.txt"), header=TRUE)
@@ -23,10 +22,11 @@ daughter_height <- heights$daughter_height
 mother_height <- heights$mother_height
 n <- length(mother_height)
 
-#' **Classical regression**
-lm_1 <- lm(daughter_height ~ mother_height)
-display(lm_1)
-ab_hat <- coef(lm_1)
+#' **Linear regression**
+fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights)
+#fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, algorithm="optimizing")
+print(fit_1)
+ab_hat <- coef(fit_1)
 
 #' **Plots for the paper/book**
 #+ eval=FALSE, include=FALSE
