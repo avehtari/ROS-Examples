@@ -74,13 +74,17 @@ cat("Predicted weight for a 70-inch-tall female is", round(mean(pred)), "pounds 
 
 #' **Using indicator variables for multiple levels of a categorical predictor**<br/>
 #' Include ethnicity in the regression as a factor
+#+ results='hide'
 fit_4 <- stan_glm(weight ~ c_height + female + factor(ethnicity), data=vitals)
+#+
 print(fit_4)
 
 #' Choose the baseline category by setting the levels
 vitals$eth <- factor(vitals$ethnicity,
   levels=c("white", "black", "hispanic", "other"))
+#+ results='hide'
 fit_5 <- stan_glm(weight ~ c_height + female + eth, data=vitals)
+#+
 print(fit_5)
 
 #' Alternatively create indicators for the four ethnic groups directly:
@@ -88,5 +92,7 @@ vitals$eth_white <- ifelse(vitals$ethnicity=="white", 1, 0)
 vitals$eth_black <- ifelse(vitals$ethnicity=="black", 1, 0)
 vitals$eth_hispanic <- ifelse(vitals$ethnicity=="hispanic", 1, 0)
 vitals$eth_other <- ifelse(vitals$ethnicity=="other", 1, 0)
+#+ results='hide'
 fit_6 <- stan_glm(weight ~ c_height + female + eth_black + eth_hispanic + eth_other, data=vitals)
+#+
 print(fit_6)
