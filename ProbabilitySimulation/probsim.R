@@ -24,7 +24,7 @@ n_girls <- rep(NA, n_sims)
 for (s in 1:n_sims){
   n_girls[s] <- rbinom(1, 400, 0.488)}
 
-#' **Plot for the book**
+#' **Plot**
 #+ eval=FALSE, include=FALSE
 pdf(root("ProbabilitySimulation/figs","girls1.pdf"), height=3.5, width=5.5)
 #+
@@ -70,7 +70,7 @@ for (s in 1:n_sims){
   n_girls[s] <- sum(girls)
 }
 
-#' **Plot for the book**
+#' **Plot**
 #+ eval=FALSE, include=FALSE
 pdf(root("ProbabilitySimulation/figs","girls2.pdf"), height=3.5, width=5.5)
 #+
@@ -88,7 +88,7 @@ y2 <- exp(y1)
 y3 <- rbinom(n_sims, 20, 0.6)
 y4 <- rpois(n_sims, 5)
 
-#' **Plot for the book**
+#' **Plot**
 #+ eval=FALSE, include=FALSE
 pdf(root("ProbabilitySimulation/figs","4dists.pdf"), height=7, width=10)
 #+
