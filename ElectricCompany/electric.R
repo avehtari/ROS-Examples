@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Electric Company"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -13,6 +13,9 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("arm")
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
 
 #' **Load data**
 electric <- read.table(root("ElectricCompany/data","electric.dat"), header=TRUE)
@@ -30,7 +33,7 @@ par(mar=c(.2, .2, .2, .2))
 onlytext('Test scores in control classes')
 onlytext('Test scores in treated classes')
 par(mar=c(1, 1, 1, 1), lwd=0.7)
-attach.all(electric)
+attach(electric)
 for (j in 1:4){
   onlytext(paste('Grade', j))
   hist(control.Posttest[Grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
@@ -58,7 +61,6 @@ par(mar=c(.2, .2, .2, .2))
 onlytext('Control\nclasses')
 onlytext('Treated\nclasses')
 par(mar=c(.2,.4,.2,.4), lwd=.5)
-attach.all(electric)
 for (j in 1:4){
   onlytext(paste('Grade', j))
   hist(control.Posttest[Grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
@@ -72,7 +74,6 @@ for (j in 1:4){
 dev.off()
 
 #' **Another plot**
-attach.all(electric)
 #+ eval=FALSE, include=FALSE
 postscript(root("ElectricCompany/figs","electricscatter1a.ps"), horizontal=T, height=4)
 #+
@@ -87,9 +88,11 @@ for (j in 1:4){
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0))
-  lm.1 <- lm(y ~ x + t)
-  abline(lm.1$coef[1], lm.1$coef[2], lwd=.5, lty=2)
-  abline(lm.1$coef[1]+lm.1$coef[3], lm.1$coef[2], lwd=.5)
+  output <- capture.output(
+      fit_1 <- stan_glm(y ~ x + t, data = electric, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  abline(coef(fit_1)[1], coef(fit_1)[2], lwd=.5, lty=2)
+  abline(coef(fit_1)[1]+coef(fit_1)[3], coef(fit_1)[2], lwd=.5)
   points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
   points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
 }
@@ -110,9 +113,11 @@ for (j in 1:4){
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0))
-  lm.1 <- lm(y ~ x + t)
-  abline(lm.1$coef[1], lm.1$coef[2], lwd=.5, lty=2)
-  abline(lm.1$coef[1]+lm.1$coef[3], lm.1$coef[2], lwd=.5)
+  output <- capture.output(
+      fit_1 <- stan_glm(y ~ x + t, data = electric, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  abline(coef(fit_1)[1], coef(fit_1)[2], lwd=.5, lty=2)
+  abline(coef(fit_1)[1]+coef(fit_1)[3], coef(fit_1)[2], lwd=.5)
   points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
   points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
 }
@@ -133,9 +138,12 @@ for (j in 1:4){
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0))
-  lm.1 <- lm(y ~ x + t + x*t)
-  abline(lm.1$coef[1], lm.1$coef[2], lwd=.5, lty=2)
-  abline(lm.1$coef[1]+lm.1$coef[3], lm.1$coef[2]+lm.1$coef[4], lwd=.5)
+  output <- capture.output(
+      fit_1 <- stan_glm(y ~ x + t + x:t, data = electric, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  abline(coef(fit_1)[1], coef(fit_1)[2], lwd=.5, lty=2)
+  abline(coef(fit_1)[1]+coef(fit_1)[3], coef(fit_1)[2]+coef(fit_1)[4], lwd=.5)
+  ## lm.1 <- lm(y ~ x + t + x*t)
   points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
   points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
 }
@@ -143,18 +151,19 @@ for (j in 1:4){
 dev.off()
 
 #' **Linear model**
-attach.all(electric)
 post.test <- c(treated.Posttest, control.Posttest)
 pre.test <- c(treated.Pretest, control.Pretest)
 grade <- rep(Grade, 2)
 treatment <- rep(c(1,0), rep(length(treated.Posttest),2))
 n <- length(post.test)
-display(lm(post.test ~ treatment + pre.test + treatment:pre.test, subset=(grade==4)))
+df <- data.frame(post.test, pre.test, grade, treatment)
+fit_3 <- stan_glm(post.test ~ treatment + pre.test + treatment:pre.test, subset=(grade==4), data=df)
+print(fit_3)
 
 #' **Another linear model**
-lm.4 <- lm(formula = post.test ~ treatment + pre.test + treatment * pre.test, subset = (grade==4))
-n.sims <- 1000
-sim.4 <- sim(lm.4, n.sims)
+fit_4 <- stan_glm(formula = post.test ~ treatment + pre.test + treatment * pre.test, subset = (grade==4),
+                  data=df)
+sim_4 <- as.matrix(fit_4)
 
 #' **Plot linear model**
 #+ eval=FALSE, include=FALSE
@@ -164,16 +173,17 @@ plot(0, 0, xlim=range(pre.test[grade==4]), ylim=c(-5,10),
        xlab="pre-test", ylab="treatment effect", main="treatment effect in grade 4")
 abline(0, 0, lwd=.5, lty=2)
 for (i in 1:20)
-  curve(sim.4$beta[i,2] + sim.4$beta[i,4]*x, lwd=.5, col="gray", add=T)
-curve(lm.4$coef[2] + lm.4$coef[4]*x, lwd=.5, add=T)
+  curve(sim_4[i,2] + sim_4[i,4]*x, lwd=.5, col="gray", add=T)
+curve(coef(fit_4)[2] + coef(fit_4)[4]*x, lwd=.5, add=TRUE)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
 #' **Mean effect**
-effect <- array(NA, c(n.sims, sum(grade==4)))
-for (i in 1:n.sims)
-  effect[i,] <- sim.4$beta[i,2] + sim.4$beta[i,4]*pre.test[grade==4]
-mean.effect <- rowMeans(effect)
+n_sims <- 1000
+effect <- array(NA, c(n_sims, sum(grade==4)))
+for (i in 1:n_sims)
+  effect[i,] <- sim_4[i,2] + sim_4[i,4]*pre.test[grade==4]
+mean_effect <- rowMeans(effect)
 
 #' **Plot repeated regression results**
 est1 <- rep(NA,4)
@@ -181,14 +191,67 @@ est2 <- rep(NA,4)
 se1 <- rep(NA,4)
 se2 <- rep(NA,4)
 for (k in 1:4){
-  lm.1 <- lm(post.test ~ treatment, subset=(grade==k))
-  lm.2 <- lm(post.test ~ treatment + pre.test, subset=(grade==k))
-  est1[k] <- lm.1$coef[2]
-  est2[k] <- lm.2$coef[2]
-  se1[k] <- summary(lm.1)$coef[2,2]
-  se2[k] <- summary(lm.2)$coef[2,2]
+  output <- capture.output(
+      fit_1 <- stan_glm(post.test ~ treatment, subset=(grade==k), data = df, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  output <- capture.output(
+      fit_2 <- stan_glm(post.test ~ treatment + pre.test, subset=(grade==k), data = df, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  est1[k] <- coef(fit_1)[2]
+  est2[k] <- coef(fit_2)[2]
+  se1[k] <- se(fit_1)[2]
+  se2[k] <- se(fit_2)[2]
 }
+regression.2tables <- function (name, est1, est2, se1, se2, label1, label2, file, bottom=FALSE){
+  J <- length(name)
+  name.range <- .6
+  x.range <- range (est1+2*se1, est1-2*se1, est2+2*se2, est1-2*se2)
+  A <- -x.range[1]/(x.range[2]-x.range[1])
+  B <- 1/(x.range[2]-x.range[1])
+  height <- .6*J
+  width <- 8*(name.range+1)
+  gap <- .4
+
+  if (!is.na(file)) postscript(file, horizontal=F, height=height, width=width)
+  par (mar=c(0,0,0,0))
+  plot (c(-name.range,2+gap), c(3,-J-2), bty="n", xlab="", ylab="",
+        xaxt="n", yaxt="n", xaxs="i", yaxs="i", type="n")
+  text (-name.range, 2, "Subpopulation", adj=0, cex=1)
+  text (.5, 2, label1, adj=.5, cex=1)
+  text (1+gap+.5, 2, label2, adj=.5, cex=1)
+  lines (c(0,1), c(0,0))
+  lines (1+gap+c(0,1), c(0,0))
+  lines (c(A,A), c(0,-J-1), lty=2, lwd=.5)
+  lines (1+gap+c(A,A), c(0,-J-1), lty=2, lwd=.5)
+  ax <- pretty (x.range)
+  ax <- ax[(A+B*ax)>0 & (A+B*ax)<1]
+  segments (A + B*ax, -.1, A + B*ax, .1, lwd=.5)
+  segments (1+gap+A + B*ax, -.1, 1+gap+A + B*ax, .1, lwd=.5)
+  text (A + B*ax, .7, ax, cex=1)
+  text (1+gap+A + B*ax, .7, ax, cex=1)
+  text (-name.range, -(1:J), name, adj=0, cex=1)
+  points (A + B*est1, -(1:J), pch=20, cex=1)
+  points (1+gap+A + B*est2, -(1:J), pch=20, cex=1)
+  segments (A + B*(est1-se1), -(1:J), A + B*(est1+se1), -(1:J), lwd=3)
+  segments (1+gap+A + B*(est2-se2), -(1:J), 1+gap+A + B*(est2+se2), -(1:J), lwd=3)
+  segments (A + B*(est1-2*se1), -(1:J), A + B*(est1+2*se1), -(1:J), lwd=.5)
+  segments (1+gap+A + B*(est2-2*se2), -(1:J), 1+gap+A + B*(est2+2*se2), -(1:J), lwd=.5)
+  if (bottom){
+    lines (c(0,1), c(-J-1,-J-1))
+    lines (1+gap+c(0,1), c(-J-1,-J-1))
+    segments (A + B*ax, -J-1-.1, A + B*ax, -J-1+.1, lwd=.5)
+    segments (1+gap+A + B*ax, -J-1-.1, 1+gap+A + B*ax, -J-1+.1, lwd=.5)
+    text (A + B*ax, -J-1-.7, ax, cex=1)
+    text (1+gap+A + B*ax, -J-1-.7, ax, cex=1)
+  } 
+  if (!is.na(file)) graphics.off()
+}
+#+ eval=FALSE, include=FALSE
+# plot to file
 regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", root("ElectricCompany/figs","electric.ests.ps"))
+#+
+# don't plot to file
+regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", NA)
 
 #' **Analyze replace/supplement**
 supp <- c(as.numeric(electric[,"Supplement."])-1, rep(NA,nrow(electric)))
@@ -205,25 +268,67 @@ par(mfrow=c(1,4))
 for (k in 1:4){
   cat(paste("grade",k,":\n"))
   ok <- (grade==k)&(!is.na(supp))
-  glm.supp <- glm(supp ~ pre.test, family=binomial(link="logit"), subset=ok)
-  display(glm.supp)
-  sims.glm.supp <- sim(glm.supp)
+  output <- capture.output(
+      glm_supp <- stan_glm(supp ~ pre.test, family=binomial(link="logit"), subset=ok, data=df, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  print(glm_supp)
+  sims.glm.supp <- as.matrix(glm_supp)
   plot(range(pre.test[ok]), c(0,1), type="n", xlab="Pre-test score",
         ylab="", main=paste("grade", k),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0), yaxt="n")
   axis(2, c(0,1), c("     Replace","Supp    "), cex.axis=1.5, mgp=c(2.5,.7,0))
   for (l in 1:20)
-      curve(invlogit(sims.glm.supp$beta[l,1] + sims.glm.supp$beta[l,2]*x), lwd=.5, col="gray", add=T)
+      curve(invlogit(sims.glm.supp[l,1] + sims.glm.supp[l,2]*x), lwd=.5, col="gray", add=T)
   points(pre.test[supp==1&ok], jitter.binary(supp[supp==1&ok]), pch=21) #  supp:  open circle
   points(pre.test[supp==0&ok], jitter.binary(supp[supp==0&ok]), pch=20)# replace:  dot
-  curve(invlogit(glm.supp$coef[1] + glm.supp$coef[2]*x), lwd=.5, add=T)
-  lm.supp <- lm(post.test ~ supp + pre.test, subset=((grade==k)&!is.na(supp)))
-  display(lm.supp)
-  est1[k] <- lm.supp$coef[2]
-  se1[k] <- summary(lm.supp)$coef[2,2]
+  curve(invlogit(coef(glm_supp)[1] + coef(glm_supp)[2]*x), lwd=.5, add=T)
+  output <- capture.output(
+      glm_supp <- stan_glm(post.test ~ supp + pre.test, subset=((grade==k)&!is.na(supp)),
+                           data=df, refresh = 0, 
+                           save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  print(glm_supp)
+  est1[k] <- coef(glm_supp)[2]
+  se1[k] <- se(glm_supp)[2]
 }
 #+ eval=FALSE, include=FALSE
 dev.off()
-
+#+
+regression.2tablesA <- function (name, est1, se1, label1, file, bottom=FALSE){
+  J <- length(name)
+  name.range <- .6
+  x.range <- range (est1+2*se1, est1-2*se1)
+  A <- -x.range[1]/(x.range[2]-x.range[1])
+  B <- 1/(x.range[2]-x.range[1])
+  height <- .6*J
+  width <- 8*(name.range+1)
+  gap <- .4
+  
+  if (!is.na(file)) postscript(file, horizontal=F, height=height, width=width)
+  par (mar=c(0,0,0,0))
+  plot (c(-name.range,2+gap), c(3,-J-2), bty="n", xlab="", ylab="",
+        xaxt="n", yaxt="n", xaxs="i", yaxs="i", type="n")
+  text (-name.range, 2, "Subpopulation", adj=0, cex=1)
+  text (.5, 2, label1, adj=.5, cex=1)
+  lines (c(0,1), c(0,0))
+  lines (c(A,A), c(0,-J-1), lty=2, lwd=.5)
+  ax <- pretty (x.range)
+  ax <- ax[(A+B*ax)>0 & (A+B*ax)<1]
+  segments (A + B*ax, -.1, A + B*ax, .1, lwd=.5)
+  text (A + B*ax, .7, ax, cex=1)
+  text (-name.range, -(1:J), name, adj=0, cex=1)
+  points (A + B*est1, -(1:J), pch=20, cex=1)
+  segments (A + B*(est1-se1), -(1:J), A + B*(est1+se1), -(1:J), lwd=3)
+  segments (A + B*(est1-2*se1), -(1:J), A + B*(est1+2*se1), -(1:J), lwd=.5)
+  if (bottom){
+    lines (c(0,1), c(-J-1,-J-1))
+    segments (A + B*ax, -J-1-.1, A + B*ax, -J-1+.1, lwd=.5)
+    text (A + B*ax, -J-1-.7, ax, cex=1)
+  } 
+  if (!is.na(file)) graphics.off()
+}
 #+ eval=FALSE, include=FALSE
+# plot to file
 regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", root("ElectricCompany/figs","electricsupp2.ps"))
+#+
+# don't plot to file
+regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", NA)
