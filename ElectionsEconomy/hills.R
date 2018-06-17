@@ -21,17 +21,20 @@ options(mc.cores = parallel::detectCores())
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
 
-#' Contour plots etc of simple likelihoods
-trans3d <- function(x,y,z, pmat) {
-       tr <- cbind(x,y,z,1) %*% pmat
-       list(x = tr[,1]/tr[,4], y= tr[,2]/tr[,4])
-     }
-
-#' 2 parameters
+#' **Likelihood for 2 parameters**
 M1 <- lm(vote ~ growth, data = hibbs)
 display(M1)
 summ <- summary(M1)
 
+#' **Plot likelihood (a, b| y)**
+#+ eval=FALSE, include=FALSE
+pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
+#+
+# Contour plots etc of simple likelihoods
+trans3d <- function(x,y,z, pmat) {
+       tr <- cbind(x,y,z,1) %*% pmat
+       list(x = tr[,1]/tr[,4], y= tr[,2]/tr[,4])
+     }
 dmvnorm <- function (y, mu, Sigma, log=FALSE){
   # multivariate normal density
   n <- nrow(Sigma)
@@ -39,7 +42,7 @@ dmvnorm <- function (y, mu, Sigma, log=FALSE){
   return (logdens)
 #  return (ifelse (log, logdens, exp(logdens)))
 }
-
+#
 rng.x <- summ$coef[1,1] + summ$coef[1,2]*c(-4,4)
 rng.y <- summ$coef[2,1] + summ$coef[2,2]*c(-4,4)
 x <- seq(rng.x[1], rng.x[2], length=30)
@@ -49,12 +52,6 @@ for (i.x in 1:length(x))
   for (i.y in 1:length(y))
     z[i.x,i.y] <- dmvnorm(c(x[i.x],y[i.y]), summ$coef[,1], summ$cov.unscaled*summ$sigma^2, log=TRUE)
 z <- exp(z-max(z))
-
-
-#' **More graphs for the bread and peace model**
-#+ eval=FALSE, include=FALSE
-pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
-#+
 par(mar=c(0, 0, 0, 0))
 persp(x, y, z,
   xlim=c(rng.x[1]-.15*(rng.x[2]-rng.x[1]), rng.x[2]), ylim=c(rng.y[1]-.15*(rng.y[2]-rng.y[1]), rng.y[2]),
@@ -65,6 +62,7 @@ mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Plot maximum likelihood estimate and std errs**
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
 #+
@@ -76,6 +74,7 @@ points(summ$coef[1,1], summ$coef[2,1], pch=19)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Plot maximum likelihood estimate and covariance**
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
 #+
@@ -94,12 +93,13 @@ lines (xx, yy)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#' **Uniform prior**
+#' **Bayesian model with flat prior**
 M3 <- stan_glm(vote ~ growth, prior=NULL, prior_intercept=NULL, prior_aux=NULL, data = hibbs)
 sims <- as.data.frame(M3)
 a <- sims[,1]
 b <- sims[,2]
 
+#' **Plot posterior draws**
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
 #+
