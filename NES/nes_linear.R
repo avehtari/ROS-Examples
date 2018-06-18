@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: National election study"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -13,6 +13,8 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
 library("foreign")
 
 #' **Load data**
@@ -21,8 +23,12 @@ data <- read.table(root("NES/data","nes.dat"))
 #' **Partyid model to illustrate repeated model use (secret weapon)**
 regress_year <- function (yr) {
   this_year <- data[data$year==yr,]
-  lm_0 <- lm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) + educ1 + female + income, data=this_year)
-  coefs <- summary(lm_0)$coef[,1:2]
+  output <- capture.output(
+      fit <- stan_glm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) +
+                          educ1 + female + income,
+                      data=this_year, warmup = 500, iter = 1500, refresh = 0,
+                      save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  coefs <- cbind(coef(fit),se(fit))
 }
 summary <- array (NA, c(9,2,8))
 for (yr in seq(1972,2000,4)){

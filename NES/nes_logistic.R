@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: National election study"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -25,22 +25,27 @@ nes <- read.table(root("NES/data","nes.dat"), header=TRUE)
 ok <- nes$year==1992 & !is.na(nes$rvote) & !is.na(nes$dvote) & (nes$rvote==1 | nes$dvote==1)
 nes92 <- nes[ok,]
 
-#' **Logistic regression of vote preference on income**
-fit_1 <- glm(rvote ~ income, family=binomial(link="logit"), data=nes92)
-display(fit_1)
-stan_fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=nes92)
-print(stan_fit_1)
+#' ### A single predictor logistic regression
+#' 
 
-#' Predictions
+#' **Logistic regression of vote preference on income**
+#+ results='hide'
+fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=nes92)
+#+
+print(fit_1)
+
+#' **Predictions**
 new <- data.frame(income=5)
-linpred <- posterior_linpred(stan_fit_1, transform=TRUE, newdata=new)
-predict <- posterior_predict(stan_fit_1, newdata=new)
+linpred <- posterior_linpred(fit_1, transform=TRUE, newdata=new)
+predict <- posterior_predict(fit_1, newdata=new)
 
 #' **Fake data example**
 data <- data.frame(rvote=rep(c(0,1), 10), income=1:20)
-stan_fit_f <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
+#+ results='hide'
+fit_f <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
+#+
 new <- data.frame(income=5)
-predict <- posterior_predict(stan_fit_f, newdata=new)
+predict <- posterior_predict(fit_f, newdata=new)
 
 #' **Plot jittered data and prediction from the logistic regression**
 #+ eval=FALSE, include=FALSE
@@ -53,7 +58,7 @@ par(mar=c(3,3,1,.1), tck=-.01, mgp=c(1.7, .3, 0))
 ok <- nes92$presvote<3
 vote <- nes92$presvote[ok] - 1
 income <- nes92$income[ok]
-curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), 1, 5, ylim=c(0,1),
+curve(invlogit(fit_1$coef[1] + fit_1$coef[2]*x), 1, 5, ylim=c(0,1),
   xlim=c(-2,8), xaxt="n", xaxs="i", 
   ylab="Pr (Republican vote)", xlab="Income", lwd=4, yaxs="i")
 curve(invlogit(fit_1$coef[1] + fit_1$coef[2]*x), -2, 8, lwd=.5, add=TRUE)
@@ -78,12 +83,12 @@ curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, ylim=c(0,1),
 axis(1, 1:5)
 mtext("(poor)", 1, 1.2, at=1, adj=.5)
 mtext("(rich)", 1, 1.2, at=5, adj=.5)
-sims_1 <- as.matrix(stan_fit_1)
+sims_1 <- as.matrix(fit_1)
 n_sims <- nrow(sims_1)
 for (j in sample(n_sims, 20)){
   curve(invlogit(sims_1[j,1] +sims_1[j,2]*x), .5, 5.5, lwd=.5, col="gray", add=TRUE)
 }
-curve (invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, add=TRUE)
+curve(invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, add=TRUE)
 points(income_jitt, vote_jitt, pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
 dev.off()
@@ -94,11 +99,16 @@ n_yrs <- length(yrs)
 fits <- array(NA, c(n_yrs, 3), dimnames <- list(yrs, c("year", "coef", "se")))
 for (j in 1:n_yrs){
   yr <- yrs[j]
-  ok <- nes$year==yr & nes$presvote<3
+  ok <- (nes$year==yr & !is.na(nes$presvote) & nes$presvote<3 &
+         !is.na(nes$vote) & !is.na(nes$income))
   vote <- nes$presvote[ok] - 1
   income <- nes$income[ok]
-  fit_1 <- glm(vote ~ income, family=binomial(link="logit"))
-  fits[j,] <- c(yr, coef(fit_1)[2], se.coef(fit_1)[2])
+  output <- capture.output(
+      fit_y <- stan_glm(vote ~ income, family=binomial(link="logit"),
+                        data = data.frame(vote, income),
+                        warmup = 500, iter = 1500, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  fits[j,] <- c(yr, coef(fit_y)[2], se(fit_y)[2])
 }
 
 #' **Plot the series of regression**
@@ -115,20 +125,28 @@ abline(0,0,lwd=.5, lty=2)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+
+#' ### Identifiability and separation
+#' 
+
 #' **Illustrate nonidentifiability of logistic regression**<br>
 #' Use "black" as a predictor (nonidentifiability in 1964)
 #+ results='hide'
 fits_2 <- array(NA, c(n_yrs, 4, 2, 2), dimnames <- list(yrs, c("Intercept", "female", "black", "income"), c("coef", "se"), c("glm", "bayes")))
+ok <- (!is.na(nes$rvote) & !is.na(nes$female) & !is.na(nes$black) & !is.na(nes$income))
 for (j in 1:n_yrs){
   print(yrs[j])
-  fit_glm <- glm(rvote ~ female + black + income, subset=(year==yrs[j]), family=binomial(link="logit"), data=nes)
+  fit_glm <- glm(rvote ~ female + black + income, subset=(year==yrs[j]),
+                 family=binomial(link="logit"), data=nes[ok,])
   fits_2[j,,1,1] <- coef(fit_glm)
   fits_2[j,,2,1] <- se.coef(fit_glm)
-  fit_bayes <- stan_glm(rvote ~ female + black + income, subset=(year==yrs[j]), family=binomial(link="logit"), data=nes)
-  sims <- as.matrix(fit_bayes)
-  fits_2[j,,1,2] <- apply(sims, 2, mean)
-  fits_2[j,,2,2] <- apply(sims, 2, sd)
-  n_sims <- dim(sims)
+  output <- capture.output(
+      fit_bayes <- stan_glm(rvote ~ female + black + income, subset=(year==yrs[j]),
+                            family=binomial(link="logit"), data=nes[ok,],
+                            warmup = 500, iter = 1500, refresh = 0, 
+                            save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  fits_2[j,,1,2] <- coef(fit_bayes)
+  fits_2[j,,2,2] <- se(fit_bayes)
   display(fit_glm)
   print(fit_bayes)
 }
