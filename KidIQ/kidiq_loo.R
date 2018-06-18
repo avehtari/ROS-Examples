@@ -29,7 +29,7 @@ print(fit_3)
 
 #' **Estimate the predictive performance of a model using
 #' within-sample plug-in (ie with mean parameters) log-score**
-sigma_hat_3 <- mean(as.matrix(fit_3)[,'sigma'])
+sigma_hat_3 <- sigma(fit_3)
 logscore_3 <- sum(dnorm(kidiq$kid_score, fitted(fit_3), sigma_hat_3, log = TRUE))
 round(logscore_3, 1)
 

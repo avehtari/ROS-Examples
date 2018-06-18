@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: KidIQ"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -120,7 +120,7 @@ plot(kidiq$mom_iq, kidiq$kid_score,
 for (i in subset){
   abline(sims_2[i,1], sims_2[i,2], col="gray")
 }
-abline(coef(stan_fit_2)[1], coef(stan_fit_2)[2], col="black")
+abline(coef(fit_2)[1], coef(fit_2)[2], col="black")
 
 #' ggplot version
 ggplot(kidiq, aes(mom_iq, kid_score)) +
@@ -154,7 +154,7 @@ for (i in subset){
   curve(cbind(1, mom_hs_bar, x) %*% sims_3[i,1:3], lwd=.5,
      col="gray", add=TRUE)
 }
-curve(cbind(1, mom_hs_bar, x) %*% coef(stan_fit_3), col="black", add=TRUE)
+curve(cbind(1, mom_hs_bar, x) %*% coef(fit_3), col="black", add=TRUE)
 jitt <- runif(nrow(kidiq), -.03, .03)
 plot(kidiq$mom_hs + jitt, kidiq$kid_score, xlab="Mother completed high school", ylab="Child test score", bty="l", pch=20, xaxt="n", yaxt="n")
 axis(1, c(0,1))
@@ -164,11 +164,11 @@ for (i in subset){
   curve(cbind(1, x, mom_iq_bar) %*% sims_3[i,1:3], lwd=.5,
      col="gray", add=TRUE)
 }
-curve(cbind(1, x, mom_iq_bar) %*% coef(stan_fit_3), col="black", add=TRUE)
+curve(cbind(1, x, mom_iq_bar) %*% coef(fit_3), col="black", add=TRUE)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#+ **Center predictors to have zero mean**
+#' **Center predictors to have zero mean**
 kidiq$c_mom_hs <- kidiq$mom_hs - mean(kidiq$mom_hs)
 kidiq$c_mom_iq <- kidiq$mom_iq - mean(kidiq$mom_iq)
 #+ results='hide'
@@ -176,7 +176,7 @@ fit_4c <- stan_glm(kid_score ~ c_mom_hs + c_mom_iq + c_mom_hs:c_mom_iq, data=kid
 #+
 print(fit_4c)
 
-#+ **Center predictors based on a reference point**
+#' **Center predictors based on a reference point**
 kidiq$c2_mom_hs <- kidiq$mom_hs - 0.5
 kidiq$c2_mom_iq <- kidiq$mom_iq - 100
 #+ results='hide'
@@ -184,7 +184,7 @@ fit_4c2 <- stan_glm(kid_score ~ c2_mom_hs + c2_mom_iq + c2_mom_hs:c2_mom_iq, dat
 #+
 print(fit_4c2)
 
-#+ **Center and scale predictors to have zero mean and sd=1/2**
+#' **Center and scale predictors to have zero mean and sd=1/2**
 kidiq$z_mom_hs <- (kidiq$mom_hs - mean(kidiq$mom_hs))/(2*sd(kidiq$mom_hs))
 kidiq$z_mom_iq <- (kidiq$mom_iq - mean(kidiq$mom_iq))/(2*sd(kidiq$mom_iq))
 #+ results='hide'
@@ -193,7 +193,7 @@ fit_4z <- stan_glm(kid_score ~ z_mom_hs + z_mom_iq + z_mom_hs:z_mom_iq, data=kid
 print(fit_4z)
 
 
-#+ **Predict using working status of mother**
+#' **Predict using working status of mother**
 #+ results='hide'
 fit_5 <- stan_glm(kid_score ~ as.factor(mom_work), data=kidiq)
 #+

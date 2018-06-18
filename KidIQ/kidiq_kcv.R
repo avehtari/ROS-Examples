@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: KidIQ cross-validation"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -21,7 +21,9 @@ library("foreign")
 kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 
 #' **Bayesian regression with the original predictors**
+#+ results='hide'
 stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
+#+
 print(stan_fit_3)
 
 #' **Leave-one-out cross-validation**
@@ -29,5 +31,7 @@ loo3 <- loo(stan_fit_3)
 loo3
 
 #' **K-fold cross-validation**
+#+ results='hide'
 kcv3 <- kfold(stan_fit_3)
+#+
 kcv3

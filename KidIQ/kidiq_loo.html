@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2018-04-24" />
+<meta name="date" content="2018-06-18" />
 
 <title>Regression and Other Stories: KidIQ cross-validation</title>
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: KidIQ cross-validation</h1>
 <h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-04-24</em></h4>
+<h4 class="date"><em>2018-06-18</em></h4>
 
 </div>
 
@@ -131,51 +131,114 @@ $(document).ready(function () {
 <p><strong>Load libraries</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
 root&lt;-has_dirname(&quot;RAOS-Examples&quot;)$make_fix_file()
-library(&quot;arm&quot;)
 library(&quot;rstanarm&quot;)
 options(mc.cores = parallel::detectCores())
 library(&quot;loo&quot;)
 library(&quot;foreign&quot;)</code></pre>
 <p><strong>Load children’s test scores data</strong></p>
 <pre class="r"><code>kidiq &lt;- read.dta(file=root(&quot;KidIQ/data&quot;,&quot;kidiq.dta&quot;))</code></pre>
-<div id="estimate-the-predictive-performance-of-a-model-using-loo-cv" class="section level3">
-<h3>Estimate the predictive performance of a model using LOO-CV</h3>
-<pre class="r"><code>stan_fit_3 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-loo_3 &lt;- loo(stan_fit_3)
-print(loo_3)</code></pre>
-<pre><code>## 
-## Computed from 4000 by 434 log-likelihood matrix
-## 
-##          Estimate   SE
-## elpd_loo  -1876.0 14.2
-## p_loo         3.9  0.4
-## looic      3751.9 28.5
+<p><strong>Linear regression</strong></p>
+<pre class="r"><code>fit_3 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq, seed=1507)</code></pre>
+<pre class="r"><code>print(fit_3)</code></pre>
+<pre><code>## stan_glm
+##  family:       gaussian [identity]
+##  formula:      kid_score ~ mom_hs + mom_iq
+##  observations: 434
+##  predictors:   3
 ## ------
-## Monte Carlo SE of elpd_loo is 0.0.
+##             Median MAD_SD
+## (Intercept) 25.7    6.1  
+## mom_hs       6.0    2.2  
+## mom_iq       0.6    0.1  
 ## 
-## All Pareto k estimates are good (k &lt; 0.5).
-## See help('pareto-k-diagnostic') for details.</code></pre>
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 18.2    0.6  
+## 
+## Sample avg. posterior predictive distribution of y:
+##          Median MAD_SD
+## mean_PPD 86.8    1.2  
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<p><strong>Estimate the predictive performance of a model using within-sample plug-in (ie with mean parameters) log-score</strong></p>
+<pre class="r"><code>sigma_hat_3 &lt;- sigma(fit_3)
+logscore_3 &lt;- sum(dnorm(kidiq$kid_score, fitted(fit_3), sigma_hat_3, log = TRUE))
+round(logscore_3, 1)</code></pre>
+<pre><code>## [1] -1872</code></pre>
 <p>**Add five pure noise predictors to the data</p>
 <pre class="r"><code>set.seed(1507)
 n=nrow(kidiq)
 kidiqr &lt;- kidiq
 kidiqr$noise &lt;- array(rnorm(5*n), c(n,5))</code></pre>
+<p><strong>Linear regression with additional noise predictors</strong></p>
+<pre class="r"><code>fit_3n &lt;- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr, seed=1507)</code></pre>
+<pre class="r"><code>print(fit_3n)</code></pre>
+<pre><code>## stan_glm
+##  family:       gaussian [identity]
+##  formula:      kid_score ~ mom_hs + mom_iq + noise
+##  observations: 434
+##  predictors:   8
+## ------
+##             Median MAD_SD
+## (Intercept) 25.6    5.5  
+## mom_hs       5.9    2.3  
+## mom_iq       0.6    0.1  
+## noise1      -0.1    0.9  
+## noise2      -1.3    1.0  
+## noise3       0.0    0.9  
+## noise4       0.2    0.9  
+## noise5      -0.5    0.9  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 18.2    0.6  
+## 
+## Sample avg. posterior predictive distribution of y:
+##          Median MAD_SD
+## mean_PPD 86.8    1.2  
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<pre class="r"><code>sigma_hat_3n &lt;- median(as.matrix(fit_3n)[,'sigma'])
+logscore_3n &lt;- sum(dnorm(kidiq$kid_score, fitted(fit_3n), sigma_hat_3n, log = TRUE))
+round(logscore_3n, 1)</code></pre>
+<pre><code>## [1] -1870.9</code></pre>
+<p><strong>Compare models with within-sample residual deviance</strong></p>
+<pre class="r"><code>round(logscore_3n - logscore_3, 1)</code></pre>
+<pre><code>## [1] 1.1</code></pre>
+<div id="compare-models-with-loo-cv" class="section level3">
+<h3>Compare models with LOO-CV</h3>
 </div>
-<div id="compare-different-models-with-loo-cv" class="section level3">
-<h3>Compare different models with LOO-CV</h3>
-<p><strong>Bayesian regression with additional noise predictors</strong></p>
-<pre class="r"><code>stan_fit_3n &lt;- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr)
-loo_3n &lt;- loo(stan_fit_3n)
+<div id="estimate-the-predictive-performance-of-models-using-loo-cv" class="section level3">
+<h3>Estimate the predictive performance of models using LOO-CV</h3>
+<pre class="r"><code>loo_3 &lt;- loo(fit_3)
+print(loo_3)</code></pre>
+<pre><code>## 
+## Computed from 4000 by 434 log-likelihood matrix
+## 
+##          Estimate   SE
+## elpd_loo  -1876.1 14.2
+## p_loo         4.1  0.4
+## looic      3752.3 28.4
+## ------
+## Monte Carlo SE of elpd_loo is 0.0.
+## 
+## All Pareto k estimates are good (k &lt; 0.5).
+## See help('pareto-k-diagnostic') for details.</code></pre>
+<pre class="r"><code>loo_3n &lt;- loo(fit_3n)
 print(loo_3n)</code></pre>
 <pre><code>## 
 ## Computed from 4000 by 434 log-likelihood matrix
 ## 
 ##          Estimate   SE
-## elpd_loo  -1880.0 14.2
+## elpd_loo  -1879.9 14.2
 ## p_loo         8.8  0.7
-## looic      3759.9 28.3
+## looic      3759.8 28.4
 ## ------
-## Monte Carlo SE of elpd_loo is 0.1.
+## Monte Carlo SE of elpd_loo is 0.0.
 ## 
 ## All Pareto k estimates are good (k &lt; 0.5).
 ## See help('pareto-k-diagnostic') for details.</code></pre>
@@ -185,18 +248,18 @@ print(loo_3n)</code></pre>
 ## (negative 'elpd_diff' favors 1st model, positive favors 2nd) 
 ## 
 ## elpd_diff        se 
-##      -4.0       1.5</code></pre>
-<p><strong>Bayesian regression with different predictors</strong></p>
-<pre class="r"><code>stan_fit_1 &lt;- stan_glm(kid_score ~ mom_hs, data=kidiq)
-loo_1 &lt;- loo(stan_fit_1)
+##      -3.7       1.5</code></pre>
+<p><strong>Linear regression with different predictors</strong></p>
+<pre class="r"><code>fit_1 &lt;- stan_glm(kid_score ~ mom_hs, data=kidiq)</code></pre>
+<pre class="r"><code>loo_1 &lt;- loo(fit_1)
 print(loo_1)</code></pre>
 <pre><code>## 
 ## Computed from 4000 by 434 log-likelihood matrix
 ## 
 ##          Estimate   SE
-## elpd_loo  -1914.8 13.8
-## p_loo         3.0  0.3
-## looic      3829.6 27.5
+## elpd_loo  -1914.9 13.8
+## p_loo         3.2  0.3
+## looic      3829.8 27.6
 ## ------
 ## Monte Carlo SE of elpd_loo is 0.0.
 ## 
@@ -209,9 +272,10 @@ print(loo_1)</code></pre>
 ## 
 ## elpd_diff        se 
 ##     -38.8       8.3</code></pre>
-<p><strong>Bayesian regression with interaction</strong></p>
-<pre class="r"><code>stan_fit_4 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs, data=kidiq)
-print(stan_fit_4)</code></pre>
+<p><strong>Linear regression with interaction</strong></p>
+<pre class="r"><code>fit_4 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs,
+                  data=kidiq, seed=1507)</code></pre>
+<pre class="r"><code>print(fit_4)</code></pre>
 <pre><code>## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs
@@ -219,27 +283,31 @@ print(stan_fit_4)</code></pre>
 ##  predictors:   4
 ## ------
 ##               Median MAD_SD
-## (Intercept)   -7.9   13.4  
-## mom_hs        46.6   14.6  
+## (Intercept)   -8.0   13.2  
+## mom_hs        47.0   14.5  
 ## mom_iq         0.9    0.1  
 ## mom_hs:mom_iq -0.4    0.2  
-## sigma         18.0    0.6  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 18.0    0.6  
 ## 
 ## Sample avg. posterior predictive distribution of y:
 ##          Median MAD_SD
-## mean_PPD 86.7    1.2  
+## mean_PPD 86.8    1.2  
 ## 
 ## ------
-## For info on the priors used see help('prior_summary.stanreg').</code></pre>
-<pre class="r"><code>loo_4 &lt;- loo(stan_fit_4)
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<pre class="r"><code>loo_4 &lt;- loo(fit_4)
 print(loo_4)</code></pre>
 <pre><code>## 
 ## Computed from 4000 by 434 log-likelihood matrix
 ## 
 ##          Estimate   SE
-## elpd_loo  -1872.5 14.4
-## p_loo         4.8  0.5
-## looic      3745.0 28.8
+## elpd_loo  -1872.6 14.4
+## p_loo         4.9  0.5
+## looic      3745.1 28.8
 ## ------
 ## Monte Carlo SE of elpd_loo is 0.0.
 ## 
@@ -251,10 +319,11 @@ print(loo_4)</code></pre>
 ## (negative 'elpd_diff' favors 1st model, positive favors 2nd) 
 ## 
 ## elpd_diff        se 
-##       3.4       2.6</code></pre>
-<p><strong>Bayesian regression with log-transformation and interaction</strong></p>
-<pre class="r"><code>stan_fit_5 &lt;- stan_glm(kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs, data=kidiq)
-print(stan_fit_5)</code></pre>
+##       3.6       2.6</code></pre>
+<p><strong>Linear regression with log-transformation and interaction</strong></p>
+<pre class="r"><code>fit_5 &lt;- stan_glm(kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs,
+                  data=kidiq, seed=1507)</code></pre>
+<pre class="r"><code>print(fit_5)</code></pre>
 <pre><code>## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs
@@ -262,19 +331,23 @@ print(stan_fit_5)</code></pre>
 ##  predictors:   4
 ## ------
 ##                    Median MAD_SD
-## (Intercept)        -233.0   42.4
-## mom_hs               60.7   39.5
-## log(mom_iq)          68.9    9.3
-## mom_hs:log(mom_iq)  -12.2    8.7
-## sigma                18.0    0.6
+## (Intercept)        -233.4   42.8
+## mom_hs               62.0   39.1
+## log(mom_iq)          69.0    9.5
+## mom_hs:log(mom_iq)  -12.4    8.7
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 18.0    0.6  
 ## 
 ## Sample avg. posterior predictive distribution of y:
 ##          Median MAD_SD
 ## mean_PPD 86.8    1.2  
 ## 
 ## ------
-## For info on the priors used see help('prior_summary.stanreg').</code></pre>
-<pre class="r"><code>loo_5 &lt;- loo(stan_fit_5)
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<pre class="r"><code>loo_5 &lt;- loo(fit_5)
 print(loo_5)</code></pre>
 <pre><code>## 
 ## Computed from 4000 by 434 log-likelihood matrix
@@ -294,7 +367,7 @@ print(loo_5)</code></pre>
 ## (negative 'elpd_diff' favors 1st model, positive favors 2nd) 
 ## 
 ## elpd_diff        se 
-##       3.6       1.4</code></pre>
+##       3.8       1.4</code></pre>
 </div>
 
 

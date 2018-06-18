@@ -22,7 +22,9 @@ library("foreign")
 kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 
 #' ### Estimate the predictive performance of a model using LOO-CV
+#+ results='hide'
 fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq, seed=1507)
+#+
 loo_3 <- loo(fit_3)
 print(loo_3)
 
@@ -35,9 +37,11 @@ kidiqr$noise <- array(rnorm(5*n), c(n,5))
 #' ### Compare different models with LOO-CV
 #' 
 #' **Linear regression with additional noise predictors**
+#+ results='hide'
 fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr, seed=1507)
 
-#' **Lienar regression with interaction**
+#' **Linear regression with interaction**
+#+ results='hide'
 fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs, data=kidiq, seed=1507)
 
 #' ### R2 without and with LOO-CV
@@ -62,8 +66,8 @@ looR2 <- function(fit) {
 round(R2(fit_3),2)
 round(R2(fit_3n),2)
 #' **R2 with LOO-CV**<br>
-#' R2 decreases when five noise predictors are addded
+#' LOO-R2 decreases when five noise predictors are addded
 round(looR2(fit_3),2)
 round(looR2(fit_3n),2)
-#' R2 increases when interaction is addded
+#' LOO-R2 increases when interaction is addded
 round(looR2(fit_4),2)

@@ -9,9 +9,9 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Andrew Gelman, Aki Vehtari" />
+<meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2018-04-24" />
+<meta name="date" content="2018-06-18" />
 
 <title>Regression and Other Stories: KidIQ cross-validation</title>
 
@@ -120,8 +120,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Regression and Other Stories: KidIQ cross-validation</h1>
-<h4 class="author"><em>Andrew Gelman, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-04-24</em></h4>
+<h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
+<h4 class="date"><em>2018-06-18</em></h4>
 
 </div>
 
@@ -137,8 +137,8 @@ library(&quot;foreign&quot;)</code></pre>
 <p><strong>Load children’s test scores data</strong></p>
 <pre class="r"><code>kidiq &lt;- read.dta(file=root(&quot;KidIQ/data&quot;,&quot;kidiq.dta&quot;))</code></pre>
 <p><strong>Bayesian regression with the original predictors</strong></p>
-<pre class="r"><code>stan_fit_3 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-print(stan_fit_3)</code></pre>
+<pre class="r"><code>stan_fit_3 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)</code></pre>
+<pre class="r"><code>print(stan_fit_3)</code></pre>
 <pre><code>## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      kid_score ~ mom_hs + mom_iq
@@ -146,17 +146,21 @@ print(stan_fit_3)</code></pre>
 ##  predictors:   3
 ## ------
 ##             Median MAD_SD
-## (Intercept) 25.8    5.9  
-## mom_hs       6.0    2.2  
+## (Intercept) 25.8    5.8  
+## mom_hs       5.9    2.2  
 ## mom_iq       0.6    0.1  
-## sigma       18.1    0.6  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 18.1    0.6  
 ## 
 ## Sample avg. posterior predictive distribution of y:
 ##          Median MAD_SD
-## mean_PPD 86.7    1.2  
+## mean_PPD 86.8    1.2  
 ## 
 ## ------
-## For info on the priors used see help('prior_summary.stanreg').</code></pre>
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
 <p><strong>Leave-one-out cross-validation</strong></p>
 <pre class="r"><code>loo3 &lt;- loo(stan_fit_3)
 loo3</code></pre>
@@ -164,9 +168,9 @@ loo3</code></pre>
 ## Computed from 4000 by 434 log-likelihood matrix
 ## 
 ##          Estimate   SE
-## elpd_loo  -1876.1 14.2
-## p_loo         4.0  0.4
-## looic      3752.1 28.5
+## elpd_loo  -1875.9 14.2
+## p_loo         3.9  0.4
+## looic      3751.8 28.5
 ## ------
 ## Monte Carlo SE of elpd_loo is 0.0.
 ## 
@@ -189,7 +193,7 @@ loo3</code></pre>
 ##  10-fold cross-validation
 ## 
 ##            Estimate   SE
-## elpd_kfold  -1875.9 14.3</code></pre>
+## elpd_kfold  -1875.8 14.3</code></pre>
 
 
 
