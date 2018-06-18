@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Mesquite"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -51,10 +51,21 @@ loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
 compare(kfold_1, loo_2_with_jacobian)
 
 #' **Plot marginal posteriors**
-mcmc_areas(as.matrix(fit_2))
+#+ fig.height=3, fig.width=6
+mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
+#+ eval=FALSE, include=FALSE
+pdf(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
+#+ fig.height=3, fig.width=6
+mcmc_areas_old(as.matrix(fit_2), regex_pars = "^log|^gro")
+#+ eval=FALSE, include=FALSE
+dev.off()
 
 #' **Plot joint marginal posterior for log(canopy_height) and log(total_height)
-mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"))+geom_vline(xintercept=0)+geom_hline(yintercept=0)
+#+ eval=FALSE, include=FALSE
+pdf(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
+mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"), size = 1)+geom_vline(xintercept=0)+geom_hline(yintercept=0)
+#+ eval=FALSE, include=FALSE
+dev.off()
 
 #' **Additional transformed variables**
 mesquite$canopy_volume <- mesquite$diam1 * mesquite$diam2 * mesquite$canopy_height
@@ -92,12 +103,16 @@ compare_models(loo_2, loo_4)
 round(looR2(fit_4),2)
 
 #' **Plot marginals**
+#+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_4))
+#+ fig.height=3, fig.width=6
+mcmc_areas_old(as.matrix(fit_4))
 
 #' **Plot pairwise joint marginals**<br>
 #' Strong collinearity between canopy volume and canopy area is obvious
 #+ fig.width=8, fig.height=8
-mcmc_pairs(as.matrix(fit_4),pars = c("log(canopy_volume)","log(canopy_area)","log(canopy_shape)","log(total_height)","log(density)"))
+mcmc_pairs(as.matrix(fit_4), size = 1, pars = c("log(canopy_volume)","log(canopy_area)",
+                                                "log(canopy_shape)","log(total_height)","log(density)"))
 
 #' **A model with canopy volume and canopy shape**
 fit_5 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_shape) +
