@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Coverage"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
