@@ -22,7 +22,6 @@ theta_hat_prior <- 0
 se_prior <- 0.25
 theta_hat_data <- 8
 se_data <- 3
-
 theta_hat_bayes <- (theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2)/(1/se_prior^2 + 1/se_data^2)
 se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
 
@@ -31,11 +30,11 @@ x <- seq(-2,2,1)
 y <- c(50, 44, 50, 47, 56)
 sexratio <- data.frame(x, y)
 
-#' **Classical regression**
+#' **Least-squares regression**
 fit <- lm(y ~ x, data = sexratio)
 display(fit)
 
-#' **Plot for the book**
+#' **Plot data and least-squares regression line**
 #+ eval=FALSE, include=FALSE
 pdf(root("SexRatio/figs","sexratio_bayes_1.pdf"), height=4, width=10)
 #+
@@ -65,7 +64,7 @@ fit_post <-
 prior_summary(fit_post)
 print(fit_post)
 
-#' **Plot for the book**
+#' **Plot Posterior simulations under weakly informative abd informative prior**
 #+ eval=FALSE, include=FALSE
 pdf(root("SexRatio/figs","sexratio_bayes_2.pdf"), height=8, width=10)
 #+
