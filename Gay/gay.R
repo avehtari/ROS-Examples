@@ -22,8 +22,8 @@ options(mc.cores = parallel::detectCores())
 library("dbarts")
 
 #' **Define common plot functions**
-gay_plot <- function(fit=NULL, question=NULL, title=NULL, pdf=FALSE) {
-  if (pdf) pdf(root("Gay/figs",paste("gay", index, ".pdf", sep="")), height=4.5, width=6)
+gay_plot <- function(fit=NULL, question=NULL, title=NULL, savepdf=FALSE) {
+  if (savepdf) pdf(root("Gay/figs",paste("gay", index, ".pdf", sep="")), height=4.5, width=6)
   par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
   plot(gay_sum[[j]]$age, gay_sum[[j]]$y/gay_sum[[j]]$n, ylim=c(0,.65), yaxs="i", xlab="Age", ylab=question, yaxt="n", bty="l", type="n", main=title)
   axis(2, seq(0,1,.2), c("0","20%","40%","60%","80%","100%"))
@@ -35,7 +35,7 @@ gay_plot <- function(fit=NULL, question=NULL, title=NULL, pdf=FALSE) {
     }
     lines(gay_sum[[j]]$age, colMeans(fit), lwd=2)
   }
-  if (pdf) dev.off()
+  if (savepdf) dev.off()
   index <<- index + 1
 }
 
@@ -89,7 +89,7 @@ gay_spline_2 <- as.list(rep(NA, 2))
 
 #' **Loop over two different questions**
 # by default don't save pdf's to file, change this to TRUE if you want to save pdf's
-pdf=FALSE
+savepdf=FALSE
 for (j in 1:2){
   
   # Prepare the data
@@ -120,29 +120,29 @@ for (j in 1:2){
   }
   
   # Make the plots
-  gay_plot(question=question[j], title="Raw data from a national survey")
+  gay_plot(question=question[j], title="Raw data from a national survey", savepdf = savepdf)
 
   # LOESS
   gay_loess[[j]] <- loess(y ~ age, data=gay[[j]])
   gay_loess_fit <- predict(gay_loess[[j]], data.frame(age=gay_sum[[j]]$age))
   gay_loess_fit <- matrix(gay_loess_fit, nrow=100, ncol=length(gay_loess_fit), byrow=TRUE)
-  gay_plot(gay_loess_fit, question=question[j], title="Loess fit")
+  gay_plot(gay_loess_fit, question=question[j], title="Loess fit", savepdf = savepdf)
 
   # Splines
   ##  gay_spline <- stan_gamm4(y/n ~ s(age), data=gay_sum, family = betar)
   gay_spline[[j]] <- stan_gamm4(I(y/n) ~ s(age), data=gay_sum[[j]], adapt_delta=0.99)
   gay_spline_fit <- posterior_linpred(gay_spline[[j]], data.frame(age=gay_sum[[j]]$age))
-  gay_plot(gay_spline_fit, question=question[j], title="Spline fit and uncertainty")
+  gay_plot(gay_spline_fit, question=question[j], title="Spline fit and uncertainty", savepdf = savepdf)
 
   # GP represented with splines
   ## gay_gp <- stan_gamm4(cbind(y, n-y) ~ s(age, bs="gp"), family=binomial(link="logit"), data=gay_sum)
   gay_GP[[j]] <- stan_gamm4(I(y/n) ~ age + s(age, bs="gp"), data=gay_sum[[j]], prior_smooth=student_t(df=4, scale=100), adapt_delta=0.99)
   gay_GP_fit <- posterior_linpred(gay_GP[[j]], data.frame(age=gay_sum[[j]]$age))
-  gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty")
+  gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty", savepdf = savepdf)
   # BART
   gay_bart[[j]] <- bart(y ~ age, gay[[j]], uniq_age, ntree = 20)
   gay_bart_fit <- pnorm(gay_bart[[j]]$yhat.test)
-  gay_plot(gay_bart_fit, question=question[j], title="Bart fit and uncertainty")
+  gay_plot(gay_bart_fit, question=question[j], title="Bart fit and uncertainty", savepdf = savepdf)
 
   # Another spline
   gay_spline_2[[j]] <- stan_gamm4(I(y/n) ~ s(age + male), data=gay_sum_2[[j]])
