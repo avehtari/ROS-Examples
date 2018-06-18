@@ -1,4 +1,3 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Congress")
 library("arm")
 library("rstanarm")
 

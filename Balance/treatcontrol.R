@@ -1,4 +1,3 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Balance")
 bell <- function(filename, mu, sd, lo, hi, ymax){
   pdf(filename, height = 3, width = 9)
   par(mar = c(4,0,3,0))
