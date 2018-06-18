@@ -1,10 +1,10 @@
 #' ---
-#' title: "Regression and Other Stories: Imputation"
+#' title: "Regression and Other Stories: Restaurant"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Regression-based imputation for the Social Indicators Survey
+#' Demonstration of using Stan for optimization
 #' 
 #' -------------
 #' 
@@ -22,7 +22,7 @@ writeLines(readLines(root("Restaurant","restaurant.stan")))
 
 #' **Compile Stan code**
 #+ results='hide'
-resto <- stan_model("restaurant.stan")
+resto <- stan_model(root("Restaurant","restaurant.stan"))
 
 #' **Optimize**
 fit <- optimizing(resto)
