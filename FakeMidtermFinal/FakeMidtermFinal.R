@@ -27,10 +27,12 @@ final <- true_ability + noise_2
 exams <- data.frame(midterm, final)
 
 #' **Linear regression**
+#+ results='hide'
 fit_1 <- stan_glm(final ~ midterm, data=exams)
-print(fit_1)
+#+
+print(fit_1, digits=2)
 
-#' **Plot for the book**
+#' **Plot midterm and final exam scores**
 #+ eval=FALSE, include=FALSE
 pdf(here("FakeMidtermFinal/figs","FakeMidtermFinal1.pdf"), height=4, width=4)
 #+
