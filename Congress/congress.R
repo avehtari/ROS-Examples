@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Congress"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -30,21 +30,21 @@ i86 <- (1986-1896)/2 + 1
 cong86 <- congress[[i86]]
 cong88 <- congress[[i86+1]]
 cong90 <- congress[[i86+2]]
-
+#
 v86 <- cong86[,5]/(cong86[,5]+cong86[,6])
 bad86 <- cong86[,5]==-9 | cong86[,6]==-9
 v86[bad86] <- NA
 contested86 <- v86>.1 & v86<.9
 inc86 <- cong86[,4]
 inc86[inc86 == -9] <- 0
-
+#
 v88 <- cong88[,5]/(cong88[,5]+cong88[,6])
 bad88 <- cong88[,5]==-9 | cong88[,6]==-9
 v88[bad88] <- NA
 contested88 <- v88>.1 & v88<.9
 inc88 <- cong88[,4]
 inc88[inc88 == -9] <- 0
-
+#
 v90 <- cong90[,5]/(cong90[,5]+cong90[,6])
 bad90 <- cong90[,5]==-9 | cong90[,6]==-9
 v90[bad90] <- NA
@@ -64,7 +64,9 @@ v90_adj <- uncontested_adj(v90)
 
 #' **Regression predicting 1988 from 1986**
 data_88 <- data.frame(vote=v88_adj, past_vote=v86_adj, inc=inc88)
+#+ results='hide'
 fit_88 <- stan_glm(vote ~ past_vote + inc, data=data_88)
+#+
 print(fit_88, digits=2)
 
 #' **Simulation for inferences and predictions of new data points**</br>
