@@ -1,6 +1,6 @@
 #' ---
 #' title: "Regression and Other Stories: Beauty and Teaching Quality"
-#' author: "Andrew Gelman, Aki Vehtari"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
@@ -15,7 +15,6 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("ggplot2")
@@ -38,17 +37,19 @@ par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(data$beauty, data$eval)
 
 #' **Fit a linear regression**
-lm_1 <- lm(eval ~ beauty, data=data)
-display(lm_1)
+#+ results='hide'
+fit_1 <- stan_glm(eval ~ beauty, data=data)
+#+
+print(fit_1, digits=2)
 
 #' **Make a scatterplot with regression lines**
 # Labeling the axes
 plot(data$beauty, data$eval, xlab="Beauty", ylab="Average teaching evaluation")
 # Display the regression line, added onto the scatterplot (add=TRUE)
-coefs <- coef(lm_1)
+coefs <- coef(fit_1)
 curve(coefs[1] + coefs[2]*x, add=TRUE)
 # Add dotted lines to show +/- 1 standard deviation
-sigma <- summary(lm_1)$sigma
+sigma <- sigma(fit_1)
 curve(coefs[1] + coefs[2]*x + sigma, lty=2, add=TRUE)
 curve(coefs[1] + coefs[2]*x - sigma, lty=2, add=TRUE)
 
@@ -70,9 +71,11 @@ ggplot(data, aes(beauty, eval)) +
 #' ### Do things differ for male and female profs?  
 
 #' Parallel regression lines
-lm_2 <- lm(eval ~ beauty + female, data=data)
-display (lm_2)
-coefs2 <- coef(lm_2)
+#+ results='hide'
+fit_2 <- stan_glm(eval ~ beauty + female, data=data)
+#+
+print(fit_2, digits=2)
+coefs2 <- coef(fit_2)
 
 #' **Make several subplots**
 # Set up a 2x2 grid of plots
@@ -97,17 +100,17 @@ curve(coefs2[1] + coefs2[2]*x + coefs2[3]*1, add=TRUE, col="red")
 
 #' ggplot versions
 # Men 
-(gg_male <-
+gg_male <-
   ggplot(subset(data, female == 0), aes(beauty, eval)) +
   geom_point() +
-  geom_abline(slope = coefs2[2], intercept = coefs2[1], color = "darkgray"))
+  geom_abline(slope = coefs2[2], intercept = coefs2[1], color = "darkgray")
 # Women
-(gg_female <-
+gg_female <-
   ggplot(subset(data, female == 1), aes(beauty, eval)) +
   geom_point() +
-  geom_abline(slope = coefs2[2], intercept = coefs2[1] + coefs2[3], color = "darkgray"))
+  geom_abline(slope = coefs2[2], intercept = coefs2[1] + coefs2[3], color = "darkgray")
 # Both
-(gg_both <-
+gg_both <-
   ggplot(data, aes(beauty, eval)) +
   geom_point(aes(color = factor(female)), show.legend = FALSE) +
   scale_color_manual(values = c("red", "blue")) +
@@ -116,7 +119,7 @@ curve(coefs2[1] + coefs2[2]*x + coefs2[3]*1, add=TRUE, col="red")
     intercept = c(coefs2[1], coefs2[1] + coefs2[3]),
     color = c("blue3", "red3"),
     size = 1
-  ))
+  )
 # Put them in a grid
 bayesplot_grid(
   gg_male, gg_female, gg_both,
@@ -129,9 +132,11 @@ bayesplot_grid(
 #' ### Do things differ for male and female profs?  
 
 #' **Non-parallel regression lines**
-lm_3 <- lm(eval ~ beauty + female + beauty*female, data=data)
-display(lm_3)
-coefs3 <- coef(lm_3)
+#+ results='hide'
+fit_3 <- stan_glm(eval ~ beauty + female + beauty*female, data=data)
+#+
+print(fit_3, digits=2)
+coefs3 <- coef(fit_3)
 
 #' **Make two subplots**
 # Set up a new 1x2 grid of plots
@@ -169,20 +174,28 @@ bayesplot_grid(
 #' ### More models
 
 #' **Add age**
-lm_4 <- lm(eval ~ beauty + female + age, data=data)
-display(lm_4)
+#+ results='hide'
+fit_4 <- stan_glm(eval ~ beauty + female + age, data=data)
+#+
+print(fit_4, digits=2)
 
 #' **Add minority**
-lm_5 <- lm(eval ~ beauty + female + minority, data=data)
-display(lm_5)
+#+ results='hide'
+fit_5 <- stan_glm(eval ~ beauty + female + minority, data=data)
+#+
+print(fit_5, digits=2)
 
 #' **Add nonenglish**
-lm_6 <- lm(eval ~ beauty + female + nonenglish, data=data)
-display(lm_6)
+#+ results='hide'
+fit_6 <- stan_glm(eval ~ beauty + female + nonenglish, data=data)
+#+
+print(fit_6, digits=2)
 
 #' **Add nonenglish and lower**
-lm_7 <- lm(eval ~ beauty + female + nonenglish + lower, data=data)
-display(lm_7)
+#+ results='hide'
+fit_7 <- stan_glm(eval ~ beauty + female + nonenglish + lower, data=data)
+#+
+print(fit_7, digits=2)
 
 #' ### Go back to simple model, add course indicators
 
@@ -198,7 +211,7 @@ for (i in 1:n){
 }
 
 #' **Include course indicators in a regression**
-lm_8 <- lm(eval ~ beauty + factor(course_id), data=data)
-display (lm_8)
-
-#' Fit a multilevel model using stan_glm() ...
+#+ results='hide'
+fit_8 <- stan_glm(eval ~ beauty + factor(course_id), data=data)
+#+
+print(fit_8, digits=2)
