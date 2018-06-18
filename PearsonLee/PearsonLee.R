@@ -14,6 +14,8 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
 library("HistData")
 
 #' **Load data**
@@ -23,12 +25,16 @@ mother_height <- heights$mother_height
 n <- length(mother_height)
 
 #' **Linear regression**
-fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights)
-#fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, algorithm="optimizing")
-print(fit_1)
+# MCMC sampling
+#fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights)
+# optimization and normal approximation at the mode
+#+ results='hide'
+fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, algorithm="optimizing")
+#+
+print(fit_1, digits=2)
 ab_hat <- coef(fit_1)
 
-#' **Plots for the paper/book**
+#' **Plot mothers' and daughters' heights**
 #+ eval=FALSE, include=FALSE
 pdf(root("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
 #+
@@ -46,6 +52,7 @@ for (i in x){
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Plot mothers' and daughters' heights with jitter**
 #+ eval=FALSE, include=FALSE
 pdf(root("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
 #+
@@ -65,8 +72,8 @@ for (i in x){
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Plot mothers' and daughters' heights and fitted regression line**
 #+ eval=FALSE, include=FALSE
-# plot for the paper/book
 pdf(root("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
@@ -87,8 +94,8 @@ mtext("Mothers' and daughters' heights,\naverage of data, and fitted regression 
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Plot fitted regression line and the average of the data**
 #+ eval=FALSE, include=FALSE
-# plot for the paper/book
 pdf(root("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
@@ -102,17 +109,17 @@ abline(ab_hat[1], ab_hat[2], lwd=3, col="white")
 abline(ab_hat[1], ab_hat[2], lwd=1.5)
 lines(rep(mean(mother_height), 2), c(0, mean(daughter_height)), lwd=.5)
 lines(c(0, mean(mother_height)), rep(mean(daughter_height), 2), lwd=.5)
-axis(1, mean(mother_height), fround(mean(mother_height), 1))
-axis(2, mean(daughter_height), fround(mean(daughter_height), 1))
-text(68, 64, paste("y =", round(ab_hat[1]), "+", fround(ab_hat[2], 2), "x"))
-text(63, 62, paste("Equivalently,  y = ", fround(mean(daughter_height), 1), " + ", fround(ab_hat[2], 2), " * (x - ", fround(mean(mother_height), 1), ")", sep=""))
+axis(1, mean(mother_height), round(mean(mother_height), 1))
+axis(2, mean(daughter_height), round(mean(daughter_height), 1))
+text(68, 64, paste("y =", round(ab_hat[1]), "+", round(ab_hat[2], 2), "x"))
+text(63, 62, paste("Equivalently,  y = ", round(mean(daughter_height), 1), " + ", round(ab_hat[2], 2), " * (x - ", round(mean(mother_height), 1), ")", sep=""))
 points(mean(mother_height), mean(daughter_height), pch=20, cex=2)
 mtext("The fitted regression line and the average of the data      ", side=3, line=1)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' **Plot fitted regression line**
 #+ eval=FALSE, include=FALSE
-# plot for the paper/book
 pdf(root("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
@@ -123,12 +130,12 @@ axis(2, round(ab_hat[1]), tck=0, las=1)
 axis(1, 0, tck=0, las=1, line=-.4)
 axis(2, 0, tck=0, las=1)
 abline(ab_hat[1], ab_hat[2], lwd=2)
-text(40, 40, paste("slope", fround(ab_hat[2], 2)))
-mtext(paste("The line, y =", round(ab_hat[1]), "+", fround(ab_hat[2], 2), "x"), side=3, line=0)
+text(40, 40, paste("slope", round(ab_hat[2], 2)))
+mtext(paste("The line, y =", round(ab_hat[1]), "+", round(ab_hat[2], 2), "x"), side=3, line=0)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-# plot for the paper/book
+#' **Plot data and fitted regression line in the context of the data**
 #+ eval=FALSE, include=FALSE
 pdf(root("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
 #+
@@ -142,11 +149,11 @@ abline(ab_hat[1], ab_hat[2], lwd=3, col="white")
 abline(ab_hat[1], ab_hat[2], lwd=1.5)
 axis(1, 0, tck=0, las=1, line=-.4)
 axis(2, 0, tck=0, las=1)
-axis(1, mean(mother_height), fround(mean(mother_height), 1), tck=0, las=1, line=-.4)
-axis(2, mean(daughter_height), fround(mean(daughter_height), 1), tck=0, las=1, line=-.7)
+axis(1, mean(mother_height), round(mean(mother_height), 1), tck=0, las=1, line=-.4)
+axis(2, mean(daughter_height), round(mean(daughter_height), 1), tck=0, las=1, line=-.7)
 lines(rep(mean(mother_height), 2), c(0, mean(daughter_height)), lwd=.5)
 lines(c(0, mean(mother_height)), rep(mean(daughter_height), 2), lwd=.5)
-text(40, 43, paste("slope", fround(ab_hat[2], 2)), cex=.9)
-mtext(paste("The line, y =", round(ab_hat[1]), "+", fround(ab_hat[2], 2), "x, in the context of the data"), side=3, line=0)
+text(40, 43, paste("slope", round(ab_hat[2], 2)), cex=.9)
+mtext(paste("The line, y =", round(ab_hat[1]), "+", round(ab_hat[2], 2), "x, in the context of the data"), side=3, line=0)
 #+ eval=FALSE, include=FALSE
 dev.off()
