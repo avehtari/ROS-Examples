@@ -135,7 +135,7 @@ ggplot(earnings, aes(height, earn)) +
 
 #' **Include interaction**
 #+ results='hide'
-fit_3 <- stan_glm(earnk ~ height + male + height*male, data=earnings)
+fit_3 <- stan_glm(earnk ~ height + male + height:male, data=earnings)
 #+
 print(fit_3)
 #' for plotting scale back to dollar scale
@@ -184,20 +184,35 @@ ggplot(earnings, aes(height, earn)) +
 #' ### Linear regression on log scale
 
 #' **Models on log scale**
-#+ results='hide'
 earnings$log_earn <- log(earnings$earn)
+#+ results='hide'
 logmodel_1 <- stan_glm(log_earn ~ height, data=earnings)
-earnings$log10_earn <- log10(earnings$earn)
-log10model_1 <- stan_glm(log10_earn ~ height, data=earnings)
-logmodel_2 <- stan_glm(log_earn ~ height + male, data=earnings)
-earnings$log_height <- log(earnings$height)
-loglogmodel_2 <- stan_glm(log_earn ~ log_height + male, data=earnings)
-logmodel_3 <- stan_glm(log_earn ~ height + male + height:male, data=earnings)
 #+
 print(logmodel_1, digits=2)
+
+#' **Model on log10 scale**
+earnings$log10_earn <- log10(earnings$earn)
+#+ results='hide'
+log10model_1 <- stan_glm(log10_earn ~ height, data=earnings)
+#+
 print(log10model_1, digits=3)
+
+#' **Model on log scale with two predictors**
+#+ results='hide'
+logmodel_2 <- stan_glm(log_earn ~ height + male, data=earnings)
+#+
 print(logmodel_2, digits=2)
+
+#' **Model on log scale for the target and one predictor**
+earnings$log_height <- log(earnings$height)
+#+ results='hide'
+loglogmodel_2 <- stan_glm(log_earn ~ log_height + male, data=earnings)
+#+
 print(loglogmodel_2, digits=2)
+
+#' **Model on log scale with two predictors and interaction**
+logmodel_3 <- stan_glm(log_earn ~ height + male + height:male, data=earnings)
+#+
 print(logmodel_3, digits=2)
 
 #' **Model on log scale with standardized interaction**
@@ -207,7 +222,7 @@ logmodel_3a <- stan_glm(log_earn ~ z_height + male + z_height:male, data=earning
 #+
 print(logmodel_3a, digits=2)
 
-#' ### Bayesian regression with rstanarm
+#' ### Uncertainty
 
 #' **Posterior uncertainty for log model**
 sims <- as.matrix(logmodel_2)
@@ -225,11 +240,11 @@ subset <- sample(n_sims, 10)
 for (i in subset){
   curve(sims[i,1] + sims[i,2]*x, lwd=0.5, col="gray30", add=TRUE)
 }
-curve(coef(M_1)[1] + coef(M_1)[2]*x, add=TRUE)
+curve(coef(logmodel_2)[1] + coef(logmodel_2)[2]*x, add=TRUE)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-# **Plot posterior draws of linear model on log scale, ggplto version**
+# **Plot posterior draws of linear model on log scale, ggplot version**
 subset <- sample(n_sims, 10)
 ggplot(earnings, aes(height, log_earn)) +
   geom_jitter(height = 0, width = 0.25) +
@@ -248,20 +263,34 @@ ggplot(earnings, aes(height, log_earn)) +
     title = "Log regression, plotted on log scale"
   )
 
-#' **Logistic regression on non-zero earnings**
-fit_2a <- stan_glm(positive ~ height + male,
-                   family = binomial(link = "logit"),
-                   data = earnings_all)
-sims_2a <- as.matrix(fit_2a)
+#' ### Posterior predictive checking
 
-#' **Linear regression on log scale**
-fit_2b <- stan_glm(log_earn ~ height + male, data = earnings)
-sims_2b <- as.matrix(fit_2b)
-print(fit_2a, digits=2)
-print(fit_2b, digits=2)
+#' **Posterior predictive checking for model in linear scale**
+yrep_1 <- posterior_predict(fit_1)
+ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[1:100,])
+#' **Posterior predictive checking for model in log scale**
+yrep_log_1 <- posterior_predict(logmodel_1)
+ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[1:100,])
+bpg <- bayesplot_grid(
+  ppc_1, ppc_log_1,
+  grid_args = list(ncol = 2),
+  titles = c("earn", "log(earn)")
+)
+#+ eval=FALSE, include=FALSE
+pdf(root("Earnings/figs","earnings_ppc.pdf"), height=3, width=9)
+#+
+bpg
+#+ eval=FALSE, include=FALSE
+dev.off()
 
-#' **Predictions for a new person**
-new <- data.frame(height = 68, male = 0, positive=1)
-pred_2a <- posterior_predict(fit_2a, newdata=new)
-pred_2b <- posterior_predict(fit_2b, newdata=new)
-pred <- ifelse(pred_2a == 1, exp(pred_2b), 0)
+#' **Posterior predictive checking for model in linear scale**
+yrep_2 <- posterior_predict(fit_2)
+ppc_dens_overlay(earnings$earnk, yrep_2[1:100,])
+
+#' **Posterior predictive checking for model in log scale**
+yrep_log_2 <- posterior_predict(logmodel_2)
+ppc_dens_overlay(earnings$log_earn, yrep_log_2[1:100,])
+
+#' **Posterior predictive checking for model in log-log scale**
+yrep_loglog_2 <- posterior_predict(loglogmodel_2)
+ppc_dens_overlay(earnings$log_earn, yrep_loglog_2[1:100,])
