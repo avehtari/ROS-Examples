@@ -19,6 +19,7 @@ library("loo")
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
+color_scheme_set(scheme = "gray")
 library("foreign")
 
 #' **Load data**
