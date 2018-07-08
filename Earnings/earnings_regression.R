@@ -18,6 +18,7 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
+color_scheme_set(scheme = "gray")
 
 #' **Load data**
 earnings_all <- read.csv(root("Earnings/data","earnings.csv"))
@@ -267,10 +268,14 @@ ggplot(earnings, aes(height, log_earn)) +
 
 #' **Posterior predictive checking for model in linear scale**
 yrep_1 <- posterior_predict(fit_1)
-ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[1:100,])
+n_sims <- nrow(yrep_1)
+subset <- sample(n_sims, 100)
+ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[subset,])
 #' **Posterior predictive checking for model in log scale**
 yrep_log_1 <- posterior_predict(logmodel_1)
-ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[1:100,])
+n_sims <- nrow(yrep_log_1)
+subset <- sample(n_sims, 100)
+ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[subset,])
 bpg <- bayesplot_grid(
   ppc_1, ppc_log_1,
   grid_args = list(ncol = 2),
@@ -285,12 +290,18 @@ dev.off()
 
 #' **Posterior predictive checking for model in linear scale**
 yrep_2 <- posterior_predict(fit_2)
-ppc_dens_overlay(earnings$earnk, yrep_2[1:100,])
+n_sims <- nrow(yrep_2)
+subset <- sample(n_sims, 100)
+ppc_dens_overlay(earnings$earnk, yrep_2[subset,])
 
 #' **Posterior predictive checking for model in log scale**
 yrep_log_2 <- posterior_predict(logmodel_2)
-ppc_dens_overlay(earnings$log_earn, yrep_log_2[1:100,])
+n_sims <- nrow(yrep_log_2)
+subset <- sample(n_sims, 100)
+ppc_dens_overlay(earnings$log_earn, yrep_log_2[subset,])
 
 #' **Posterior predictive checking for model in log-log scale**
 yrep_loglog_2 <- posterior_predict(loglogmodel_2)
-ppc_dens_overlay(earnings$log_earn, yrep_loglog_2[1:100,])
+n_sims <- nrow(yrep_loglog_2)
+subset <- sample(n_sims, 100)
+ppc_dens_overlay(earnings$log_earn, yrep_loglog_2[subset,])
