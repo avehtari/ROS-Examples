@@ -51,6 +51,27 @@ loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
 #' trusts that we know what we are comparing
 compare(kfold_1, loo_2_with_jacobian)
 
+#' **Posterior predictive checking for model in original scale
+yrep_1 <- posterior_predict(fit_1)
+n_sims <- nrow(yrep_1)
+subset <- sample(n_sims, 100)
+ppc_1 <- ppc_dens_overlay(mesquite$weight, yrep_1[subset,])
+#' **Posterior predictive checking for model in log scale**
+yrep_2 <- posterior_predict(fit_2)
+ppc_2 <- ppc_dens_overlay(log(mesquite$weight), yrep_2[subset,])
+bpg <- bayesplot_grid(
+  ppc_1, ppc_2,
+  grid_args = list(ncol = 2),
+  titles = c("Model for weight", "Model for log(weight)")
+)
+#+ eval=FALSE, include=FALSE
+pdf(root("Mesquite/figs","mesquite_ppc.pdf"), height=3, width=9)
+#+
+bpg
+#+ eval=FALSE, include=FALSE
+dev.off()
+
+
 #' **Plot marginal posteriors**
 #+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
