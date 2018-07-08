@@ -18,6 +18,7 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
+color_scheme_set(scheme = "gray")
 
 #' **Load data**
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
@@ -98,7 +99,7 @@ axis(2, seq(45,60,5), paste(seq(45,60,5),"%",sep=""), mgp=c(2,.5,0))
 with(hibbs, points(growth, vote, pch=20))
 abline(50, 0, lwd=.5, col="gray")
 abline(coef(M1), col="gray15")
-text(2.7, 53.5, paste("y =", fround(coef(M1)[1],1), "+", fround(coef(M1)[2],1), "x"), adj=0, col="gray15")
+text(2.7, 53.5, paste("y =", round(coef(M1)[1],1), "+", round(coef(M1)[2],1), "x"), adj=0, col="gray15")
 #+ eval=FALSE, include=FALSE
 dev.off()
 
@@ -141,8 +142,8 @@ y_pred <- rnorm(n_sims, y_hat, sigma)
 Median <- median(y_pred)
 MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
 win_prob <- mean(y_pred > 50)
-cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
-  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="", "\n")
+cat("Predicted Clinton percentage of 2-party vote: ", round(Median, 1), ",
+  with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2), sep="", "\n")
 
 #+ eval=FALSE, include=FALSE
 pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10)
@@ -228,8 +229,8 @@ y_pred <- rnorm(n_sims, y_hat, sigma)
 Median <- median(y_pred)
 MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
 win_prob <- mean(y_pred > 50)
-cat("Predicted Clinton percentage of 2-party vote: ", fround(Median, 1), ",
-  with s.e. ", fround(MAD_SD, 1), "\nPr (Clinton win) = ", fround(win_prob, 2), sep="", "\n")
+cat("Predicted Clinton percentage of 2-party vote: ", round(Median, 1), ",
+  with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2), sep="", "\n")
 
 #' Use the posterior_predict function from rstanarm
 new_data <- data.frame(growth = 2.0)
