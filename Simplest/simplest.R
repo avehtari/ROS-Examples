@@ -60,9 +60,9 @@ n_0 <- 20
 set.seed(2141)
 y_0 <- rnorm(n_0, 2, 5)
 fake <- data.frame(y_0)
-pfround(y_0, 1)
-pfround(mean(y_0), 2)
-pfround(sd(y_0)/sqrt(n), 2)
+round(y_0, 1)
+round(mean(y_0), 2)
+round(sd(y_0)/sqrt(n), 2)
 
 #' **Estimating the mean is the same as regressing on a constant term**
 #+ results='hide'
@@ -101,7 +101,7 @@ axis(1, c(0, 1))
 abline(h=mean(y[x==0]), lty=2, col="gray50")
 abline(h=mean(y[x==1]), lty=2, col="gray50")
 abline(coef(fit_3)[1], coef(fit_3)[2])
-text(.5, -1 + coef(fit)[1] + .5*coef(fit)[2], paste("y =", fround(coef(fit)[1], 2), "+", fround(coef(fit)[2], 2), "x"), cex=.9, adj=0)
+text(.5, -1 + coef(fit_3)[1] + .5*coef(fit_3)[2], paste("y =", round(coef(fit_3)[1], 2), "+", round(coef(fit_3)[2], 2), "x"), cex=.9, adj=0)
 text(.05, -1 + mean(y[x==0]), expression(paste(bar(y)[0], " = 2.68")), col="gray30", cex=.9, adj=0)
 text(.95, 1 + mean(y[x==1]), expression(paste(bar(y)[1], " = 8.38")), col="gray30", cex=.9, adj=1)
 #+ eval=FALSE, include=FALSE
