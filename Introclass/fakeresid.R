@@ -25,8 +25,12 @@ introclass  <- data.frame(midterm = grades[,"Midterm"],
 fit_1 <- stan_glm(final ~ midterm, data = introclass)
 print(fit_1)
 
-#' **Compute residuals**
-predicted <- fitted(fit_1)
+#' **Compute residuals**<br>
+#' compute predictions from simulations
+sims <- as.matrix(fit_1)
+predicted <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
+#' or with built-in function
+predicted <- colMeans(posterior_linpred(fit_1))
 resid <- introclass$final - predicted
 
 #' **Plot residuals vs predicted**
@@ -59,7 +63,11 @@ introclass$y_fake <- a + b*introclass$midterm + rnorm(n, 0, 15)
 fit_fake <- stan_glm(y_fake ~ midterm, data = introclass)
 
 #' **Compute residuals**
-predicted_fake <- fitted(fit_fake)
+#' compute predictions from simulations
+sims <- as.matrix(fit_fake)
+predicted_fake <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
+#' or with built-in function
+predicted_fake <- colMeans(posterior_linpred(fit_fake))
 resid_fake <- introclass$y_fake - predicted_fake
 
 #' **Plot residuals vs predicted**
