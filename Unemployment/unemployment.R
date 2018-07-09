@@ -4,18 +4,23 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Time series fit and model checking for unemployment series
+#' Time series fit and posterior predictive model checking for unemployment series
 #' 
 #' -------------
 #' 
 
 #' **Load libraries**
+#' 
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 ## library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
+library("ggplot2")
+library("bayesplot")
+theme_set(bayesplot::theme_default(base_family = "sans"))
+color_scheme_set(scheme = "gray")
 
 #' **Load data**
 unemp <- read.table(root("Unemployment/data","unemployment_simple.dat"),
@@ -44,7 +49,7 @@ fit_lag <- stan_glm(y ~ y_lag, data=unemp)
 #+
 print(fit_lag, digits=2)
 
-#' **Simulate replicated datasets (using beta.hat, sigma.hat)**
+#' **Simulate replicated datasets**
 y_rep <- posterior_predict(fit_lag)
 y_rep <- cbind(unemp$y[1], y_rep)
 n_sims <- nrow(y_rep)
@@ -64,7 +69,7 @@ for (s in sort(sample(n_sims, 15))){
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#' **Numerical model check**
+#' **Numerical posterior predictive check**
 Test <- function (y){
   n <- length(y)
   y_lag <- c(NA, y[1:(n-1)])
@@ -75,3 +80,5 @@ test_y <- Test(unemp$y)
 test_rep <- apply(y_rep, 1, Test)
 print(mean(test_rep > test_y))
 print(quantile(test_rep, c(.1,.5,.9)))
+#' **Plot test statistic for data and histogram of test statistics for replications**
+ppc_stat(y=unemp$y, yrep=y_rep, stat=Test)
