@@ -29,13 +29,20 @@ print(fit_3)
 
 #' **Estimate the predictive performance of a model using
 #' within-sample plug-in (ie with mean parameters) log-score**
-sigma_hat_3 <- sigma(fit_3)
-logscore_3 <- sum(dnorm(kidiq$kid_score, fitted(fit_3), sigma_hat_3, log = TRUE))
+pluginlogscore_3 <- sum(dnorm(kidiq$kid_score, fitted(fit_3), sigma(fit_3), log = TRUE))
+round(pluginlogscore_3, 1)
+
+#' **Estimate the predictive performance of a model using
+#' within-sample posterior predictive (ie integrating over parameters) log-score**
+sigmas <- as.matrix(fit_3)[,'sigma']
+preds <- posterior_linpred(fit_3)
+nsims <- nrow(preds)
+logscore_3 <- sum(log(rowMeans(sapply(1:nsims, FUN = function(i) dnorm(kidiq$kid_score, preds[i,], sigmas[i], log=FALSE)))))
 round(logscore_3, 1)
 
 #' **Add five pure noise predictors to the data
 set.seed(1507)
-n=nrow(kidiq)
+n <- nrow(kidiq)
 kidiqr <- kidiq
 kidiqr$noise <- array(rnorm(5*n), c(n,5))
 
@@ -44,11 +51,23 @@ kidiqr$noise <- array(rnorm(5*n), c(n,5))
 fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr, seed=1507)
 #+
 print(fit_3n)
-sigma_hat_3n <- median(as.matrix(fit_3n)[,'sigma'])
-logscore_3n <- sum(dnorm(kidiq$kid_score, fitted(fit_3n), sigma_hat_3n, log = TRUE))
+
+#' **Estimate the predictive performance of a model using
+#' within-sample plug-in (ie with mean parameters) log-score**
+pluginlogscore_3n <- sum(dnorm(kidiq$kid_score, fitted(fit_3n), sigma(fit_3n), log = TRUE))
+round(pluginlogscore_3n, 1)
+
+#' **Estimate the predictive performance of a model using
+#' within-sample posterior predictive (ie integrating over parameters) log-score**
+sigmas <- as.matrix(fit_3n)[,'sigma']
+preds <- posterior_linpred(fit_3n)
+logscore_3n <- sum(log(rowMeans(sapply(1:nsims, FUN = function(i) dnorm(kidiq$kid_score, preds[i,], sigmas[i], log=FALSE)))))
 round(logscore_3n, 1)
 
-#' **Compare models with within-sample residual deviance**
+#' **Compare models with within-sample plug-in log scores**
+round(pluginlogscore_3n - pluginlogscore_3, 1)
+
+#' **Compare models with within-sample posterior predictive log scores**
 round(logscore_3n - logscore_3, 1)
 
 #' ### Compare models with LOO-CV

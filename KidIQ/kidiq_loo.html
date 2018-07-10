@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2018-06-18" />
+<meta name="date" content="2018-07-10" />
 
 <title>Regression and Other Stories: KidIQ cross-validation</title>
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: KidIQ cross-validation</h1>
 <h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-06-18</em></h4>
+<h4 class="date"><em>2018-07-10</em></h4>
 
 </div>
 
@@ -163,13 +163,19 @@ library(&quot;foreign&quot;)</code></pre>
 ## * For help interpreting the printed output see ?print.stanreg
 ## * For info on the priors used see ?prior_summary.stanreg</code></pre>
 <p><strong>Estimate the predictive performance of a model using within-sample plug-in (ie with mean parameters) log-score</strong></p>
-<pre class="r"><code>sigma_hat_3 &lt;- sigma(fit_3)
-logscore_3 &lt;- sum(dnorm(kidiq$kid_score, fitted(fit_3), sigma_hat_3, log = TRUE))
+<pre class="r"><code>pluginlogscore_3 &lt;- sum(dnorm(kidiq$kid_score, fitted(fit_3), sigma(fit_3), log = TRUE))
+round(pluginlogscore_3, 1)</code></pre>
+<pre><code>## [1] -1872</code></pre>
+<p><strong>Estimate the predictive performance of a model using within-sample posterior predictive (ie integrating over parameters) log-score</strong></p>
+<pre class="r"><code>sigmas &lt;- as.matrix(fit_3)[,'sigma']
+preds &lt;- posterior_linpred(fit_3)
+nsims &lt;- nrow(preds)
+logscore_3 &lt;- sum(log(rowMeans(sapply(1:nsims, FUN = function(i) dnorm(kidiq$kid_score, preds[i,], sigmas[i], log=FALSE)))))
 round(logscore_3, 1)</code></pre>
 <pre><code>## [1] -1872</code></pre>
 <p>**Add five pure noise predictors to the data</p>
 <pre class="r"><code>set.seed(1507)
-n=nrow(kidiq)
+n &lt;- nrow(kidiq)
 kidiqr &lt;- kidiq
 kidiqr$noise &lt;- array(rnorm(5*n), c(n,5))</code></pre>
 <p><strong>Linear regression with additional noise predictors</strong></p>
@@ -202,13 +208,22 @@ kidiqr$noise &lt;- array(rnorm(5*n), c(n,5))</code></pre>
 ## ------
 ## * For help interpreting the printed output see ?print.stanreg
 ## * For info on the priors used see ?prior_summary.stanreg</code></pre>
-<pre class="r"><code>sigma_hat_3n &lt;- median(as.matrix(fit_3n)[,'sigma'])
-logscore_3n &lt;- sum(dnorm(kidiq$kid_score, fitted(fit_3n), sigma_hat_3n, log = TRUE))
-round(logscore_3n, 1)</code></pre>
+<p><strong>Estimate the predictive performance of a model using within-sample plug-in (ie with mean parameters) log-score</strong></p>
+<pre class="r"><code>pluginlogscore_3n &lt;- sum(dnorm(kidiq$kid_score, fitted(fit_3n), sigma(fit_3n), log = TRUE))
+round(pluginlogscore_3n, 1)</code></pre>
 <pre><code>## [1] -1870.9</code></pre>
-<p><strong>Compare models with within-sample residual deviance</strong></p>
-<pre class="r"><code>round(logscore_3n - logscore_3, 1)</code></pre>
+<p><strong>Estimate the predictive performance of a model using within-sample posterior predictive (ie integrating over parameters) log-score</strong></p>
+<pre class="r"><code>sigmas &lt;- as.matrix(fit_3n)[,'sigma']
+preds &lt;- posterior_linpred(fit_3n)
+logscore_3n &lt;- sum(log(rowMeans(sapply(1:nsims, FUN = function(i) dnorm(kidiq$kid_score, preds[i,], sigmas[i], log=FALSE)))))
+round(logscore_3n, 1)</code></pre>
+<pre><code>## [1] -1871.1</code></pre>
+<p><strong>Compare models with within-sample plug-in log scores</strong></p>
+<pre class="r"><code>round(pluginlogscore_3n - pluginlogscore_3, 1)</code></pre>
 <pre><code>## [1] 1.1</code></pre>
+<p><strong>Compare models with within-sample posterior predictive log scores</strong></p>
+<pre class="r"><code>round(logscore_3n - logscore_3, 1)</code></pre>
+<pre><code>## [1] 0.9</code></pre>
 <div id="compare-models-with-loo-cv" class="section level3">
 <h3>Compare models with LOO-CV</h3>
 </div>
