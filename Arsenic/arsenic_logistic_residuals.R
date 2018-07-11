@@ -31,13 +31,15 @@ wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
 fit_8 <- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
                       c_dist100:c_educ4 + c_arsenic:c_educ4,
                   family = binomial(link="logit"), data = wells)
+pred8 <- fitted(fit_8)
 
 #' **Error rates**
-error_rate <- mean(round(abs(wells$y-pred8)))
 error_rate_null <- mean(round(abs(wells$y-mean(pred8))))
+round(error_rate_null, 2)
+error_rate <- mean(round(abs(wells$y-pred8)))
+round(error_rate, 2)
 
 #' ### Residual plot
-pred8 <- fitted(fit_8)
 #+ eval=FALSE, include=FALSE
 postscript(root("Arsenic/figs","arsenic.logitresidsa.ps"),
            height=3.5, width=4, horizontal=TRUE)
@@ -120,13 +122,25 @@ points (br[,1], br[,2], pch=20, cex=.5)
 dev.off()
 
 #' **Predict switching with distance, log(arsenic), education and intercations**
-#' Use non-centered predictors fro easier plotting
+#' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
 fit_8b <- stan_glm(y ~ dist100 + log_arsenic + educ4 +
                       dist100:educ4 + log_arsenic:educ4,
-                  family = binomial(link="logit"), data = wells)
+                   family = binomial(link="logit"), data = wells)
+
+#' **Predict switching with distance, log(arsenic), education and intercations**
+#' Use non-centered predictors for easier plotting
+#+ results='hide'
+wells$log_arsenic <- log(wells$arsenic)
+fit_8b <- stan_glm(y ~ dist100 + log_arsenic + educ4 +
+                      dist100:educ4 + log_arsenic:educ4,
+                   family = binomial(link="logit"), data = wells)
 pred8b <- fitted(fit_8b)
+
+#' **Error rate**
+error_rate <- mean(round(abs(wells$y-pred8b)))
+round(error_rate, 2)
 
 #' **Plots for log model**
 #+ eval=FALSE, include=FALSE
