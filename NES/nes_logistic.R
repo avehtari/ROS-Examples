@@ -126,6 +126,22 @@ abline(0,0,lwd=.5, lty=2)
 dev.off()
 
 
+#' ### Predictive accuracy and log score for logistic regression
+#' 
+
+#' **Estimate the with-in sample predictive accuracy**
+predp <- fitted(fit_1)
+round(c(mean(predp[nes92$rvote==1]), mean(1-predp[nes92$rvote==0])), 3)
+
+#' **Estimate the predictive performance of a model using
+#' within-sample log-score**
+round(sum(log(c(predp[nes92$rvote==1], 1-predp[nes92$rvote==0]))), 1)
+
+#' **Estimate the predictive performance of a model using
+#' leave-one-out log-score (elpd_loo)**
+loo(fit_1)
+
+
 #' ### Identifiability and separation
 #' 
 
