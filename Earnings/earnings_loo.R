@@ -5,7 +5,8 @@
 #' ---
 
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("here")
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("ggplot2")
@@ -14,7 +15,7 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 library("loo")
 
 #' **Load data**
-earnings_all <- read.csv(here("Earnings/data","earnings.csv"))
+earnings_all <- read.csv(root("Earnings/data","earnings.csv")) 
 earnings_all$positive <- earnings_all$earn > 0
 # only non-zero earnings
 earnings <- earnings_all[earnings_all$positive, ]
@@ -60,12 +61,12 @@ sprintf("The baseline by guessing the larger class elpd_loo %.1f sd %.1f",elpd0,
 sprintf("The difference to baseline elpd_diff %.1f sd %.1f",elpd0diff,sdelpd0diff)
 
 # PSIS-LOO weights
-log_lik=log_lik(fit_1b)
-psis=psislw(-log_lik)
+log_lik<-log_lik(fit_1b)
+psis <- psislw(-log_lik)
 # posterior predictive sample
 preds <- posterior_linpred(fit_1b)
 # LOO predictive mean
-predloo=E_loo(preds,psis$lw_smooth)
+predloo <- E_loo(preds,psis$lw_smooth)
 # LOO Bayesian R2
-R2loo=var(predloo)/(var(predloo)+var(fit_1b$y-predloo))
+R2loo <- var(predloo)/(var(predloo)+var(fit_1b$y-predloo))
 sprintf('LOO residual sd = %.2f, LOO-R-Squared = %.2f',sd(fit_1b$y-predloo),R2loo)
