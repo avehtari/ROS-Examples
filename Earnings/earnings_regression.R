@@ -276,17 +276,13 @@ yrep_log_1 <- posterior_predict(logmodel_1)
 n_sims <- nrow(yrep_log_1)
 subset <- sample(n_sims, 100)
 ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[subset,])
-bpg <- bayesplot_grid(
+(bpg <- bayesplot_grid(
   ppc_1, ppc_log_1,
   grid_args = list(ncol = 2),
   titles = c("earn", "log(earn)")
-)
+))
 #+ eval=FALSE, include=FALSE
-pdf(root("Earnings/figs","earnings_ppc.pdf"), height=3, width=9)
-#+
-bpg
-#+ eval=FALSE, include=FALSE
-dev.off()
+ggsave(root("Earnings/figs","earnings_ppc.pdf"), bpg, height=3, width=9)
 
 #' **Posterior predictive checking for model in linear scale**
 yrep_2 <- posterior_predict(fit_2)

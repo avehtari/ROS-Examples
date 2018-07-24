@@ -28,15 +28,20 @@ Sigma <- rho*array(1, c(k,k)) + (1-rho)*diag(k)
 X <- mvrnorm(n, rep(0,k), Sigma)
 b <- c(c(-1, 1, 2), rep(0,k-3))
 y <- X %*% b + rnorm(n)*2
-fake <- data.frame(X, y) 
-fit_1 <- stan_glm(y ~ .,
-                  prior=normal(0, 10, autoscale=FALSE), data=fake)
+fake <- data.frame(X, y)
+
+#' **Weakly informative prior**
+#+ results='hide'
+fit_1 <- stan_glm(y ~ ., prior=normal(0, 10, autoscale=FALSE), data=fake)
 loo_1 <- loo(fit_1)
 kfold_1 <- kfold(fit_1)
 
+#' **An alternative weakly informative prior**<br>
 #' The regularized horseshoe prior `hs()` is weakly informative,
 #' stating that it is likely that only small number of predictors are
 #' relevant, but we don't know which ones.
+#+ results='hide'
 fit_2 <- update(fit_1, prior=hs())
 kfold_2 <- kfold(fit_2)
-compare_models(kfold_1,kfold_2)
+#+
+loo::compare(kfold_1,kfold_2)

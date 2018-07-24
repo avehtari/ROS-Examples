@@ -23,7 +23,7 @@ color_scheme_set(scheme = "gray")
 library("foreign")
 
 #' **Load data**
-mesquite<-read.table(root("Mesquite/data","mesquite.dat"),header=T)
+mesquite <- read.table(root("Mesquite/data","mesquite.dat"), header=TRUE)
 summary(mesquite)
 
 #' **Regress `weight` on all of the predictors**
