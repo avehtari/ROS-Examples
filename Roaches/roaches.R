@@ -128,6 +128,7 @@ yrep_3 <- posterior_predict(fit_3)
 #+
 (ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[subset,]+1))+
      xlab('log10(y+1)'))
+#+ eval=FALSE, include=FALSE
 ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5)
 
 #' **Predictive checking with test statistic**<br>
