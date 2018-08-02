@@ -1,0 +1,36 @@
+# missing codes:  -9: refused/dk to say if you have this source
+#                 -5: you said you had it but refused/dk the amount
+
+# earnings variables:
+
+# rearn:  respondent's earnings
+# tearn:  spouse's earnings
+# pearn:  earnings of primary wage-earner in family
+# searn:  earnings of secondary wage-earner in family
+# unemp:  unemployment, veteran's benefits, worker comp for entire family
+# socsec:  social security of entire family
+# pension:  pension, retirement income of entire family
+# interest:  interest of entire family
+# income:  rental income of entire family
+# alimony:  alimony child support for entire family
+# giftmon:  gift income for entire family
+# ssi:  ssi for entire family
+# welfare:  public assistance for entire family
+# charity:  income received from charity for entire family
+
+# demographics:
+
+# earners:  #earners in family (0,1,2)
+# sex:  male=1, female=2
+# race of respondent:  1=white, 2=black, 3=hispanic(nonblack), 4=other
+# famchild:  #kids (0-8)
+# anych6:  any children under 6?
+# immig:  0 if respondent is U.S. citizen, 1 if not
+# rdisab:  is respondent disabled?
+# cdisab:  is focal child disabled?
+# educ_r:  respondent's education (1=no hs, 2=hs, 3=some coll, 4=college grad)
+# r_age:  respondent's age (18-97)
+# DON'T USE primary:  -9=missing, 0=spouse, 1=respondent is primary earner  
+# marrcoh:  0=single, 1=married/cohabitating
+# workmos:  primary earner's months worked last year
+# workhrs:  primary earner's hours/week worked last year
