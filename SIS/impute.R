@@ -84,7 +84,7 @@ wave3 <- mutate(wave3,
   zero_earnings = (workhrs==0 & workmos==0),
   earnings_top = if_else(zero_earnings, 0, earnings_top))
 
-#' **Create a little dataset with all our redefined variables!**
+#' **Create a little dataset with all our redefined variables**
 SIS <- select(wave3,
               earnings, earnings_top, male, over65,
               white, immig, educ_r, workmos, workhrs_top,
@@ -96,9 +96,8 @@ imp_1 <- stan_glm(earnings ~ male + over65 + white + immig +
   educ_r + workmos + workhrs_top + any_ssi + any_welfare + any_charity,
   data=SIS_pos)
 print(imp_1)
-pred_1 <-
-    colMeans(posterior_predict(imp_1,
-                               newdata = select(SIS, -starts_with("earnings"))))
+SIS_predictors <- select(SIS, -starts_with("earnings"))
+pred_1 <- colMeans(posterior_predict(imp_1, newdata = SIS_predictors))
 SIS <- mutate(SIS,
   pred_1 = pred_1,
   earnings_imp_1 = impute(earnings, pred_1))
@@ -108,9 +107,8 @@ imp_2_sqrt <- stan_glm(I(sqrt(earnings_top)) ~ male + over65 + white + immig +
   educ_r + workmos + workhrs_top + any_ssi + any_welfare + any_charity,
   data=SIS_pos)
 print(imp_2_sqrt)
-pred_2_sqrt <-
-    colMeans(posterior_predict(imp_2_sqrt,
-                               newdata = select(SIS, -starts_with("earnings"))))
+SIS_predictors <- select(SIS, -starts_with("earnings"))
+pred_2_sqrt <- colMeans(posterior_predict(imp_2_sqrt, newdata = SIS_predictors))
 SIS <- mutate(SIS,
   pred_2 = topcode(pred_2_sqrt^2, 100),
   earnings_imp_2 = impute(earnings_top, pred_2))
@@ -186,10 +184,10 @@ fit_ifpos_sqrt <- imp_2_sqrt
 print(fit_ifpos_sqrt)
 
 #' **Predict the sign and then the earnings (if positive)**
-pred_pos <- posterior_predict(fit_pos, draws = 1, 
-                              newdata = select(SIS, -starts_with("earnings")))
+SIS_predictors <- select(SIS, -starts_with("earnings"))
+pred_pos <- posterior_predict(fit_pos, draws = 1, newdata = SIS_predictors)
 pred_ifpos_sqrt <- posterior_predict(fit_ifpos_sqrt, draws = 1, 
-                                     newdata = select(SIS, -starts_with("earnings")))
+                                     newdata = SIS_predictors)
 pred_ifpos <- topcode(pred_ifpos_sqrt^2, 100)
 SIS <- mutate(SIS,
  earnings_imp = impute(earnings, pred_pos*pred_ifpos))
