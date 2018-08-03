@@ -21,10 +21,10 @@ mean_age_45_54 <- function(yr){
   ok <- births$year %in% (yr - ages)
   return(sum(births$births[ok]*rev(ages))/sum(births$births[ok]))
 }
-for (yr in 1989:2015) print(mean_age_45_54(yr))
+for (yr in 1989:2015) print(mean_age_45_54(yr), digits=3)
 
 #' **Calculation**
-print((.5/10)* (.006423 - .003064)/.003064)
+print((.5/10)* (.006423 - .003064)/.003064, digits=3)
 
 #' **From life table**
 deathpr_by_age <- c(.003064, .003322, .003589, .003863, .004148, .004458, .004800, .005165, .005554, .005971)
@@ -41,7 +41,8 @@ for (i in 1:length(years)){
   ok <- pop[,"AGE"] %in% ages_in_2000 & pop[,"MONTH"]==4 & pop[,"YEAR"]==2000
   pop_male <- pop[ok,"NHWA_MALE"]
   pop_female <- pop[ok,"NHWA_FEMALE"]
-  print(c(weighted.mean(45:54, pop_male), weighted.mean(45:54, pop_female)))
+  print(c(weighted.mean(45:54, pop_male), weighted.mean(45:54, pop_female)),
+        digits=3)
   deathpr_1[i] <- weighted.mean(deathpr_by_age, pop_male + pop_female)
   deathpr_2[i] <- sum(deathpr_male* pop_male + deathpr_female*pop_female)/sum(pop_male + pop_female)
 }
