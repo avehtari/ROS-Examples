@@ -1,5 +1,21 @@
+#' ---
+#' title: "Regression and Other Stories: Balance"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' **Load libraries**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+
+#' **Plot figures**
+savepdf <- FALSE
+#+ eval=FALSE, include=FALSE
+savepdf <- TRUE
+#+
 bell <- function(filename, mu, sd, lo, hi, ymax){
-  pdf(filename, height = 3, width = 9)
+  if (savepdf) pdf(filename, height = 3, width = 9)
   par(mar = c(4,0,3,0))
   curve(
     dnorm(x, mu, sd),
@@ -10,7 +26,7 @@ bell <- function(filename, mu, sd, lo, hi, ymax){
     cex.axis = 3.5,
     mgp = c(3,3,0)
   )
-  dev.off()
+  if (savepdf) dev.off()
 }
 
 bell("bell1h.pdf", 2, .4, .3, 5.7, 1)
