@@ -13,7 +13,10 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("ggplot2")
+theme_set(bayesplot::theme_default(base_family = "sans"))
 
+#' **Percentage support for the death penalty**
 #+ eval=FALSE, include=FALSE
 postscript(root("Death/figs","polls.ps"), horizontal=TRUE)
 #+
@@ -26,6 +29,11 @@ plot(year, support*100, xlab="Year",
       cex.axis=2, cex.lab=2, type="l")
 #+ eval=FALSE, include=FALSE
 dev.off()
+
+#' ggplot version
+poll <- data.frame(support, year)
+ggplot(aes(x = year, y = support*100), data = poll) + geom_line() +
+    labs(x= "Year", y = "Percentage support for the death penalty")
 
 #+ eval=FALSE, include=FALSE
 postscript(root("Death/figs","states.ps"), horizontal=TRUE)
@@ -53,6 +61,15 @@ for (i in 1:length(ds)){
 #+ eval=FALSE, include=FALSE
 dev.off()
 
+#' ggplot version
+poll <- data.frame(ds, hom, err.rate, std.err.rate, state.abbrs)
+ggplot(aes(x = ds/hom, y = err.rate,
+           ymin = err.rate - std.err.rate, ymax = err.rate + std.err.rate),
+       data = poll) + geom_pointrange() +
+    labs(x= "Death sentences per homicide",
+         y = "Rate of reversal of death sentences") +
+    geom_text(aes(label=state.abbrs), hjust = "right", nudge_x=-0.0005)
+
 #+ eval=FALSE, include=FALSE
 postscript(root("Death/figs","deathpolls.ps"), horizontal=TRUE)
 #+
@@ -67,3 +84,10 @@ for (i in 1:nrow(polls))
   lines(rep(year[i],2), 100*(support[i]+c(-1,1)*sqrt(support[i]*(1-support[i])/1000)))
 #+ eval=FALSE, include=FALSE
 dev.off()
+
+#' ggplot version
+poll <- data.frame(support, year, sd = sqrt(support*(1-support)/1000))
+ggplot(aes(x = year, y = support*100,
+           ymin = 100*(support-sd), ymax =  100*(support+sd)),
+       data = poll) + geom_pointrange() +
+    labs(x= "Year", y = "Percentage support for the death penalty")
