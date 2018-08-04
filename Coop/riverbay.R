@@ -15,7 +15,7 @@ library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 
 #' **Load data**
-data <- read.table(root("Coop","Riverbay.csv"), header=FALSE, sep=",")
+data <- read.table(root("Coop/data","Riverbay.csv"), header=FALSE, sep=",")
 votes <- data[,2:7]
 candidate.totals <- votes[,6]
 time.totals <- apply(votes, 2, sum)
@@ -35,19 +35,19 @@ actual <- rep(NA, n.candidates)
 expected <- rep(NA, n.candidates)
 
 #' Plot
+#+ fig.width=8, fig.height=8
 par(mfrow=c(6,5), mar=c(3,4,2,0), pty="m")
-for (i in winners){
+for (i in winners) {
   y <- extras[i,]/extras.voters
   plot(voters, y, ylim=range(0,y), type="l", xlab="", ylab="",
         main=names[i])
-
   p.hat <- candidate.totals[i]/5553
   actual[i] <- sd(as.numeric(y))
   expected[i] <- sqrt(mean(p.hat*(1-p.hat)/extras.voters))
 }
 
 #' Plot
-par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 par(pty="s")
 plot(expected, actual, xlim=range(expected,actual),
       ylim=range(expected,actual))
@@ -95,7 +95,7 @@ points(candidate.totals, expected, pch=20, cex=2)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
-#' chi^2 tests
+#' **chi^2 tests**
 chisq <- rep(NA, nrow(extras))
 for (i in 1:nrow(extras)){
   observed <- rbind(extras[i,], extras.voters-extras[i,])
