@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Gelman, Aki Vehtari" />
 
-<meta name="date" content="2018-03-11" />
+<meta name="date" content="2018-08-05" />
 
 <title>Regression and Other Stories: Linear Regression</title>
 
@@ -92,6 +92,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -121,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Linear Regression</h1>
 <h4 class="author"><em>Andrew Gelman, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-03-11</em></h4>
+<h4 class="date"><em>2018-08-05</em></h4>
 
 </div>
 
@@ -148,34 +151,34 @@ dat &lt;- data.frame(y, x1, x2)</code></pre>
 display(fit1)</code></pre>
 <pre><code>## lm(formula = y ~ x1 + x2, data = dat)
 ##             coef.est coef.se
-## (Intercept) 0.74     0.22   
-## x1          1.94     0.21   
-## x2          3.06     0.21   
+## (Intercept) 1.02     0.21   
+## x1          1.77     0.22   
+## x2          3.59     0.20   
 ## ---
 ## n = 100, k = 3
-## residual sd = 2.19, R-Squared = 0.73</code></pre>
+## residual sd = 2.10, R-Squared = 0.80</code></pre>
 <p><strong>Extract estimates and uncertainties</strong></p>
 <pre class="r"><code>b_hat &lt;- coef(fit1)
 b_se &lt;- se.coef(fit1)
-print(cbind(b_hat, b_se))</code></pre>
-<pre><code>##                 b_hat      b_se
-## (Intercept) 0.7353569 0.2188493
-## x1          1.9422464 0.2072006
-## x2          3.0554145 0.2108205</code></pre>
+print(cbind(b_hat, b_se), digits=3)</code></pre>
+<pre><code>##             b_hat  b_se
+## (Intercept)  1.02 0.214
+## x1           1.77 0.221
+## x2           3.59 0.200</code></pre>
 <p><strong>Fit and display using lm, using matrix of predictors</strong></p>
 <pre class="r"><code>fit2 &lt;- lm(y ~ X)
 display(fit2)</code></pre>
 <pre><code>## lm(formula = y ~ X)
 ##             coef.est coef.se
-## (Intercept) 0.74     0.22   
-## Xx1         1.94     0.21   
-## Xx2         3.06     0.21   
+## (Intercept) 1.02     0.21   
+## Xx1         1.77     0.22   
+## Xx2         3.59     0.20   
 ## ---
 ## n = 100, k = 3
-## residual sd = 2.19, R-Squared = 0.73</code></pre>
+## residual sd = 2.10, R-Squared = 0.80</code></pre>
 <p><strong>Fit and display using stan_glm</strong></p>
 <pre class="r"><code>fit3 &lt;- stan_glm(y ~ x1 + x2, data = dat)
-print(fit3)</code></pre>
+print(fit3, digits=2)</code></pre>
 <pre><code>## stan_glm
 ##  family:       gaussian [identity]
 ##  formula:      y ~ x1 + x2
@@ -183,36 +186,21 @@ print(fit3)</code></pre>
 ##  predictors:   3
 ## ------
 ##             Median MAD_SD
-## (Intercept) 0.7    0.2   
-## x1          1.9    0.2   
-## x2          3.1    0.2   
-## sigma       2.2    0.2   
+## (Intercept) 1.02   0.22  
+## x1          1.78   0.22  
+## x2          3.59   0.20  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 2.11   0.16  
 ## 
 ## Sample avg. posterior predictive distribution of y:
 ##          Median MAD_SD
-## mean_PPD 0.7    0.3   
+## mean_PPD 0.27   0.29  
 ## 
 ## ------
-## For info on the priors used see help('prior_summary.stanreg').</code></pre>
-<pre class="r"><code>print(fit3, digits=2)</code></pre>
-<pre><code>## stan_glm
-##  family:       gaussian [identity]
-##  formula:      y ~ x1 + x2
-##  observations: 100
-##  predictors:   3
-## ------
-##             Median MAD_SD
-## (Intercept) 0.74   0.21  
-## x1          1.94   0.21  
-## x2          3.06   0.21  
-## sigma       2.20   0.16  
-## 
-## Sample avg. posterior predictive distribution of y:
-##          Median MAD_SD
-## mean_PPD 0.73   0.32  
-## 
-## ------
-## For info on the priors used see help('prior_summary.stanreg').</code></pre>
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
 <p><strong>Run again just to see some simulation variability</strong></p>
 <pre class="r"><code>fit3 &lt;- stan_glm(y ~ x1 + x2, data = dat)
 print(fit3, digits=2)</code></pre>
@@ -223,25 +211,29 @@ print(fit3, digits=2)</code></pre>
 ##  predictors:   3
 ## ------
 ##             Median MAD_SD
-## (Intercept) 0.73   0.23  
-## x1          1.94   0.21  
-## x2          3.05   0.21  
-## sigma       2.20   0.16  
+## (Intercept) 1.02   0.21  
+## x1          1.78   0.22  
+## x2          3.59   0.20  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 2.11   0.15  
 ## 
 ## Sample avg. posterior predictive distribution of y:
 ##          Median MAD_SD
-## mean_PPD 0.73   0.32  
+## mean_PPD 0.29   0.30  
 ## 
 ## ------
-## For info on the priors used see help('prior_summary.stanreg').</code></pre>
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
 <p><strong>Extract estimates and uncertainties</strong></p>
 <pre class="r"><code>b_hat &lt;- coef(fit3)
 b_se &lt;- se(fit3)
-print(cbind(b_hat, b_se))</code></pre>
-<pre><code>##                 b_hat      b_se
-## (Intercept) 0.7306597 0.2315128
-## x1          1.9427464 0.2112742
-## x2          3.0522382 0.2101855</code></pre>
+print(cbind(b_hat, b_se), digits=3)</code></pre>
+<pre><code>##             b_hat  b_se
+## (Intercept)  1.02 0.213
+## x1           1.78 0.217
+## x2           3.59 0.204</code></pre>
 
 
 

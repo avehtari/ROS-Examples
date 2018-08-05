@@ -35,7 +35,7 @@ display(fit1)
 #' **Extract estimates and uncertainties**
 b_hat <- coef(fit1)
 b_se <- se.coef(fit1)
-print(cbind(b_hat, b_se))
+print(cbind(b_hat, b_se), digits=3)
 
 #' **Fit and display using lm, using matrix of predictors**
 fit2 <- lm(y ~ X)
@@ -43,7 +43,6 @@ display(fit2)
 
 #' **Fit and display using stan_glm**
 fit3 <- stan_glm(y ~ x1 + x2, data = dat)
-print(fit3)
 print(fit3, digits=2)
 #' **Run again just to see some simulation variability**
 fit3 <- stan_glm(y ~ x1 + x2, data = dat)
@@ -52,4 +51,4 @@ print(fit3, digits=2)
 #' **Extract estimates and uncertainties**
 b_hat <- coef(fit3)
 b_se <- se(fit3)
-print(cbind(b_hat, b_se))
+print(cbind(b_hat, b_se), digits=3)
