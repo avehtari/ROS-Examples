@@ -152,6 +152,7 @@
 #'     - [poststrat2](Poststrat/poststrat2.html) - Poststratification after estimation
 #'   - [Imputation/](Imputation/)
 #'     - [imputation](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
+#'     - [imputation_gg](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
 #' 
 #' 
 #' ## Code and data alphabetically
@@ -213,6 +214,7 @@
 #'     - [helicopters](Helicopters/helicopters.html) - Example data file for helicopter flying time exercise
 #'   - [Imputation/](Imputation/)
 #'     - [imputation](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
+#'     - [imputation_gg](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
 #'   - [Interactions/](Interactions/)
 #'     - [interactions](Interactions/interactions.html) - Plot interaction example figure
 #'   - [Introclass/](Introclass/)
@@ -265,8 +267,6 @@
 #'   - [Simplest/](Simplest/)
 #'     - [simplest](Simplest/simplest.html) - Linear regression with a single predictor
 #'     - [simplest_lm](Simplest/simplest_lm.html) - Linear least squares regression with a single predictor
-#'   - [SIS/](SIS/)
-#'     - [impute](SIS/impute.html) - Regression-based imputation for the Social Indicators Survey
 #'   - [Stents/](Stents/)
 #'     - [stents](Stents/stents.html) - Stents - comparing distributions
 #'   - [Storable/](Storable/)

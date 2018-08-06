@@ -15,6 +15,8 @@ library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
+
+#' **Load data**
 source(root("Imputation/data","imputation_setup.R"))
 
 #' **General function for creating a completed data vector using imputations**
@@ -44,7 +46,8 @@ fit_imp_1 <- stan_glm(
   subset = earnings > 0
 )
 print(fit_imp_1)
-pred_1 <- colMeans(posterior_linpred(fit_imp_1, SIS_predictors))  # point predictions
+# point predictions
+pred_1 <- colMeans(posterior_linpred(fit_imp_1, SIS_predictors))  
 earnings_imp_1 <- impute(earnings, pred_1)
 
 #' **Impute subset of earnings that are nonzero:  square root scale and topcoding**
@@ -56,22 +59,21 @@ fit_imp_2 <- stan_glm(
   subset = earnings > 0
 )
 print(fit_imp_2)
-pred_2_sqrt <- colMeans(posterior_linpred(fit_imp_2, SIS_predictors))  # point predictions
+# point predictions
+pred_2_sqrt <- colMeans(posterior_linpred(fit_imp_2, SIS_predictors))  
 pred_2 <- topcode(pred_2_sqrt^2, 100)
 earnings_imp_2 <- impute(earnings_top, pred_2)
 
 #' ### 2.  One random imputation
 
-#' **Linear scale (use fitted model lm_imp_1)**
+#' **Linear scale (use fitted model fit_imp_1)**
+pred_3 <- posterior_predict(fit_imp_1, SIS_predictors, draws = 1)
+earnings_imp_3 <- impute(earnings, pred_3)
 
-pred_3 <- posterior_predict(fit_imp_1, SIS_predictors)
-earnings_imp_3 <- impute(earnings, pred_3[1,])
-
-#' **Square root scale and topcoding (use fitted model lm_imp_2)**
-
-pred_4_sqrt <- posterior_predict(fit_imp_2, SIS_predictors)
+#' **Square root scale and topcoding (use fitted model fit_imp_2)**
+pred_4_sqrt <- posterior_predict(fit_imp_2, SIS_predictors, draws = 1)
 pred_4 <- topcode(pred_4_sqrt^2, 100)
-earnings_imp_4 <- impute(earnings_top, pred_4[1,])
+earnings_imp_4 <- impute(earnings_top, pred_4)
 
 #' ### 3.  Histograms and scatterplots of data and imputations
 #+ eval=FALSE, include=FALSE
@@ -139,8 +141,11 @@ fit_positive_sqrt <- stan_glm(sqrt(earnings_top) ~ male + over65 + white + immig
 print(fit_positive_sqrt)
 
 #' **Predict the sign and then the earnings (if positive)**
-pred_sign <- posterior_predict(fit_positive, SIS_predictors)[1,]  # one random imp
-pred_pos_sqrt <- posterior_predict(fit_positive_sqrt, SIS_predictors)[1,]  # one random imp
+# one random imp
+pred_sign <- posterior_predict(fit_positive, SIS_predictors, draws = 1)
+# one random imp
+pred_pos_sqrt <- posterior_predict(fit_positive_sqrt, SIS_predictors,
+                                   draws = 1)
 pred_pos <- topcode(pred_pos_sqrt^2, 100)
 earnings_imp <- impute(earnings, pred_sign*pred_pos)
 
@@ -158,13 +163,13 @@ for (s in 1:n_sims){
     immig + educ_r + workmos + workhrs_top + any_ssi + any_welfare +
     any_charity, data=SIS)
   SIS_predictors <- SIS[,3:ncol(SIS)]
-  pred <- posterior_predict(fit, SIS_predictors)[1,]
+  pred <- posterior_predict(fit, SIS_predictors, draws = 1)
   SIS$earnings_imp <- impute(earnings, pred)
-
+  
   fit <- stan_glm(interest ~ earnings_imp + male + over65 + white +
     immig + educ_r + workmos + workhrs_top + any_ssi + any_welfare +
     any_charity, data=SIS)
   SIS_predictors <- SIS[,3:ncol(SIS)]
-  pred <- posterior_predict(fit, SIS_predictors)[1,]
+  pred <- posterior_predict(fit, SIS_predictors, draws = 1)
   SIS$interest_imp <- impute(interest, pred)
 }
