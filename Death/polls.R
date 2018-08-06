@@ -4,7 +4,7 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Death - proportion of American adults supporting the death penalty
+#' Death - Proportion of American adults supporting the death penalty
 #' 
 #' -------------
 #' 
