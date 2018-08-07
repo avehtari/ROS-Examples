@@ -42,10 +42,11 @@ with(golf, {
 dev.off()
 
 #' **Fit the geometry based nonlinear model**
+stanfile_golf1 <- root("Golf","golf1.stan")
 #+ comment=NA
-writeLines(readLines(root("Golf","golf1.stan")))
+writeLines(readLines(stanfile_golf1))
 #+ results='hide'
-fit1 <- stan(root("Golf","golf1.stan"), data = golf_data)
+fit1 <- stan(file = stanfile_golf1, data = golf_data)
 #+
 print(fit1)
 
@@ -54,10 +55,11 @@ sims1 <- extract(fit1)
 sigma_hat <- median(sims1$sigma)
 
 #' **Fit naive logistic regression**
+stanfile_golf2 <- root("Golf","golf_logistic.stan")
 #+ comment=NA
-writeLines(readLines(root("Golf","golf_logistic.stan")))
+writeLines(readLines(stanfile_golf2))
 #+ results='hide'
-fit2 <- stan(root("Golf","golf_logistic.stan"), data = golf_data)
+fit2 <- stan(file = stanfile_golf2, data = golf_data)
 #+
 print(fit2)
 
