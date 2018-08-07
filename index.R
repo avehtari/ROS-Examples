@@ -1,15 +1,18 @@
 #' ---
-#' title: "Regression and Other Stories: index"
+#' title: "Regression and Other Stories: Index"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
 #' Index for the code and data for the book Regression and Other Stories
+#'
+#' - [Code and data by chapters](#by_chapters)
+#' - [Code and data folders alphabetically](#alphabetically)
 #' 
 #' -------------
 #' 
 
-#' ## Code and data by chapters
+#' ## <a id="by_chapters"></a>Code and data by chapters
 #' 
 
 #' ### 1  Introduction
@@ -56,6 +59,7 @@
 #' ### 5  Simulation
 #'   - [ProbabilitySimulation/](ProbabilitySimulation/)
 #'     - [probsim](ProbabilitySimulation/probsim.html) - Simulation of probability models
+#'   - [Earnings/](Earnings/)
 #'     - [earnings_bootstrap](Earnings/earnings_bootstrap.html) - Bootstrapping to simulate the sampling distribution
 #' 
 #' ### 6  Background on regression modeling
@@ -155,7 +159,7 @@
 #'     - [imputation_gg](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
 #' 
 #' 
-#' ## Code and data alphabetically
+#' ## <a id="alphabetically"></a>Code and data alphabetically
 #' 
 #'   - [AcademyAwards/](AcademyAwards/)
 #'   - [AgePeriodCohort/](AgePeriodCohort/)
