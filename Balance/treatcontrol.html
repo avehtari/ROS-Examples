@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2018-08-04" />
+<meta name="date" content="2018-08-09" />
 
 <title>Regression and Other Stories: Balance</title>
 
@@ -124,18 +124,19 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Balance</h1>
 <h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-08-04</em></h4>
+<h4 class="date"><em>2018-08-09</em></h4>
 
 </div>
 
 
+<pre class="r"><code># switch this to TRUE to save figures in separate files
+savefigs &lt;- FALSE</code></pre>
 <p><strong>Load libraries</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
 root&lt;-has_dirname(&quot;RAOS-Examples&quot;)$make_fix_file()</code></pre>
 <p><strong>Plot figures</strong></p>
-<pre class="r"><code>savepdf &lt;- FALSE</code></pre>
 <pre class="r"><code>bell &lt;- function(filename, mu, sd, lo, hi, ymax){
-  if (savepdf) pdf(filename, height = 3, width = 9)
+  if (savefigs) pdf(filename, height = 3, width = 9)
   par(mar = c(4,0,3,0))
   curve(
     dnorm(x, mu, sd),
@@ -146,7 +147,7 @@ root&lt;-has_dirname(&quot;RAOS-Examples&quot;)$make_fix_file()</code></pre>
     cex.axis = 3.5,
     mgp = c(3,3,0)
   )
-  if (savepdf) dev.off()
+  if (savefigs) dev.off()
 }
 
 bell(&quot;bell1h.pdf&quot;, 2, .4, .3, 5.7, 1)</code></pre>

@@ -4,6 +4,10 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #+ setup, message=FALSE, error=FALSE, warning=FALSE, eval=FALSE, include=FALSE
 # This library is needed only when saving the figure, and thus not loaded for the notebook
 library("rprojroot")
@@ -23,7 +27,7 @@ for (i in 1:n_rep){
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(root("Coverage/figs","coverage.pdf"), height=4, width=8)
+if (savefigs) pdf(root("Coverage/figs","coverage.pdf"), height=4, width=8)
 #+
 par(mar=c(3,3,0,0), mgp=c(1.5,.5,0), tck=-.01)
 plot(c(-2, n_rep+2), range(conf), bty="l", xlab="Simulation", ylab="Estimate, 50%, and 95% confidence interval", xaxs="i", yaxt="n", type="n")
@@ -35,4 +39,4 @@ for (i in 1:n_rep){
   lines(c(i,i), conf[i,c(2,3)], lwd=2)
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rstanarm")
@@ -34,7 +38,7 @@ print(fit_1, digits=2)
 
 #' **Plot midterm and final exam scores**
 #+ eval=FALSE, include=FALSE
-pdf(here("FakeMidtermFinal/figs","FakeMidtermFinal1.pdf"), height=4, width=4)
+if (savefigs) pdf(here("FakeMidtermFinal/figs","FakeMidtermFinal1.pdf"), height=4, width=4)
 #+
 par(mar=c(3, 3, 2, 1), mgp=c(1.7, .5, 0), tck=-.01)
 par(pty="s")
@@ -48,4 +52,4 @@ for (i in x){
 }
 abline(coef(fit_1))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -9,12 +9,15 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #' 
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-## library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("ggplot2")
@@ -29,7 +32,7 @@ unemp$y <- unemp$unemployed.pct
 
 #' **Plot the unemployment rate**
 #+ eval=FALSE, include=FALSE
-pdf(root("Unemployment/figs","unemployment1.pdf"), height=3, width=4.5)
+if (savefigs) pdf(root("Unemployment/figs","unemployment1.pdf"), height=3, width=4.5)
 #+
 par(mar=c(3,3,1,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(unemp$year, unemp$y, type="l", ylab="Unemployment rate", xlab="Year", yaxs="i",
@@ -39,7 +42,7 @@ axis(1, seq(1950,2010,20))
 axis(2, seq(0,10), rep("",11))
 axis(2, c(0,5,10), paste (c(0,5,10), "%", sep=""))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Fit a 1st-order autogregression**
 n <- nrow(unemp)
@@ -56,7 +59,7 @@ n_sims <- nrow(y_rep)
 
 #' **Plot the simulated unemployment rate series**
 #+ eval=FALSE, include=FALSE
-pdf(root("Unemployment/figs","unemployment2.pdf"), height=4.5, width=7.5)
+if (savefigs) pdf(root("Unemployment/figs","unemployment2.pdf"), height=4.5, width=7.5)
 #+
 par(mar=c(1,1,3,.1), mgp=c(2,.5,0), tck=-.01)
 par(mfrow=c(3,5))
@@ -67,7 +70,7 @@ for (s in sort(sample(n_sims, 15))){
   axis(2, seq(0,10), rep("",11))
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Numerical posterior predictive check**
 Test <- function (y){

@@ -133,20 +133,20 @@ qplot(earnings_top, data=SIS_pos, breaks=seq(0,100,10),
       fill=I("white"), col=I("black")) +
     xlab("earnings") + ggtitle("Observed earnings (excluding 0's)")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.hist2.pdf"), width = 5, height = 4)
+ggsave(root("SIS/figs","impute.hist2.gg.pdf"), width = 5, height = 4)
 
 qplot(earnings_imp_2, data = filter(SIS, is.na(earnings)),
      breaks=seq(0,100,10), fill=I("white"), col=I("black")) +
     xlab("earnings") + ggtitle("Deterministic imputation of earnings")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.hist3.pdf"), width = 5, height = 4)
+ggsave(root("SIS/figs","impute.hist3.gg.pdf"), width = 5, height = 4)
 
 #' Random imputation of earnings
 qplot(earnings_imp_4, data = filter(SIS, is.na(earnings)),
      breaks=seq(0,100,10), fill=I("white"), col=I("black")) +
     xlab("earnings") + ggtitle("Random imputation of earnings")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.hist4.pdf"), width = 5, height = 4)
+ggsave(root("SIS/figs","impute.hist4.gg.pdf"), width = 5, height = 4)
 
 #' Deterministic imputation scatter plot
 ggplot() + 
@@ -157,7 +157,7 @@ ggplot() +
     xlab("Regression prediction") + ylab("Imputed income") +
     ggtitle("Deterministic imputation")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.scat1.pdf"), width = 5, height = 4)
+ggsave(root("SIS/figs","impute.scat1.gg.pdf"), width = 5, height = 4)
 
 #' Random imputation scatter plot
 ggplot() + 
@@ -168,7 +168,7 @@ ggplot() +
     xlab("Regression prediction") + ylab("Imputed income") +
     ggtitle("Random imputation")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.scat2.pdf"), width = 5, height = 4)
+ggsave(root("SIS/figs","impute.scat2.gg.pdf"), width = 5, height = 4)
 
 ###############################################################################
 

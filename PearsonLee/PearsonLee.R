@@ -10,6 +10,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -36,7 +40,7 @@ ab_hat <- coef(fit_1)
 
 #' **Plot mothers' and daughters' heights**
 #+ eval=FALSE, include=FALSE
-pdf(root("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
+if (savefigs) pdf(root("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, 1), mgp=c(1.7, .5, 0), tck=-.01)
 par(pty="s")
@@ -50,11 +54,11 @@ for (i in x){
   abline(v=i, col="gray70", lty=2)
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot mothers' and daughters' heights with jitter**
 #+ eval=FALSE, include=FALSE
-pdf(root("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
+if (savefigs) pdf(root("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
 #+
 mother_height_jitt <- mother_height + runif(n, -0.5, 0.5)
 daughter_height_jitt <- daughter_height + runif(n, -0.5, 0.5)
@@ -70,11 +74,11 @@ for (i in x){
   abline(v=i, col="gray70", lty=2)
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot mothers' and daughters' heights and fitted regression line**
 #+ eval=FALSE, include=FALSE
-pdf(root("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
+if (savefigs) pdf(root("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 par(pty="s")
@@ -92,11 +96,11 @@ abline(ab_hat[1], ab_hat[2], lwd=1.5)
 points(mean(mother_height), mean(daughter_height), pch=20, cex=2, col="white")
 mtext("Mothers' and daughters' heights,\naverage of data, and fitted regression line", side=3, line=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot fitted regression line and the average of the data**
 #+ eval=FALSE, include=FALSE
-pdf(root("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
+if (savefigs) pdf(root("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 par(pty="s")
@@ -116,11 +120,11 @@ text(63, 62, paste("Equivalently,  y = ", round(mean(daughter_height), 1), " + "
 points(mean(mother_height), mean(daughter_height), pch=20, cex=2)
 mtext("The fitted regression line and the average of the data      ", side=3, line=1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot fitted regression line**
 #+ eval=FALSE, include=FALSE
-pdf(root("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
+if (savefigs) pdf(root("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 plot(c(0, 100), c(0, 100), xlab="", ylab="", xaxt="n", yaxt="n", bty="n", type="n")
@@ -133,11 +137,11 @@ abline(ab_hat[1], ab_hat[2], lwd=2)
 text(40, 40, paste("slope", round(ab_hat[2], 2)))
 mtext(paste("The line, y =", round(ab_hat[1]), "+", round(ab_hat[2], 2), "x"), side=3, line=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot data and fitted regression line in the context of the data**
 #+ eval=FALSE, include=FALSE
-pdf(root("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
+if (savefigs) pdf(root("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
 #+
 par(mar=c(3, 3, 2, .1), mgp=c(2, .5, 0), tck=-.01)
 plot(c(0, 100), c(0, 100), xlab="", ylab="", xaxt="n", yaxt="n", bty="n", type="n")
@@ -156,4 +160,4 @@ lines(c(0, mean(mother_height)), rep(mean(daughter_height), 2), lwd=.5)
 text(40, 43, paste("slope", round(ab_hat[2], 2)), cex=.9)
 mtext(paste("The line, y =", round(ab_hat[1]), "+", round(ab_hat[2], 2), "x, in the context of the data"), side=3, line=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

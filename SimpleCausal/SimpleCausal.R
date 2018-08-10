@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -28,7 +32,7 @@ display(lm_1a)
 
 #' **Plots**
 #+ eval=FALSE, include=FALSE
-pdf(root("SimpleCausal/figs","overview_1a.pdf"), height=3.5, width=4.5)
+if (savefigs) pdf(root("SimpleCausal/figs","overview_1a.pdf"), height=3.5, width=4.5)
 #+
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(x_binary, y, xlab="", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Regression with binary treatment", cex.main=.9, xaxt="n", cex.lab=.9, cex.axis=.9)
@@ -36,21 +40,21 @@ axis(1, c(0,1), c("    Control", "Treatment    "), cex.axis=.9)
 abline(coef(lm_1a)[1], coef(lm_1a)[2])
 text(0.3, 13, paste("Estimated treatment effect is\nslope of fitted line: ", fround(coef(lm_1a)[2], 1)), cex=.8, adj=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Classical regression with continuous predictor**
 lm_1b <- lm(y ~ x, data = data)
 display(lm_1b)
 
 #+ eval=FALSE, include=FALSE
-pdf(root("SimpleCausal/figs","overview_1b.pdf"), height=3.5, width=4.5)
+if (savefigs) pdf(root("SimpleCausal/figs","overview_1b.pdf"), height=3.5, width=4.5)
 #+
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Regression with continuous treatment", cex.main=.9, cex.lab=.9, cex.axis=.9)
 abline(coef(lm_1b)[1], coef(lm_1b)[2])
 text(3.2, 15, paste("Estimated treatment\neffect per unit of x is\nslope of fitted line: ", fround(coef(lm_1b)[2], 1)), cex=.8, adj=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Simulated data from nonlinear model**
 y <- rnorm(N, 10 + 25*exp(-x), 3)
@@ -61,22 +65,22 @@ lm_2a <- lm(y ~ x, data = data)
 display(lm_2a)
 
 #+ eval=FALSE, include=FALSE
-pdf(root("SimpleCausal/figs","overview_2a.pdf"), height=3.5, width=4.5)
+if (savefigs) pdf(root("SimpleCausal/figs","overview_2a.pdf"), height=3.5, width=4.5)
 #+
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Nonlinear treatment effect", cex.main=.9, cex.lab=.9, cex.axis=.9)
 curve(10 + 25*exp(-x), add=TRUE)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("SimpleCausal/figs","overview_2b.pdf"), height=3.5, width=4.5)
+if (savefigs) pdf(root("SimpleCausal/figs","overview_2b.pdf"), height=3.5, width=4.5)
 #+
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Nonlinear effect, estimated with straight line fit", cex.main=.9, cex.lab=.9, cex.axis=.9)
 abline(coef(lm_2a)[1], coef(lm_2a)[2])
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Simulated data from two groups**
 N <- 100
@@ -89,7 +93,7 @@ lm_2 <- lm(yy ~ xx + z, data=data)
 display(lm_2)
 
 #+ eval=FALSE, include=FALSE
-pdf(root("SimpleCausal/figs","overview_3.pdf"), height=3.5, width=4.5)
+if (savefigs) pdf(root("SimpleCausal/figs","overview_3.pdf"), height=3.5, width=4.5)
 #+
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(xx, yy, xlab="Pre-treatment predictor", ylab="Outcome measurement", bty="l", main="Continuous pre-treatment predictor and binary treatment    ", cex.main=.9, cex.lab=.9, cex.axis=.9, type="n")
@@ -103,7 +107,7 @@ x0 <- 5.2
 arrows(x0, coef(lm_2)[1] + coef(lm_2)[2]*x0, x0, coef(lm_2)[1] + coef(lm_2)[2]*x0 + coef(lm_2)[3], length=.1, code=3)
 text(x0+.1, coef(lm_2)[1] + coef(lm_2)[2]*x0 + .5*coef(lm_2)[3], paste("Estimated\ntreatment\neffect is", fround(coef(lm_2)[3], 1)), cex=.8, adj=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 for (j in 0:1) print(mean(yy[z==j]))
 for (j in 0:1) print(mean(xx[z==j]))

@@ -10,6 +10,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -52,7 +56,7 @@ print(median(delay[ok & !censored & !peacekeepers]))
 
 #' Plot
 #+ eval=FALSE, include=FALSE
-pdf(root("Peacekeeping/figs","peacekeeping_1.pdf"), height=4, width=10)
+if (savefigs) pdf(root("Peacekeeping/figs","peacekeeping_1.pdf"), height=4, width=10)
 #+
 par(mfrow=c(1,2), mar=c(3,5,3,0), mgp=c(1.5,.5,0), tck=-.01)
 subset <- ok & peacekeepers
@@ -60,10 +64,10 @@ hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years unt
 subset <- ok & !peacekeepers
 hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("Without peackeeping:  ", round(100*mean(censored[subset])), "% stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Peacekeeping/figs","peacekeeping_2.pdf"), height=5, width=7)
+if (savefigs) pdf(root("Peacekeeping/figs","peacekeeping_2.pdf"), height=5, width=7)
 #+
 ok2 <- ok & !is.na(badness)
 badness2 <- badness/2 + 8
@@ -77,10 +81,10 @@ points(badness2[ok2&peacekeepers&censored], delay[ok2&peacekeepers&censored], co
 points(badness2[ok2&!peacekeepers&censored], delay[ok2&!peacekeepers&censored], col="black", pch=21) # circle
 mtext("Peacekeeping (red) is associated with slightly longer periods without war", line=1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Peacekeeping/figs","peacekeeping_3.pdf"), height=4, width=10)
+if (savefigs) pdf(root("Peacekeeping/figs","peacekeeping_3.pdf"), height=4, width=10)
 #+
 par(mfrow=c(1,2), mar=c(3,4,2,0), tck=-.01, mgp=c(1.7,.5,0))
 ok2a <- ok&peacekeepers
@@ -98,7 +102,7 @@ points(badness2[ok2b&!peacekeepers&!censored], delay[ok2b&!peacekeepers&!censore
 points(badness2[ok2b&!peacekeepers&censored], delay[ok2b&!peacekeepers&censored], col="black", pch=1, cex=1.1) # circle
 mtext("Without U.N. peacekeeping", line=1, cex=1.1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' 
 #' -------------

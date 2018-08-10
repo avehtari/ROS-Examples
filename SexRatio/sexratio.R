@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -36,7 +40,7 @@ display(fit)
 
 #' **Plot data and least-squares regression line**
 #+ eval=FALSE, include=FALSE
-pdf(root("SexRatio/figs","sexratio_bayes_1.pdf"), height=4, width=10)
+if (savefigs) pdf(root("SexRatio/figs","sexratio_bayes_1.pdf"), height=4, width=10)
 #+
 par(mfrow=c(1,2), mar=c(3,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 plot(x, y, ylim=c(43, 57), xlab="Attractiveness of parent", ylab="Percentage of girl babies", bty="l", yaxt="n", main="Data on beauty and sex ratio",  pch=19, cex=1)
@@ -46,7 +50,7 @@ axis(2, c(45,50,55), paste(c(45,50,55), "%", sep=""))
 abline(coef(fit)[1], coef(fit)[2])
 text(1, 52.2, paste("y = ", fround(coef(fit)[1], 1), " + ", fround(coef(fit)[2], 1), " x\n(Std err of slope is ", fround(se.coef(fit)[2], 1), ")", sep=""))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Bayesian regression with weakly informative prior**
 fit_default <- stan_glm(y ~ x, data = sexratio)
@@ -66,7 +70,7 @@ print(fit_post)
 
 #' **Plot Posterior simulations under weakly informative abd informative prior**
 #+ eval=FALSE, include=FALSE
-pdf(root("SexRatio/figs","sexratio_bayes_2.pdf"), height=8, width=10)
+if (savefigs) pdf(root("SexRatio/figs","sexratio_bayes_2.pdf"), height=8, width=10)
 #+
 par(mfrow=c(2,2), mar=c(5,3,3,2), mgp=c(1.7,.5,0), tck=-.01)
 fit_bayes <- list(as.data.frame(fit_default), as.data.frame(fit_post))
@@ -83,4 +87,4 @@ for (k in 1:2){
   abline(coef_est[1], coef_est[2], lwd=2)
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

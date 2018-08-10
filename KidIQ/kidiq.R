@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -141,7 +145,7 @@ sims_3 <- as.matrix(fit_3)
 n_sims_3 <- nrow(sims_3)
 
 #+ eval=FALSE, include=FALSE
-pdf(root("KidIQ/figs","kidiq.betasim2.pdf"), height=3.5, width=9)
+if (savefigs) pdf(root("KidIQ/figs","kidiq.betasim2.pdf"), height=3.5, width=9)
 #+
 par(mar=c(3,3,1,3), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfrow=c(1,2))
@@ -166,7 +170,7 @@ for (i in subset){
 }
 curve(cbind(1, x, mom_iq_bar) %*% coef(fit_3), col="black", add=TRUE)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Center predictors to have zero mean**
 kidiq$c_mom_hs <- kidiq$mom_hs - mean(kidiq$mom_hs)

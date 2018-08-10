@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -27,8 +31,8 @@ golf_data <- list(x=golf$x, y=golf$y, n=golf$n, J=nrow(golf), r=r, R=R)
 
 #' **Plot data**
 #+ eval=FALSE, include=FALSE
-pdf(root("Golf/figs","golf0.pdf"), height=5, width=7)
-#+
+if (savefigs) pdf(root("Golf/figs","golf0.pdf"), height=5, width=7)
+#'
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
     plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02),
@@ -39,7 +43,7 @@ with(golf, {
     text(x + .4, y/n + se + .02, paste(y, "/", n,sep=""), cex=.6, col="gray40")
 })
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Fit the geometry based nonlinear model**
 stanfile_golf1 <- root("Golf","golf1.stan")
@@ -70,7 +74,7 @@ b_hat <- median(sims2$b)
 
 #' **Plot logistic regression result**
 #+ eval=FALSE, include=FALSE
-pdf(root("Golf/figs","golf1.pdf"), height=5, width=7)
+if (savefigs) pdf(root("Golf/figs","golf1.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
@@ -84,11 +88,11 @@ with(golf, {
                           round(a_hat, 2), ", b = ", round(b_hat, 2), sep=""))
 })
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot geometry based model result**
 #+ eval=FALSE, include=FALSE
-pdf(root("Golf/figs","golf2.pdf"), height=5, width=7)
+if (savefigs) pdf(root("Golf/figs","golf2.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
@@ -104,11 +108,11 @@ with(golf, {
                           round(sigma_hat*180/pi, 1), " degrees", sep=""))
 })
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot geometry based model posterior draws of sigma**
 #+ eval=FALSE, include=FALSE
-pdf(root("Golf/figs","golf2a.pdf"), height=5, width=7)
+if (savefigs) pdf(root("Golf/figs","golf2a.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
@@ -126,11 +130,11 @@ with(golf, {
     text(18.5, .26, "Geometry-based model,\n post draws of sigma")
 })
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot two models in same figure**
 #+ eval=FALSE, include=FALSE
-pdf(root("Golf/figs","golf3.pdf"), height=5, width=7)
+if (savefigs) pdf(root("Golf/figs","golf3.pdf"), height=5, width=7)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
@@ -147,4 +151,4 @@ with(golf, {
     text(18.5, .24, "Geometry-based model")
 })
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -64,7 +68,7 @@ plot (expend, life, xlim=c(0,1.05*max(expend)), xaxs="i",
 #symbols (expend, life, circles=sqrt(doctor), inches=.8, add=TRUE, fg="gray80")
 text(expend, life, countries, col=color)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot  scatterplot, excluding some countries**
 removec <- countries %in% c("Netherlands", "Belgium", "Germany",
@@ -83,10 +87,10 @@ text(expend[!removec], life[!removec], countries[!removec],
 for (x in seq(2000,6000,2000)) abline (v=x, col="gray", lwd=.5)
 for (y in seq(74,82,2)) abline (y,0,col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
-dev.off ()
+if (savefigs) dev.off ()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("HealthExpenditure/figs","healthscatter3.pdf"), height=4, width=5.5)
+if (savefigs) pdf(root("HealthExpenditure/figs","healthscatter3.pdf"), height=4, width=5.5)
 #+
 par(mgp=c(1.7,.5, 0), tck=-.01, mar=c(3,3,.1,.1))
 plot(expend[!removec], life[!removec], xlim=c(0,1.05*max(expend)),
@@ -96,5 +100,5 @@ axis(1, seq(0,6000,2000))
 #symbols (expend[!removec], life[!removec], circles=sqrt(doctor[!removec]), inches=.8, add=TRUE, fg="gray80")
 text(expend[!removec], life[!removec], countries[!removec], cex=.9)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 

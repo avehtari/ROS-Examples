@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -77,35 +81,35 @@ earnings_imp_4 <- impute(earnings_top, pred_4)
 
 #' ### 3.  Histograms and scatterplots of data and imputations
 #+ eval=FALSE, include=FALSE
-pdf(root("Imputation/figs","impute_hist2.pdf"), height=4, width=5.5)
+if (savefigs) pdf(root("Imputation/figs","impute_hist2.pdf"), height=4, width=5.5)
 #+
 par(mar=c(3,3,1,1), mgp=c(1.7,.5,0), tck=-.01)
 hist(earnings_top[earnings>0], breaks=seq(0,100,10), xlab="earnings", ylab="", main="Observed earnings (excluding 0's)")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Imputation/figs","impute_hist3.pdf"), height=4, width=5.5)
+if (savefigs) pdf(root("Imputation/figs","impute_hist3.pdf"), height=4, width=5.5)
 #+
 par(mar=c(3,3,1,1), mgp=c(1.7,.5,0), tck=-.01)
 hist(earnings_imp_2[is.na(earnings)], breaks=seq(0,100,10),
       xlab="earnings", ylab="", ylim=c(0,48),
       main="Deterministic imputation of earnings")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Imputation/figs","impute_hist4.pdf"), height=4, width=5.5)
+if (savefigs) pdf(root("Imputation/figs","impute_hist4.pdf"), height=4, width=5.5)
 #+
 par(mar=c(3,3,1,1), mgp=c(1.7,.5,0), tck=-.01)
 hist(earnings_imp_4[is.na(earnings)], breaks=seq(0,100,10),
       xlab="earnings", ylab="", ylim=c(0,48),
      main="Random imputation of earnings")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Imputation/figs","impute_scat_1.pdf"), height=4, width=5)
+if (savefigs) pdf(root("Imputation/figs","impute_scat_1.pdf"), height=4, width=5)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.01)
 plot(range(earnings_imp_2[is.na(earnings)]), c(0,100),
@@ -114,10 +118,10 @@ plot(range(earnings_imp_2[is.na(earnings)]), c(0,100),
 points(earnings_imp_2[is.na(earnings)], earnings_imp_2[is.na(earnings)], pch=19, cex=.5)
 points(pred_2[earnings>0], earnings[earnings>0], pch=20, col="darkgray", cex=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Imputation/figs","impute_scat_2.pdf"), height=4, width=5)
+if (savefigs) pdf(root("Imputation/figs","impute_scat_2.pdf"), height=4, width=5)
 #+
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.01)
 plot(range(earnings_imp_2[is.na(earnings)]), c(0,100),
@@ -126,7 +130,7 @@ plot(range(earnings_imp_2[is.na(earnings)]), c(0,100),
 points(earnings_imp_2[is.na(earnings)], earnings_imp_4[is.na(earnings)], pch=19, cex=.5)
 points(pred_2[earnings>0], earnings[earnings>0], pch=20, col="darkgray", cex=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 # ### 4.  Two-stage imputation model
 

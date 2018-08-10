@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -26,14 +30,14 @@ for (s in 1:n_sims){
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(root("ProbabilitySimulation/figs","girls1.pdf"), height=3.5, width=5.5)
+if (savefigs) pdf(root("ProbabilitySimulation/figs","girls1.pdf"), height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist(n_girls, main="", xaxt="n", yaxt="n")
 axis (1, seq(150,250,25), mgp=c(1.5,.5,0))
 axis (2, seq(0,200,100), mgp=c(1.5,.5,0))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Accounting for twins**
 birth_type <- sample(c("fraternal twin","identical twin","single birth"),
@@ -72,14 +76,14 @@ for (s in 1:n_sims){
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(root("ProbabilitySimulation/figs","girls2.pdf"), height=3.5, width=5.5)
+if (savefigs) pdf(root("ProbabilitySimulation/figs","girls2.pdf"), height=3.5, width=5.5)
 #+
 par(mar=c(3,3,1,1),  mgp=c(1.5,.5,0), tck=-.01)
 hist (n_girls, main="", xaxt="n", yaxt="n", mgp=c(1.5,.5,0))
 axis (1, seq(150,250,25), mgp=c(1.5,.5,0))
 axis (2, seq(0,200,100), mgp=c(1.5,.5,0))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Simulation of continuous and mixed discrete/continuous models**
 n_sims <- 1000
@@ -90,7 +94,7 @@ y4 <- rpois(n_sims, 5)
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(root("ProbabilitySimulation/figs","4dists.pdf"), height=7, width=10)
+if (savefigs) pdf(root("ProbabilitySimulation/figs","4dists.pdf"), height=7, width=10)
 #+
 par(mar=c(4,3,4,3),  mgp=c(1.5,.5,0), tck=-.01)
 par(mfrow=c(2,2))
@@ -99,7 +103,7 @@ hist(y2, breaks=seq(0, ceiling(max(y2)) + 5, 5),  main="1000 draws from correspo
 hist(y3, breaks=seq(-0.5, 20.5, 1), main="1000 draws from binomial dist. with 20 tries, probability 0.6")
 hist(y4, breaks=seq(-0.5, max(y4) + 1, 1), main="1000 draws from Poisson dist. with mean 5")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' Generate the height of one randomly chosen adult
 male <- rbinom(1, 1, 0.48)

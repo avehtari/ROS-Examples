@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -42,7 +46,7 @@ coef1 <- coef(fit_1)*1000
 
 #' **Plot linear model**
 #+ eval=FALSE, include=FALSE
-pdf(root("Earnings/figs","heights1a.pdf"), height=8.5, width=11)
+if (savefigs) pdf(root("Earnings/figs","heights1a.pdf"), height=8.5, width=11)
 #+
 par(mar=c(6,6,4,2)+.1)
 plot(earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings",
@@ -52,7 +56,7 @@ abline(coef1, lwd=2)
 abline(0,0,col="gray")
 axis(2, c(0,100000,200000), c("0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot linear model, ggplot version**
 gg_earnings <- ggplot(earnings, aes(x = height + height_jitter_add, y = earn)) +
@@ -65,7 +69,7 @@ gg_earnings
 
 #' **Plot extrapolation**
 #+ eval=FALSE, include=FALSE
-pdf(root("Earnings/figs","heights1b.pdf"), height=8.5, width=11)
+if (savefigs) pdf(root("Earnings/figs","heights1b.pdf"), height=8.5, width=11)
 #+
 par(mar=c(6,6,4,2)+.1)
 plot(xlim=c(0,max(earnings$height)), ylim=c(-70000,200000), earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10", cex.main=3, main="Extrapolation")
@@ -74,7 +78,7 @@ abline(0,0,col="gray")
 intercept <- coef1[1]
 axis(2, c(intercept,0,100000,200000), c(round(intercept,-2),"0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot extrapolation, ggplot version, modifying the gg_earnings object
 #' we already created**
@@ -94,7 +98,7 @@ coef2 <- coef(fit_2)*1000
 
 #' **Plot linear model with male/female**
 #+ eval=FALSE, include=FALSE
-pdf(root("Earnings/figs","heights2.pdf"), height=8.5, width=11)
+if (savefigs) pdf(root("Earnings/figs","heights2.pdf"), height=8.5, width=11)
 #+
 par(mar=c(6,6,5,2)+.1)
 plot(range(earnings$height), range(predict(fit_2)*1000), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10",
@@ -105,7 +109,7 @@ text(68, coef2[1] + coef2[2]*65, "women:\ny = -11 000 + 450x", cex=3, adj=0, col
 abline(coef2[1]+coef2[3], coef2[2], col="blue", lwd=2)
 text(68, coef2[1]+coef2[3] + coef2[2]*65, "men:\ny = -2 000 + 450x", cex=3, adj=0, col="blue")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Include male/female, ggplot version**
 ggplot(earnings, aes(height, earn)) +
@@ -144,7 +148,7 @@ coef3 <- coef(fit_3)*1000
 
 #' **Plot linear model with interaction**
 #+ eval=FALSE, include=FALSE
-pdf(root("Earnings/figs","heights3.pdf"), height=8.5, width=11)
+if (savefigs) pdf(root("Earnings/figs","heights3.pdf"), height=8.5, width=11)
 #+
 par(mar=c(6,6,5,2)+.1)
 plot(range(earnings$height), range(predict(fit_3)*1000), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10", cex.main=3, main="Fitted regression with interactions,\nseparate lines for men and women", bty="l")
@@ -154,7 +158,7 @@ text(62, coef3[1] + coef3[2]*80, "women:\ny = -7 000 + 180x", cex=3, adj=0, col=
 abline(coef3[1]+coef3[3], coef3[2]+coef3[4], col="blue", lwd=2)
 text(68, coef3[1]+coef3[3] + (coef3[2]+coef3[4])*66, "men:\ny = -22 000 + 740x", cex=3, adj=0, col="blue")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Include interaction, ggplot version**
 ggplot(earnings, aes(height, earn)) +
@@ -243,7 +247,7 @@ for (i in subset){
 }
 curve(coef(logmodel_2)[1] + coef(logmodel_2)[2]*x, add=TRUE)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 # **Plot posterior draws of linear model on log scale, ggplot version**
 subset <- sample(n_sims, 10)

@@ -1,0 +1,108 @@
+---
+title: "Regression and Other Stories: Newcomb"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Posterior predictive checking of Normal model for Newcomb's speed of light data
+
+-------------
+
+
+```{r include=FALSE}
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+**Load libraries**
+
+```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
+library("ggplot2")
+library("bayesplot")
+theme_set(bayesplot::theme_default(base_family = "sans"))
+color_scheme_set(scheme = "gray")
+```
+
+**Data**<br>
+Simon Newcomb's measurements of the speed of light, from Stigler
+(1977).  The data are recorded as deviations from $24,\!800$
+nanoseconds.
+
+```{r }
+newcomb <- data.frame(y=c(28,26,33,24,34,-44,27,16,40,-2,29,22,24,21,25,30,
+                          23,29,31,19,24,20,36,32,36,28,25,21,28,29,37,25,28,
+                          26,30,32,36,26,30,22, 36,23,27,27,28,27,31,27,26,
+                          33,26,32,32,24,39,28,24,25,32,25,29,27,28,29,16,23))
+```
+
+**Fit a regression model with just the intercept term**
+
+```{r }
+fit <- stan_glm(y ~ 1, data=newcomb)
+```
+
+**Simulate from the predictive distribution**
+
+```{r }
+sims <- as.matrix(fit)
+n_sims <- nrow(sims)
+n <- length(newcomb$y)
+y_rep <- array(NA, c(n_sims, n))
+for (s in 1:n_sims){
+    y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
+}
+```
+
+**Plot histogram of 20 replicates**
+
+```{r }
+par(mfrow=c(5,4), mar=rep(2,4))
+for (s in sample(n_sims, 20)) {
+    hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n")
+}
+```
+
+**Simulate using built-in function**
+
+```{r }
+y_rep <- posterior_predict(fit)
+```
+
+**Plot data and 19 replications using built-in function**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Newcomb/figs","newcomb_ppc_hist.pdf"), height=3, width=9)
+```
+```{r }
+ppc_hist(newcomb$y, y_rep[1:19, ])
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**Plot test statistic for data and replicates**
+
+```{r }
+Test <- function (y){
+    min(y)
+}
+test_rep <- apply(y_rep, 1, Test)
+hist(test_rep, xlim=range(Test(newcomb$y), test_rep))
+lines(rep(Test(newcomb$y),2), c(0,n_sims))
+```
+
+**Plot test statistic for data and replicates using built-in function**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Newcomb/figs","newcomb_ppc_stat.pdf"), height=3, width=6)
+```
+```{r }
+ppc_stat(newcomb$y, y_rep, stat = "min")
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+

@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -16,7 +20,7 @@ root<-has_dirname("RAOS-Examples")$make_fix_file()
 
 #' **Plot causal diagram**
 #+ eval=FALSE, include=FALSE
-pdf(root("CausalDiagram/figs","diagram1.pdf"), height=4.5, width=10)
+if (savefigs) pdf(root("CausalDiagram/figs","diagram1.pdf"), height=4.5, width=10)
 #+
 par(mar=c(0,0,0,0))
 plot(c(-.5,4), c(0,1.8), xlab="", ylab="", xaxt="n", yaxt="n", bty="n", type="n")
@@ -31,4 +35,4 @@ arrows(c(1.1,1.1), c(1,1), c(3.3,3.3), c(.5, 1.5))
 arrows(-.3,.2,4,.2, length=.2)
 text(1.8, .1, "Time", cex=2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

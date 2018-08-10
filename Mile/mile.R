@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -32,7 +36,7 @@ print(coef(fit)[1] + coef(fit)[2]*c(1900,2000), digits=4) # Exact
 
 #' **Example of increasing trend**
 #+ eval=FALSE, include=FALSE
-pdf(root("Mile/figs","aplusbx1a.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mile/figs","aplusbx1a.pdf"), height=3.5, width=5)
 #+
 a <- 0.15
 b <- 0.4
@@ -43,11 +47,11 @@ axis(1, c(0,1,2))
 axis(2, c(a,a+b,a+2*b), c("a","a+b","a+2b"))
 abline(a, b)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Example of decreasing trend**
 #+ eval=FALSE, include=FALSE
-pdf(root("Mile/figs","aplusbx1b.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mile/figs","aplusbx1b.pdf"), height=3.5, width=5)
 #+
 a <- 0.95
 b <- -0.4
@@ -58,35 +62,35 @@ axis(1, c(0,1,2))
 axis(2, c(a,a+b,a+2*b), c("a","a+b","a+2b"))
 abline(a, b)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Approximate trend from the fit in range [0,2.1]**
 #+ eval=FALSE, include=FALSE
-pdf(root("Mile/figs","aplusbx2a.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mile/figs","aplusbx2a.pdf"), height=3.5, width=5)
 #+
 par(mar=c(3,3,1,1), mgp=c(2,.5,0), tck=-.01)
 curve(1007 - 0.393*x, from=0, to=2.1, xlab="x", ylab="y", bty="l",
   main="y = 1007 - 0.393x")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Approximate trend from the fit in range [0,100]**
 #+ eval=FALSE, include=FALSE
-pdf(root("Mile/figs","aplusbx2b.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mile/figs","aplusbx2b.pdf"), height=3.5, width=5)
 #+
 par(mar=c(3,3,1,1), mgp=c(2,.5,0), tck=-.01)
 curve(1007 - 0.393*x, from=0, to=100, xlab="x", ylab="y", bty="l",
   main="y = 1007 - 0.393x")
 #+ eval=FALSE, include=FALSE
-dev.off()     
+if (savefigs) dev.off()     
 
 #' **Approximate trend of record times in the mile run from 1900 to 2000**
 #+ eval=FALSE, include=FALSE
-pdf(root("Mile/figs","aplusbx3.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mile/figs","aplusbx3.pdf"), height=3.5, width=5)
 #+
 par(mar=c(3,3,1,1), mgp=c(2,.5,0), tck=-.01)
 plot(year, seconds)
 curve(1007 - 0.393*x, from=1900, to=2000, xlab="Year", ylab="Time (seconds)", bty="l",
   main="Approx. trend of record times in the mile run", ylim=c(210, 270), add=TRUE)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

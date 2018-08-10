@@ -9,6 +9,9 @@
 #' -------------
 #' 
 
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -48,13 +51,13 @@ for (i in 1:length(years)){
 }
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","births.pdf"), height=5.5, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","births.pdf"), height=5.5, width=7)
 #+
 par(mar=c(4,4,3,0), mgp=c(2.2,.5,0), tck=-.01)
 plot(years, deathpr_2/deathpr_2[1], type="l", bty="l", xlab="Year", ylab="Death rate (compared to rate in 1989) ", main="Approx increase in death rate among 45-54-year-old whites,\n expected just from the changing age composition of this group", col="red", lwd=2, cex.axis=1.1, cex.lab=1.1)
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #'
 deaton <- read.table(root("AgePeriodCohort/data","deaton.txt"), header=TRUE)
@@ -89,16 +92,13 @@ for (k in 1:3){
   }
 }
 
-savepdf <- FALSE
-#+ eval=FALSE, include=FALSE
-savepdf <- TRUE
-#+
-for (k in 1:3){
+for (k in 1:3) {
   data <- mort_data[[k]]
-  if (savepdf)
-      pdf(root("AgePeriodCohort/figs",paste("death_rates_by_age_and_eth_", k, ".pdf", sep="")),
-          height=11, width=8)
-  par(mfrow=c(7,5), mar=c(2.5, 2.5, 2, .2), mgp=c(1.5,.3,0), tck=-.01, oma=c(0,0,3,0))
+  if (savefigs) pdf(root("AgePeriodCohort/figs",
+                       paste("death_rates_by_age_and_eth_", k, ".pdf", sep="")),
+                  height=11, width=8)
+  par(mfrow=c(7,5), mar=c(2.5, 2.5, 2, .2),
+      mgp=c(1.5,.3,0), tck=-.01, oma=c(0,0,3,0))
   years_1 <- 1999:2013
   for (i in 1:length(ages_all)){
     ok <- data[,"Age"]==ages_all[i]
@@ -110,7 +110,10 @@ for (k in 1:3){
     male_mort <- male_deaths/male_population
     female_mort <- female_deaths/female_population
     total_mort <- (male_deaths + female_deaths)/(male_population + female_population)
-    plot(years_1, total_mort/total_mort[1], xaxt="n", yaxt="n", ylim=range(.65,1.25), type="n", bty="n", xaxs="i", yaxs="i", xlab="", ylab=if (i%%5==1) "Relative death rate" else "", main=paste("age", ages_all[i]))
+    plot(years_1, total_mort/total_mort[1], xaxt="n", yaxt="n",
+         ylim=range(.65,1.25), type="n", bty="n", xaxs="i", yaxs="i",
+         xlab="", ylab=if (i%%5==1) "Relative death rate" else "",
+         main=paste("age", ages_all[i]))
     lines(years_1, male_mort/male_mort[1], col="blue")
     lines(years_1, female_mort/female_mort[1], col="red")
     axis(1, seq(1990,2020,5))
@@ -119,7 +122,11 @@ for (k in 1:3){
     grid(col="gray")
   }
   for (j in 1:3){
-    plot(years_1, avg_death_rate[,j,k]/avg_death_rate[1,j,k], xaxt="n", yaxt="n", ylim=range(.65,1.25), type="n", bty="n", xaxs="i", yaxs="i", xlab="", ylab=if (j==1) "Relative death rate" else "", main=paste("Age-adj, ", min(ages_decade[[j]]), "-", max(ages_decade[[j]]), sep=""))
+      plot(years_1, avg_death_rate[,j,k]/avg_death_rate[1,j,k],
+           xaxt="n", yaxt="n", ylim=range(.65,1.25), type="n", bty="n",
+           xaxs="i", yaxs="i", xlab="",
+           ylab=if (j==1) "Relative death rate" else "",
+           main=paste("Age-adj, ", min(ages_decade[[j]]), "-", max(ages_decade[[j]]), sep=""))
     lines(years_1, male_avg_death_rate[,j,k]/male_avg_death_rate[1,j,k], col="blue")
     lines(years_1, female_avg_death_rate[,j,k]/female_avg_death_rate[1,j,k], col="red")
     axis(1, seq(1990,2020,5))
@@ -128,18 +135,20 @@ for (k in 1:3){
   }
   mtext(paste(group_names[k], "women and men: trends in death rates since 1999"), side=3, outer=TRUE, line=1)
   par(mar=c(0,0,0,0))
-  plot(c(-1,1), c(-1,1), xaxt="n", xlab="", yaxt="n", ylab="", bty="n", type="n")
-  plot(c(-1,1), c(-1,1), xaxt="n", xlab="", yaxt="n", ylab="", bty="n", type="n")
+  plot(c(-1,1), c(-1,1), xaxt="n", xlab="", yaxt="n", ylab="",
+       bty="n", type="n")
+  plot(c(-1,1), c(-1,1), xaxt="n", xlab="", yaxt="n", ylab="",
+       bty="n", type="n")
   text(0, .5, paste("Red lines show\ntrends for women."), col="red")
   text(0, -.2, paste("Blue lines show\ntrends for men."), col="blue")
-  if (savepdf)
-      dev.off()
+  if (savefigs) dev.off()
 }
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","effect_of_age_adj.pdf"), height=6, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","effect_of_age_adj.pdf"), height=6, width=7)
 #+
-par(mfrow=c(3,3), mar=c(2.5, 2.5, 2, .2), mgp=c(1.5,.3,0), tck=-.01, oma=c(0,0,4,0))
+par(mfrow=c(3,3), mar=c(2.5, 2.5, 2, .2), mgp=c(1.5,.3,0), tck=-.01,
+    oma=c(0,0,4,0))
 text_pos <- array(NA, c(2,2,3,3))
 text_pos[1,1,,] <- cbind(c(2008, 2003, 2010), c(2005, 2011, 2005), c(2005, 2007, 2005))
 text_pos[2,1,,] <- cbind(c(2005, 2004, 2007), c(2004, 2008, 2006), c(2004, 2006, 2006))
@@ -148,7 +157,10 @@ text_pos[2,2,,] <- cbind(c(1.02, 1.03, .86), c(.86, .85, .93), c(.82, .80, .90))
 for (k in 1:3){
   for (j in 1:3){
     rng <- range(avg_death_rate[,j,k]/avg_death_rate[1,j,k], raw_death_rate[,j,k]/raw_death_rate[1,j,k])
-    plot(years_1, avg_death_rate[,j,k]/avg_death_rate[1,j,k], ylim=rng, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab=if (j==1) "Death rate relative to 1999" else "", main=paste(group_names[k], " age ", min(ages_decade[[j]]), "-", max(ages_decade[[j]]), sep=""))
+    plot(years_1, avg_death_rate[,j,k]/avg_death_rate[1,j,k], ylim=rng,
+         xaxt="n", type="l", bty="l", xaxs="i",
+         xlab="", ylab=if (j==1) "Death rate relative to 1999" else "",
+         main=paste(group_names[k], " age ", min(ages_decade[[j]]), "-", max(ages_decade[[j]]), sep=""))
     lines(years_1, raw_death_rate[,j,k]/raw_death_rate[1,j,k], lty=2)
     abline(h=1, col="gray")
     axis(1, seq(1990,2020,5))
@@ -158,11 +170,11 @@ for (k in 1:3){
 }
 mtext("Effects of age adjustment on trends in death rates by decade of age\n(Note:  these graphs are on different scales)", side=3, line=1, outer=TRUE)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","decades.pdf"), height=6, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","decades.pdf"), height=6, width=7)
 #+
 par(mfrow=c(3,3), mar=c(2.5, 2.5, 2, .2), mgp=c(1.5,.3,0), tck=-.01, oma=c(0,0,4,0))
 for (k in 1:3){
@@ -177,10 +189,10 @@ for (k in 1:3){
 }
 mtext("Age-adjusted trends in death rate for 10-year bins", side=3, line=1, outer=TRUE)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","focus_group.pdf"), height=7, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","focus_group.pdf"), height=7, width=7)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, avg_death_rate[,2,1],  ylim=c(382, 416), xaxt="n", yaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Death rate per 100,000", main="AGE-ADJUSTED death rates for non-Hispanic whites aged 45-54")
@@ -188,11 +200,11 @@ axis(1, seq(1990,2020,5))
 axis(2, seq(390, 420, 10))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","focus_group_2.pdf"), height=6, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","focus_group_2.pdf"), height=6, width=7)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, raw_death_rate[,2,1],  ylim=c(382,  416), xaxt="n", yaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Death rate per 100,000", main="RAW death rates for non-Hispanic whites aged 45-54")
@@ -200,11 +212,11 @@ axis(1, seq(1990,2020,5))
 axis(2, seq(390, 420, 10))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","focus_group_3.pdf"), height=6, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","focus_group_3.pdf"), height=6, width=7)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(range(years_1), c(1, 1.1), xaxt="n", yaxt="n", type="n", bty="l", xaxs="i", xlab="", ylab="Death rate relative to 1999", main="Age-adjusted death rates for non-Hispanic whites aged 45-54:\nTrends for women and men")
@@ -216,11 +228,11 @@ text(2011.5, 1.075, "Women", col="red")
 text(2010.5, 1.02, "Men", col="blue")
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","focus_group_4.pdf"), height=6, width=7)
+if (savefigs) pdf(root("AgePeriodCohort/figs","focus_group_4.pdf"), height=6, width=7)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(range(years_1), c(1, 1.15), xaxt="n", yaxt="n", type="n", bty="l", xaxs="i", xlab="", ylab="Death rate relative to 1999", main="RAW death rates for non-Hispanic whites aged 45-54:\nTrends for women and men")
@@ -232,7 +244,7 @@ text(2011.5, 1.11, "Women", col="red")
 text(2010.5, 1.045, "Men", col="blue")
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' Simple graph of totals
 number_of_deaths <- rep(NA, length(years_1))
@@ -272,49 +284,49 @@ for (i in 1:length(years_1)){
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","first_order_bias_a.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","first_order_bias_a.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1,  number_of_deaths, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Number of deaths", main="Raw data show a stunning rise and fall\nin mortality among non-Hispanic whites aged 45-54", cex.main=.9)
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","first_order_bias_b.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","first_order_bias_b.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1,  number_of_people, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Number of non-Hispanic whites aged 45-54", main="But the denominator is changing in the same way!", cex.main=.9)
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","second_order_bias_a.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","second_order_bias_a.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1,  number_of_deaths/number_of_people, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Mortality rate among non-Hisp whites 45-54", main="So take the ratio!", cex.main=.9)
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","second_order_bias_b.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","second_order_bias_b.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, avg_age, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Avg age among non-Hisp whites 45-54", main="But the average age in this group is going up!", cex.main=.9)
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","second_order_bias_c.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","second_order_bias_c.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, avg_age, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Avg age among non-Hisp whites 45-54", main="Let's check the average age using a different dataset", cex.main=.9)
@@ -324,12 +336,12 @@ text(2011.7, 49.6, "From\nCDC data", cex=.8)
 text(2007.5, 49.55, "Extrapolation from\n2001 Census", col="orange", cex=.8)
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","second_order_bias_d.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","second_order_bias_d.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, death_rate_extrap_1999, xaxt="n", type="n", bty="l", xaxs="i", xlab="", ylab="Reconstructed death rate", main="Increase in death rate among 45-54-year-old non-Hisp whites,\n expected just from the changing age composition of this group", cex.main=.8)
@@ -337,12 +349,12 @@ lines(years_1, death_rate_extrap_1999, col="green4")
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","second_order_bias_e.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","second_order_bias_e.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, number_of_deaths/number_of_people, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Death rate for 45-54 non-Hisp whites", main="Increase in death rate among 45-54-year-old non-Hisp whites,\n expected just from the changing age composition of this group", cex.main=.8)
@@ -352,11 +364,11 @@ text(2002.5, .00404, "Raw death rate", cex=.8)
 text(2009, .00394, "Expected just from\nage shift", col="green4", cex=.8)
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","second_order_bias_f.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","second_order_bias_f.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, number_of_deaths/number_of_people, xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Death rate for 45-54 non-Hisp whites", main="Projecting backward from 2013 makes it clear that\nall the underlying change happened between 1999 and 2005", cex.main=.8)
@@ -366,21 +378,21 @@ text(2003, .00395, "Raw death rate", cex=.8)
 text(2001.5, .004075, "Expected just from\nage shift", col="green4", cex=.8)
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","third_order_bias_a.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","third_order_bias_a.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 plot(years_1, age_adj_rate_flat/age_adj_rate_flat[1], xaxt="n", type="l", bty="l", xaxs="i", xlab="", ylab="Age-adj death rate, relative to 1999", main="Trend in age-adjusted death rate\nfor 45-54-year-old non-Hisp whites", cex.main=.8)
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #+ eval=FALSE, include=FALSE
-pdf(root("AgePeriodCohort/figs","third_order_bias_b.pdf"), height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","third_order_bias_b.pdf"), height=4, width=5)
 #+
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
 rng <- range(age_adj_rate_flat/age_adj_rate_flat[1], age_adj_rate_1999/age_adj_rate_1999[1], age_adj_rate_2013/age_adj_rate_2013[1])
@@ -392,4 +404,4 @@ text(2004, 1.032, "Using 2013\nage dist", cex=.8)
 axis(1, seq(1990,2020,5))
 grid(col="gray")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

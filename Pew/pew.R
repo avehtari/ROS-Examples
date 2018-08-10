@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -125,7 +129,7 @@ ideology.label <- c("Very liberal", "Liberal", "Moderate", "Conservative", "Very
 n.ideology <- max(ideology, na.rm=TRUE)
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5)
 #+
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")
@@ -147,10 +151,10 @@ for (i in 1:n.pid){
 }
 mtext("Self-declared party identification, by income", side=3, line=1, cex=1.2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
 #+
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")
@@ -172,7 +176,7 @@ for (i in 1:n.ideology){
 }
 mtext("Self-declared political ideology, by income", side=3, line=1, cex=1.2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' Recoded religious attendance (relatt) to 1-5 scale
 relatt <- 7 - as.numeric(pew_pre$attend)
@@ -217,4 +221,4 @@ for (i in 1:3){
 mtext("Income distributions within self-reported political categories in 2008",
       outer=TRUE, side=3, line=.5, cex=1.2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -49,7 +53,7 @@ predict <- posterior_predict(fit_f, newdata=new)
 
 #' **Plot jittered data and prediction from the logistic regression**
 #+ eval=FALSE, include=FALSE
-pdf(root("NES/figs","income1a.pdf"), height=2.8, width=3.8)
+if (savefigs) pdf(root("NES/figs","income1a.pdf"), height=2.8, width=3.8)
 #+
 n <- nrow(nes92)
 income_jitt <- nes92$income + runif(n, -.2, .2)
@@ -67,11 +71,11 @@ mtext("(poor)", 1, 1.2, at=1, adj=.5)
 mtext("(rich)", 1, 1.2, at=5, adj=.5)
 points(income_jitt, vote_jitt, pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot jittered data and prediction with uncertainties**
 #+ eval=FALSE, include=FALSE
-pdf(root("NES/figs","income1b.pdf"), height=2.8, width=3.8)
+if (savefigs) pdf(root("NES/figs","income1b.pdf"), height=2.8, width=3.8)
 #+
 par(mar=c(3,3,1,.1), tck=-.01, mgp=c(1.7, .3, 0))
 ok <- nes92$presvote<3
@@ -91,7 +95,7 @@ for (j in sample(n_sims, 20)){
 curve(invlogit(fit_1$coef[1] + fit_1$coef[2]*x), .5, 5.5, add=TRUE)
 points(income_jitt, vote_jitt, pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Series of regressions for different years**
 yrs <- seq(1952, 2000, 4)
@@ -113,7 +117,7 @@ for (j in 1:n_yrs){
 
 #' **Plot the series of regression**
 #+ eval=FALSE, include=FALSE
-pdf(root("NES/figs","incomeseries.pdf"), height=3.4, width=4.9)
+if (savefigs) pdf(root("NES/figs","incomeseries.pdf"), height=3.4, width=4.9)
 #+
 par(mar=c(3,2.5,1,.2), tck=-.01, mgp=c(1.5, .3, 0))
 plot (fits[,"year"], fits[,"coef"], xlim=c(1950,2000), ylim=range(fits[,"coef"]-fits[,"se"], fits[,"coef"]+fits[,"se"]),
@@ -123,7 +127,7 @@ for (j in 1:n_yrs){
 }
 abline(0,0,lwd=.5, lty=2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #' ### Predictive accuracy and log score for logistic regression
@@ -169,7 +173,7 @@ for (j in 1:n_yrs){
 
 #' **Plot illustration on nonidentifiability of logistic regression**
 #+ eval=FALSE, include=FALSE
-pdf(root("NES/figs","separation_compare.pdf"), height=2.8, width=8.3)
+if (savefigs) pdf(root("NES/figs","separation_compare.pdf"), height=2.8, width=8.3)
 #+ fig.width=9, fig.height=6
 par(mfrow=c(2,5), mar=c(3,3,0,1), tck=-.02, mgp=c(1.2,.3,0), oma=c(0,0,3,0))
 for (k in 1:2){
@@ -188,4 +192,4 @@ for (k in 1:2){
   }
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

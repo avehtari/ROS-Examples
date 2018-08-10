@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -79,7 +83,7 @@ round(2*pnorm(-diffs/ses), 2)
 
 #' **Graph showing distribution shift**
 #+ eval=FALSE, include=FALSE
-pdf("stents_shift_1.pdf", height=3, width=6)
+if (savefigs) pdf("stents_shift_1.pdf", height=3, width=6)
 #+ 
 par(mar=c(3,3,0,1), mgp=c(1.5,.5,0), tck=-.01)
 plot(c(0,1000), c(0, 1.1), yaxs="i", yaxt="n", xlab="Exercise time (seconds)", ylab="", bty="n", type="n")
@@ -89,4 +93,4 @@ text(270, .7, "Controls")
 text(755, .7, "Treated")
 abline(c(510, 510), c(0, 1))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -39,7 +43,7 @@ yrs <- seq(1972,2000,4)
 
 #' **Plot**
 #+ eval=FALSE, include=FALSE
-pdf(root("NES/figs","partyid_1.pdf"), height=2.5, width=7.5)
+if (savefigs) pdf(root("NES/figs","partyid_1.pdf"), height=2.5, width=7.5)
 #+
 coef_names <- c("Intercept", "Ideology", "Black", "Age_30_44", "Age_45_64", "Age_65_up", "Education", "Female", "Income")
 par(mfrow=c(2,5), mar=c(2,3,2,2), tck=-.02, mgp=c(2,.7,0))
@@ -51,4 +55,4 @@ for (k in 1:9){
   segments(yrs, summary[k,1,]-.67*summary[k,2,], yrs, summary[k,1,]+.67*summary[k,2,])
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -28,7 +32,7 @@ summ <- summary(M1)
 
 #' **Plot likelihood (a, b| y)**
 #+ eval=FALSE, include=FALSE
-pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
 #+
 # Contour plots etc of simple likelihoods
 trans3d <- function(x,y,z, pmat) {
@@ -60,11 +64,11 @@ text(trans3d(mean(rng.x), rng.y[1]-.12*(rng.y[2]-rng.y[1]), 0, pm = res), expres
 text(trans3d(rng.x[1]-.08*(rng.x[2]-rng.x[1]), mean(rng.y), 0, pm = res), expression(beta[1]))
 mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot maximum likelihood estimate and std errs**
 #+ eval=FALSE, include=FALSE
-pdf(root("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a) %+-% 1, " std err,  ", hat(b) %+-% 1, " std err)")), type="n")
@@ -72,11 +76,11 @@ lines(rep(summ$coef[1,1], 2), summ$coef[2,1] + c(-1,1)*summ$coef[2,2], col="gray
 lines(summ$coef[1,1] + c(-1,1)*summ$coef[1,2], rep(summ$coef[2,1], 2), col="gray20")
 points(summ$coef[1,1], summ$coef[2,1], pch=19)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot maximum likelihood estimate and covariance**
 #+ eval=FALSE, include=FALSE
-pdf(root("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main=expression(paste("(", hat(a), ", ", hat(b), ") and covariance matrix")), type="n")
@@ -91,7 +95,7 @@ xx <- summ$coef[1,1] + summ$coef[1,2]*(aa*sqrt(1+rho)+bb*sqrt(1-rho))
 yy <- summ$coef[2,1] + summ$coef[2,2]*(aa*sqrt(1+rho)-bb*sqrt(1-rho))
 lines (xx, yy)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Bayesian model with flat prior**
 M3 <- stan_glm(vote ~ growth, prior=NULL, prior_intercept=NULL, prior_aux=NULL, data = hibbs)
@@ -101,10 +105,10 @@ b <- sims[,2]
 
 #' **Plot posterior draws**
 #+ eval=FALSE, include=FALSE
-pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(rng.x, rng.y, xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n")
 points(a, b, pch=20, cex=.2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

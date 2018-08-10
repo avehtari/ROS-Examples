@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -51,11 +55,11 @@ for (s in sample(n_sims, 20)) {
 y_rep <- posterior_predict(fit)
 #' **Plot data and 19 replications using built-in function**
 #+ eval=FALSE, include=FALSE
-pdf(root("Newcomb/figs","newcomb_ppc_hist.pdf"), height=3, width=9)
+if (savefigs) pdf(root("Newcomb/figs","newcomb_ppc_hist.pdf"), height=3, width=9)
 #+
 ppc_hist(newcomb$y, y_rep[1:19, ])
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot test statistic for data and replicates**
 Test <- function (y){
@@ -67,8 +71,8 @@ lines(rep(Test(newcomb$y),2), c(0,n_sims))
 
 #' **Plot test statistic for data and replicates using built-in function**
 #+ eval=FALSE, include=FALSE
-pdf(root("Newcomb/figs","newcomb_ppc_stat.pdf"), height=3, width=6)
+if (savefigs) pdf(root("Newcomb/figs","newcomb_ppc_stat.pdf"), height=3, width=6)
 #+
 ppc_stat(newcomb$y, y_rep, stat = "min")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

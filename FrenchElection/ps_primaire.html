@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Gelman, Aki Vehtari" />
 
-<meta name="date" content="2018-03-11" />
+<meta name="date" content="2018-08-09" />
 
 <title>Regression and Other Stories: French Election</title>
 
@@ -92,6 +92,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -121,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: French Election</h1>
 <h4 class="author"><em>Andrew Gelman, Aki Vehtari</em></h4>
-<h4 class="date"><em>2018-03-11</em></h4>
+<h4 class="date"><em>2018-08-09</em></h4>
 
 </div>
 
@@ -129,13 +132,12 @@ $(document).ready(function () {
 <p>French Election data</p>
 <hr />
 <p><strong>Load libraries</strong></p>
-<pre class="r"><code>library(&quot;here&quot;)
-library(&quot;arm&quot;)</code></pre>
+<pre class="r"><code>library(&quot;rprojroot&quot;)
+root&lt;-has_dirname(&quot;RAOS-Examples&quot;)$make_fix_file()</code></pre>
 <p><strong>Load data</strong></p>
-<pre class="r"><code>ps &lt;- read.table(here(&quot;FrenchElection/data&quot;,&quot;ps_primaire.txt&quot;), header=TRUE)
-
-#* **Analyze**
-J &lt;- nrow(ps)
+<pre class="r"><code>ps &lt;- read.table(root(&quot;FrenchElection/data&quot;,&quot;ps_primaire.txt&quot;), header=TRUE)</code></pre>
+<p><strong>Analyze</strong></p>
+<pre class="r"><code>J &lt;- nrow(ps)
 n1 &lt;- ps[J,2]
 n2 &lt;- ps[J,3] - ps[J,2]
 p1 &lt;- ps[1:(J-1),2]/n1

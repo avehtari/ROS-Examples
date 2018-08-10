@@ -13,7 +13,6 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 
 #' **Load data**
 ps <- read.table(root("FrenchElection/data","ps_primaire.txt"), header=TRUE)
