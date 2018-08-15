@@ -19,19 +19,21 @@ library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
+library("ggplot2")
+theme_set(bayesplot::theme_default(base_family = "sans"))
 
 #' **Load data**
 mile <- read.table(root("Mile/data","mile2.txt"), header=TRUE)
 year <- mile$yr + mile$month/12
 seconds <- mile$min*60 + mile$sec
-data <- data.frame(mile, year, seconds)
+mile <- data.frame(mile, year, seconds)
 
-#' **Linear model*
-fit <- stan_glm(seconds ~ year, data = data)
-print(fit, digits=3)
+#' **Linear model**
+fit <- stan_glm(seconds ~ year, data = mile)
+print(fit, digits=2)
 
 #' **Predictions for 1900 and 2000**
-print(1007 -.393*c(1900,2000))  # Approx
+print(1006 -.393*c(1900,2000))  # Approx
 print(coef(fit)[1] + coef(fit)[2]*c(1900,2000), digits=4) # Exact
 
 #' **Example of increasing trend**
@@ -69,8 +71,8 @@ if (savefigs) dev.off()
 if (savefigs) pdf(root("Mile/figs","aplusbx2a.pdf"), height=3.5, width=5)
 #+
 par(mar=c(3,3,1,1), mgp=c(2,.5,0), tck=-.01)
-curve(1007 - 0.393*x, from=0, to=2.1, xlab="x", ylab="y", bty="l",
-  main="y = 1007 - 0.393x")
+curve(1006 - 0.393*x, from=0, to=2.1, xlab="x", ylab="y", bty="l",
+  main="y = 1006 - 0.393x")
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
@@ -79,8 +81,8 @@ if (savefigs) dev.off()
 if (savefigs) pdf(root("Mile/figs","aplusbx2b.pdf"), height=3.5, width=5)
 #+
 par(mar=c(3,3,1,1), mgp=c(2,.5,0), tck=-.01)
-curve(1007 - 0.393*x, from=0, to=100, xlab="x", ylab="y", bty="l",
-  main="y = 1007 - 0.393x")
+curve(1006 - 0.393*x, from=0, to=100, xlab="x", ylab="y", bty="l",
+  main="y = 1006 - 0.393x")
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()     
 
@@ -89,8 +91,43 @@ if (savefigs) dev.off()
 if (savefigs) pdf(root("Mile/figs","aplusbx3.pdf"), height=3.5, width=5)
 #+
 par(mar=c(3,3,1,1), mgp=c(2,.5,0), tck=-.01)
-plot(year, seconds)
-curve(1007 - 0.393*x, from=1900, to=2000, xlab="Year", ylab="Time (seconds)", bty="l",
-  main="Approx. trend of record times in the mile run", ylim=c(210, 270), add=TRUE)
+plot(mile$year, mile$seconds)
+curve(1006 - 0.393*x, from=1900, to=2000,
+      xlab="Year", ylab="Time (seconds)", bty="l",
+      main="Approx. trend of record times in the mile run",
+      ylim=c(210, 270), add=TRUE)
 #+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+
+#' **ggplot version**
+ggplot(aes(x=year, y=seconds), data=mile) + geom_point(shape=1, size=2) +
+    geom_abline(intercept=fit$coefficients[1], slope=fit$coefficients[2]) +
+    labs(x="Year", y="Time (seconds)",
+         title = "Approx. trend of record times in the mile run")
+
+#+ eval=FALSE, include=FALSE
+# A simple graph
+# World record times in the mile run from 1900 to 2000
+if (savefigs) pdf(root("Mile/figs","mile1a.pdf"), height=3.5, width=5)
+plot(mile$year, mile$seconds,
+     main="World record times in the mile run")
+if (savefigs) dev.off()
+
+#+ eval=FALSE, include=FALSE
+# World record times in the mile run from 1900 to 2000
+# Improved graph
+if (savefigs) pdf(root("Mile/figs","mile1b.pdf"), height=3.5, width=5)
+par(mar=c(3,3,3,1), mgp=c(2,.5,0), tck=-.01)
+plot(mile$year, mile$seconds, bty="l",
+     main="World record times in the mile run", xlab="Year", ylab="Seconds")
+if (savefigs) dev.off()
+
+#+ eval=FALSE, include=FALSE
+# World record times in the mile run from 1900 to 2000
+# Fitted line
+if (savefigs) pdf(root("Mile/figs","mile2.pdf"), height=3.5, width=5)
+par(mar=c(3,3,3,1), mgp=c(2,.5,0), tck=-.01)
+curve(1006 - 0.393*x, from=floor(min(mile$year)), to=ceiling(max(mile$year)),
+      xlab="Year", ylab="World record time (in seconds)", bty="l",
+      main="Fitted line predicting world record\n in mile run over time")
 if (savefigs) dev.off()
