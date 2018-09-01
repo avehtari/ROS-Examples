@@ -9,6 +9,10 @@
 #' -------------
 #' 
 
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
@@ -65,29 +69,29 @@ bpg <- bayesplot_grid(
   titles = c("Model for weight", "Model for log(weight)")
 )
 #+ eval=FALSE, include=FALSE
-pdf(root("Mesquite/figs","mesquite_ppc.pdf"), height=3, width=9)
+if (savefigs) pdf(root("Mesquite/figs","mesquite_ppc.pdf"), height=3, width=9)
 #+
 bpg
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #' **Plot marginal posteriors**
 #+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
 #+ eval=FALSE, include=FALSE
-pdf(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
 #+ fig.height=3, fig.width=6
-mcmc_areas_old(as.matrix(fit_2), regex_pars = "^log|^gro")
+mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot joint marginal posterior for log(canopy_height) and log(total_height)
 #+ eval=FALSE, include=FALSE
-pdf(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
+if (savefigs) pdf(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
 mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"), size = 1)+geom_vline(xintercept=0)+geom_hline(yintercept=0)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Additional transformed variables**
 mesquite$canopy_volume <- mesquite$diam1 * mesquite$diam2 * mesquite$canopy_height
@@ -128,7 +132,7 @@ round(looR2(fit_4),2)
 #+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_4))
 #+ fig.height=3, fig.width=6
-mcmc_areas_old(as.matrix(fit_4))
+mcmc_areas(as.matrix(fit_4))
 
 #' **Plot pairwise joint marginals**<br>
 #' Strong collinearity between canopy volume and canopy area is obvious
