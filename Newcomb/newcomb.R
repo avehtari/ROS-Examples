@@ -42,14 +42,12 @@ sims <- as.matrix(fit)
 n_sims <- nrow(sims)
 n <- length(newcomb$y)
 y_rep <- array(NA, c(n_sims, n))
-for (s in 1:n_sims){
-    y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
-}
+for (s in 1:n_sims)
+  y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
 #' **Plot histogram of 20 replicates**
 par(mfrow=c(5,4), mar=rep(2,4))
-for (s in sample(n_sims, 20)) {
-    hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n")
-}
+for (s in sample(n_sims, 20))
+  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n")
 
 #' **Simulate using built-in function**
 y_rep <- posterior_predict(fit)
@@ -62,9 +60,8 @@ ppc_hist(newcomb$y, y_rep[1:19, ])
 if (savefigs) dev.off()
 
 #' **Plot test statistic for data and replicates**
-Test <- function (y){
-    min(y)
-}
+Test <- function (y)
+  min(y)
 test_rep <- apply(y_rep, 1, Test)
 hist(test_rep, xlim=range(Test(newcomb$y), test_rep))
 lines(rep(Test(newcomb$y),2), c(0,n_sims))
