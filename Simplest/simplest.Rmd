@@ -76,8 +76,8 @@ n_0 <- 20
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
 set.seed(2141)
-y_0 <- rnorm(n_0, 2, 5)
-fake <- data.frame(y_0)
+y_0 <- rnorm(n_0, 2.0, 5.0)
+fake_0 <- data.frame(y_0)
 round(y_0, 1)
 round(mean(y_0), 2)
 round(sd(y_0)/sqrt(n), 2)
@@ -86,7 +86,8 @@ round(sd(y_0)/sqrt(n), 2)
 **Estimating the mean is the same as regressing on a constant term**
 
 ```{r results='hide'}
-fit_2 <- stan_glm(y_0 ~ 1, data = fake, seed=2141)
+fit_2 <- stan_glm(y_0 ~ 1, data = fake_0, seed=2141,
+                  prior_intercept = NULL, prior = NULL, prior_aux = NULL)
 ```
 ```{r }
 print(fit_2)
@@ -115,7 +116,8 @@ n <- n_0 + n_1
 y <- c(y_0, y_1)
 x <- c(rep(0, n_0), rep(1, n_1))
 fake <- data.frame(y, x)
-fit_3 <- stan_glm(y ~ x, data = fake, seed=2141)
+fit_3 <- stan_glm(y ~ x, data = fake, seed=2141,
+                  prior_intercept = NULL, prior = NULL, prior_aux = NULL)
 print(fit_3)
 ```
 
