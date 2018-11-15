@@ -59,8 +59,8 @@ a <- 65
 b <- 0.7
 sigma <- 15
 n <- nrow(introclass)
-introclass$y_fake <- a + b*introclass$midterm + rnorm(n, 0, 15)
-fit_fake <- stan_glm(y_fake ~ midterm, data = introclass)
+introclass$final_fake <- a + b*introclass$midterm + rnorm(n, 0, 15)
+fit_fake <- stan_glm(final_fake ~ midterm, data = introclass)
 
 #' **Compute residuals**
 #' compute predictions from simulations
@@ -68,7 +68,7 @@ sims <- as.matrix(fit_fake)
 predicted_fake <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
 #' or with built-in function
 predicted_fake <- colMeans(posterior_linpred(fit_fake))
-resid_fake <- introclass$y_fake - predicted_fake
+resid_fake <- introclass$final_fake - predicted_fake
 
 #' **Plot residuals vs predicted**
 #+ eval=FALSE, include=FALSE
@@ -84,7 +84,7 @@ dev.off()
 #+ eval=FALSE, include=FALSE
 postscript(root("Introclass/figs","fakeresid2b.ps"), height=3.8, width=4.5)
 #+
-plot(introclass$y_fake, resid_fake, xlab="observed value", ylab="residual", main="Fake data:  resids vs.\ observed", mgp=c(1.5,.5,0), pch=20, yaxt="n")
+plot(introclass$final_fake, resid_fake, xlab="observed value", ylab="residual", main="Fake data:  resids vs.\ observed", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
