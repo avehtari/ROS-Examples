@@ -13,7 +13,7 @@ Example where an informative prior makes a difference
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

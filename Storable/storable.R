@@ -1,32 +1,45 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Storable")
+#' ---
+#' title: "Regression and Other Stories: Storable"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
 
-library("arm")
-library("rstanarm")
+#' Ordered categorical data analysis with a study from experimental
+#' economics, on the topic of ``storable votes.''
+#' 
+#' -------------
+#' 
+
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
+#' **Load packages**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstan")
 rstan_options(auto_write = TRUE)
+library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
-## R code for analysis of storable votes for the book
-
-data_2player <- read.csv("2playergames.csv")
-data_3player <- read.csv("3playergames.csv")
-data_6player <- read.csv("6playergames.csv")
+#' **Load data**
+data_2player <- read.csv(root("Storable/data","2playergames.csv"))
+data_3player <- read.csv(root("Storable/data","3playergames.csv"))
+data_6player <- read.csv(root("Storable/data","6playergames.csv"))
 data_all <- rbind(data_2player, data_3player, data_6player)
-data_all$factor_vote <- factor(data_all$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"))
-## Simple analysis using data from just one person
+data_all$factor_vote <- factor(data_all$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
 
-subset <- data_2player[,"person"]==401
-y <- data_2player[subset, "vote"]
-x <- data_2player[subset, "value"]
-
-## From Jonah
-data_2player <- read.csv("2playergames.csv")
+#' **Simple analysis using data from just one person**
 data_401 <- subset(data_2player, person == 401, select = c("vote", "value"))
-fit_1 <- stan_polr(factor(vote) ~ value, data = data_401, prior = R2(0.5, "mean"))
-print(fit_1)
+data_401$factor_vote <- factor(data_401$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
+#+ results='hide'
+fit_1 <- stan_polr(factor_vote ~ value, data = data_401,
+                   prior = R2(0.5, "mean"))
+#+
+print(fit_1, digits=2)
 
-## 6 people
-
+#' **6 people**
 plotted <- c(101, 303, 409, 405, 504, 112)
 story <- c("Perfectly monotonic",
            "One fuzzy and one sharp cutpoint",
@@ -40,12 +53,17 @@ fit <- as.list(rep(NA, n_plotted))
 for (i in 1:n_plotted){
   ok <- data_all[,"person"]==plotted[i]
   data[[i]] <- data_all[ok,]
-  fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]], prior=R2(0.5, "mean"))
+  output <- capture.output(
+      fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
+                            prior=R2(0.5, "mean"),
+                            cores = 1, open_progress = FALSE,
+                            adapt_delta = 0.999))
 }
 
-## Graph
-
-pdf(root("Storable/figs","sampledata4.pdf"), height=5, width=8)
+#' **Graph**
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Storable/figs","sampledata4.pdf"), height=5, width=8)
+#+
 par(mfrow=c(2,3), mgp=c(1.5,.5,0), tck=-.01)
 for (i in 1:n_plotted){
   sims <- as.matrix(fit[[i]])
@@ -75,5 +93,5 @@ for (i in 1:n_plotted){
     lines(rep(cutpoints[i_cut],2), i_cut+c(0,1), lwd=.5)
   }
 }
-dev.off()
-
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()

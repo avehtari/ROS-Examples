@@ -9,7 +9,11 @@
 #' -------------
 #' 
 
-#' **Load libraries**
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
+#' **Load packages**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
@@ -114,34 +118,34 @@ namesplot <- function(a){
 girls50 <- name.subset(girl, 50)
 boys50 <- name.subset(!girl, 50)
 #+ eval=FALSE, include=FALSE
-pdf(root("Names/figs","girls50.pdf"), height=8, width=8)
+if (savefigs) pdf(root("Names/figs","girls50.pdf"), height=8, width=8)
 #+
 par(mar=c(1,2,1,1))
 namesplot(girls50)
 #+ eval=FALSE, include=FALSE
-dev.off()
-pdf(root("Names/figs","boys50.pdf"), height=8, width=8)
+if (savefigs) dev.off()
+if (savefigs) pdf(root("Names/figs","boys50.pdf"), height=8, width=8)
 #+
 par(mar=c(1,2,1,1))
 namesplot(boys50)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 #+
 girls70 <- name.subset(girl, 0)
 boys70 <- name.subset(!girl, 0)
 #+ eval=FALSE, include=FALSE
-pdf(root("Names/figs","girls70.pdf"), height=10, width=8)
+if (savefigs) pdf(root("Names/figs","girls70.pdf"), height=10, width=8)
 #+
 par(mar=c(1,2,1,1))
 namesplot(girls70)
 #+ eval=FALSE, include=FALSE
-dev.off()
-pdf(root("Names/figs","boys70.pdf"), height=10, width=8)
+if (savefigs) dev.off()
+if (savefigs) pdf(root("Names/figs","boys70.pdf"), height=10, width=8)
 #+
 par(mar=c(1,2,1,1))
 namesplot(boys70)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Restrict to top 1000 and remove Laura's list of bad names**
 error.names <- as.matrix(read.csv(root("Names/data","Error Names.csv")))
@@ -163,18 +167,18 @@ for (i in (1:N)[evertop1000]){
 girls50new <- name.subset(girl & keep, 50)
 boys50new <- name.subset(!girl & keep, 50)
 #+ eval=FALSE, include=FALSE
-pdf(root("Names/figs","girls50new.pdf"), height=8, width=8)
+if (savefigs) pdf(root("Names/figs","girls50new.pdf"), height=8, width=8)
 #+
 par(mar=c(1,2,1,1))
 namesplot(girls50new)
 #+ eval=FALSE, include=FALSE
-dev.off()
-pdf(root("Names/figs","boys50new.pdf"), height=8, width=8)
+if (savefigs) dev.off()
+if (savefigs) pdf(root("Names/figs","boys50new.pdf"), height=8, width=8)
 #+
 par(mar=c(1,2,1,1))
 namesplot(boys50new)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' Add new column
 avg.year.2 <- rep(NA, 50)
@@ -186,12 +190,12 @@ for (i in 1:50){
 girls50new <- cbind(girls50new[,1], avg.year.2, girls50new[,2:6])
 colnames(girls50new)[1] <- "year.of.max.pop"
 #+ eval=FALSE, include=FALSE
-pdf(root("Names/figs","girls50new.pdf"), height=8, width=9)
+if (savefigs) pdf(root("Names/figs","girls50new.pdf"), height=8, width=9)
 #+
 par(mar=c(1,2,1,1))
 namesplot(girls50new)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 #'
 avg.year.2 <- rep(NA, 50)
 names50 <- row.names(boys50new)
@@ -202,9 +206,9 @@ for (i in 1:50){
 boys50new <- cbind(boys50new[,1], avg.year.2, boys50new[,2:6])
 colnames(boys50new)[1] <- "year.of.max.pop"
 #+ eval=FALSE, include=FALSE
-pdf(root("Names/figs","boys50new.pdf"), height=8, width=9)
+if (savefigs) pdf(root("Names/figs","boys50new.pdf"), height=8, width=9)
 #+
 par(mar=c(1,2,1,1))
 namesplot(boys50new)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

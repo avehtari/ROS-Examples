@@ -13,7 +13,7 @@ Predict respondents' yearly earnings using survey data from 1990.
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

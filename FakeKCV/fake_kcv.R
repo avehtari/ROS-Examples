@@ -9,7 +9,7 @@
 #' -------------
 #' 
 
-#' **Load libraries**
+#' **Load packages**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("MASS")      # needed for mvrnorm()
 library("rstanarm")

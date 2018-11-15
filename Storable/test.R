@@ -1,6 +1,5 @@
 setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/Storable")
 
-library("arm")
 library("rstanarm")
 library("rstan")
 rstan_options(auto_write = TRUE)

@@ -13,7 +13,7 @@ Regression-based imputation for the Social Indicators Survey
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

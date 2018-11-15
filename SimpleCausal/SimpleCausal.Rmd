@@ -13,7 +13,7 @@ Simple graphs illustrating regression for causal inference
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

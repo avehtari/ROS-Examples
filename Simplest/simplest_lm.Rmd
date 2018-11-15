@@ -13,7 +13,7 @@ Linear least squares regression with a single predictor
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

@@ -9,7 +9,7 @@
 #' -------------
 #' 
 
-#' **Load libraries**
+#' **Load packages**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("arm")
 library("rstanarm")

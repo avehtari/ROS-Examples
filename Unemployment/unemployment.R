@@ -13,7 +13,7 @@
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load libraries**
+#' **Load packages**
 #' 
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")

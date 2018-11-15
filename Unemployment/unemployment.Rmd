@@ -13,7 +13,7 @@ Time series fit and posterior predictive model checking for unemployment series
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}

@@ -9,7 +9,7 @@
 #' -------------
 #'
 
-#' **Load libraries**
+#' **Load packages**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()

@@ -14,7 +14,7 @@ The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

@@ -8,12 +8,12 @@ Age-Period-Cohort - Age adjustment
 -------------
 
 
-```{r }
+```{r include=FALSE}
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")

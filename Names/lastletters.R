@@ -1,3 +1,45 @@
+#' ---
+#' title: "Regression and Other Stories: Names"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Names - Distributions of names of American babies
+#' 
+#' -------------
+#' 
+
+#+ include=FALSE
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
+#' **Load packages**
+#+ setup, message=FALSE, error=FALSE, warning=FALSE
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+
+#' **Load data**
+allnames <- read.csv(root("Names/data","SSA-longtail-names.csv"))
+girl <- as.vector(allnames$sex)=="F"
+names <- as.vector(allnames$name)
+columns <- colnames(allnames)
+range <- (1:length(columns))[columns=="X1931"]:(1:length(columns))[columns=="X2000"]
+years <- 1931:2000
+colRenorm <- function(a){
+  a / matrix(colSums(a), nrow=nrow(a), ncol=ncol(a), byrow=TRUE)
+}
+counts <- as.matrix(allnames[,range])
+counts.norm <- colRenorm(counts)
+totals <- rowMeans(counts.norm)
+counts.adj <- ifelse (counts==0, 2, counts)
+counts.adj.norm <- colRenorm(counts.adj)/colSums(counts.adj)
+#'
+names <- read.csv(root("Names/data","Names.csv"))
+names <- allnames
+namelength <- nchar(names)
+lastletter <- substr(names, namelength, namelength)
+firstletter <- substr(names, 1, 1)
+
 discrete.histogram <- function (x, prob, prob2=NULL,
     xlab="x", ylab="Probability", xaxs.label=NULL, yaxs.label=NULL, bar.width=NULL, ...){
   if (length(x) != length(prob)) stop()
@@ -31,10 +73,6 @@ discrete.histogram <- function (x, prob, prob2=NULL,
   }
 }
 
-namelength <- nchar (names)
-lastletter <- substr (names, namelength, namelength)
-firstletter <- substr (names, 1, 1)
-#for (year in seq(1906,2006,50)){
 for (year in c(1900,1950,2010)){
   thisyear <- allnames[,paste("X",year,sep="")]
   lastletter.by.sex <- array (NA, c(26,2))
@@ -45,13 +83,15 @@ for (year in c(1900,1950,2010)){
     firstletter.by.sex[i,1] <- sum (thisyear[firstletter==LETTERS[i] & girl])
     firstletter.by.sex[i,2] <- sum (thisyear[firstletter==LETTERS[i] & !girl])
   }
-  pdf (paste ("boys", year, ".pdf", sep=""), height=3, width=4.5)
+  if (savefigs) pdf(root("Names/figs", paste("boys", year, ".pdf", sep="")),
+                   height=3, width=4.5)
   discrete.histogram (1:26, 100*(lastletter.by.sex[,2])/sum(lastletter.by.sex[,2]), xaxs.label=list(1:26,letters), yaxs.label=list(seq(0,30,10),seq(0,30,10)), xlab="", ylab="Percentage of boys born", main=paste ("Last letter of boys' names in", year), cex.axis=.9, cex.main=.9, bar.width=.8)
   for (y in c(10,20,30)) abline (y,0,col="gray",lwd=.5)
-  dev.off ()
-  pdf (paste ("girls", year, ".pdf", sep=""), height=3, width=4.5)
+  if (savefigs) dev.off()
+  if (savefigs) pdf(root("Names/figs", paste("girls", year, ".pdf", sep="")),
+                   height=3, width=4.5)
   discrete.histogram (1:26, 100*(lastletter.by.sex[,1])/sum(lastletter.by.sex[,1]), xaxs.label=list(1:26,letters), yaxs.label=list(seq(0,30,10),seq(0,30,10)), xlab="", ylab="Percentage of girls born", main=paste ("Last letter of girls' names in", year), cex.main=.9)
-  dev.off ()
+  if (savefigs) dev.off()
 }
 
 yrs <- 1880:2010
@@ -74,8 +114,10 @@ for (i in 1:n.yrs){
   }
 }
 
-pdf ("namestimeboys.pdf", height=3.5, width=6)
-par (mar=c(2,2,1,1), mgp=c(1.7,.3,0), tck=-.01, oma=c(0,0,2,0), mfrow=c(2,3))
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Names/figs", "namestimeboys.pdf"), height=3.5, width=6)
+#+
+par(mar=c(2,2,1,1), mgp=c(1.7,.3,0), tck=-.01, oma=c(0,0,2,0), mfrow=c(2,3))
 popular <- rev (order (lastletterfreqs[1,,2]))[1:6]
 for (k in 1:length(popular)){
   plot (range(yrs), c(0,50), type="n", xlab="", ylab="", bty="l", xaxt="n", yaxt="n", yaxs="i", xaxs="i")
@@ -89,9 +131,13 @@ for (k in 1:length(popular)){
   }
 }
 mtext ("Last letters of boys' names", side=3, outer=TRUE, line=.5)
-dev.off()
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+#+
 
-pdf ("namestimeboys2.pdf", height=4, width=6)
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Names/figs", "namestimeboys2.pdf"), height=4, width=6)
+#+
 par (mar=c(2,3,2,1), mgp=c(1.7,.3,0), tck=-.01)
 popular <- c(14,25,4)
 width <- rep (.5,26)
@@ -110,10 +156,14 @@ text (2000, 35, "N")
 text (1935, 20, "D")
 text (1975, 15, "Y")
 mtext ("Last letters of boys' names", side=3, line=.5)
-dev.off()
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+#+
 
-pdf ("namestimeboys3.pdf", height=4, width=6)
-par (mar=c(2,3,2,1), mgp=c(1.7,.3,0), tck=-.01)
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Names/figs", "namestimeboys3.pdf",) height=4, width=6)
+#+
+par(mar=c(2,3,2,1), mgp=c(1.7,.3,0), tck=-.01)
 popular <- c(14,25,4)
 plot (range(yrs), c(0,41), type="n", xlab="", ylab="Percentage", bty="l", xaxt="n", yaxt="n", yaxs="i", xaxs="i")
   axis (1, seq(1900,2000,50))
@@ -129,27 +179,26 @@ plot (range(yrs), c(0,41), type="n", xlab="", ylab="Percentage", bty="l", xaxt="
     }
   }
 mtext ("First letters of boys' names", side=3, line=.5)
-dev.off()
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+#+
 
-# Stuff for NYT column
+#' Stuff for NYT column
+dim(lastletterfreqs[,,2])
+round(lastletterfreqs[yrs>2005,,2], 2)  # 35% end in n
+round(lastletterfreqs[yrs>2005,,1], 2)  # 38% of all girls end in a
 
-dim (lastletterfreqs[,,2])
-pfround (lastletterfreqs[yrs>2005,,2], 2)  # 35% end in n
-pfround (lastletterfreqs[yrs>2005,,1], 2)  # 38% of all girls end in a
+#' 1950
+round(lastletterfreqs[yrs==1950,,2], 2)  # 14% end in n (tied with d, s, and y as most popular)
+round(lastletterfreqs[yrs==1950,,1], 2)  # 34% of all girls end in a
 
-# 1950
-pfround (lastletterfreqs[yrs==1950,,2], 2)  # 14% end in n (tied with d, s, and y as most popular)
-pfround (lastletterfreqs[yrs==1950,,1], 2)  # 34% of all girls end in a
+#' 1900
+round(lastletterfreqs[yrs==1900,,2], 2)  # 14% end in n (tied with d, s, and y as most popular)
+round(lastletterfreqs[yrs==1900,,1], 2)  # 34% of all girls end in a
 
-# 1900
-pfround (lastletterfreqs[yrs==1900,,2], 2)  # 14% end in n (tied with d, s, and y as most popular)
-pfround (lastletterfreqs[yrs==1900,,1], 2)  # 34% of all girls end in a
-
-# Most popular names in any given year
-
+#' Most popular names in any given year
 boy.names <- names[!girl]
 girl.names <- names[girl]
-
 for (year in c(1900,1950,2010)){
   thisyear <- allnames[,paste("X",year,sep="")]
   boy.totals <- thisyear[!girl]
@@ -181,23 +230,31 @@ for (i in 1:length(yrs)){
   topten_percentage[i,1] <- 100*sum(popularity[1:10])
 }
 
-pdf ("n.pdf", height=3, width=4)
-par (mar=c(4,2,1,0), mgp=c(1.3,.2,0), tck=-.02)
-plot (yrs, n_percentage, type="l", xaxt="n", yaxt="n", xaxs="i", yaxs="i", ylim=c(0,45), bty="l", xlab="Year", ylab="", cex.lab=.8)
-axis (1, c(1900,1950,2000), cex.axis=.8)
-axis (2, c(0,20,40), c("0%","20%","40%"), cex.axis=.8)
-mtext ("Percentage of new boys' names each year ending in 'n'", cex=.8)
-mtext ("Source:  Social Security Administration, courtesy of Laura Wattenberg", 1, 2.5, cex=.5, adj=0)
-dev.off ()
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Names/figs", "n.pdf"), height=3, width=4)
+#+
+par(mar=c(4,2,1,0), mgp=c(1.3,.2,0), tck=-.02)
+plot(yrs, n_percentage, type="l", xaxt="n", yaxt="n", xaxs="i", yaxs="i", ylim=c(0,45), bty="l", xlab="Year", ylab="", cex.lab=.8)
+axis(1, c(1900,1950,2000), cex.axis=.8)
+axis(2, c(0,20,40), c("0%","20%","40%"), cex.axis=.8)
+mtext("Percentage of new boys' names each year ending in 'n'", cex=.8)
+mtext("Source:  Social Security Administration, courtesy of Laura Wattenberg", 1, 2.5, cex=.5, adj=0)
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+#+
 
-pdf ("topten.pdf", height=3, width=4)
-par (mar=c(4,2,1,0), mgp=c(1.3,.2,0), tck=-.02)
-plot (yrs, topten_percentage[,2], type="l", xaxt="n", yaxt="n", xaxs="i", yaxs="i", ylim=c(0,45), bty="l", xlab="Year", ylab="", cex.lab=.8)
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Names/figs", "topten.pdf"), height=3, width=4)
+#+
+par(mar=c(4,2,1,0), mgp=c(1.3,.2,0), tck=-.02)
+plot(yrs, topten_percentage[,2], type="l", xaxt="n", yaxt="n", xaxs="i", yaxs="i", ylim=c(0,45), bty="l", xlab="Year", ylab="", cex.lab=.8)
 lines (yrs, topten_percentage[,1])
-axis (1, c(1900,1950,2000), cex.axis=.8)
-axis (2, c(0,20,40), c("0%","20%","40%"), cex.axis=.8)
-text (1902, 35, "Boys", cex=.75, adj=0)
-text (1911, 20, "Girls", cex=.75, adj=0)
-mtext ("Total popularity of top ten names each year, by sex", cex=.8)
-mtext ("Source:  Social Security Administration, courtesy of Laura Wattenberg", 1, 2.5, cex=.5, adj=0)
-dev.off ()
+axis(1, c(1900,1950,2000), cex.axis=.8)
+axis(2, c(0,20,40), c("0%","20%","40%"), cex.axis=.8)
+text(1902, 35, "Boys", cex=.75, adj=0)
+text(1911, 20, "Girls", cex=.75, adj=0)
+mtext("Total popularity of top ten names each year, by sex", cex=.8)
+mtext("Source:  Social Security Administration, courtesy of Laura Wattenberg", 1, 2.5, cex=.5, adj=0)
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off ()
+#+

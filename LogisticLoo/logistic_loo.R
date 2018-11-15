@@ -1,7 +1,6 @@
 setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/LogisticLoo")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
-library("arm")
 library("MASS")      # needed for mvrnorm()
 
 n <- 200

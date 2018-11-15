@@ -13,7 +13,7 @@ Posterior predictive checking of Normal model for Newcomb's speed of light data
 savefigs <- FALSE
 ```
 
-**Load libraries**
+**Load packages**
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rprojroot")
