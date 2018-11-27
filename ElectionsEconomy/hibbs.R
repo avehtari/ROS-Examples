@@ -107,7 +107,7 @@ text(2.7, 53.5, paste("y =", round(coef(M1)[1],1), "+", round(coef(M1)[2],1), "x
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Prediction given 2% growth**
+#' **Plot prediction given 2% growth**
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict.pdf"), height=3.5, width=6)
 #+
@@ -135,19 +135,59 @@ b <- sims[,2]
 sigma <- sims[,3]
 n_sims <- nrow(sims)
 
-#' **Median and mean absolute deviation (MAD)**
-print(median(a))
-print(1.483*median(abs(a - median(a))))
+#' **Median and mean absolute deviation (MAD_SD)**
+Median <- apply(sims, 2, median)
+MAD_SD <- apply(sims, 2, mad)
+print(cbind(Median, MAD_SD))
 
-#' **Do a prediction "manually"**
-y_hat <- a + 2.0 * b
-y_pred <- rnorm(n_sims, y_hat, sigma)
+#' **Median and mean absolute deviation (MAD_SD) for a derived quantity a/b**
+a <- sims[,1]
+b <- sims[,2]
+z <- a/b
+print(median(z))
+print(mad(z))
 
+#' **Point prediction given 2% growth**
+new <- data.frame(growth=2.0)
+y_point_pred <- predict(M1, newdata=new)
+
+#' **Alternative way to compute the point prediction**
+a_hat <- coef(M1)[1]
+b_hat <- coef(M1)[2]
+y_point_pred <- a_hat + b_hat*new
+
+#' **Uncertainty in prediction given 2% growth**
+y_linpred <- posterior_linpred(M1, newdata=new)
+
+#' **Do same computation "manually"**
+a <- sims[,1]
+b <- sims[,2]
+y_linpred <- a + b*new
+
+#' **Predictive uncertainty**
+y_pred <- posterior_predict(M1, newdata=new)
+
+#' **Predictive uncertainty manually**
+sigma <- sims[,3]
+n_sims <- nrow(sims)
+y_pred <- as.numeric(a + b*new) + rnorm(n_sims, 0, sigma)
+
+#' **Summarize predictions**
 Median <- median(y_pred)
-MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
+MAD_SD <- mad(y_pred)
 win_prob <- mean(y_pred > 50)
-cat("Predicted Clinton percentage of 2-party vote: ", round(Median, 1), ",
-  with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2), sep="", "\n")
+cat("Predicted Clinton percentage of 2-party vote: ", round(Median,1),
+  ", with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2),
+  sep="")
+
+#' **Summarize predictions graphically**
+hist(y_pred)
+
+#' **Predict for many new values**
+new_grid <- data.frame(growth=seq(-2.0, 4.0, 0.5))
+y_point_pred_grid <- predict(M1, newdata=new_grid)
+y_linpred_grid <- posterior_linpred(M1, newdata=new_grid)
+y_pred_grid <- posterior_predict(M1, newdata=new_grid)
 
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10)
@@ -225,7 +265,7 @@ ggplot(hibbs, aes(x = growth, y = vote)) +
   )
 
 
-#' Add more uncertainty
+#' **Add more uncertainty**
 x <- rnorm(n_sims, 2.0, 0.3)
 y_hat <- a + b*x
 y_pred <- rnorm(n_sims, y_hat, sigma)
@@ -235,13 +275,6 @@ MAD_SD <- 1.483*median(abs(y_pred - median(y_pred)))
 win_prob <- mean(y_pred > 50)
 cat("Predicted Clinton percentage of 2-party vote: ", round(Median, 1), ",
   with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2), sep="", "\n")
-
-#' Use the posterior_predict function from rstanarm
-new_data <- data.frame(growth = 2.0)
-y_pred <- posterior_predict(M1, new_data)
-
-new_data_grid <- data.frame(growth = seq(-2.0, 4.0, 0.5))
-y_pred_grid <- posterior_predict(M1, new_data_grid)
 
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_3.pdf"), height=3.5, width=6)
@@ -254,8 +287,8 @@ axis(1, seq(40,65,5), paste(seq(40,65,5),"%",sep=""))
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version (using bayesplot's mcmc_hist)
-mcmc_hist(y_pred, binwidth = 1) +
+#' ggplot version
+qplot(y_pred, binwidth = 1) +
   xlim(35, 70) +
   labs(
     x ="Clinton share of the two-party vote",

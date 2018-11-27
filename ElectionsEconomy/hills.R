@@ -98,7 +98,8 @@ lines (xx, yy)
 if (savefigs) dev.off()
 
 #' **Bayesian model with flat prior**
-M3 <- stan_glm(vote ~ growth, prior=NULL, prior_intercept=NULL, prior_aux=NULL, data = hibbs)
+M3 <- stan_glm(vote ~ growth, data = hibbs,
+               prior_intercept=NULL, prior=NULL, prior_aux=NULL)
 sims <- as.data.frame(M3)
 a <- sims[,1]
 b <- sims[,2]
