@@ -45,12 +45,18 @@ fit_2 <- stan_glm(weight ~ c_height, data=vitals)
 #+
 print(fit_2)
 
-#' **Posterior simulations**
+#' **Point prediction**
 new <- data.frame(c_height=4.0)
+point_pred_2 <- predict(fit_2, newdata=new)
+
+#' **Posterior simulations**
+#' 
 #' variation coming from posterior uncertainty in the coefficients
 linpred_2 <- posterior_linpred(fit_2, newdata=new)
 hist(linpred_2)
 
+#' **Posterior predictive simulations**
+#' 
 #' variation coming from posterior uncertainty in the coefficients and
 #' predictive uncertainty
 postpred_2 <- posterior_predict(fit_2, newdata=new)
