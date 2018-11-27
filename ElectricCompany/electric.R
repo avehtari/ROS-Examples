@@ -151,39 +151,40 @@ for (j in 1:4){
 dev.off()
 
 #' **Linear model**
-post.test <- c(treated.Posttest, control.Posttest)
-pre.test <- c(treated.Pretest, control.Pretest)
+post_test <- c(treated.Posttest, control.Posttest)
+pre_test <- c(treated.Pretest, control.Pretest)
 grade <- rep(Grade, 2)
 treatment <- rep(c(1,0), rep(length(treated.Posttest),2))
-n <- length(post.test)
-df <- data.frame(post.test, pre.test, grade, treatment)
-fit_3 <- stan_glm(post.test ~ treatment + pre.test + treatment:pre.test, subset=(grade==4), data=df)
+n <- length(post_test)
+df <- data.frame(post_test, pre_test, grade, treatment)
+fit_3 <- stan_glm(post_test ~ treatment + pre_test + treatment:pre_test, subset=(grade==4), data=df)
 print(fit_3)
 
 #' **Another linear model**
-fit_4 <- stan_glm(formula = post.test ~ treatment + pre.test + treatment * pre.test, subset = (grade==4),
+fit_4 <- stan_glm(formula = post_test ~ treatment + pre_test + treatment * pre_test, subset = (grade==4),
                   data=df)
-sim_4 <- as.matrix(fit_4)
+sims_4 <- as.matrix(fit_4)
 
 #' **Plot linear model**
 #+ eval=FALSE, include=FALSE
 postscript(root("ElectricCompany/figs","grade4.interactions.ps"), horizontal=T, height=3.8, width=5)
 #+
-plot(0, 0, xlim=range(pre.test[grade==4]), ylim=c(-5,10),
+n_sims <- nrow(sims_4)
+plot(0, 0, xlim=range(pre_test[grade==4]), ylim=c(-5,10),
        xlab="pre-test", ylab="treatment effect", main="treatment effect in grade 4")
 abline(0, 0, lwd=.5, lty=2)
-for (i in 1:20)
-  curve(sim_4[i,2] + sim_4[i,4]*x, lwd=.5, col="gray", add=T)
-curve(coef(fit_4)[2] + coef(fit_4)[4]*x, lwd=.5, add=TRUE)
+for (s in sample(n_sims, 20))
+  curve(sims_4[s,2] + sims_4[s,4]*x, lwd=.5, col="gray", add=TRUE)
+est_4 <- apply(sims_4, 2, median)
+curve(est_4[2] + est_4[4]*x, lwd=0.5, add=TRUE)
 #+ eval=FALSE, include=FALSE
 dev.off()
 
 #' **Mean effect**
-n_sims <- 1000
 effect <- array(NA, c(n_sims, sum(grade==4)))
-for (i in 1:n_sims)
-  effect[i,] <- sim_4[i,2] + sim_4[i,4]*pre.test[grade==4]
-mean_effect <- rowMeans(effect)
+for (s in 1:n_sims)
+  effect[s,] <- sims_4[s,2] + sims_4[s,4]*pre_test[grade==4]
+avg_effect <- rowMeans(effect)
 
 #' **Plot repeated regression results**
 est1 <- rep(NA,4)
@@ -192,11 +193,13 @@ se1 <- rep(NA,4)
 se2 <- rep(NA,4)
 for (k in 1:4){
   output <- capture.output(
-      fit_1 <- stan_glm(post.test ~ treatment, subset=(grade==k), data = df, refresh = 0, 
-                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+      fit_1 <- stan_glm(post_test ~ treatment, subset=(grade==k), data = df,
+                        refresh = 0, save_warmup = FALSE, cores = 1,
+                        open_progress = FALSE))
   output <- capture.output(
-      fit_2 <- stan_glm(post.test ~ treatment + pre.test, subset=(grade==k), data = df, refresh = 0, 
-                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+      fit_2 <- stan_glm(post_test ~ treatment + pre_test, subset=(grade==k),
+                        data = df, refresh = 0, save_warmup = FALSE, cores = 1,
+                        open_progress = FALSE))
   est1[k] <- coef(fit_1)[2]
   est2[k] <- coef(fit_2)[2]
   se1[k] <- se(fit_1)[2]
@@ -269,26 +272,26 @@ for (k in 1:4){
   cat(paste("grade",k,":\n"))
   ok <- (grade==k)&(!is.na(supp))
   output <- capture.output(
-      glm_supp <- stan_glm(supp ~ pre.test, family=binomial(link="logit"), subset=ok, data=df, refresh = 0, 
+      fit_supp <- stan_glm(supp ~ pre_test, family=binomial(link="logit"), subset=ok, data=df, refresh = 0, 
                         save_warmup = FALSE, cores = 1, open_progress = FALSE))
-  print(glm_supp)
-  sims.glm.supp <- as.matrix(glm_supp)
-  plot(range(pre.test[ok]), c(0,1), type="n", xlab="Pre-test score",
+  print(fit_supp)
+  sims.glm.supp <- as.matrix(fit_supp)
+  plot(range(pre_test[ok]), c(0,1), type="n", xlab="Pre-test score",
         ylab="", main=paste("grade", k),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0), yaxt="n")
   axis(2, c(0,1), c("     Replace","Supp    "), cex.axis=1.5, mgp=c(2.5,.7,0))
   for (l in 1:20)
       curve(invlogit(sims.glm.supp[l,1] + sims.glm.supp[l,2]*x), lwd=.5, col="gray", add=T)
-  points(pre.test[supp==1&ok], jitter.binary(supp[supp==1&ok]), pch=21) #  supp:  open circle
-  points(pre.test[supp==0&ok], jitter.binary(supp[supp==0&ok]), pch=20)# replace:  dot
-  curve(invlogit(coef(glm_supp)[1] + coef(glm_supp)[2]*x), lwd=.5, add=T)
+  points(pre_test[supp==1&ok], jitter.binary(supp[supp==1&ok]), pch=21) #  supp:  open circle
+  points(pre_test[supp==0&ok], jitter.binary(supp[supp==0&ok]), pch=20)# replace:  dot
+  curve(invlogit(coef(fit_supp)[1] + coef(fit_supp)[2]*x), lwd=.5, add=T)
   output <- capture.output(
-      glm_supp <- stan_glm(post.test ~ supp + pre.test, subset=((grade==k)&!is.na(supp)),
+      fit_supp <- stan_glm(post_test ~ supp + pre_test, subset=((grade==k)&!is.na(supp)),
                            data=df, refresh = 0, 
                            save_warmup = FALSE, cores = 1, open_progress = FALSE))
-  print(glm_supp)
-  est1[k] <- coef(glm_supp)[2]
-  se1[k] <- se(glm_supp)[2]
+  print(fit_supp)
+  est1[k] <- coef(fit_supp)[2]
+  se1[k] <- se(fit_supp)[2]
 }
 #+ eval=FALSE, include=FALSE
 dev.off()
