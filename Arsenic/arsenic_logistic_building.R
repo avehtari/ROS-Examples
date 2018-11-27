@@ -16,7 +16,7 @@ root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("loo")
-library("arm")
+invlogit <- plogis
 
 #' **Load data**
 wells <- read.csv(root("Arsenic/data","wells.csv"))

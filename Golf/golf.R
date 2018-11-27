@@ -17,10 +17,10 @@ savefigs <- FALSE
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstan")
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
+invlogit <- plogis
 
 #' **Set up the data**
 golf <- read.table(root("Golf/data","golf.txt"), header=TRUE, skip=2)

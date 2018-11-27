@@ -13,9 +13,9 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
+invlogit <- plogis
 
 #' **Load data**
 electric <- read.table(root("ElectricCompany/data","electric.dat"), header=TRUE)

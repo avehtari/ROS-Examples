@@ -13,7 +13,7 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
-library("arm")
+invlogit <- plogis
 
 #' **Create some fake data**
 #'
