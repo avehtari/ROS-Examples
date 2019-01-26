@@ -80,8 +80,12 @@
 #'     - [hibbs_coverage.html](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/hibbs_coverage.html) - Checking the #'   - [Simplest/](Simplest/)
 #'     - [simplest.html](Simplest/simplest.html) - Linear regression with a single predictor
 #'     - [simplest_lm.html](Simplest/simplest_lm.html) - Linear least squares regression with a single predictor
+#'
+#' ### 8 Fitting regression models
+#'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
+#'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
 #' 
-#' ### 8  Bayesian inference and prediction
+#' ### 9 Prediction and Bayesian inference 
 #'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
 #'   - [SexRatio/](https://github.com/avehtari/RAOS-Examples/tree/master/SexRatio/)
@@ -91,7 +95,7 @@
 #'   - [Earnings/](https://github.com/avehtari/RAOS-Examples/tree/master/Earnings/)
 #'     - [earnings_regression.html](Earnings/earnings_regression.html) - Predict respondents' yearly earnings using survey data from 1990.
 #' 
-#' ### 9  Linear regression with multiple predictors
+#' ### 10  Linear regression with multiple predictors
 #'   - [KidIQ/](https://github.com/avehtari/RAOS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'   - [Vitals/](https://github.com/avehtari/RAOS-Examples/tree/master/Vitals/)
@@ -103,7 +107,7 @@
 #'   - [Beauty/](https://github.com/avehtari/RAOS-Examples/tree/master/Beauty/)
 #'     - [beauty.html](Beauty/beauty.html) - Student evaluations of instructors’ beauty and teaching quality
 #'
-#' ### 10  Assumptions, diagnostics, and model evaluation
+#' ### 11  Assumptions, diagnostics, and model evaluation
 #'   - [KidIQ/](https://github.com/avehtari/RAOS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'     - [kidiq_loo.html](KidIQ/kidiq_loo.html) - Linear regression and leave-one-out cross-validation
@@ -119,7 +123,7 @@
 #'     - [fake_kcv.html](FakeKCV/fake_kcv.html) - Demonstration of $K$-fold cross-validation using simulated data
 #'   - [Pyth/](https://github.com/avehtari/RAOS-Examples/tree/master/Pyth/)
 #' 
-#' ### 11  Transformations
+#' ### 12  Transformations
 #'   - [KidIQ/](https://github.com/avehtari/RAOS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'   - [Earnings/](https://github.com/avehtari/RAOS-Examples/tree/master/Earnings/)
@@ -128,7 +132,7 @@
 #'     - [mesquite.html](Mesquite/mesquite.html) - Predicting the yields of mesquite bushes
 #'   - [Pollution/](https://github.com/avehtari/RAOS-Examples/tree/master/Pollution/)
 #' 
-#' ### 12  Logistic regression
+#' ### 13  Logistic regression
 #'   - [NES/](HTTPS://GITHUB.COM/AVEHTARI/RAOS-EXAMPLES/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
@@ -137,7 +141,7 @@
 #'     - [arsenic_logistic_apc.html](Arsenic/arsenic_logistic_apc.html) - Average predictice comparisons for a logistic regression model: wells in Bangladesh
 #'   - [Rodents/](https://github.com/avehtari/RAOS-Examples/tree/master/Rodents/)
 #'
-#' ### 13  Other generalized linear models
+#' ### 14  Other generalized linear models
 #'   - [Roaches/](https://github.com/avehtari/RAOS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Storable/](https://github.com/avehtari/RAOS-Examples/tree/master/Storable/) 
@@ -150,11 +154,11 @@
 #'   - [Congress/](https://github.com/avehtari/RAOS-Examples/tree/master/Congress/)
 #'   - [AcademyAwards/](https://github.com/avehtari/RAOS-Examples/tree/master/AcademyAwards/)
 #'
-#' ### 14  Design and sample size decisions
+#' ### 15  Design and sample size decisions
 #'   - [ElectricCompany/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectricCompany/)
 #'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
 #'
-#' ### 15  Poststratification and missing-data imputation
+#' ### 16  Poststratification and missing-data imputation
 #'   - [Poststrat/](https://github.com/avehtari/RAOS-Examples/tree/master/Poststrat/)
 #'     - [poststrat.html](Poststrat/poststrat.html) - Poststratification after estimation
 #'     - [poststrat2.html](Poststrat/poststrat2.html) - Poststratification after estimation
