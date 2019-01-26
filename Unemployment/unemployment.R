@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Time series fit and posterior predictive model checking for unemployment series
+#' Time series fit and posterior predictive model checking for
+#' unemployment series
 #' 
 #' -------------
 #' 
@@ -84,4 +85,4 @@ test_rep <- apply(y_rep, 1, Test)
 print(mean(test_rep > test_y))
 print(quantile(test_rep, c(.1,.5,.9)))
 #' **Plot test statistic for data and histogram of test statistics for replications**
-ppc_stat(y=unemp$y, yrep=y_rep, stat=Test)
+ppc_stat(y=unemp$y, yrep=y_rep, stat=Test, binwidth = 1) + scale_y_continuous(breaks=NULL)
