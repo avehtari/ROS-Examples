@@ -103,7 +103,7 @@
 #'   - [Beauty/](https://github.com/avehtari/RAOS-Examples/tree/master/Beauty/)
 #'     - [beauty.html](Beauty/beauty.html) - Student evaluations of instructors’ beauty and teaching quality
 #'
-#' ### 10  Diagnostics and model evaluation
+#' ### 10  Assumptions, diagnostics, and model evaluation
 #'   - [KidIQ/](https://github.com/avehtari/RAOS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'     - [kidiq_loo.html](KidIQ/kidiq_loo.html) - Linear regression and leave-one-out cross-validation
@@ -113,6 +113,8 @@
 #'     - [newcomb.html](Newcomb/newcomb.html) - Posterior predictive checking of Normal model for Newcomb's speed of light data
 #'   - [Unemployment/](https://github.com/avehtari/RAOS-Examples/tree/master/Unemployment/)
 #'     - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
+#'   - [Rsquared/](https://github.com/avehtari/RAOS-Examples/tree/master/Rsquared/)
+#'     - [rsquared.html](Rsquared/rsquared.html) - Bayesian R^2
 #'   - [FakeKCV/](https://github.com/avehtari/RAOS-Examples/tree/master/FakeKCV/)
 #'     - [fake_kcv.html](FakeKCV/fake_kcv.html) - Demonstration of $K$-fold cross-validation using simulated data
 #'   - [Pyth/](https://github.com/avehtari/RAOS-Examples/tree/master/Pyth/)
@@ -265,6 +267,8 @@
 #'   - [Roaches/](https://github.com/avehtari/RAOS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Rodents/](https://github.com/avehtari/RAOS-Examples/tree/master/Rodents/)
+#'   - [Rsquared/](https://github.com/avehtari/RAOS-Examples/tree/master/Rsquared/)
+#'     - [rsquared.html](Rsquared/rsquared.html) - Bayesian R^2
 #'   - [Sesame/](https://github.com/avehtari/RAOS-Examples/tree/master/Sesame/)
 #'   - [SexRatio/](https://github.com/avehtari/RAOS-Examples/tree/master/SexRatio/)
 #'     - [sexratio.html](SexRatio/sexratio.html) - Example where an informative prior makes a difference
