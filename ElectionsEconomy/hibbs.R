@@ -88,6 +88,7 @@ if (savefigs) dev.off()
 M1 <- stan_glm(vote ~ growth, data = hibbs)
 print(M1)
 prior_summary(M1)
+summary(M1)
 
 #' **Posterior interval**
 round(posterior_interval(M1),1)
