@@ -137,8 +137,10 @@
 #'
 #' ### 13  Other generalized linear models
 #'   - [Roaches/](Roaches/)
-#'     - [roaches](Roaches/roaches.html) - Analyse the effect of integrated pes#'   - [Storable/](Storable/)
-#'     - stan_polr problem - Ordered categorical data analysis with a study fro#'   - [Earnings/](Earnings/)
+#'     - [roaches](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
+#'   - [Storable/](Storable/) 
+#'     - [storable](Storable/storable.html) - Ordered categorical data analysis with a study from experimental economics, on the topic of ``storable votes.''
+#'   - [Earnings/](Earnings/)
 #'     - [earnings_compound](Earnings/earnings_compound.html) - Compound discrete-continuos model
 #'   - [RiskyBehavior/](RiskyBehavior/)
 #'   - [NES/](NES/)
@@ -274,7 +276,7 @@
 #'   - [Stents/](Stents/)
 #'     - [stents](Stents/stents.html) - Stents - comparing distributions
 #'   - [Storable/](Storable/)
-#'     - stan_polr problem - Ordered categorical data analysis with a study from experimental economics, on the topic of ``storable votes.''
+#'     - [storable](Storable/storable.html) - Ordered categorical data analysis with a study from experimental economics, on the topic of ``storable votes.''
 #'   - [Unemployment/](Unemployment/)
 #'     - [unemployment](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
 #'   - [Vitals/](Vitals/)
