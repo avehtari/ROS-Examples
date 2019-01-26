@@ -22,6 +22,7 @@ library("rstan")
 rstan_options(auto_write = TRUE)
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
+invlogit<-plogis
 
 #' **Load data**
 data_2player <- read.csv(root("Storable/data","2playergames.csv"))
@@ -51,13 +52,15 @@ n_plotted <- length(plotted)
 data <- as.list(rep(NA, n_plotted))
 fit <- as.list(rep(NA, n_plotted))
 for (i in 1:n_plotted){
-  ok <- data_all[,"person"]==plotted[i]
-  data[[i]] <- data_all[ok,]
+  #ok <- data_all[,"person"]==plotted[i]
+  data[[i]] <- subset(data_all, person == plotted[i], 
+                      select = c("vote", "factor_vote", "value"))
   output <- capture.output(
       fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
-                            prior=R2(0.5, "mean"),
+                            prior=R2(0.3, "mean"),
                             cores = 1, open_progress = FALSE,
-                            adapt_delta = 0.999))
+                            warmup = 2000, iter = 4000,
+                            adapt_delta = 0.99999999))
 }
 
 #' **Graph**
