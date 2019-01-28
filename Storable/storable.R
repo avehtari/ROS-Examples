@@ -36,7 +36,7 @@ data_401 <- subset(data_2player, person == 401, select = c("vote", "value"))
 data_401$factor_vote <- factor(data_401$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
 #+ results='hide'
 fit_1 <- stan_polr(factor_vote ~ value, data = data_401,
-                   prior = R2(0.5, "mean"))
+                   prior = R2(0.3, "mean"))
 #+
 print(fit_1, digits=2)
 
@@ -59,8 +59,7 @@ for (i in 1:n_plotted){
       fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
                             prior=R2(0.3, "mean"),
                             cores = 1, open_progress = FALSE,
-                            warmup = 2000, iter = 4000,
-                            adapt_delta = 0.99999999))
+                            adapt_delta = 0.9999))
 }
 
 #' **Graph**
