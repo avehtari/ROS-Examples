@@ -35,6 +35,7 @@ roaches$roach100 <- roaches$roach1 / 100
 fit_1 <- stan_glm(y ~ roach100 + treatment + senior, family=poisson,
   offset=log(exposure2), data=roaches)
 #+
+prior_summary(fit_1)
 print(fit_1, digits=2)
 
 #' **Graphical posterior predictive checking**<br>
@@ -62,6 +63,7 @@ print(mean(yrep_1==0), digits=2)
 fit_2 <- stan_glm(y ~ roach100 + treatment + senior, family=neg_binomial_2,
   offset=log(exposure2), data=roaches)
 #+
+prior_summary(fit_2)
 print(fit_2, digits=2)
 loo_2 <- loo(fit_2)
 
