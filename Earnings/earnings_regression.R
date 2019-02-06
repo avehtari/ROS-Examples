@@ -23,6 +23,7 @@ library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 color_scheme_set(scheme = "gray")
+SEED <- 7783
 
 #' **Load data**
 earnings_all <- read.csv(root("Earnings/data","earnings.csv"))
@@ -38,7 +39,7 @@ height_jitter_add <- runif(n, -.2, .2)
 
 #' **Model on 1k dollars scale**
 #+ results='hide'
-fit_1 <- stan_glm(earnk ~ height, data=earnings)
+fit_1 <- stan_glm(earnk ~ height, data = earnings, seed = SEED)
 #+
 print(fit_1)
 #' for plotting scale back to dollar scale
@@ -90,7 +91,7 @@ gg_earnings +
 
 #' **Include male/female**
 #+ results='hide'
-fit_2 <- stan_glm(earnk ~ height + male, data=earnings)
+fit_2 <- stan_glm(earnk ~ height + male, data = earnings, seed = SEED)
 #+
 print(fit_2)
 #' for plotting scale back to dollar scale
@@ -140,7 +141,8 @@ ggplot(earnings, aes(height, earn)) +
 
 #' **Include interaction**
 #+ results='hide'
-fit_3 <- stan_glm(earnk ~ height + male + height:male, data=earnings)
+fit_3 <- stan_glm(earnk ~ height + male + height:male, data = earnings,
+                  seed = SEED)
 #+
 print(fit_3)
 #' for plotting scale back to dollar scale
@@ -191,39 +193,42 @@ ggplot(earnings, aes(height, earn)) +
 #' **Models on log scale**
 earnings$log_earn <- log(earnings$earn)
 #+ results='hide'
-logmodel_1 <- stan_glm(log_earn ~ height, data=earnings)
+logmodel_1 <- stan_glm(log_earn ~ height, data = earnings, seed = SEED)
 #+
 print(logmodel_1, digits=2)
 
 #' **Model on log10 scale**
 earnings$log10_earn <- log10(earnings$earn)
 #+ results='hide'
-log10model_1 <- stan_glm(log10_earn ~ height, data=earnings)
+log10model_1 <- stan_glm(log10_earn ~ height, data = earnings, seed = SEED)
 #+
 print(log10model_1, digits=3)
 
 #' **Model on log scale with two predictors**
 #+ results='hide'
-logmodel_2 <- stan_glm(log_earn ~ height + male, data=earnings)
+logmodel_2 <- stan_glm(log_earn ~ height + male, data = earnings, seed = SEED)
 #+
 print(logmodel_2, digits=2)
 
 #' **Model on log scale for the target and one predictor**
 earnings$log_height <- log(earnings$height)
 #+ results='hide'
-loglogmodel_2 <- stan_glm(log_earn ~ log_height + male, data=earnings)
+loglogmodel_2 <- stan_glm(log_earn ~ log_height + male, data = earnings,
+                          seed = SEED)
 #+
 print(loglogmodel_2, digits=2)
 
 #' **Model on log scale with two predictors and interaction**
-logmodel_3 <- stan_glm(log_earn ~ height + male + height:male, data=earnings)
+logmodel_3 <- stan_glm(log_earn ~ height + male + height:male, data = earnings,
+                       seed = SEED)
 #+
 print(logmodel_3, digits=2)
 
 #' **Model on log scale with standardized interaction**
 earnings$z_height <- with(earnings, (height - mean(height))/sd(height))
 #+ results='hide'
-logmodel_3a <- stan_glm(log_earn ~ z_height + male + z_height:male, data=earnings)
+logmodel_3a <- stan_glm(log_earn ~ z_height + male + z_height:male,
+                        data = earnings, seed = SEED)
 #+
 print(logmodel_3a, digits=2)
 
