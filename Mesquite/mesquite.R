@@ -46,7 +46,7 @@ fit_2 <- stan_glm(formula = log(weight) ~ log(diam1) + log(diam2) +
                       group, data=mesquite)
 (loo_2 <- loo(fit_2))
 
-#' ** Jacobian correction to make the models comparable**
+#' **Jacobian correction to make the models comparable**
 loo_2_with_jacobian <- loo_2
 loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
                                      log(mesquite$weight)
@@ -55,7 +55,7 @@ loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
 #' trusts that we know what we are comparing
 compare(kfold_1, loo_2_with_jacobian)
 
-#' **Posterior predictive checking for model in original scale
+#' **Posterior predictive checking for model in original scale**
 yrep_1 <- posterior_predict(fit_1)
 n_sims <- nrow(yrep_1)
 subset <- sample(n_sims, 100)
@@ -68,30 +68,24 @@ bpg <- bayesplot_grid(
   grid_args = list(ncol = 2),
   titles = c("Model for weight", "Model for log(weight)")
 )
-#+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Mesquite/figs","mesquite_ppc.pdf"), height=3, width=9)
-#+
+#' **Display posterior predictive checking plots**
 bpg
 #+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
-
+if (savefigs)
+    ggsave(root("Mesquite/figs","mesquite_ppc.pdf"), bpg, height=3, width=9)
 
 #' **Plot marginal posteriors**
 #+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
-#+ fig.height=3, fig.width=6
-mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
-#+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
+if (savefigs)
+    ggsave(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
 
 #' **Plot joint marginal posterior for log(canopy_height) and log(total_height)
-#+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
 mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"), size = 1)+geom_vline(xintercept=0)+geom_hline(yintercept=0)
 #+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
+if (savefigs)
+    ggsave(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
 
 #' **Additional transformed variables**
 mesquite$canopy_volume <- mesquite$diam1 * mesquite$diam2 * mesquite$canopy_height
@@ -118,6 +112,11 @@ looR2 <- function(fit) {
 round(looR2(fit_2),2)
 round(looR2(fit_3),2)
 
+#' **Compare Bayesian R^2**
+round(median(bayes_R2(fit_2)),2)
+round(median(bayes_R2(fit_3)),2)
+
+
 #' **Add canopy area and canopy shape**
 fit_4 <- stan_glm(formula = log(weight) ~ log(canopy_volume) +
                       log(canopy_area) + log(canopy_shape) +
@@ -127,10 +126,14 @@ print(fit_4)
 (loo_4 <- loo(fit_4))
 compare_models(loo_2, loo_4)
 round(looR2(fit_4),2)
+round(median(bayes_R2(fit_4)),2)
+
+#' **Plot Bayesian R^2**
+#+ results='hide', fig.height=3, fig.width=6
+mcmc_hist(data.frame(bayes_R2(fit_4)), binwidth=0.005)+
+  xlab('Bayesian R^2') + scale_y_continuous(breaks=NULL)
 
 #' **Plot marginals**
-#+ fig.height=3, fig.width=6
-mcmc_areas(as.matrix(fit_4))
 #+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_4))
 
@@ -146,6 +149,7 @@ fit_5 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_shape) +
 (loo_5 <- loo(fit_5))
 compare_models(loo_4, loo_5)
 round(looR2(fit_5),2)
+round(median(bayes_R2(fit_5)),2)
 
 #' **A model in a previous edition**
 fit_6 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_area) +
@@ -153,3 +157,4 @@ fit_6 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_area) +
 (loo_6 <- loo(fit_6))
 compare_models(loo_5, loo_6)
 round(looR2(fit_6),2)
+round(median(bayes_R2(fit_6)),2)
