@@ -81,7 +81,7 @@ for (i in 1:n_plotted){
   temp <- seq(0, 100, 0.1)
   prob <- array(NA, c(length(temp), n_cutpoints+1))
   expected <- rep(NA, length(temp))
-  prob[,1] <- 1 - invlogit((temp-cutpoints[1]/s))
+  prob[,1] <- 1 - invlogit((temp-cutpoints[1])/s)
   expected <- 1*prob[,1]
   for (i_cut in 2:n_cutpoints){
     prob[,i_cut] <- invlogit((temp-cutpoints[i_cut-1])/s) -
