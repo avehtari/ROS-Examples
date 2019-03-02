@@ -82,7 +82,10 @@ if (savefigs)
     ggsave(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
 
 #' **Plot joint marginal posterior for log(canopy_height) and log(total_height)
-mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"), size = 1)+geom_vline(xintercept=0)+geom_hline(yintercept=0)
+mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"), size = 1) +
+    geom_vline(xintercept=0) +
+    geom_hline(yintercept=0) +
+    labs(x="coef of log(canopy_height)", y="coef of log(total_height)")
 #+ eval=FALSE, include=FALSE
 if (savefigs)
     ggsave(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
