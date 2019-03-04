@@ -10,12 +10,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -30,10 +30,12 @@ n <- length(mother_height)
 
 #' **Linear regression**
 # MCMC sampling
-#fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights)
-# optimization and normal approximation at the mode
 #+ results='hide'
-fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, algorithm="optimizing")
+tic();fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, algorithm='optimizing', thin=1);toc()
+# optimization and normal approximation at the mode is faster with similar
+# accuracy, because n is big and there are only three parameters to estimate
+# fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights,
+#                   algorithm="optimizing")
 #+
 print(fit_1, digits=2)
 ab_hat <- coef(fit_1)

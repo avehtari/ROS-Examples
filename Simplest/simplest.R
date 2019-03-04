@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -35,9 +35,12 @@ y <- a + b*x + sigma*rnorm(n)
 fake <- data.frame(x, y)
 
 #' **Linear regression model**
-#+ results='hide'
-fit_1 <- stan_glm(y ~ x, data = fake, seed=2141)
-#+
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit_1 <- stan_glm(y ~ x, data = fake, seed=2141, refresh = 0)
 print(fit_1, digits=2)
 
 #' **Plot for the book**
@@ -70,7 +73,7 @@ round(sd(y_0)/sqrt(n), 2)
 
 #' **Estimating the mean is the same as regressing on a constant term**
 #+ results='hide'
-fit_2 <- stan_glm(y_0 ~ 1, data = fake_0, seed=2141,
+fit_2 <- stan_glm(y_0 ~ 1, data = fake_0, seed=2141, refresh = 0,
                   prior_intercept = NULL, prior = NULL, prior_aux = NULL)
 #+
 print(fit_2)
@@ -86,6 +89,7 @@ se_0 <- sd(y_0)/sqrt(n_0)
 se_1 <- sd(y_1)/sqrt(n_1)
 se <- sqrt(se_0^2 + se_1^2)
 print(diff)
+
 print(se)
 
 #' **Estimating a difference is the same as regressing on an indicator variable**
@@ -93,7 +97,7 @@ n <- n_0 + n_1
 y <- c(y_0, y_1)
 x <- c(rep(0, n_0), rep(1, n_1))
 fake <- data.frame(y, x)
-fit_3 <- stan_glm(y ~ x, data = fake, seed=2141,
+fit_3 <- stan_glm(y ~ x, data = fake, seed=2141, refresh = 0, 
                   prior_intercept = NULL, prior = NULL, prior_aux = NULL)
 print(fit_3)
 
@@ -114,6 +118,6 @@ text(.95, 1 + mean(y[x==1]), expression(paste(bar(y)[1], " = 8.38")), col="gray3
 if (savefigs) dev.off()
 
 #' **Repeat with flat priors**
-fit_3b <- stan_glm(y ~ x, data = fake, seed=2141, 
+fit_3b <- stan_glm(y ~ x, data = fake, seed=2141, refresh = 0,
                   prior=NULL, prior_intercept=NULL, prior_aux=NULL)
 print(fit_3b)

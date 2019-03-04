@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 
@@ -25,10 +25,10 @@ read.page <- function (datapage){
   data <- data[1:30,]           # file has only 30 rows of data
   countries <- as.character (data[,"X"])
   numbers <- data[,variables.keep]
-  n <- length (countries)
-  recent.data <- rep (NA, n)
+  n <- length(countries)
+  recent.data <- rep(NA, n)
   for (i in 1:n) {
-    y <- as.numeric (numbers[i,])
+    y <- as.numeric(numbers[i,])
     ok <- !is.na(y)
     if (sum(ok)>0) {
       years.keep <- (1:length(y))[ok]
@@ -38,7 +38,7 @@ read.page <- function (datapage){
       recent.data[i] <- NA
     }
   }
-  return (list (countries=countries, recent.data=recent.data))
+  return(list (countries=countries, recent.data=recent.data))
 }
 expend <- read.page(root("HealthExpenditure/data","healthexpenditure.csv"))
 life <- read.page(root("HealthExpenditure/data","lifeexpectancy.csv"))
@@ -62,10 +62,10 @@ doctor <- doctor$recent.data
 png(root("HealthExpenditure/figs","healthscatter.png"), height=600, width=700)
 #+
 par(mgp=c(1.7,.5,0), tck=-.01, mar=c(3,3,.1,.1))
-plot (expend, life, xlim=c(0,1.05*max(expend)), xaxs="i",
+plot(expend, life, xlim=c(0,1.05*max(expend)), xaxs="i",
       type="n", xlab="Health care spending (PPP US$)",
       ylab="Life expectancy (years)")
-#symbols (expend, life, circles=sqrt(doctor), inches=.8, add=TRUE, fg="gray80")
+#symbols(expend, life, circles=sqrt(doctor), inches=.8, add=TRUE, fg="gray80")
 text(expend, life, countries, col=color)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
@@ -80,12 +80,12 @@ par(mgp=c(2.5,.7,0), tck=-.01, mar=c(4,4,.1,.1))
 plot(expend[!removec], life[!removec], xlim=c(0,1.05*max(expend)),
       xaxs="i",  type="n", xlab="Health care spending (PPP US$)",
       ylab="Life expectancy (years)", cex.axis=1.3, cex.lab=1.3, las=1, xaxt="n", bty="l")
-#symbols (expend[!removec], life[!removec], circles=sqrt(doctor[!removec]), inches=.8, add=TRUE, fg="gray80")
+#symbols(expend[!removec], life[!removec], circles=sqrt(doctor[!removec]), inches=.8, add=TRUE, fg="gray80")
 axis(1, seq(0,8000,2000), cex.axis=1.3, cex.lab=1.3)
 text(expend[!removec], life[!removec], countries[!removec],
       col=color[!removec], cex=1.3)
-for (x in seq(2000,6000,2000)) abline (v=x, col="gray", lwd=.5)
-for (y in seq(74,82,2)) abline (y,0,col="gray", lwd=.5)
+for (x in seq(2000,6000,2000)) abline(v=x, col="gray", lwd=.5)
+for (y in seq(74,82,2)) abline(y,0,col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off ()
 

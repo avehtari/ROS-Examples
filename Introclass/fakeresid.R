@@ -9,8 +9,12 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -22,7 +26,12 @@ introclass  <- data.frame(midterm = grades[,"Midterm"],
                           final = grades[,"Final"])
 
 #' **Fit linear regression model**
-fit_1 <- stan_glm(final ~ midterm, data = introclass)
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit_1 <- stan_glm(final ~ midterm, data = introclass, refresh = 0)
 print(fit_1)
 
 #' **Compute residuals**<br>
@@ -35,7 +44,7 @@ resid <- introclass$final - predicted
 
 #' **Plot residuals vs predicted**
 #+ eval=FALSE, include=FALSE
-postscript(root("Introclass/figs","fakeresid1a.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid1a.ps"), height=3.8, width=4.5)
 #+
 plot(predicted, resid, xlab="predicted value", ylab="residual",
      main="Residuals vs.\ predicted values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
@@ -52,7 +61,7 @@ plot(introclass$final, resid, xlab="observed value", ylab="residual", main="Resi
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Simulate fake data**
 a <- 65
@@ -72,20 +81,20 @@ resid_fake <- introclass$final_fake - predicted_fake
 
 #' **Plot residuals vs predicted**
 #+ eval=FALSE, include=FALSE
-postscript(root("Introclass/figs","fakeresid2a.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid2a.ps"), height=3.8, width=4.5)
 #+
 plot(predicted_fake, resid_fake, xlab="predicted value", ylab="residual", main="Fake data:  resids vs.\ predicted", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot residuals vs observed**
 #+ eval=FALSE, include=FALSE
-postscript(root("Introclass/figs","fakeresid2b.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid2b.ps"), height=3.8, width=4.5)
 #+
 plot(introclass$final_fake, resid_fake, xlab="observed value", ylab="residual", main="Fake data:  resids vs.\ observed", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

@@ -10,8 +10,12 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -134,20 +138,20 @@ qplot(earnings_top, data=SIS_pos, breaks=seq(0,100,10),
       fill=I("white"), col=I("black")) +
     xlab("earnings") + ggtitle("Observed earnings (excluding 0's)")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.hist2.gg.pdf"), width = 5, height = 4)
+if (savefigs) ggsave(root("SIS/figs","impute.hist2.gg.pdf"), width = 5, height = 4)
 
 qplot(earnings_imp_2, data = filter(SIS, is.na(earnings)),
      breaks=seq(0,100,10), fill=I("white"), col=I("black")) +
     xlab("earnings") + ggtitle("Deterministic imputation of earnings")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.hist3.gg.pdf"), width = 5, height = 4)
+if (savefigs) ggsave(root("SIS/figs","impute.hist3.gg.pdf"), width = 5, height = 4)
 
 #' Random imputation of earnings
 qplot(earnings_imp_4, data = filter(SIS, is.na(earnings)),
      breaks=seq(0,100,10), fill=I("white"), col=I("black")) +
     xlab("earnings") + ggtitle("Random imputation of earnings")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.hist4.gg.pdf"), width = 5, height = 4)
+if (savefigs) ggsave(root("SIS/figs","impute.hist4.gg.pdf"), width = 5, height = 4)
 
 #' Deterministic imputation scatter plot
 ggplot() + 
@@ -158,7 +162,7 @@ ggplot() +
     xlab("Regression prediction") + ylab("Imputed income") +
     ggtitle("Deterministic imputation")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.scat1.gg.pdf"), width = 5, height = 4)
+if (savefigs) ggsave(root("SIS/figs","impute.scat1.gg.pdf"), width = 5, height = 4)
 
 #' Random imputation scatter plot
 ggplot() + 
@@ -169,7 +173,7 @@ ggplot() +
     xlab("Regression prediction") + ylab("Imputed income") +
     ggtitle("Random imputation")
 #+ eval=FALSE, include=FALSE
-ggsave(root("SIS/figs","impute.scat2.gg.pdf"), width = 5, height = 4)
+if (savefigs) ggsave(root("SIS/figs","impute.scat2.gg.pdf"), width = 5, height = 4)
 
 ###############################################################################
 

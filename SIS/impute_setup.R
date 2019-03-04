@@ -1,7 +1,22 @@
-setwd("~/AndrewFiles/books/regression.and.other.stories/Examples/SIS")
+#' ---
+#' title: "Regression and Other Stories: SIS"
+#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+#' date: "`r format(Sys.Date())`"
+#' ---
+
+#' Regression-based imputation for the Social Indicators Survey
+#' 
+#' -------------
+#' 
+
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
+#' **Load packages**
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
 
 ## Read in data from wave 3 of the Social Indicators Survey
-
 attach.overwrite <- function(a, overwrite=TRUE, name="attach.all"){
 #
 # Version of the "attach" function that overwrites variables if necessary.
@@ -17,7 +32,7 @@ attach.overwrite <- function(a, overwrite=TRUE, name="attach.all"){
   attach(a, name=name)
 }
 
-wave3 <- read.table("siswave3v4impute3.csv", header=TRUE, sep=",")
+wave3 <- read.table(root("SIS/data","siswave3v4impute3.csv"), header=TRUE, sep=",")
 attach.overwrite(wave3)
 n <- nrow(wave3)
 

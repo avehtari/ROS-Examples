@@ -10,8 +10,12 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -21,7 +25,12 @@ library("loo")
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
+#+ eval=FALSE, include=FALSE
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
+
+#' Set random seed for reproducability
+SEED <- 3579
 
 #' **Load data**
 data(roaches)
@@ -31,10 +40,8 @@ roaches$roach100 <- roaches$roach1 / 100
 
 #' ### Poisson model
 #' 
-#+ results='hide'
 fit_1 <- stan_glm(y ~ roach100 + treatment + senior, family=poisson,
-  offset=log(exposure2), data=roaches)
-#+
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
 prior_summary(fit_1)
 print(fit_1, digits=2)
 
@@ -59,10 +66,8 @@ print(mean(yrep_1==0), digits=2)
 #'
 #' negative-binomial model is over-dispersed compared to Poisson
 #' 
-#+ results='hide'
 fit_2 <- stan_glm(y ~ roach100 + treatment + senior, family=neg_binomial_2,
-  offset=log(exposure2), data=roaches)
-#+
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
 prior_summary(fit_2)
 print(fit_2, digits=2)
 loo_2 <- loo(fit_2)
@@ -76,7 +81,7 @@ yrep_2 <- posterior_predict(fit_2)
 pbg <- bayesplot_grid(ppc_1, ppc_2,
                       grid_args = list(ncol = 2),
                       titles = c("Poisson", "negative-binomial"))
-ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9)
+if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9)
 
 #' **Predictive checking with test statistic**<br>
 #' ppc with proportion of zero counts test statistic
@@ -118,7 +123,7 @@ roaches$log_exposure2 <- log(roaches$exposure2)
 fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior,
                  zi ~ logp1_roach1 + treatment + senior),
              family=zero_inflated_negbinomial(), data=roaches,
-             prior=set_prior("normal(0,1)"))
+             prior=set_prior("normal(0,1)"), seed=SEED, refresh=500)
 #+
 print(fit_3)
 loo_3 <- loo(fit_3)
@@ -131,7 +136,7 @@ yrep_3 <- posterior_predict(fit_3)
 (ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[subset,]+1))+
      xlab('log10(y+1)'))
 #+ eval=FALSE, include=FALSE
-ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5)
+if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5)
 
 #' **Predictive checking with test statistic**<br>
 #' ppc with zero count test statistic

@@ -31,8 +31,10 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
@@ -66,7 +68,7 @@ round(sum(poststrat_data$N * y_bar_cells), 3)
 round(mean(poll$vote, na.rm=TRUE), 3)
 
 #' **stan_glm**
-fit_1 <- stan_glm(vote ~ factor(pid), data = poll)
+fit_1 <- stan_glm(vote ~ factor(pid), data = poll, refresh = 0)
 print(fit_1, digits=2)
 
 #' **Poststrat using posterior_linpred()**
@@ -82,7 +84,7 @@ print(c(mean(poststrat_est_2), mad(poststrat_est_2)), digits=2)
 #' ### Logistic
 
 #' **Fit the regression**
-fit <- stan_glm(vote ~ factor(pid), family=binomial(link="logit"), data = poll)
+fit <- stan_glm(vote ~ factor(pid), family=binomial(link="logit"), data = poll, refresh = 0)
 print(fit, digits=2)
 
 #' **Raw estimate**
@@ -110,7 +112,7 @@ poll <- data.frame(pid=rep(c("Republican", "Democrat", "Independent"),
                            c(2,2,2)), male=rep(c(0,1), 3))
 N_population <- c(0.16, 0.17, 0.19, 0.17, 0.16, 0.15)
 
-
+# the following doesn't work
 fit_2 <- stan_glm(vote ~ factor(pid) + male + factor(pid):male, data=poll)
 
 N <- 5

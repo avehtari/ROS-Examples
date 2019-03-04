@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstan")
@@ -47,11 +47,8 @@ if (savefigs) dev.off()
 
 #' **Fit the geometry based nonlinear model**
 stanfile_golf1 <- root("Golf","golf1.stan")
-#+ comment=NA
 writeLines(readLines(stanfile_golf1))
-#+ results='hide'
 fit1 <- stan(file = stanfile_golf1, data = golf_data)
-#+
 print(fit1)
 
 #' Post-processing
@@ -60,11 +57,8 @@ sigma_hat <- median(sims1$sigma)
 
 #' **Fit naive logistic regression**
 stanfile_golf2 <- root("Golf","golf_logistic.stan")
-#+ comment=NA
 writeLines(readLines(stanfile_golf2))
-#+ results='hide'
 fit2 <- stan(file = stanfile_golf2, data = golf_data)
-#+
 print(fit2)
 
 #' Post-processing

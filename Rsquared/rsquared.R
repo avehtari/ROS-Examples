@@ -35,12 +35,12 @@
 #' where $\pi_n^s$ are predicted probabilities.
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -48,10 +48,13 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
 library("foreign")
+# for reproducability
 SEED <- 1800
 set.seed(SEED)
+#+ eval=FALSE, include=FALSE
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
 
 #' # Function for Bayesian R-squared for stan_glm models. 
 #' 
@@ -84,12 +87,11 @@ rsq_2 <- var(yhat)/(var(yhat) + var(r))
 round(c(rsq_1, rsq_2), 3)
 
 #' **Bayes fit**
-#+ results='hide'
 fit_bayes <- stan_glm(y ~ x, data = xy,
   prior_intercept = normal(0, 0.2, autoscale = FALSE),
   prior = normal(1, 0.2, autoscale = FALSE),
   prior_aux = NULL,
-  seed = SEED
+  seed = SEED, refresh = 0
 )
 posterior <- as.matrix(fit_bayes, pars = c("(Intercept)", "x"))
 post_means <- colMeans(posterior)
@@ -244,8 +246,8 @@ ggsave("fig/bayesr2post.pdf", width = 5, height = 4)
 set.seed(20)
 y<-rbinom(n=20,size=1,prob=(1:20-0.5)/20)
 data <- data.frame(rvote=y, income=1:20)
-#+ results='hide'
-fit_logit <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
+fit_logit <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data,
+                      refresh=0)
 
 #' **Median Bayesian R^2**
 round(median(bayesR2<-bayes_R2(fit_logit)), 2)
@@ -271,9 +273,8 @@ mesquite$canopy_shape <- mesquite$diam1 / mesquite$diam2
 (n <- nrow(mesquite))
 
 #' **Predict log weight model with log canopy volume, log canopy shape, and group**
-#+ results='hide'
 fit_5 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_shape) +
-    group, data=mesquite)
+    group, data=mesquite, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit_5)), 2)
@@ -298,9 +299,8 @@ lowbwt$race <- factor(lowbwt$race)
 (n <- nrow(lowbwt))
 
 #' **Predict low birth weight**
-#+ results='hide'
 fit <- stan_glm(low ~ age + lwt + race + smoke,
-                family=binomial(link="logit"), data=lowbwt)
+                family=binomial(link="logit"), data=lowbwt, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit)), 2)
@@ -321,8 +321,7 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 #' 
 
 #' **Predict birth weight**
-#+ results='hide'
-fit <- stan_glm(bwt ~ age + lwt + race + smoke, data=lowbwt)
+fit <- stan_glm(bwt ~ age + lwt + race + smoke, data=lowbwt, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit)), 2)
@@ -345,8 +344,8 @@ kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 (n <- nrow(kidiq))
 
 #' **Predict test score**
-#+ results='hide'
-fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq, seed=1507)
+fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq,
+                  seed=SEED, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit_3)), 2)
@@ -360,16 +359,15 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
     geom_vline(xintercept=median(bayesR2))
 
 
-#' **Add five pure noise predictors to the data
+#' **Add five pure noise predictors to the data**
 set.seed(1507)
 n <- nrow(kidiq)
 kidiqr <- kidiq
 kidiqr$noise <- array(rnorm(5*n), c(n,5))
 
 #' **Linear regression with additional noise predictors**
-#+ results='hide'
-fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr, seed=1507)
-#+
+fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr,
+                   seed=SEED, refresh=0)
 print(fit_3n)
 
 #' **Median Bayesian R2**
@@ -377,7 +375,7 @@ round(median(bayesR2n<-bayes_R2(fit_3n)), 2)
 
 #' Median Bayesian R2 is higher with additional noise predictors, but
 #' the distribution of Bayesian R2 reveals that the increase is not
-#' practically useful
+#' practically relevant.
 #' 
 
 #' **Plot posterior of Bayesian R2**
@@ -405,13 +403,9 @@ earnings$log_earn <- log(earnings$earn)
 
 #' **Bayesian logistic regression on non-zero earnings**</br>
 #' Predict using height and sex
-#+ results='hide'
 fit_1a <- stan_glm(positive ~ height + male,
                    family = binomial(link = "logit"),
-                   data = earnings_all)
-
-#' There is a clear difference in predictive performance.
-#' 
+                   data = earnings_all, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit_1a)), 3)
@@ -424,22 +418,14 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.002) + pxl +
     xlab('Bayesian R2') +
     geom_vline(xintercept=median(bayesR2))
 
-#' With plenty of data, there is not much difference between using
-#' draws from residuals or from sigma.
-#' 
-
 #' **Bayesian probit regression on non-zero earnings**</br>
-#+ results='hide'
 fit_1p <- stan_glm(positive ~ height + male,
                    family = binomial(link = "probit"),
-                   data = earnings_all)
+                   data = earnings_all, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2), 3)
 round(median(bayesR2p<-bayes_R2(fit_1p)), 3)
-
-#' LOO-R2 is slightly lower than median of Bayesian R2
-#' 
 
 #' **Compare logistic and probit models using new Bayesian R2**
 #+ message=FALSE, error=FALSE, warning=FALSE
@@ -460,8 +446,7 @@ bayesplot_grid(p1,p2)
 #' 
 
 #' **Bayesian model on positive earnings on log scale**
-#+ results='hide'
-fit_1b <- stan_glm(log_earn ~ height + male, data = earnings)
+fit_1b <- stan_glm(log_earn ~ height + male, data = earnings, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit_1b)), 3)

@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -22,7 +22,11 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
+#+ eval=FALSE, include=FALSE
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
+
+#' Set random seed for reproducability
 SEED <- 7783
 
 #' **Load data**
@@ -38,9 +42,13 @@ height_jitter_add <- runif(n, -.2, .2)
 #' ### Normal linear regression
 
 #' **Model on 1k dollars scale**
-#+ results='hide'
-fit_1 <- stan_glm(earnk ~ height, data = earnings, seed = SEED)
-#+
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit_1 <- stan_glm(earnk ~ height, data = earnings,
+                  seed = SEED, refresh = 0)
 print(fit_1)
 #' for plotting scale back to dollar scale
 coef1 <- coef(fit_1)*1000
@@ -91,7 +99,8 @@ gg_earnings +
 
 #' **Include male/female**
 #+ results='hide'
-fit_2 <- stan_glm(earnk ~ height + male, data = earnings, seed = SEED)
+fit_2 <- stan_glm(earnk ~ height + male, data = earnings,
+                  seed = SEED)
 #+
 print(fit_2)
 #' for plotting scale back to dollar scale
@@ -142,7 +151,7 @@ ggplot(earnings, aes(height, earn)) +
 #' **Include interaction**
 #+ results='hide'
 fit_3 <- stan_glm(earnk ~ height + male + height:male, data = earnings,
-                  seed = SEED)
+                  seed = SEED, refresh = 0)
 #+
 print(fit_3)
 #' for plotting scale back to dollar scale
@@ -193,20 +202,23 @@ ggplot(earnings, aes(height, earn)) +
 #' **Models on log scale**
 earnings$log_earn <- log(earnings$earn)
 #+ results='hide'
-logmodel_1 <- stan_glm(log_earn ~ height, data = earnings, seed = SEED)
+logmodel_1 <- stan_glm(log_earn ~ height, data = earnings,
+                       seed = SEED, refresh = 0)
 #+
 print(logmodel_1, digits=2)
 
 #' **Model on log10 scale**
 earnings$log10_earn <- log10(earnings$earn)
 #+ results='hide'
-log10model_1 <- stan_glm(log10_earn ~ height, data = earnings, seed = SEED)
+log10model_1 <- stan_glm(log10_earn ~ height, data = earnings,
+                         seed = SEED, refresh = 0)
 #+
 print(log10model_1, digits=3)
 
 #' **Model on log scale with two predictors**
 #+ results='hide'
-logmodel_2 <- stan_glm(log_earn ~ height + male, data = earnings, seed = SEED)
+logmodel_2 <- stan_glm(log_earn ~ height + male, data = earnings,
+                       seed = SEED, refresh = 0)
 #+
 print(logmodel_2, digits=2)
 
@@ -214,13 +226,13 @@ print(logmodel_2, digits=2)
 earnings$log_height <- log(earnings$height)
 #+ results='hide'
 loglogmodel_2 <- stan_glm(log_earn ~ log_height + male, data = earnings,
-                          seed = SEED)
+                          seed = SEED, refresh = 0)
 #+
 print(loglogmodel_2, digits=2)
 
 #' **Model on log scale with two predictors and interaction**
 logmodel_3 <- stan_glm(log_earn ~ height + male + height:male, data = earnings,
-                       seed = SEED)
+                       seed = SEED, refresh = 0)
 #+
 print(logmodel_3, digits=2)
 
@@ -228,7 +240,7 @@ print(logmodel_3, digits=2)
 earnings$z_height <- with(earnings, (height - mean(height))/sd(height))
 #+ results='hide'
 logmodel_3a <- stan_glm(log_earn ~ z_height + male + z_height:male,
-                        data = earnings, seed = SEED)
+                        data = earnings, seed = SEED, refresh = 0)
 #+
 print(logmodel_3a, digits=2)
 
@@ -238,7 +250,7 @@ print(logmodel_3a, digits=2)
 sims <- as.matrix(logmodel_2)
 n_sims <- nrow(sims)
 
-# **Plot posterior draws of linear model on log scale**
+#' **Plot posterior draws of linear model on log scale**
 #+ eval=FALSE, include=FALSE
 postscript(root("Earnings/figs","heights.log1a.ps"), horizontal=TRUE)
 #+
@@ -254,7 +266,7 @@ curve(coef(logmodel_2)[1] + coef(logmodel_2)[2]*x, add=TRUE)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-# **Plot posterior draws of linear model on log scale, ggplot version**
+#' **Plot posterior draws of linear model on log scale, ggplot version**
 subset <- sample(n_sims, 10)
 ggplot(earnings, aes(height, log_earn)) +
   geom_jitter(height = 0, width = 0.25) +

@@ -10,13 +10,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#' 
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -24,7 +23,9 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
+#+ eval=FALSE, include=FALSE
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
 
 #' **Load data**
 unemp <- read.table(root("Unemployment/data","unemployment_simple.dat"),
@@ -48,9 +49,7 @@ if (savefigs) dev.off()
 #' **Fit a 1st-order autogregression**
 n <- nrow(unemp)
 unemp$y_lag <- c(NA, unemp$y[1:(n-1)])
-#+ results='hide'
-fit_lag <- stan_glm(y ~ y_lag, data=unemp)
-#+
+fit_lag <- stan_glm(y ~ y_lag, data=unemp, refresh=0)
 print(fit_lag, digits=2)
 
 #' **Simulate replicated datasets**

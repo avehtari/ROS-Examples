@@ -102,7 +102,7 @@
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
 #'   - [Congress/](https://github.com/avehtari/RAOS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
-#'   - [NES/](HTTPS://GITHUB.COM/AVEHTARI/RAOS-EXAMPLES/NES/)
+#'   - [NES/](https://github.com/avehtari/RAOS-examples/nes/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'   - [Beauty/](https://github.com/avehtari/RAOS-Examples/tree/master/Beauty/)
 #'     - [beauty.html](Beauty/beauty.html) - Student evaluations of instructors’ beauty and teaching quality
@@ -111,7 +111,7 @@
 #'   - [KidIQ/](https://github.com/avehtari/RAOS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'     - [kidiq_loo.html](KidIQ/kidiq_loo.html) - Linear regression and leave-one-out cross-validation
-#'     - [kidiq_looR2.html](KidIQ/kidiq_looR2.html) - Linear regression and leave-one-out cross-validation R-squared
+#'     - [kidiq_R2.html](KidIQ/kidiq_R2.html) - Linear regression and Bayes-R2 and LOO-R2
 #'     - [kidiq_kcv.html](KidIQ/kidiq_kcv.html) - Linear regression and K-fold cross-validation
 #'   - [Newcomb/](https://github.com/avehtari/RAOS-Examples/tree/master/Newcomb/)
 #'     - [newcomb.html](Newcomb/newcomb.html) - Posterior predictive checking of Normal model for Newcomb's speed of light data
@@ -234,7 +234,7 @@
 #'   - [KidIQ/](https://github.com/avehtari/RAOS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'     - [kidiq_loo.html](KidIQ/kidiq_loo.html) - Linear regression and leave-one-out cross-validation
-#'     - [kidiq_looR2.html](KidIQ/kidiq_looR2.html) - Linear regression and leave-one-out cross-validation R-squared
+#'     - [kidiq_R2.html](KidIQ/kidiq_R2.html) - Linear regression and Bayes-R2 and LOO-R2
 #'     - [kidiq_kcv.html](KidIQ/kidiq_kcv.html) - Linear regression and K-fold cross-validation
 #'   - [Lalonde/](https://github.com/avehtari/RAOS-Examples/tree/master/Lalonde/)
 #'   - [LogisticPriors/](https://github.com/avehtari/RAOS-Examples/tree/master/LogisticPriors/)

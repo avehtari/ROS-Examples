@@ -9,21 +9,24 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("foreign")
+# for reproducability
+SEED <- 1507
 
 #' **Load children's test scores data**
 kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 
 #' **Bayesian regression with the original predictors**
-#+ results='hide'
-stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-#+
+stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq,
+                       seed=SEED, refresh = 0)
 print(stan_fit_3)
 
 #' **Leave-one-out cross-validation**
@@ -31,7 +34,5 @@ loo3 <- loo(stan_fit_3)
 loo3
 
 #' **K-fold cross-validation**
-#+ results='hide'
 kcv3 <- kfold(stan_fit_3)
-#+
 kcv3

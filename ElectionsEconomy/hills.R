@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
@@ -98,8 +98,9 @@ lines (xx, yy)
 if (savefigs) dev.off()
 
 #' **Bayesian model with flat prior**
-M3 <- stan_glm(vote ~ growth, data = hibbs,
-               prior_intercept=NULL, prior=NULL, prior_aux=NULL)
+M3 <- stan_glm(vote ~ growth, data = hibbs, 
+               prior_intercept=NULL, prior=NULL, prior_aux=NULL,
+               refresh = 0)
 sims <- as.data.frame(M3)
 a <- sims[,1]
 b <- sims[,2]

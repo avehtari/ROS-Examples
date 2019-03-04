@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -31,15 +31,16 @@ kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
 #' 
 
 #' **A single binary predictor **
-#+ results='hide'
-fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq)
-#+
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq, refresh = 0)
 print(fit_1)
 
 #' **A single continuous predictor **
-#+ results='hide'
-fit_2 <- stan_glm(kid_score ~ mom_iq, data=kidiq)
-#+
+fit_2 <- stan_glm(kid_score ~ mom_iq, data=kidiq, refresh = 0)
 print(fit_2)
 
 #' **Displaying a regression line as a function of one input variable**
@@ -60,9 +61,7 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
 #' 
 
 #' **Linear regression**
-#+ results='hide'
-fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq)
-#+
+fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq, refresh = 0)
 print(fit_3)
 
 #' **Alternative display**
@@ -90,9 +89,8 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
   labs(x = "Mother IQ score", y = "Child test score")
 
 #' **Two fitted regression lines -- model with interaction**
-#+ results='hide'
-fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_hs:mom_iq, data=kidiq)
-#+
+fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_hs:mom_iq, data=kidiq,
+                  refresh = 0)
 print(fit_4)
 colors <- ifelse(kidiq$mom_hs==1, "black", "gray")
 plot(kidiq$mom_iq, kidiq$kid_score,
@@ -175,30 +173,25 @@ if (savefigs) dev.off()
 #' **Center predictors to have zero mean**
 kidiq$c_mom_hs <- kidiq$mom_hs - mean(kidiq$mom_hs)
 kidiq$c_mom_iq <- kidiq$mom_iq - mean(kidiq$mom_iq)
-#+ results='hide'
-fit_4c <- stan_glm(kid_score ~ c_mom_hs + c_mom_iq + c_mom_hs:c_mom_iq, data=kidiq)
-#+
+fit_4c <- stan_glm(kid_score ~ c_mom_hs + c_mom_iq + c_mom_hs:c_mom_iq,
+                   data=kidiq, refresh = 0)
 print(fit_4c)
 
 #' **Center predictors based on a reference point**
 kidiq$c2_mom_hs <- kidiq$mom_hs - 0.5
 kidiq$c2_mom_iq <- kidiq$mom_iq - 100
-#+ results='hide'
-fit_4c2 <- stan_glm(kid_score ~ c2_mom_hs + c2_mom_iq + c2_mom_hs:c2_mom_iq, data=kidiq)
-#+
+fit_4c2 <- stan_glm(kid_score ~ c2_mom_hs + c2_mom_iq + c2_mom_hs:c2_mom_iq,
+                    data=kidiq, refresh = 0)
 print(fit_4c2)
 
 #' **Center and scale predictors to have zero mean and sd=1/2**
 kidiq$z_mom_hs <- (kidiq$mom_hs - mean(kidiq$mom_hs))/(2*sd(kidiq$mom_hs))
 kidiq$z_mom_iq <- (kidiq$mom_iq - mean(kidiq$mom_iq))/(2*sd(kidiq$mom_iq))
-#+ results='hide'
-fit_4z <- stan_glm(kid_score ~ z_mom_hs + z_mom_iq + z_mom_hs:z_mom_iq, data=kidiq)
-#+
+fit_4z <- stan_glm(kid_score ~ z_mom_hs + z_mom_iq + z_mom_hs:z_mom_iq,
+                   data=kidiq, refresh = 0)
 print(fit_4z)
 
 
 #' **Predict using working status of mother**
-#+ results='hide'
-fit_5 <- stan_glm(kid_score ~ as.factor(mom_work), data=kidiq)
-#+
+fit_5 <- stan_glm(kid_score ~ as.factor(mom_work), data=kidiq, refresh = 0)
 print(fit_5)

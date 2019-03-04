@@ -9,8 +9,12 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -41,15 +45,15 @@ round(error_rate, 2)
 
 #' ### Residual plot
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logitresidsa.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsa.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,1), c(-1,1), xlab="Estimated  Pr (switching)", ylab="Observed - estimated",
      type="n", main="Residual plot", mgp=c(2,.5,0))
 abline(0,0, col="gray", lwd=.5)
 points(pred8, wells$y-pred8, pch=20, cex=.2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' ### Binned residual plots
 #'
@@ -76,8 +80,8 @@ binned_resids <- function (x, y, nclass=sqrt(length(x))){
 
 #' **Binned residual plot with respect to predicted probability**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logitresidsb.ps"),
-           height=3.5, width=4, horizontal=T)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsb.ps"),
+                         height=3.5, width=4, horizontal=T)
 #+
 br8 <- binned_resids(pred8, wells$y-pred8, nclass=40)$binned
 plot(range(br8[,1]), range(br8[,2],br8[,6],-br8[,6]),
@@ -88,12 +92,12 @@ lines(br8[,1], br8[,6], col="gray", lwd=.5)
 lines(br8[,1], -br8[,6], col="gray", lwd=.5)
 points(br8[,1], br8[,2], pch=20, cex=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Binned residual plots with respect to predictors**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","logitresids.2a.ps"),
-           height=3.5, width=4, horizontal=T)
+if (savefigs) postscript(root("Arsenic/figs","logitresids.2a.ps"),
+                         height=3.5, width=4, horizontal=T)
 #+
 br <- binned_resids(wells$dist, wells$y-pred8, nclass=40)$binned
 plot(range(br[,1]), range(br[,2],br[,6],-br[,6]),
@@ -105,10 +109,10 @@ lines(br[,1], br[,6], col="gray", lwd=.5)
 lines(br[,1], -br[,6], col="gray", lwd=.5)
 points(br[,1], br[,2], pch=20, cex=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logitresids.2b.ps"),
-           height=3.5, width=4, horizontal=T)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresids.2b.ps"),
+                         height=3.5, width=4, horizontal=T)
 #+
 br <- binned_resids(wells$arsenic, wells$y-pred8, nclass=40)$binned
 plot(range(0,br[,1]), range(br[,2],br[,6],-br[,6]),
@@ -119,7 +123,7 @@ lines (br[,1], br[,6], col="gray", lwd=.5)
 lines (br[,1], -br[,6], col="gray", lwd=.5)
 points (br[,1], br[,2], pch=20, cex=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Predict switching with distance, log(arsenic), education and intercations**
 #' Use non-centered predictors for easier plotting
@@ -144,8 +148,8 @@ round(error_rate, 2)
 
 #' **Plots for log model**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logmodel.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logmodel.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 jitter_binary <- function(a, jitt=.05){
   a + (1-2*a)*runif(length(a),0,jitt)
@@ -159,13 +163,13 @@ curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*.5+coef(fit_8b)[3]*log(x)+coef(fi
 text(.25, .80, "if dist = 0", adj=0, cex=.8)
 text(2, .63, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logitresids.3b.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresids.3b.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
-br <- binned.resids(wells$arsenic, wells$y-pred8b, nclass=40)$binned
+br <- binned_resids(wells$arsenic, wells$y-pred8b, nclass=40)$binned
 plot(range(0,br[,1]), range(br[,2],br[,6],-br[,6]),
      xlab="Arsenic level", ylab="Average residual", type="n",
      main="Binned residual plot\nfor model with log (arsenic)", mgp=c(2,.5,0))
@@ -175,4 +179,4 @@ lines(br[,1], br[,6], col="gray", lwd=.5)
 lines(br[,1], -br[,6], col="gray", lwd=.5)
 points(br[,1], br[,2], pch=20, cex=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

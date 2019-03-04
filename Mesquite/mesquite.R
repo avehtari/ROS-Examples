@@ -9,22 +9,28 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("foreign")
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("loo")
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
-library("foreign")
+
+#' Set random seed for reproducability
+SEED <- 4587
+
+#+ eval=FALSE, include=FALSE
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
 
 #' **Load data**
 mesquite <- read.table(root("Mesquite/data","mesquite.dat"), header=TRUE)
@@ -32,21 +38,24 @@ summary(mesquite)
 
 #' **Regress `weight` on all of the predictors**
 fit_1 <- stan_glm(weight ~ diam1 + diam2 + canopy_height + total_height +
-                      density + group, data=mesquite)
+                      density + group, data=mesquite, seed=SEED, refresh=0)
 print(fit_1)
 (loo_1 <- loo(fit_1))
-#+ results='hide'
-kfold_1 <- kfold(fit_1, K=10)
-#+
+#' We get warnings about high Pareto k values, which indicates that
+#' the importance sampling approximation used in loo is in this case
+#' unreliable. We thus use more robust K-fold-CV.
+kfold_1 <- rstanarm::kfold(fit_1, K=10)
 kfold_1
 
-#' **Regress `log(weight)` on all of the log transformed predictors**
-fit_2 <- stan_glm(formula = log(weight) ~ log(diam1) + log(diam2) +
-                      log(canopy_height) + log(total_height) + log(density) +
-                      group, data=mesquite)
+#' **Regress `log(weight)` on all of the log transformed predictors**<br>
+fit_2 <- stan_glm(log(weight) ~ log(diam1) + log(diam2) + log(canopy_height) +
+                      log(total_height) + log(density) + group,
+                  data=mesquite, seed=SEED, refresh=0)
 (loo_2 <- loo(fit_2))
 
-#' **Jacobian correction to make the models comparable**
+#' **Jacobian correction to make the models comparable**<br>
+#' Jacobian correction is needed as model 1 is modeling y and model 2
+#' is modeling log(y).
 loo_2_with_jacobian <- loo_2
 loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
                                      log(mesquite$weight)
@@ -96,9 +105,11 @@ mesquite$canopy_area <- mesquite$diam1 * mesquite$diam2
 mesquite$canopy_shape <- mesquite$diam1 / mesquite$diam2
 
 #' **A model with just the new canopy volume variable**
-fit_3 <- stan_glm(log(weight) ~ log(canopy_volume), data=mesquite)
+fit_3 <- stan_glm(log(weight) ~ log(canopy_volume), data=mesquite,
+                  seed=SEED, refresh=0)
 print(fit_3)
 loo_3 <- loo(fit_3)
+#' Both models are modeling log(y) and can be compared directly.
 compare_models(loo_2, loo_3)
 
 #' **Compare also LOO-R^2**
@@ -124,7 +135,7 @@ round(median(bayes_R2(fit_3)),2)
 fit_4 <- stan_glm(formula = log(weight) ~ log(canopy_volume) +
                       log(canopy_area) + log(canopy_shape) +
                       log(total_height) + log(density) + group,
-                  data=mesquite)
+                  data=mesquite, seed=SEED, refresh=0)
 print(fit_4)
 (loo_4 <- loo(fit_4))
 compare_models(loo_2, loo_4)
@@ -143,12 +154,13 @@ mcmc_areas(as.matrix(fit_4))
 #' **Plot pairwise joint marginals**<br>
 #' Strong collinearity between canopy volume and canopy area is obvious
 #+ fig.width=8, fig.height=8
-mcmc_pairs(as.matrix(fit_4), size = 1, pars = c("log(canopy_volume)","log(canopy_area)",
-                                                "log(canopy_shape)","log(total_height)","log(density)"))
+mcmc_pairs(as.matrix(fit_4), pars=c("log(canopy_volume)","log(canopy_area)",
+                                    "log(canopy_shape)","log(total_height)",
+                                    "log(density)"))
 
 #' **A model with canopy volume and canopy shape**
 fit_5 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_shape) +
-    group, data=mesquite)
+    group, data=mesquite, seed=SEED, refresh=0)
 (loo_5 <- loo(fit_5))
 compare_models(loo_4, loo_5)
 round(looR2(fit_5),2)
@@ -156,7 +168,7 @@ round(median(bayes_R2(fit_5)),2)
 
 #' **A model in a previous edition**
 fit_6 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_area) +
-    group, data=mesquite)
+    group, data=mesquite, seed=SEED, refresh=0)
 (loo_6 <- loo(fit_6))
 compare_models(loo_5, loo_6)
 round(looR2(fit_6),2)

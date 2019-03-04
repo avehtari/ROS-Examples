@@ -9,8 +9,12 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -47,13 +51,13 @@ print(fit_1, digits=3)
 
 #' **Histogram of distances**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.distances.bnew.ps"),
-           height=3, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.distances.bnew.ps"),
+                         height=3, width=4, horizontal=TRUE)
 #+
 hist(wells$dist, breaks=seq(0,10+max(wells$dist),10), freq=TRUE,
      xlab="Distance (in meters) to nearest safe well", ylab="", main="", mgp=c(2,.5,0))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Scale distance in meters to distance in 100 meters**
 wells$dist100 <- wells$dist/100
@@ -71,8 +75,8 @@ jitter_binary <- function(a, jitt=.05){
   a + (1-2*a)*runif(length(a),0,jitt)
 }
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logitfit.1new.a.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitfit.1new.a.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,max(wells$dist, na.rm=TRUE)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
@@ -80,12 +84,12 @@ plot(c(0,max(wells$dist, na.rm=TRUE)*1.02), c(0,1),
 curve(invlogit(coef(fit_1)[1]+coef(fit_1)[2]*x), lwd=1, add=TRUE)
 points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot uncertainty in the estimated coefficients**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.logitfit.scatterplot.ps"),
-           height=3.5, width=3.5, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitfit.scatterplot.ps"),
+                         height=3.5, width=3.5, horizontal=TRUE)
 #+
 sims <- as.matrix(fit_2)
 par(pty="s")
@@ -95,12 +99,12 @@ plot(sims[1:500,1], sims[1:500,2], xlim=c(.4,.8), ylim=c(-1,0),
 axis(1, seq(.4,.8,.2), mgp=c(1.5,.5,0))
 axis(2, seq(-1,0,.5), mgp=c(1.5,.5,0))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot uncertainty in the estimated predictions**
 #+ eval=FALSE, include=FALSE
-postscript (root("Arsenic/figs","arsenic.logitfit.1new.b.ps"),
-            height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.logitfit.1new.b.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,max(wells$dist, na.rm=T)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
@@ -112,7 +116,7 @@ for (j in 1:20) {
 curve(invlogit(coef(fit_2)[1]+coef(fit_2)[2]*x/100), lwd=1, add=T)
 points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 
 #' ### Two predictors
@@ -120,17 +124,18 @@ dev.off()
 
 #' **Histogram of arsenic levels**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.levels.a.ps"),
-           height=3, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.levels.a.ps"),
+                         height=3, width=4, horizontal=TRUE)
 #+
 hist(wells$arsenic, breaks=seq(0,.25+max(wells$arsenic),.25), freq=TRUE,
      xlab="Arsenic concentration in well water", ylab="", main="", mgp=c(2,.5,0))
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Fit a model using scaled distance and arsenic level**
 #+ results='hide'
-fit_3 <- stan_glm(y ~ dist100 + arsenic, family = binomial(link = "logit"), data=wells)
+fit_3 <- stan_glm(y ~ dist100 + arsenic, family = binomial(link = "logit"),
+                  data=wells)
 #'
 print(fit_3, digits=2)
 #' LOO log score
@@ -146,8 +151,8 @@ round(mean(c(pred3[wells$y==1]-pred2[wells$y==1],pred2[wells$y==0]-pred3[wells$y
 
 #' **Plot model fits**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.2variables.a.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.2variables.a.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,max(wells$dist,na.rm=T)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
@@ -158,10 +163,10 @@ curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*x/100+coef(fit_3)[3]*1.00), lwd=.5,
 text(50, .27, "if As = 0.5", adj=0, cex=.8)
 text(75, .50, "if As = 1.0", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.2variables.b.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.2variables.b.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
      xlab="Arsenic concentration in well water", ylab="Pr (switching)",
@@ -172,7 +177,7 @@ curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*0.5+coef(fit_3)[3]*x), from=0.5, lw
 text(.5, .78, "if dist = 0", adj=0, cex=.8)
 text(2, .6, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' ### Interaction
 #' 
@@ -198,8 +203,8 @@ print(fit_5, digits=2)
 
 #' **Plot model fits**
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.interact.a.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.interact.a.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,max(wells$dist,na.rm=T)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
@@ -210,10 +215,10 @@ curve(invlogit(coef(fit_4)[1]+coef(fit_4)[2]*x/100+coef(fit_4)[3]*1.00+coef(fit_
 text (50, .29, "if As = 0.5", adj=0, cex=.8)
 text (75, .50, "if As = 1.0", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 #+ eval=FALSE, include=FALSE
-postscript(root("Arsenic/figs","arsenic.interact.b.ps"),
-           height=3.5, width=4, horizontal=TRUE)
+if (savefigs) postscript(root("Arsenic/figs","arsenic.interact.b.ps"),
+                         height=3.5, width=4, horizontal=TRUE)
 #+
 plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
      xlab="Arsenic concentration in well water", ylab="Pr (switching)",
@@ -224,7 +229,7 @@ curve(invlogit(coef(fit_4)[1]+coef(fit_4)[2]*0.5+coef(fit_4)[3]*x+coef(fit_4)[4]
 text (.5, .78, "if dist = 0", adj=0, cex=.8)
 text (2, .6, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' ### More predictors
 #' 
@@ -266,6 +271,9 @@ print(fit_8, digits=2)
 compare_models(loo3, loo8)
 compare_models(loo7, loo8)
 
+
+
+
 #' **Average improvement in LOO predictive probabilities**<br>
 #' from dist100 + arsenic to dist100 + arsenic + educ4 + dist100:educ4 + arsenic:educ4
 pred8 <- loo_predict(fit_8, psis_object = loo8$psis_object)$value
@@ -300,9 +308,12 @@ compare_models(loo3a, loo4a)
 #' **Add interactions with education**
 wells$c_log_arsenic <- wells$log_arsenic - mean(wells$log_arsenic)
 #+ results='hide'
+start_time = Sys.time()
 fit_8a <- stan_glm(y ~ c_dist100 + c_log_arsenic + c_educ4 +
                       c_dist100:c_educ4 + c_log_arsenic:c_educ4,
                   family = binomial(link="logit"), data = wells)
+end_time = Sys.time()
+end_time - start_time
 #'
 print(fit_8a, digits=2)
 #' LOO log score

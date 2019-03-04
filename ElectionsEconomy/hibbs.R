@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -22,7 +22,6 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
 
 #' **Load data**
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
@@ -85,9 +84,19 @@ abline(50, 0, lwd=.5, col="gray")
 if (savefigs) dev.off()
 
 #' ### Linear regression
-M1 <- stan_glm(vote ~ growth, data = hibbs)
+#'
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+M1 <- stan_glm(vote ~ growth, data = hibbs, refresh = 0)
+#' Print default summary of the fitted model
 print(M1)
+#' Print summary of the priors used
 prior_summary(M1)
+#' Almost all models in Regression and Other Stories have very good
+#' sampling behavior. `summary()` function can be used to obtain the
+#' summary of the convergence diagnostics for MCMC sampling.
 summary(M1)
 
 #' **Posterior interval**

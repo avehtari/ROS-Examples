@@ -9,8 +9,12 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 
@@ -58,7 +62,7 @@ points(candidate.totals, expected, col="red")
 
 #' Plot
 #+ eval=FALSE, include=FALSE
-postscript(root("Coop/figs","coop1.ps"), height=3.5, horizontal=TRUE)
+if (savefigs) postscript(root("Coop/figs","coop1.ps"), height=3.5, horizontal=TRUE)
 #+ eval=FALSE
 par(mfrow=c(2,4), mar=c(3,4,2,0), pty="m")
 for (i in winners[1:8]){
@@ -68,10 +72,10 @@ for (i in winners[1:8]){
         main=names[i], cex.main=1.5, cex.axis=1.5, cex.lab=1.5, cex.main=1.5)
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-postscript(root("Coop/figs","coop2.ps"), , height=3.5, horizontal=TRUE)
+if (savefigs) postscript(root("Coop/figs","coop2.ps"), , height=3.5, horizontal=TRUE)
 #+
 par(mfrow=c(2,4), mar=c(3,4,2,0), pty="m")
 for (i in winners[1:8]){
@@ -81,10 +85,10 @@ for (i in winners[1:8]){
         main=names[i], cex.main=1.5, cex.axis=1.5, cex.lab=1.5, cex.main=1.5)
 }
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-postscript(root("Coop/figs","coop3.ps"), horizontal=TRUE)
+if (savefigs) postscript(root("Coop/figs","coop3.ps"), horizontal=TRUE)
 #+
 par(mar=c(5,5,4,2)+.1)
 plot(candidate.totals, actual, xlim=c(0,max(candidate.totals)*1.05),
@@ -93,7 +97,7 @@ plot(candidate.totals, actual, xlim=c(0,max(candidate.totals)*1.05),
       xaxs="i", yaxs="i")
 points(candidate.totals, expected, pch=20, cex=2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **chi^2 tests**
 chisq <- rep(NA, nrow(extras))

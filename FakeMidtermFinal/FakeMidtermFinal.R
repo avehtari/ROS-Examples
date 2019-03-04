@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
@@ -31,9 +31,12 @@ final <- true_ability + noise_2
 exams <- data.frame(midterm, final)
 
 #' **Linear regression**
-#+ results='hide'
-fit_1 <- stan_glm(final ~ midterm, data=exams)
-#+
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit_1 <- stan_glm(final ~ midterm, data=exams, refresh = 0)
 print(fit_1, digits=2)
 
 #' **Plot midterm and final exam scores**

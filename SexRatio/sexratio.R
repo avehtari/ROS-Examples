@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
@@ -53,18 +53,15 @@ text(1, 52.2, paste("y = ", fround(coef(fit)[1], 1), " + ", fround(coef(fit)[2],
 if (savefigs) dev.off()
 
 #' **Bayesian regression with weakly informative prior**
-fit_default <- stan_glm(y ~ x, data = sexratio)
+fit_default <- stan_glm(y ~ x, data = sexratio, refresh = 0)
 prior_summary(fit_default)
 print(fit_default)
 
 #' **Bayesian regression with informative prior**
-fit_post <-
-  stan_glm(
-    y ~ x,
-    data = sexratio,
-    prior = normal(0, 0.2, autoscale = FALSE),
-    prior_intercept = normal(48.8, 0.5, autoscale = FALSE)
-  )#, prior_aux=normal(0, 2, autoscale=FALSE))
+fit_post <- stan_glm(y ~ x, data = sexratio,
+                     prior = normal(0, 0.2, autoscale = FALSE),
+                     prior_intercept = normal(48.8, 0.5, autoscale = FALSE),
+                     refresh = 0)
 prior_summary(fit_post)
 print(fit_post)
 

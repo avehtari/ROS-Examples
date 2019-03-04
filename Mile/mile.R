@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -29,7 +29,12 @@ seconds <- mile$min*60 + mile$sec
 mile <- data.frame(mile, year, seconds)
 
 #' **Linear model**
-fit <- stan_glm(seconds ~ year, data = mile)
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit <- stan_glm(seconds ~ year, data = mile, refresh = 0)
 print(fit, digits=2)
 
 #' **Predictions for 1900 and 2000**

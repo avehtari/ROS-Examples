@@ -11,8 +11,10 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -37,9 +39,7 @@ par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(data$beauty, data$eval)
 
 #' **Fit a linear regression**
-#+ results='hide'
-fit_1 <- stan_glm(eval ~ beauty, data=data)
-#+
+fit_1 <- stan_glm(eval ~ beauty, data=data, refresh=0)
 print(fit_1, digits=2)
 
 #' **Make a scatterplot with regression lines**
@@ -71,9 +71,7 @@ ggplot(data, aes(beauty, eval)) +
 #' ### Do things differ for male and female profs?  
 
 #' Parallel regression lines
-#+ results='hide'
-fit_2 <- stan_glm(eval ~ beauty + female, data=data)
-#+
+fit_2 <- stan_glm(eval ~ beauty + female, data=data, refresh=0)
 print(fit_2, digits=2)
 coefs2 <- coef(fit_2)
 
@@ -132,9 +130,7 @@ bayesplot_grid(
 #' ### Do things differ for male and female profs?  
 
 #' **Non-parallel regression lines**
-#+ results='hide'
-fit_3 <- stan_glm(eval ~ beauty + female + beauty*female, data=data)
-#+
+fit_3 <- stan_glm(eval ~ beauty + female + beauty*female, data=data, refresh=0)
 print(fit_3, digits=2)
 coefs3 <- coef(fit_3)
 
@@ -174,27 +170,20 @@ bayesplot_grid(
 #' ### More models
 
 #' **Add age**
-#+ results='hide'
-fit_4 <- stan_glm(eval ~ beauty + female + age, data=data)
-#+
+fit_4 <- stan_glm(eval ~ beauty + female + age, data=data, refresh=0)
 print(fit_4, digits=2)
 
 #' **Add minority**
-#+ results='hide'
-fit_5 <- stan_glm(eval ~ beauty + female + minority, data=data)
-#+
+fit_5 <- stan_glm(eval ~ beauty + female + minority, data=data, refresh=0)
 print(fit_5, digits=2)
 
 #' **Add nonenglish**
-#+ results='hide'
-fit_6 <- stan_glm(eval ~ beauty + female + nonenglish, data=data)
-#+
+fit_6 <- stan_glm(eval ~ beauty + female + nonenglish, data=data, refresh=0)
 print(fit_6, digits=2)
 
 #' **Add nonenglish and lower**
-#+ results='hide'
-fit_7 <- stan_glm(eval ~ beauty + female + nonenglish + lower, data=data)
-#+
+fit_7 <- stan_glm(eval ~ beauty + female + nonenglish + lower,
+                  data=data, refresh=0)
 print(fit_7, digits=2)
 
 #' ### Go back to simple model, add course indicators
@@ -211,7 +200,5 @@ for (i in 1:n){
 }
 
 #' **Include course indicators in a regression**
-#+ results='hide'
-fit_8 <- stan_glm(eval ~ beauty + factor(course_id), data=data)
-#+
+fit_8 <- stan_glm(eval ~ beauty + factor(course_id), data=data, refresh=0)
 print(fit_8, digits=2)

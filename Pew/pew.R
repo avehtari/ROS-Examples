@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("foreign")
@@ -24,7 +24,7 @@ pew_pre <- read.dta(root("Pew/data","pew_research_center_june_elect_wknd_data.dt
 n <- nrow(pew_pre)
 
 #' **Glance data**
-table (pew_pre[,"date"])
+table(pew_pre[,"date"])
 which_question <- ifelse(!is.na(pew_pre$heat2), 2, ifelse (!is.na(pew_pre$heat4), 4, 0))
 table(pew_pre$date, which_question)
 
@@ -50,8 +50,8 @@ registered[is.na(registered)] <- 0
 #' Date
 early <- pew_pre$date < 90008
 late <- pew_pre$date > 90008
-month <- floor (pew_pre$date/10000)
-day <- floor (pew_pre$date/100) - 100*month
+month <- floor(pew_pre$date/10000)
+day <- floor(pew_pre$date/100) - 100*month
 day.numeric <- month*31 + day
 poll.id <- ifelse (month==6, 1,
              ifelse (month==7 & day<28, 2,
@@ -64,7 +64,7 @@ poll.id <- ifelse (month==6, 1,
 n.poll.id <- max(poll.id)
 
 #' State (1-51, in alfa order, including DC)
-stnum <- as.numeric (pew_pre$state)
+stnum <- as.numeric(pew_pre$state)
 
 #' Identify out DC
 state.abb.long <- c(state.abb[1:8], "DC", state.abb[9:50])

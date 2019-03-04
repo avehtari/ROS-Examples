@@ -4,12 +4,12 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#+ setup, message=FALSE, error=FALSE, warning=FALSE, eval=FALSE, include=FALSE
-# This library is needed only when saving the figure, and thus not loaded for the notebook
+#+ eval=FALSE, include=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 

@@ -9,8 +9,10 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -64,9 +66,7 @@ v90_adj <- uncontested_adj(v90)
 
 #' **Regression predicting 1988 from 1986**
 data_88 <- data.frame(vote=v88_adj, past_vote=v86_adj, inc=inc88)
-#+ results='hide'
-fit_88 <- stan_glm(vote ~ past_vote + inc, data=data_88)
-#+
+fit_88 <- stan_glm(vote ~ past_vote + inc, data=data_88, refresh=0)
 print(fit_88, digits=2)
 
 #' **Simulation for inferences and predictions of new data points**</br>

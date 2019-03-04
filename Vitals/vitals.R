@@ -9,8 +9,10 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -29,9 +31,12 @@ print(vitals[1:5,])
 #' ### Simulating uncertainty for linear predictors and predicted values
 
 #' **Predict weight (in pounds) from height (in inches)**
-#+ results='hide'
-fit_1 <- stan_glm(weight ~ height, data=vitals)
-#+
+#'
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit_1 <- stan_glm(weight ~ height, data=vitals, refresh = 0)
 print(fit_1)
 
 #' **Predict weight for 66 inches person
@@ -40,9 +45,7 @@ predicted_1 <- coefs_1[1] + coefs_1[2]*66
 
 #' **Center heights**
 vitals$c_height <- vitals$height - 66
-#+ results='hide'
-fit_2 <- stan_glm(weight ~ c_height, data=vitals)
-#+
+fit_2 <- stan_glm(weight ~ c_height, data=vitals, refresh = 0)
 print(fit_2)
 
 #' **Point prediction**
@@ -70,9 +73,7 @@ pred <- posterior_predict(fit_1, newdata=new)
 cat("Predicted weight for a 66-inch-tall person is", round(mean(pred)), "pounds with a sd of", round(sd(pred)), "\n")
 
 #' **Including a binary variable in a regression**
-#+ results='hide'
-fit_3 <- stan_glm(weight ~ c_height + female, data=vitals)
-#+
+fit_3 <- stan_glm(weight ~ c_height + female, data=vitals, refresh = 0)
 print(fit_3)
 new <- data.frame(c_height=4, female=1)
 pred <- posterior_predict(fit_3, newdata=new)
@@ -80,17 +81,14 @@ cat("Predicted weight for a 70-inch-tall female is", round(mean(pred)), "pounds 
 
 #' **Using indicator variables for multiple levels of a categorical predictor**<br/>
 #' Include ethnicity in the regression as a factor
-#+ results='hide'
-fit_4 <- stan_glm(weight ~ c_height + female + factor(ethnicity), data=vitals)
-#+
+fit_4 <- stan_glm(weight ~ c_height + female + factor(ethnicity),
+                  data=vitals, refresh = 0)
 print(fit_4)
 
 #' Choose the baseline category by setting the levels
 vitals$eth <- factor(vitals$ethnicity,
   levels=c("white", "black", "hispanic", "other"))
-#+ results='hide'
-fit_5 <- stan_glm(weight ~ c_height + female + eth, data=vitals)
-#+
+fit_5 <- stan_glm(weight ~ c_height + female + eth, data=vitals, refresh = 0)
 print(fit_5)
 
 #' Alternatively create indicators for the four ethnic groups directly:
@@ -98,7 +96,6 @@ vitals$eth_white <- ifelse(vitals$ethnicity=="white", 1, 0)
 vitals$eth_black <- ifelse(vitals$ethnicity=="black", 1, 0)
 vitals$eth_hispanic <- ifelse(vitals$ethnicity=="hispanic", 1, 0)
 vitals$eth_other <- ifelse(vitals$ethnicity=="other", 1, 0)
-#+ results='hide'
-fit_6 <- stan_glm(weight ~ c_height + female + eth_black + eth_hispanic + eth_other, data=vitals)
-#+
+fit_6 <- stan_glm(weight ~ c_height + female + eth_black + eth_hispanic + eth_other,
+                  data=vitals, refresh = 0)
 print(fit_6)

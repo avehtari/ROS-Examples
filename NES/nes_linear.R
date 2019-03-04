@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -27,11 +27,10 @@ data <- read.table(root("NES/data","nes.dat"))
 #' **Partyid model to illustrate repeated model use (secret weapon)**
 regress_year <- function (yr) {
   this_year <- data[data$year==yr,]
-  output <- capture.output(
-      fit <- stan_glm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) +
-                          educ1 + female + income,
-                      data=this_year, warmup = 500, iter = 1500, refresh = 0,
-                      save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  fit <- stan_glm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) +
+                      educ1 + female + income,
+                  data=this_year, warmup = 500, iter = 1500, refresh = 0,
+                  save_warmup = FALSE, cores = 1, open_progress = FALSE)
   coefs <- cbind(coef(fit),se(fit))
 }
 summary <- array (NA, c(9,2,8))

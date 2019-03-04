@@ -10,12 +10,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstan")
@@ -36,7 +36,7 @@ data_401 <- subset(data_2player, person == 401, select = c("vote", "value"))
 data_401$factor_vote <- factor(data_401$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
 #+ results='hide'
 fit_1 <- stan_polr(factor_vote ~ value, data = data_401,
-                   prior = R2(0.3, "mean"))
+                   prior = R2(0.3, "mean"), refresh = 0)
 #+
 print(fit_1, digits=2)
 
@@ -55,11 +55,10 @@ for (i in 1:n_plotted){
   #ok <- data_all[,"person"]==plotted[i]
   data[[i]] <- subset(data_all, person == plotted[i], 
                       select = c("vote", "factor_vote", "value"))
-  output <- capture.output(
-      fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
-                            prior=R2(0.3, "mean"),
-                            cores = 1, open_progress = FALSE,
-                            adapt_delta = 0.9999))
+    fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
+                          prior=R2(0.3, "mean"), refresh = 0,
+                          cores = 1, open_progress = FALSE,
+                          adapt_delta = 0.9999)
 }
 
 #' **Graph**

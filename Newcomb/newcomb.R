@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -22,6 +22,8 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
+#+ eval=FALSE, include=FALSE
+# grayscale figures for the book
 color_scheme_set(scheme = "gray")
 
 #' **Data**<br>
@@ -45,7 +47,12 @@ if (savefigs) dev.off()
 mcmc_hist(newcomb, pars="y") + xlab("")
 
 #' **Fit a regression model with just the intercept term**
-fit <- stan_glm(y ~ 1, data=newcomb)
+#' 
+#' The option `refresh = 0` supresses the default Stan sampling
+#' progress output. This is useful for small data with fast
+#' computation. For more complex models and bigger data, it can be
+#' useful to see the progress.
+fit <- stan_glm(y ~ 1, data=newcomb, refresh=0)
 
 #' **Simulate from the predictive distribution**
 sims <- as.matrix(fit)
@@ -70,12 +77,12 @@ y_rep <- posterior_predict(fit)
 #' **Plot data and 19 replications using built-in function**
 ppc_hist(newcomb$y, y_rep[1:19, ], binwidth = 8)
 #+ eval=FALSE, include=FALSE
-ggsave(root("Newcomb/figs","newcomb_ppc_hist.pdf"), width = 9, height = 4)
+if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_hist.pdf"), width = 9, height = 4)
 
 #' **Plot kernel density estimate of data and 100 replications using built-in function**
 ppc_dens_overlay(newcomb$y, y_rep[1:100, ]) + scale_y_continuous(breaks=NULL)
 #+ eval=FALSE, include=FALSE
-ggsave(root("Newcomb/figs","newcomb_ppc_dens_overlay.pdf"), width = 6, height = 2.5)
+if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_dens_overlay.pdf"), width = 6, height = 2.5)
 
 #' **Plot test statistic for data and replicates**
 Test <- function (y)
@@ -93,4 +100,4 @@ if (savefigs) dev.off()
 #' **Plot test statistic for data and replicates using built-in function**
 ppc_stat(newcomb$y, y_rep, stat = "min", binwidth = 2)
 #+ eval=FALSE, include=FALSE
-ggsave(root("Newcomb/figs","newcomb_ppc_stat.pdf"), width = 6, height = 4)
+if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_stat.pdf"), width = 6, height = 4)

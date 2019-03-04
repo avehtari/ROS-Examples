@@ -9,8 +9,10 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -33,7 +35,7 @@ fake <- data.frame(x, y)
 
 #' **Step 3: Fitting the model and comparing fitted to pretend values**
 #+ results='hide'
-fit <- stan_glm(y ~ x, data = fake)
+fit <- stan_glm(y ~ x, data = fake, refresh = 0)
 #+
 print(fit)
 
@@ -59,10 +61,9 @@ for (s in 1:n_fake){
   set.seed(s)
   y <- a + b*x + rnorm(n, 0, sigma)
   fake <- data.frame(x, y)
-  output <- capture.output(
-      fit <- stan_glm(y ~ x, data = fake, warmup = 500, iter = 1500, refresh = 0,
+  fit <- stan_glm(y ~ x, data = fake, warmup = 500, iter = 1500, refresh = 0,
                       save_warmup = FALSE, cores = 1, open_progress = FALSE,
-                      seed = s))
+                      seed = s)
   pi50 <- posterior_interval(fit, prob = 0.5)['x',]
   pi68 <- posterior_interval(fit, prob = 0.68)['x',]
   pi90 <- posterior_interval(fit, prob = 0.9)['x',]

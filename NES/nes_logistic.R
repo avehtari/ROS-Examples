@@ -9,12 +9,12 @@
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
@@ -33,9 +33,8 @@ nes92 <- nes[ok,]
 #' 
 
 #' **Logistic regression of vote preference on income**
-#+ results='hide'
-fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=nes92)
-#+
+fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=nes92,
+                  refresh=0)
 print(fit_1)
 
 #' **Predictions**
@@ -45,9 +44,8 @@ predict <- posterior_predict(fit_1, newdata=new)
 
 #' **Fake data example**
 data <- data.frame(rvote=rep(c(0,1), 10), income=1:20)
-#+ results='hide'
-fit_f <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data)
-#+
+fit_f <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data,
+                  refresh=0)
 new <- data.frame(income=5)
 predict <- posterior_predict(fit_f, newdata=new)
 
@@ -107,11 +105,10 @@ for (j in 1:n_yrs){
          !is.na(nes$vote) & !is.na(nes$income))
   vote <- nes$presvote[ok] - 1
   income <- nes$income[ok]
-  output <- capture.output(
-      fit_y <- stan_glm(vote ~ income, family=binomial(link="logit"),
-                        data = data.frame(vote, income),
-                        warmup = 500, iter = 1500, refresh = 0, 
-                        save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  fit_y <- stan_glm(vote ~ income, family=binomial(link="logit"),
+                    data = data.frame(vote, income),
+                    warmup = 500, iter = 1500, refresh = 0, 
+                    save_warmup = FALSE, cores = 1, open_progress = FALSE)
   fits[j,] <- c(yr, coef(fit_y)[2], se(fit_y)[2])
 }
 
@@ -160,11 +157,10 @@ for (j in 1:n_yrs){
                  family=binomial(link="logit"), data=nes[ok,])
   fits_2[j,,1,1] <- coef(fit_glm)
   fits_2[j,,2,1] <- se.coef(fit_glm)
-  output <- capture.output(
-      fit_bayes <- stan_glm(rvote ~ female + black + income, subset=(year==yrs[j]),
-                            family=binomial(link="logit"), data=nes[ok,],
-                            warmup = 500, iter = 1500, refresh = 0, 
-                            save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  fit_bayes <- stan_glm(rvote ~ female + black + income, subset=(year==yrs[j]),
+                        family=binomial(link="logit"), data=nes[ok,],
+                        warmup = 500, iter = 1500, refresh = 0, 
+                        save_warmup = FALSE, cores = 1, open_progress = FALSE)
   fits_2[j,,1,2] <- coef(fit_bayes)
   fits_2[j,,2,2] <- se(fit_bayes)
   display(fit_glm)

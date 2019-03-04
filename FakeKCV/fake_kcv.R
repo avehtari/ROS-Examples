@@ -9,18 +9,23 @@
 #' -------------
 #' 
 
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
 #' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("MASS")      # needed for mvrnorm()
 library("rstanarm")
+library("loo")
 options(mc.cores = parallel::detectCores())
+#' Set random seed for reproducability
+SEED <- 1754
 
 #' **Generate fake data**
 #'
 #' $60\times 30$ matrix representing 30 predictors that are random but
 #' not independent; rather, we draw them from a multivariate normal
 #' distribution with correlations 0.8:
-set.seed(1754)
+set.seed(SEED)
 n <- 60
 k <- 30
 rho <- 0.8
@@ -31,17 +36,32 @@ y <- X %*% b + rnorm(n)*2
 fake <- data.frame(X, y)
 
 #' **Weakly informative prior**
-#+ results='hide'
-fit_1 <- stan_glm(y ~ ., prior=normal(0, 10, autoscale=FALSE), data=fake)
-loo_1 <- loo(fit_1)
-kfold_1 <- kfold(fit_1)
+fit_1 <- stan_glm(y ~ ., prior=normal(0, 10, autoscale=FALSE),
+                  data=fake, seed=SEED, refresh=0)
+(loo_1 <- loo(fit_1))
+#' In this case, Pareto smoothed importance sampling LOO fails, but
+#' the diagnostic recognizes this with many high Pareto k values. We
+#' can run slower, but more robust K-fold-CV
+kfold_1 <- rstanarm::kfold(fit_1)
 
 #' **An alternative weakly informative prior**<br>
 #' The regularized horseshoe prior `hs()` is weakly informative,
 #' stating that it is likely that only small number of predictors are
 #' relevant, but we don't know which ones.
-#+ results='hide'
-fit_2 <- update(fit_1, prior=hs())
-kfold_2 <- kfold(fit_2)
-#+
+k0 <- 2 # prior guess for the number of relevant variables
+tau0 <- k0/(k-k0) * 1/sqrt(n)
+hs_prior <- hs(df=1, global_df=1, global_scale=tau0, slab_scale=3, slab_df=7)
+fit_2 <- stan_glm(y ~ ., prior=hs_prior, data=fake, seed=SEED,
+                  control=list(adapt_delta=0.995), refresh=200)
+(loo_2 <- loo(fit_2))
+#' PSIS-LOO performs better now, but there is still one bad diagnostic
+#' value, and thus we run again slower, but more robust K-fold-CV
+kfold_2 <- rstanarm::kfold(fit_2)
+
+#' **Comparison of models**
+compare_models(loo_1,loo_2)
 loo::compare(kfold_1,kfold_2)
+#' As PSIS-LOO fails is underestimates the difference between the
+#' models. The Pareto k diagnostic correctly identified the problem,
+#' and more robust K-fold-CV shows that by using a better prior we can
+#' get better predictions.
