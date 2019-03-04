@@ -133,15 +133,20 @@
 #'   - [Pollution/](https://github.com/avehtari/RAOS-Examples/tree/master/Pollution/)
 #' 
 #' ### 13  Logistic regression
-#'   - [NES/](HTTPS://GITHUB.COM/AVEHTARI/RAOS-EXAMPLES/NES/)
+#'   - [NES/](https://github.com/avehtari/raos-examples/nes/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
 #'     - [arsenic_logistic_building.html](Arsenic/arsenic_logistic_building.html) - Building a logistic regression model: wells in Bangladesh
+#'
+#' ### 14  Working with logistic regression
+#'   - [NES/](https://github.com/avehtari/raos-examples/nes/)
+#'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
+#'   - [Rodents/](https://github.com/avehtari/RAOS-Examples/tree/master/Rodents/)
+#'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
 #'     - [arsenic_logistic_residuals.html](Arsenic/arsenic_logistic_residuals.html) - Residual plots for a logistic regression model: wells in Bangladesh
 #'     - [arsenic_logistic_apc.html](Arsenic/arsenic_logistic_apc.html) - Average predictice comparisons for a logistic regression model: wells in Bangladesh
-#'   - [Rodents/](https://github.com/avehtari/RAOS-Examples/tree/master/Rodents/)
 #'
-#' ### 14  Other generalized linear models
+#' ### 15  Other generalized linear models
 #'   - [Roaches/](https://github.com/avehtari/RAOS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Storable/](https://github.com/avehtari/RAOS-Examples/tree/master/Storable/) 
@@ -154,11 +159,11 @@
 #'   - [Congress/](https://github.com/avehtari/RAOS-Examples/tree/master/Congress/)
 #'   - [AcademyAwards/](https://github.com/avehtari/RAOS-Examples/tree/master/AcademyAwards/)
 #'
-#' ### 15  Design and sample size decisions
+#' ### 16  Design and sample size decisions
 #'   - [ElectricCompany/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectricCompany/)
 #'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
 #'
-#' ### 16  Poststratification and missing-data imputation
+#' ### 17  Poststratification and missing-data imputation
 #'   - [Poststrat/](https://github.com/avehtari/RAOS-Examples/tree/master/Poststrat/)
 #'     - [poststrat.html](Poststrat/poststrat.html) - Poststratification after estimation
 #'     - [poststrat2.html](Poststrat/poststrat2.html) - Poststratification after estimation
