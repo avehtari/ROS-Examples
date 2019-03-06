@@ -198,6 +198,7 @@ for (i in 1:n){
     if (courses[i,j]==1) course_id[i] <- j
   }
 }
+data$course_id <- course_id
 
 #' **Include course indicators in a regression**
 fit_8 <- stan_glm(eval ~ beauty + factor(course_id), data=data, refresh=0)
