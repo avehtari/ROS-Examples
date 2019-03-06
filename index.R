@@ -133,13 +133,15 @@
 #'   - [Pollution/](https://github.com/avehtari/RAOS-Examples/tree/master/Pollution/)
 #' 
 #' ### 13  Logistic regression
-#'   - [NES/](https://github.com/avehtari/raos-examples/nes/)
+#'   - [NES/](https://github.com/avehtari/raos-examples/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
 #'     - [arsenic_logistic_building.html](Arsenic/arsenic_logistic_building.html) - Building a logistic regression model: wells in Bangladesh
 #'
 #' ### 14  Working with logistic regression
-#'   - [NES/](https://github.com/avehtari/raos-examples/nes/)
+#'   - [LogitGraphs/](https://github.com/avehtari/raos-examples/LogitGraphs/)
+#'     - [logitgraphs.html](LogitGraphs/logitgraphs.html) - Different ways of displaying logistic regression
+#'   - [NES/](https://github.com/avehtari/raos-examples/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Rodents/](https://github.com/avehtari/RAOS-Examples/tree/master/Rodents/)
 #'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
