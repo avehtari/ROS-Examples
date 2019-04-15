@@ -59,9 +59,9 @@ fit_2 <- stan_glm(y ~ ., prior=hs_prior, data=fake, seed=SEED,
 kfold_2 <- rstanarm::kfold(fit_2)
 
 #' **Comparison of models**
-compare_models(loo_1,loo_2)
-loo::compare(kfold_1,kfold_2)
-#' As PSIS-LOO fails is underestimates the difference between the
+loo_compare(loo_1,loo_2)
+loo_compare(kfold_1,kfold_2)
+#' As PSIS-LOO fails it underestimates the difference between the
 #' models. The Pareto k diagnostic correctly identified the problem,
 #' and more robust K-fold-CV shows that by using a better prior we can
 #' get better predictions.
