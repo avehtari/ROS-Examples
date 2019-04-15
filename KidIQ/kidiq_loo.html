@@ -11,7 +11,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-03-03" />
+<meta name="date" content="2019-04-15" />
 
 <title>Regression and Other Stories: KidIQ cross-validation</title>
 
@@ -256,9 +256,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -289,8 +287,6 @@ summary {
 </style>
 
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -365,14 +361,23 @@ $(document).ready(function () {
 
 
 
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
 
 <div class="fluid-row" id="header">
 
 
 
 <h1 class="title toc-ignore">Regression and Other Stories: KidIQ cross-validation</h1>
-<h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2019-03-03</em></h4>
+<h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
+<h4 class="date">2019-04-15</h4>
 
 </div>
 
@@ -409,10 +414,6 @@ mom_iq       0.6    0.1
 Auxiliary parameter(s):
       Median MAD_SD
 sigma 18.2    0.6  
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 86.8    1.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -456,10 +457,6 @@ noise5      -0.5    0.9
 Auxiliary parameter(s):
       Median MAD_SD
 sigma 18.2    0.6  
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 86.8    1.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -513,13 +510,10 @@ Monte Carlo SE of elpd_loo is 0.0.
 
 All Pareto k estimates are good (k &lt; 0.5).
 See help('pareto-k-diagnostic') for details.</code></pre>
-<pre class="r"><code>compare_models(loo_3, loo_3n)</code></pre>
-<pre><code>
-Model comparison: 
-(negative 'elpd_diff' favors 1st model, positive favors 2nd) 
-
-elpd_diff        se 
-     -3.7       1.5 </code></pre>
+<pre class="r"><code>loo_compare(loo_3, loo_3n)</code></pre>
+<pre><code>       elpd_diff se_diff
+fit_3   0.0       0.0   
+fit_3n -3.7       1.5   </code></pre>
 <p><strong>Linear regression with different predictors</strong></p>
 <pre class="r"><code>fit_1 &lt;- stan_glm(kid_score ~ mom_hs, data=kidiq,
                   seed = SEED, refresh = 0)
@@ -537,13 +531,10 @@ Monte Carlo SE of elpd_loo is 0.0.
 
 All Pareto k estimates are good (k &lt; 0.5).
 See help('pareto-k-diagnostic') for details.</code></pre>
-<pre class="r"><code>compare_models(loo_3, loo_1)</code></pre>
-<pre><code>
-Model comparison: 
-(negative 'elpd_diff' favors 1st model, positive favors 2nd) 
-
-elpd_diff        se 
-    -38.7       8.3 </code></pre>
+<pre class="r"><code>loo_compare(loo_3, loo_1)</code></pre>
+<pre><code>      elpd_diff se_diff
+fit_3   0.0       0.0  
+fit_1 -38.7       8.3  </code></pre>
 <p><strong>Linear regression with interaction</strong></p>
 <pre class="r"><code>fit_4 &lt;- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs,
                   data=kidiq, seed=SEED, refresh = 0)
@@ -555,18 +546,14 @@ print(fit_4)</code></pre>
  predictors:   4
 ------
               Median MAD_SD
-(Intercept)   -6.6   12.8  
-mom_hs        45.6   14.1  
+(Intercept)   -6.5   12.4  
+mom_hs        45.6   13.7  
 mom_iq         0.9    0.1  
-mom_hs:mom_iq -0.4    0.2  
+mom_hs:mom_iq -0.4    0.1  
 
 Auxiliary parameter(s):
       Median MAD_SD
 sigma 18.0    0.6  
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 86.8    1.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -577,21 +564,18 @@ print(loo_4)</code></pre>
 Computed from 4000 by 434 log-likelihood matrix
 
          Estimate   SE
-elpd_loo  -1872.6 14.4
-p_loo         4.9  0.5
-looic      3745.2 28.7
+elpd_loo  -1872.4 14.3
+p_loo         4.7  0.5
+looic      3744.8 28.7
 ------
 Monte Carlo SE of elpd_loo is 0.0.
 
 All Pareto k estimates are good (k &lt; 0.5).
 See help('pareto-k-diagnostic') for details.</code></pre>
-<pre class="r"><code>compare_models(loo_3, loo_4)</code></pre>
-<pre><code>
-Model comparison: 
-(negative 'elpd_diff' favors 1st model, positive favors 2nd) 
-
-elpd_diff        se 
-      3.6       2.5 </code></pre>
+<pre class="r"><code>loo_compare(loo_3, loo_4)</code></pre>
+<pre><code>      elpd_diff se_diff
+fit_4  0.0       0.0   
+fit_3 -3.7       2.5   </code></pre>
 <p><strong>Linear regression with log-transformation and interaction</strong></p>
 <pre class="r"><code>fit_5 &lt;- stan_glm(kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs,
                   data=kidiq, seed=SEED, refresh = 0)
@@ -603,18 +587,14 @@ print(fit_5)</code></pre>
  predictors:   4
 ------
                    Median MAD_SD
-(Intercept)        -232.1   42.2
-mom_hs               59.0   39.2
-log(mom_iq)          68.6    9.3
-mom_hs:log(mom_iq)  -11.8    8.7
+(Intercept)        -232.5   42.6
+mom_hs               60.4   39.4
+log(mom_iq)          68.8    9.5
+mom_hs:log(mom_iq)  -12.1    8.8
 
 Auxiliary parameter(s):
       Median MAD_SD
 sigma 18.0    0.6  
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 86.8    1.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -625,21 +605,25 @@ print(loo_5)</code></pre>
 Computed from 4000 by 434 log-likelihood matrix
 
          Estimate   SE
-elpd_loo  -1872.4 14.4
+elpd_loo  -1872.3 14.4
 p_loo         4.3  0.4
-looic      3744.8 28.9
+looic      3744.6 28.8
 ------
 Monte Carlo SE of elpd_loo is 0.0.
 
 All Pareto k estimates are good (k &lt; 0.5).
 See help('pareto-k-diagnostic') for details.</code></pre>
-<pre class="r"><code>compare_models(loo_3, loo_5)</code></pre>
-<pre><code>
-Model comparison: 
-(negative 'elpd_diff' favors 1st model, positive favors 2nd) 
-
-elpd_diff        se 
-      3.7       1.4 </code></pre>
+<pre class="r"><code>loo_compare(loo_3, loo_5)</code></pre>
+<pre><code>      elpd_diff se_diff
+fit_5  0.0       0.0   
+fit_3 -3.8       1.4   </code></pre>
+<p><strong>Compare several models</strong></p>
+<pre class="r"><code>loo_compare(loo_1, loo_3, loo_4, loo_5)</code></pre>
+<pre><code>      elpd_diff se_diff
+fit_5   0.0       0.0  
+fit_4  -0.1       1.7  
+fit_3  -3.8       1.4  
+fit_1 -42.5       8.8  </code></pre>
 </div>
 
 

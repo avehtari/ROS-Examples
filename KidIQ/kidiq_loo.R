@@ -85,14 +85,14 @@ loo_3 <- loo(fit_3)
 print(loo_3)
 loo_3n <- loo(fit_3n)
 print(loo_3n)
-compare_models(loo_3, loo_3n)
+loo_compare(loo_3, loo_3n)
 
 #' **Linear regression with different predictors**
 fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq,
                   seed = SEED, refresh = 0)
 loo_1 <- loo(fit_1)
 print(loo_1)
-compare_models(loo_3, loo_1)
+loo_compare(loo_3, loo_1)
 
 #' **Linear regression with interaction**
 fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs,
@@ -100,7 +100,7 @@ fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs,
 print(fit_4)
 loo_4 <- loo(fit_4)
 print(loo_4)
-compare_models(loo_3, loo_4)
+loo_compare(loo_3, loo_4)
 
 #' **Linear regression with log-transformation and interaction**
 fit_5 <- stan_glm(kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs,
@@ -108,4 +108,7 @@ fit_5 <- stan_glm(kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs,
 print(fit_5)
 loo_5 <- loo(fit_5)
 print(loo_5)
-compare_models(loo_3, loo_5)
+loo_compare(loo_3, loo_5)
+
+#' **Compare several models**
+loo_compare(loo_1, loo_3, loo_4, loo_5)
