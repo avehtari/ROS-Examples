@@ -44,7 +44,7 @@ print(fit_1)
 #' We get warnings about high Pareto k values, which indicates that
 #' the importance sampling approximation used in loo is in this case
 #' unreliable. We thus use more robust K-fold-CV.
-kfold_1 <- rstanarm::kfold(fit_1, K=10)
+kfold_1 <- kfold(fit_1, K=10)
 kfold_1
 
 #' **Regress `log(weight)` on all of the log transformed predictors**<br>
@@ -60,8 +60,9 @@ loo_2_with_jacobian <- loo_2
 loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
                                      log(mesquite$weight)
 (elpd_loo_2_with_jacobian <- sum(loo_2_with_jacobian$pointwise[,1]))
-#' `compare_models` checks that the target data is same, but `compare`
-#' trusts that we know what we are comparing
+
+#' there will be a warning that the target data is not the same same, 
+#' this is ok because we have the jacobian correction
 loo_compare(kfold_1, loo_2_with_jacobian)
 
 #' **Posterior predictive checking for model in original scale**

@@ -110,5 +110,7 @@ loo_5 <- loo(fit_5)
 print(loo_5)
 loo_compare(loo_3, loo_5)
 
+
 #' **Compare several models**
 loo_compare(loo_1, loo_3, loo_4, loo_5)
+
