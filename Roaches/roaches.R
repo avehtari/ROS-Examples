@@ -127,7 +127,7 @@ fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior,
 #+
 print(fit_3)
 loo_3 <- loo(fit_3)
-compare(loo_2, loo_3)
+loo_compare(loo_2, loo_3)
 
 #' **Graphical posterior predictive checking**
 #+ results='hide'
