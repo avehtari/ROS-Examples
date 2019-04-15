@@ -42,7 +42,7 @@ fit_1 <- stan_glm(y ~ ., prior=normal(0, 10, autoscale=FALSE),
 #' In this case, Pareto smoothed importance sampling LOO fails, but
 #' the diagnostic recognizes this with many high Pareto k values. We
 #' can run slower, but more robust K-fold-CV
-kfold_1 <- rstanarm::kfold(fit_1)
+kfold_1 <- kfold(fit_1)
 
 #' **An alternative weakly informative prior**<br>
 #' The regularized horseshoe prior `hs()` is weakly informative,
@@ -56,11 +56,11 @@ fit_2 <- stan_glm(y ~ ., prior=hs_prior, data=fake, seed=SEED,
 (loo_2 <- loo(fit_2))
 #' PSIS-LOO performs better now, but there is still one bad diagnostic
 #' value, and thus we run again slower, but more robust K-fold-CV
-kfold_2 <- rstanarm::kfold(fit_2)
+kfold_2 <- kfold(fit_2)
 
 #' **Comparison of models**
-compare_models(loo_1,loo_2)
-loo::compare(kfold_1,kfold_2)
+loo_compare(loo_1,loo_2)
+loo_compare(kfold_1,kfold_2)
 #' As PSIS-LOO fails is underestimates the difference between the
 #' models. The Pareto k diagnostic correctly identified the problem,
 #' and more robust K-fold-CV shows that by using a better prior we can

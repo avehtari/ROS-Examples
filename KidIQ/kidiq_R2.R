@@ -62,7 +62,7 @@ loo_3 <- loo(fit_3)
 print(loo_3)
 
 #' **Compare models based on expected log predictive density**
-compare_models(loo_1, loo_3)
+loo_compare(loo_1, loo_3)
 
 #' **Bayes-R2**<br>
 #' Median Bayes-R2 increases

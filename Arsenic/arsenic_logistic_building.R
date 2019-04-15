@@ -141,7 +141,7 @@ print(fit_3, digits=2)
 #' LOO log score
 (loo3 <- loo(fit_3, save_psis = TRUE))
 #' Compare models
-compare_models(loo2, loo3)
+loo_compare(loo2, loo3)
 
 #' **Average improvement in LOO predictive probabilities**<br>
 #' from dist100 to dist100 + arsenic
@@ -191,7 +191,7 @@ print(fit_4, digits=2)
 #' LOO log score
 (loo4 <- loo(fit_4))
 #' Compare models
-compare_models(loo3, loo4)
+loo_compare(loo3, loo4)
 
 #' **Centering the input variables**
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
@@ -243,7 +243,7 @@ print(fit_6, digits=2)
 #' LOO log score
 (loo6 <- loo(fit_6))
 #' Compare models
-compare_models(loo4, loo6)
+loo_compare(loo4, loo6)
 
 #' **Remove assoc**
 #+ results='hide'
@@ -254,8 +254,8 @@ print(fit_7, digits=2)
 #' LOO log score
 (loo7 <- loo(fit_7))
 #' Compare models
-compare_models(loo4, loo7)
-compare_models(loo6, loo7)
+loo_compare(loo4, loo7)
+loo_compare(loo6, loo7)
 
 #' **Add interactions with education**
 #+ results='hide'
@@ -268,8 +268,8 @@ print(fit_8, digits=2)
 #' LOO log score
 (loo8 <- loo(fit_8, save_psis=TRUE))
 #' Compare models
-compare_models(loo3, loo8)
-compare_models(loo7, loo8)
+loo_compare(loo3, loo8)
+loo_compare(loo7, loo8)
 
 
 
@@ -292,7 +292,7 @@ print(fit_3a, digits=2)
 #' LOO log score
 (loo3a <- loo(fit_3a))
 #' Compare models
-compare_models(loo3, loo3a)
+loo_compare(loo3, loo3a)
 
 #' **Fit a model using scaled distance, log arsenic level, and an interaction**<br>
 #+ results='hide'
@@ -303,7 +303,7 @@ print(fit_4a, digits=2)
 #' LOO log score
 (loo4a <- loo(fit_4a))
 #' Compare models
-compare_models(loo3a, loo4a)
+loo_compare(loo3a, loo4a)
 
 #' **Add interactions with education**
 wells$c_log_arsenic <- wells$log_arsenic - mean(wells$log_arsenic)
@@ -319,4 +319,4 @@ print(fit_8a, digits=2)
 #' LOO log score
 (loo8a <- loo(fit_8a, save_psis=TRUE))
 #' Compare models
-compare_models(loo8, loo8a)
+loo_compare(loo8, loo8a)
