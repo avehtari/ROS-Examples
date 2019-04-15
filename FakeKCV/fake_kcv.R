@@ -61,6 +61,7 @@ kfold_2 <- kfold(fit_2)
 #' **Comparison of models**
 loo_compare(loo_1,loo_2)
 loo_compare(kfold_1,kfold_2)
+
 #' As PSIS-LOO fails is underestimates the difference between the
 #' models. The Pareto k diagnostic correctly identified the problem,
 #' and more robust K-fold-CV shows that by using a better prior we can

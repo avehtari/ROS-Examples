@@ -60,6 +60,7 @@ loo_2_with_jacobian <- loo_2
 loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
                                      log(mesquite$weight)
 (elpd_loo_2_with_jacobian <- sum(loo_2_with_jacobian$pointwise[,1]))
+
 #' there will be a warning that the target data is not the same same, 
 #' this is ok because we have the jacobian correction
 loo_compare(kfold_1, loo_2_with_jacobian)
