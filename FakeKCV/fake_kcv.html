@@ -424,7 +424,7 @@ Pareto k diagnostic values:
    (1, Inf)   (very bad)  1     1.7%   46        
 See help('pareto-k-diagnostic') for details.</code></pre>
 <p>In this case, Pareto smoothed importance sampling LOO fails, but the diagnostic recognizes this with many high Pareto k values. We can run slower, but more robust K-fold-CV</p>
-<pre class="r"><code>kfold_1 &lt;- rstanarm::kfold(fit_1)</code></pre>
+<pre class="r"><code>kfold_1 &lt;- kfold(fit_1)</code></pre>
 <p><strong>An alternative weakly informative prior</strong><br> The regularized horseshoe prior <code>hs()</code> is weakly informative, stating that it is likely that only small number of predictors are relevant, but we don’t know which ones.</p>
 <pre class="r"><code>k0 &lt;- 2 # prior guess for the number of relevant variables
 tau0 &lt;- k0/(k-k0) * 1/sqrt(n)
@@ -450,7 +450,7 @@ Pareto k diagnostic values:
    (1, Inf)   (very bad)  0     0.0%   &lt;NA&gt;      
 See help('pareto-k-diagnostic') for details.</code></pre>
 <p>PSIS-LOO performs better now, but there is still one bad diagnostic value, and thus we run again slower, but more robust K-fold-CV</p>
-<pre class="r"><code>kfold_2 &lt;- rstanarm::kfold(fit_2)</code></pre>
+<pre class="r"><code>kfold_2 &lt;- kfold(fit_2)</code></pre>
 <p><strong>Comparison of models</strong></p>
 <pre class="r"><code>loo_compare(loo_1,loo_2)</code></pre>
 <pre><code>      elpd_diff se_diff
@@ -459,8 +459,8 @@ fit_1 -9.9       5.7   </code></pre>
 <pre class="r"><code>loo_compare(kfold_1,kfold_2)</code></pre>
 <pre><code>      elpd_diff se_diff
 fit_2   0.0       0.0  
-fit_1 -16.7       5.0  </code></pre>
-<p>As PSIS-LOO fails it underestimates the difference between the models. The Pareto k diagnostic correctly identified the problem, and more robust K-fold-CV shows that by using a better prior we can get better predictions.</p>
+fit_1 -16.4       5.0  </code></pre>
+<p>As PSIS-LOO fails is underestimates the difference between the models. The Pareto k diagnostic correctly identified the problem, and more robust K-fold-CV shows that by using a better prior we can get better predictions.</p>
 
 
 
