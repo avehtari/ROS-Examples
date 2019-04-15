@@ -62,7 +62,7 @@ loo_2_with_jacobian$pointwise[,1] <- loo_2_with_jacobian$pointwise[,1]-
 (elpd_loo_2_with_jacobian <- sum(loo_2_with_jacobian$pointwise[,1]))
 #' `compare_models` checks that the target data is same, but `compare`
 #' trusts that we know what we are comparing
-compare(kfold_1, loo_2_with_jacobian)
+loo_compare(kfold_1, loo_2_with_jacobian)
 
 #' **Posterior predictive checking for model in original scale**
 yrep_1 <- posterior_predict(fit_1)
@@ -110,7 +110,7 @@ fit_3 <- stan_glm(log(weight) ~ log(canopy_volume), data=mesquite,
 print(fit_3)
 loo_3 <- loo(fit_3)
 #' Both models are modeling log(y) and can be compared directly.
-compare_models(loo_2, loo_3)
+loo_compare(loo_2, loo_3)
 
 #' **Compare also LOO-R^2**
 looR2 <- function(fit) {
@@ -138,7 +138,7 @@ fit_4 <- stan_glm(formula = log(weight) ~ log(canopy_volume) +
                   data=mesquite, seed=SEED, refresh=0)
 print(fit_4)
 (loo_4 <- loo(fit_4))
-compare_models(loo_2, loo_4)
+loo_compare(loo_2, loo_4)
 round(looR2(fit_4),2)
 round(median(bayes_R2(fit_4)),2)
 
@@ -162,7 +162,7 @@ mcmc_pairs(as.matrix(fit_4), pars=c("log(canopy_volume)","log(canopy_area)",
 fit_5 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_shape) +
     group, data=mesquite, seed=SEED, refresh=0)
 (loo_5 <- loo(fit_5))
-compare_models(loo_4, loo_5)
+loo_compare(loo_4, loo_5)
 round(looR2(fit_5),2)
 round(median(bayes_R2(fit_5)),2)
 
@@ -170,6 +170,6 @@ round(median(bayes_R2(fit_5)),2)
 fit_6 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_area) +
     group, data=mesquite, seed=SEED, refresh=0)
 (loo_6 <- loo(fit_6))
-compare_models(loo_5, loo_6)
+loo_compare(loo_5, loo_6)
 round(looR2(fit_6),2)
 round(median(bayes_R2(fit_6)),2)
