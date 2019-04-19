@@ -180,6 +180,9 @@
 #'   - [BigData/](https://github.com/avehtari/RAOS-Examples/tree/master/BigData/)
 #'     - [bigdata.html](BigData/bigdata.html) - Demonstrate computation speed with 100 000 observations.
 #' 
+#'
+#' -------------
+#' 
 #' ## <a id="alphabetically"></a>Code and data alphabetically
 #' 
 #'   - [AcademyAwards/](https://github.com/avehtari/RAOS-Examples/tree/master/AcademyAwards/)
