@@ -172,7 +172,12 @@
 #'   - [Imputation/](https://github.com/avehtari/RAOS-Examples/tree/master/Imputation/)
 #'     - [imputation.html](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
 #'     - [imputation_gg.html](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
-#' 
+#'
+#' ### 22  Advanced regression and multilevel models
+#'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
+#'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
+#'   - [BigData/](https://github.com/avehtari/RAOS-Examples/tree/master/BigData/)
+#'     - [bigdata.html](BigData/bigdata.html) - Demonstrate computation speed with 100 000 observations.
 #' 
 #' ## <a id="alphabetically"></a>Code and data alphabetically
 #' 
