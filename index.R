@@ -8,7 +8,7 @@
 #'
 #' - [Code and data by chapters](#by_chapters)
 #' - [Code and data folders alphabetically](#alphabetically)
-#' 
+#' - [Git repo for the code and data](https://github.com/avehtari/RAOS-Examples)
 #' -------------
 #' 
 
