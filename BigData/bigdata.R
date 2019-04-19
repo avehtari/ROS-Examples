@@ -54,18 +54,6 @@ fit3 <- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0)
 toc()
 print(fit3, digits=2)
 
-#' **Fit and display using stan_glm and optimization**<br>
-#' Using optimization with normal approximation, but without Pareto
-#' smoothed importance resampling provides coefficient standard
-#' errors, but no diagnostic whether normal approximation at the mode
-#' is appropriate.
-tic()
-fit4 <- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0,
-                 importance_resampling = FALSE) 
-toc()
-print(fit4, digits=2)
-
-
 #' **Logistic regression**<br>
 #' **Create fake data with 10\,000 observations and p=100**
 SEED <- 1655
@@ -86,11 +74,11 @@ toc()
 display(fit1)
 
 #' **Fit and display using stan_glm and MCMC**<br>
-## tic()
-## fit2 <- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
-##                  init=0, seed=SEED)
-## toc()
-## print(fit2, digits=2)
+tic()
+fit2 <- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
+                 init_r=0.1, seed=SEED)
+toc()
+print(fit2, digits=2)
 
 #' **Fit and display using stan_glm and optimization**<br>
 #' Using optimization with normal approximation and Pareto smoothed
@@ -105,14 +93,14 @@ print(fit3, digits=2)
 
 #' **Fit and display using stan_glm and optimization**<br>
 #' Using optimization with normal approximation, but without Pareto
-#' smoothed importance resampling provides coefficient standard
+#' smoothed importance resampling provides approximate coefficient standard
 #' errors, but no diagnostic whether normal approximation at the mode
 #' is appropriate.
 tic()
 fit4 <- stan_glm(y ~ ., data=fake, family=binomial(),
                algorithm='optimizing',
                importance_resampling = FALSE,
-                init=0) 
+               init=0) 
 toc()
 print(fit4, digits=2)
 

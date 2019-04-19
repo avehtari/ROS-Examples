@@ -404,7 +404,7 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- lm(y ~ ., data=fake)
 toc()</code></pre>
-<pre><code>2.074 sec elapsed</code></pre>
+<pre><code>2.321 sec elapsed</code></pre>
 <pre class="r"><code>display(fit1)</code></pre>
 <pre><code>lm(formula = y ~ ., data = fake)
             coef.est coef.se
@@ -517,7 +517,7 @@ residual sd = 10.02, R-Squared = 0.08</code></pre>
 fit2 &lt;- stan_glm(y ~ ., data=fake, mean_PPD=FALSE,
                  refresh=0, seed=SEED)
 toc()</code></pre>
-<pre><code>10.265 sec elapsed</code></pre>
+<pre><code>12.344 sec elapsed</code></pre>
 <pre class="r"><code>print(fit2, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       gaussian [identity]
@@ -639,7 +639,7 @@ sigma 10.02   0.02
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>6.634 sec elapsed</code></pre>
+<pre><code>7.273 sec elapsed</code></pre>
 <pre class="r"><code>print(fit3, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       gaussian [identity]
@@ -762,7 +762,7 @@ sigma 10.02   0.02
 fit4 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0,
                  importance_resampling = FALSE) 
 toc()</code></pre>
-<pre><code>6.592 sec elapsed</code></pre>
+<pre><code>7.136 sec elapsed</code></pre>
 <pre class="r"><code>print(fit4, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       gaussian [identity]
@@ -895,7 +895,7 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>1.13 sec elapsed</code></pre>
+<pre><code>1.301 sec elapsed</code></pre>
 <pre class="r"><code>display(fit1)</code></pre>
 <pre><code>glm(formula = y ~ ., family = binomial(), data = fake)
             coef.est coef.se
@@ -1004,17 +1004,130 @@ X99          0.03     0.04
   n = 10000, k = 101
   residual deviance = 3629.5, null deviance = 11288.3 (difference = 7658.7)</code></pre>
 <p><strong>Fit and display using stan_glm and MCMC</strong><br></p>
-<pre class="r"><code>## tic()
-## fit2 &lt;- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
-##                  init=0, seed=SEED)
-## toc()
-## print(fit2, digits=2)</code></pre>
+<pre class="r"><code>tic()
+fit2 &lt;- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
+                 init_r=0.1, seed=SEED)
+toc()</code></pre>
+<pre><code>644.893 sec elapsed</code></pre>
+<pre class="r"><code>print(fit2, digits=2)</code></pre>
+<pre><code>stan_glm
+ family:       binomial [logit]
+ formula:      y ~ .
+ observations: 10000
+ predictors:   101
+------
+            Median MAD_SD
+(Intercept)  3.82   0.10 
+x            5.61   0.14 
+X1           0.00   0.04 
+X2          -0.08   0.04 
+X3           0.06   0.04 
+X4           0.01   0.04 
+X5           0.00   0.04 
+X6          -0.01   0.04 
+X7           0.02   0.04 
+X8          -0.01   0.04 
+X9          -0.03   0.04 
+X10          0.04   0.04 
+X11         -0.03   0.04 
+X12          0.01   0.04 
+X13          0.02   0.04 
+X14         -0.09   0.04 
+X15          0.11   0.04 
+X16          0.00   0.05 
+X17          0.00   0.04 
+X18         -0.07   0.04 
+X19         -0.03   0.04 
+X20          0.06   0.04 
+X21         -0.07   0.04 
+X22         -0.01   0.04 
+X23          0.06   0.04 
+X24          0.10   0.04 
+X25         -0.06   0.04 
+X26         -0.02   0.04 
+X27          0.01   0.04 
+X28          0.03   0.04 
+X29          0.07   0.04 
+X30          0.01   0.04 
+X31         -0.01   0.04 
+X32          0.08   0.04 
+X33         -0.05   0.04 
+X34          0.04   0.04 
+X35          0.02   0.04 
+X36         -0.02   0.04 
+X37         -0.06   0.04 
+X38         -0.02   0.04 
+X39         -0.04   0.05 
+X40          0.02   0.05 
+X41          0.03   0.04 
+X42         -0.06   0.04 
+X43         -0.05   0.04 
+X44          0.00   0.04 
+X45          0.00   0.04 
+X46         -0.06   0.04 
+X47          0.06   0.04 
+X48          0.03   0.04 
+X49         -0.01   0.04 
+X50         -0.03   0.04 
+X51          0.00   0.04 
+X52          0.05   0.04 
+X53         -0.01   0.04 
+X54          0.03   0.04 
+X55         -0.05   0.04 
+X56         -0.02   0.04 
+X57         -0.01   0.04 
+X58          0.00   0.04 
+X59          0.01   0.04 
+X60          0.07   0.05 
+X61          0.00   0.05 
+X62         -0.05   0.05 
+X63          0.00   0.04 
+X64          0.02   0.04 
+X65         -0.04   0.04 
+X66         -0.01   0.04 
+X67         -0.04   0.04 
+X68          0.06   0.05 
+X69         -0.09   0.04 
+X70         -0.06   0.04 
+X71          0.03   0.04 
+X72         -0.04   0.05 
+X73          0.09   0.04 
+X74          0.00   0.04 
+X75          0.00   0.04 
+X76         -0.03   0.04 
+X77         -0.04   0.04 
+X78         -0.05   0.04 
+X79          0.03   0.04 
+X80          0.01   0.04 
+X81         -0.04   0.04 
+X82         -0.01   0.04 
+X83          0.06   0.05 
+X84          0.05   0.04 
+X85          0.09   0.04 
+X86         -0.02   0.04 
+X87          0.13   0.04 
+X88         -0.02   0.04 
+X89          0.00   0.04 
+X90         -0.03   0.04 
+X91         -0.02   0.04 
+X92          0.05   0.04 
+X93          0.06   0.04 
+X94         -0.01   0.04 
+X95         -0.04   0.04 
+X96         -0.06   0.04 
+X97         -0.02   0.04 
+X98          0.10   0.04 
+X99          0.03   0.04 
+
+------
+* For help interpreting the printed output see ?print.stanreg
+* For info on the priors used see ?prior_summary.stanreg</code></pre>
 <p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                 algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>8.446 sec elapsed</code></pre>
+<pre><code>10.211 sec elapsed</code></pre>
 <pre class="r"><code>print(fit3, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       binomial [logit]
@@ -1135,7 +1248,7 @@ fit4 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                importance_resampling = FALSE,
                 init=0) 
 toc()</code></pre>
-<pre><code>2.358 sec elapsed</code></pre>
+<pre><code>2.513 sec elapsed</code></pre>
 <pre class="r"><code>print(fit4, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       binomial [logit]
@@ -1264,7 +1377,7 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>13.043 sec elapsed</code></pre>
+<pre><code>12.565 sec elapsed</code></pre>
 <pre class="r"><code>display(fit1)</code></pre>
 <pre><code>glm(formula = y ~ ., family = binomial(), data = fake)
             coef.est coef.se
@@ -1377,7 +1490,7 @@ X99          0.01     0.01
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                  algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>79.334 sec elapsed</code></pre>
+<pre><code>77.506 sec elapsed</code></pre>
 <pre class="r"><code>print(fit3, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       binomial [logit]
@@ -1498,7 +1611,7 @@ fit4 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                  importance_resampling = FALSE,
                  init=0) 
 toc()</code></pre>
-<pre><code>23.616 sec elapsed</code></pre>
+<pre><code>21.221 sec elapsed</code></pre>
 <pre class="r"><code>print(fit4, digits=2)</code></pre>
 <pre><code>stan_glm
  family:       binomial [logit]
