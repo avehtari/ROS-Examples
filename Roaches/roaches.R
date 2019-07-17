@@ -38,76 +38,78 @@ data(roaches)
 #' scale the number of roaches by 100
 roaches$roach100 <- roaches$roach1 / 100
 
-#' ### Poisson model
-#' 
-fit_1 <- stan_glm(y ~ roach100 + treatment + senior, family=poisson,
-  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
-prior_summary(fit_1)
-print(fit_1, digits=2)
-
-#' **Graphical posterior predictive checking**<br>
-#'
-#' instead of y, we plot log10(y+1) to better show the differences in
-#' the shape of the predictive distribution
-yrep_1 <- posterior_predict(fit_1)
-n_sims <- nrow(yrep_1)
-subset <- sample(n_sims, 100)
-(ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[subset,]+1))+
-     xlim(0,3) + xlab('log10(y+1)'))
-
-#' **Predictive checking with test statistic**<br>
-#' test statistic used is the proportion of zero counts
-ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==0))
-#' or
-print(mean(roaches$y==0), digits=2)
-print(mean(yrep_1==0), digits=2)
-
 #' ### Negative-binomial model
 #'
 #' negative-binomial model is over-dispersed compared to Poisson
 #' 
-fit_2 <- stan_glm(y ~ roach100 + treatment + senior, family=neg_binomial_2,
+fit_1 <- stan_glm(y ~ roach100 + treatment + senior, family=neg_binomial_2,
   offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
-prior_summary(fit_2)
-print(fit_2, digits=2)
-loo_2 <- loo(fit_2)
+prior_summary(fit_1)
+print(fit_1, digits=2)
+loo_1 <- loo(fit_1)
 
 #' **Graphical posterior predictive checking**
-yrep_2 <- posterior_predict(fit_2)
-(ppc_2 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_2[subset,]+1))+
+yrep_1 <- posterior_predict(fit_1)
+(ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[sims_display,]+1))+
      xlab('log10(y+1)'))
 
 #+ eval=FALSE, include=FALSE
-pbg <- bayesplot_grid(ppc_1, ppc_2,
+pbg <- bayesplot_grid(ppc_1, ppc_1,
                       grid_args = list(ncol = 2),
                       titles = c("Poisson", "negative-binomial"))
 if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9)
 
 #' **Predictive checking with test statistic**<br>
 #' ppc with proportion of zero counts test statistic
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==0))
+#' or
+print(mean(roaches$y==0), digits=2)
+print(mean(yrep_1==0), digits=2)
+
+#' **Predictive checking with test statistic**<br>
+#' ppc with proportion of counts of 1 test statistic
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==1))
+#' or
+print(mean(roaches$y==1), digits=2)
+print(mean(yrep_1==1), digits=2)
+
+#' ppc with 95% quantile test statistic
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) quantile(y, probs=0.95))
+
+#' ppc with 99% quantile test statistic
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) quantile(y, probs=0.99))
+
+#' ppc with max count test statistic
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=max)
+#' or
+print(max(roaches$y), digits=2)
+print(max(yrep_1), digits=2)
+
+#' ### Poisson model
+#' 
+#' Poisson is a special case of negative-binomial
+#' 
+fit_2 <- stan_glm(y ~ roach100 + treatment + senior, family=poisson,
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
+prior_summary(fit_2)
+print(fit_2, digits=2)
+
+#' **Graphical posterior predictive checking**<br>
+#'
+#' instead of y, we plot log10(y+1) to better show the differences in
+#' the shape of the predictive distribution
+yrep_2 <- posterior_predict(fit_2)
+n_sims <- nrow(yrep_2)
+sims_display <- sample(n_sims, 100)
+(ppc_2 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_2[sims_display,]+1))+
+     xlim(0,3) + xlab('log10(y+1)'))
+
+#' **Predictive checking with test statistic**<br>
+#' test statistic used is the proportion of zero counts
 ppc_stat(y=roaches$y, yrep=yrep_2, stat=function(y) mean(y==0))
 #' or
 print(mean(roaches$y==0), digits=2)
 print(mean(yrep_2==0), digits=2)
-
-#' **Predictive checking with test statistic**<br>
-#' ppc with proportion of counts of 1 test statistic
-ppc_stat(y=roaches$y, yrep=yrep_2, stat=function(y) mean(y==1))
-#' or
-print(mean(roaches$y==1), digits=2)
-print(mean(yrep_2==1), digits=2)
-
-#' ppc with 95% quantile test statistic
-ppc_stat(y=roaches$y, yrep=yrep_2, stat=function(y) quantile(y, probs=0.95))
-
-#' ppc with 99% quantile test statistic
-ppc_stat(y=roaches$y, yrep=yrep_2, stat=function(y) quantile(y, probs=0.99))
-
-#' ppc with max count test statistic
-ppc_stat(y=roaches$y, yrep=yrep_2, stat=max)
-#' or
-print(max(roaches$y), digits=2)
-print(max(yrep_2), digits=2)
 
 #' ### Zero-inflated negative-binomial model
 #'
@@ -130,10 +132,8 @@ loo_3 <- loo(fit_3)
 loo_compare(loo_2, loo_3)
 
 #' **Graphical posterior predictive checking**
-#+ results='hide'
 yrep_3 <- posterior_predict(fit_3)
-#+
-(ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[subset,]+1))+
+(ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[sims_display,]+1))+
      xlab('log10(y+1)'))
 #+ eval=FALSE, include=FALSE
 if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5)
