@@ -258,8 +258,8 @@ par(mar=c(6,6,4,2)+.1)
 plot(earnings$height + runif(n,-.2,.2), earnings$log_earn, xlab="height", ylab="log (earnings)", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10",
       cex.main=3, main="Log regression, plotted on log scale")
 axis(2, seq(6,12,2), mgp=c(4,1.1,0),cex.axis=3)
-subset <- sample(n_sims, 10)
-for (i in subset){
+sims_display <- sample(n_sims, 10)
+for (i in sims_display){
   curve(sims[i,1] + sims[i,2]*x, lwd=0.5, col="gray30", add=TRUE)
 }
 curve(coef(logmodel_2)[1] + coef(logmodel_2)[2]*x, add=TRUE)
@@ -267,12 +267,12 @@ curve(coef(logmodel_2)[1] + coef(logmodel_2)[2]*x, add=TRUE)
 if (savefigs) dev.off()
 
 #' **Plot posterior draws of linear model on log scale, ggplot version**
-subset <- sample(n_sims, 10)
+sims_display <- sample(n_sims, 10)
 ggplot(earnings, aes(height, log_earn)) +
   geom_jitter(height = 0, width = 0.25) +
   geom_abline(
-    intercept = sims[subset, 1],
-    slope = sims[subset, 2],
+    intercept = sims[sims_display, 1],
+    slope = sims[sims_display, 2],
     color = "darkgray"
   ) +
   geom_abline(
@@ -290,13 +290,13 @@ ggplot(earnings, aes(height, log_earn)) +
 #' **Posterior predictive checking for model in linear scale**
 yrep_1 <- posterior_predict(fit_1)
 n_sims <- nrow(yrep_1)
-subset <- sample(n_sims, 100)
-ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[subset,])
+sims_display <- sample(n_sims, 100)
+ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[sims_display,])
 #' **Posterior predictive checking for model in log scale**
 yrep_log_1 <- posterior_predict(logmodel_1)
 n_sims <- nrow(yrep_log_1)
-subset <- sample(n_sims, 100)
-ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[subset,])
+sims_display <- sample(n_sims, 100)
+ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[sims_display,])
 (bpg <- bayesplot_grid(
   ppc_1, ppc_log_1,
   grid_args = list(ncol = 2),
@@ -308,17 +308,17 @@ ggsave(root("Earnings/figs","earnings_ppc.pdf"), bpg, height=3, width=9)
 #' **Posterior predictive checking for model in linear scale**
 yrep_2 <- posterior_predict(fit_2)
 n_sims <- nrow(yrep_2)
-subset <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$earnk, yrep_2[subset,])
+sims_display <- sample(n_sims, 100)
+ppc_dens_overlay(earnings$earnk, yrep_2[sims_display,])
 
 #' **Posterior predictive checking for model in log scale**
 yrep_log_2 <- posterior_predict(logmodel_2)
 n_sims <- nrow(yrep_log_2)
-subset <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$log_earn, yrep_log_2[subset,])
+sims_display <- sample(n_sims, 100)
+ppc_dens_overlay(earnings$log_earn, yrep_log_2[sims_display,])
 
 #' **Posterior predictive checking for model in log-log scale**
 yrep_loglog_2 <- posterior_predict(loglogmodel_2)
 n_sims <- nrow(yrep_loglog_2)
-subset <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$log_earn, yrep_loglog_2[subset,])
+sims_display <- sample(n_sims, 100)
+ppc_dens_overlay(earnings$log_earn, yrep_loglog_2[sims_display,])

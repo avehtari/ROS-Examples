@@ -68,11 +68,11 @@ loo_compare(kfold_1, loo_2_with_jacobian)
 #' **Posterior predictive checking for model in original scale**
 yrep_1 <- posterior_predict(fit_1)
 n_sims <- nrow(yrep_1)
-subset <- sample(n_sims, 100)
-ppc_1 <- ppc_dens_overlay(mesquite$weight, yrep_1[subset,])
+sims_display <- sample(n_sims, 100)
+ppc_1 <- ppc_dens_overlay(mesquite$weight, yrep_1[sims_display,])
 #' **Posterior predictive checking for model in log scale**
 yrep_2 <- posterior_predict(fit_2)
-ppc_2 <- ppc_dens_overlay(log(mesquite$weight), yrep_2[subset,])
+ppc_2 <- ppc_dens_overlay(log(mesquite$weight), yrep_2[sims_display,])
 bpg <- bayesplot_grid(
   ppc_1, ppc_2,
   grid_args = list(ncol = 2),
