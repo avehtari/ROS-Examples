@@ -10,10 +10,7 @@ parameters {
   real<lower=0> sigma;
 }
 model {
-  vector[J] p;
-  for (j in 1:J){
-    p[j] = 2*Phi(asin((R-r)/x[j]) / sigma) - 1;
-  }
+  vector[J] p = 2*Phi(asin((R-r) ./ x) / sigma) - 1;
   y ~ binomial(n, p);
 }
 generated quantities {
