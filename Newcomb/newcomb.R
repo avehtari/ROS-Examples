@@ -67,8 +67,8 @@ for (s in 1:n_sims)
 if (savefigs) pdf(root("Newcomb/figs","newcomb_rep_hist.pdf"), height=4, width=8)
 #+
 par(mfrow=c(4,5), mar=rep(2,4))
-for (s in sample(n_sims, 20))
-  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n")
+for (s in sample(n_sims, 20)) {
+  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n") }
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
@@ -85,8 +85,8 @@ ppc_dens_overlay(newcomb$y, y_rep[1:100, ]) + scale_y_continuous(breaks=NULL)
 if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_dens_overlay.pdf"), width = 6, height = 2.5)
 
 #' **Plot test statistic for data and replicates**
-Test <- function (y)
-  min(y)
+Test <- function (y) {
+  min(y) }
 test_rep <- apply(y_rep, 1, Test)
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Newcomb/figs","newcomb_test_hist.pdf"), height=4, width=5)
