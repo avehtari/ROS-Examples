@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-04-19" />
+<meta name="date" content="2019-08-07" />
 
 <title>Regression and Other Stories: Big data</title>
 
@@ -344,18 +345,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,1354 +366,109 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Big data</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-04-19</h4>
+<h4 class="date">2019-08-07</h4>
 
 </div>
 
 
-<p>Demonstrate computation speed with 100,000 observations.</p>
+<p>Demonstrate computation speed with bigger data.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(arm)
 library(rstanarm)
 options(mc.cores = parallel::detectCores())
 library(tictoc)</code></pre>
-<p><strong>Linear regression</strong><br> <strong>Create fake data with n=100,000 and p=100</strong></p>
+<p><strong>Linear regression</strong></p>
+<p><strong>Create fake data with n=100,000 and p=100</strong></p>
 <pre class="r"><code>SEED &lt;- 1656
 set.seed(SEED)
 n &lt;- 1e5
+k &lt;- 100
 x &lt;- rnorm(n)
-xn &lt;- matrix(rnorm(n*99),nrow=n)
+xn &lt;- matrix(rnorm(n*(k-1)),nrow=n)
 a &lt;- 2
 b &lt;- 3
 sigma &lt;- 10
 y &lt;- a + b*x + sigma*rnorm(n)
 fake &lt;- data.frame(x, xn, y)</code></pre>
-<p><strong>Fit and display using lm</strong><br></p>
+<p><strong>Fit using lm</strong><br></p>
 <pre class="r"><code>tic()
 fit1 &lt;- lm(y ~ ., data=fake)
 toc()</code></pre>
-<pre><code>2.321 sec elapsed</code></pre>
-<pre class="r"><code>display(fit1)</code></pre>
-<pre><code>lm(formula = y ~ ., data = fake)
-            coef.est coef.se
-(Intercept)  2.04     0.03  
-x            2.99     0.03  
-X1          -0.01     0.03  
-X2          -0.01     0.03  
-X3          -0.02     0.03  
-X4           0.02     0.03  
-X5           0.00     0.03  
-X6           0.04     0.03  
-X7          -0.05     0.03  
-X8          -0.02     0.03  
-X9          -0.03     0.03  
-X10          0.03     0.03  
-X11          0.01     0.03  
-X12         -0.04     0.03  
-X13         -0.02     0.03  
-X14          0.03     0.03  
-X15          0.01     0.03  
-X16         -0.04     0.03  
-X17          0.00     0.03  
-X18          0.05     0.03  
-X19         -0.05     0.03  
-X20          0.02     0.03  
-X21          0.01     0.03  
-X22          0.02     0.03  
-X23         -0.03     0.03  
-X24          0.01     0.03  
-X25          0.00     0.03  
-X26         -0.03     0.03  
-X27          0.01     0.03  
-X28          0.07     0.03  
-X29         -0.02     0.03  
-X30         -0.01     0.03  
-X31          0.00     0.03  
-X32         -0.03     0.03  
-X33          0.00     0.03  
-X34          0.03     0.03  
-X35          0.02     0.03  
-X36          0.00     0.03  
-X37         -0.02     0.03  
-X38         -0.02     0.03  
-X39          0.00     0.03  
-X40          0.05     0.03  
-X41          0.04     0.03  
-X42          0.04     0.03  
-X43         -0.03     0.03  
-X44          0.04     0.03  
-X45         -0.03     0.03  
-X46         -0.03     0.03  
-X47          0.01     0.03  
-X48         -0.08     0.03  
-X49          0.04     0.03  
-X50         -0.01     0.03  
-X51          0.02     0.03  
-X52          0.05     0.03  
-X53          0.00     0.03  
-X54          0.00     0.03  
-X55         -0.07     0.03  
-X56         -0.03     0.03  
-X57          0.01     0.03  
-X58          0.05     0.03  
-X59         -0.04     0.03  
-X60          0.02     0.03  
-X61          0.03     0.03  
-X62          0.04     0.03  
-X63          0.01     0.03  
-X64          0.01     0.03  
-X65          0.01     0.03  
-X66          0.02     0.03  
-X67         -0.01     0.03  
-X68          0.02     0.03  
-X69         -0.02     0.03  
-X70         -0.01     0.03  
-X71         -0.02     0.03  
-X72          0.02     0.03  
-X73          0.03     0.03  
-X74          0.04     0.03  
-X75         -0.03     0.03  
-X76         -0.01     0.03  
-X77         -0.04     0.03  
-X78         -0.01     0.03  
-X79         -0.03     0.03  
-X80          0.01     0.03  
-X81         -0.01     0.03  
-X82          0.00     0.03  
-X83          0.01     0.03  
-X84          0.00     0.03  
-X85         -0.03     0.03  
-X86         -0.04     0.03  
-X87          0.03     0.03  
-X88         -0.03     0.03  
-X89          0.00     0.03  
-X90         -0.07     0.03  
-X91          0.05     0.03  
-X92         -0.01     0.03  
-X93          0.02     0.03  
-X94         -0.01     0.03  
-X95         -0.07     0.03  
-X96          0.02     0.03  
-X97         -0.02     0.03  
-X98          0.04     0.03  
-X99          0.04     0.03  
----
-n = 100000, k = 101
-residual sd = 10.02, R-Squared = 0.08</code></pre>
-<p><strong>Fit and display using stan_glm and MCMC</strong><br></p>
+<pre><code>2.089 sec elapsed</code></pre>
+<pre class="r"><code>#display(fit1)</code></pre>
+<p><strong>Fit using stan_glm and MCMC</strong><br> stan_glm is fast for linear regression with n&gt;k</p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, mean_PPD=FALSE,
-                 refresh=0, seed=SEED)
+                 refresh=100, seed=SEED)
 toc()</code></pre>
-<pre><code>12.344 sec elapsed</code></pre>
-<pre class="r"><code>print(fit2, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       gaussian [identity]
- formula:      y ~ .
- observations: 100000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  2.04   0.03 
-x            2.99   0.03 
-X1          -0.01   0.03 
-X2          -0.01   0.03 
-X3          -0.02   0.03 
-X4           0.02   0.03 
-X5           0.00   0.03 
-X6           0.04   0.03 
-X7          -0.05   0.03 
-X8          -0.02   0.03 
-X9          -0.03   0.03 
-X10          0.03   0.03 
-X11          0.01   0.03 
-X12         -0.04   0.03 
-X13         -0.03   0.03 
-X14          0.03   0.03 
-X15          0.01   0.03 
-X16         -0.04   0.03 
-X17          0.00   0.03 
-X18          0.05   0.03 
-X19         -0.05   0.03 
-X20          0.02   0.03 
-X21          0.01   0.03 
-X22          0.02   0.03 
-X23         -0.03   0.03 
-X24          0.01   0.03 
-X25          0.00   0.03 
-X26         -0.03   0.03 
-X27          0.01   0.03 
-X28          0.07   0.03 
-X29         -0.02   0.03 
-X30         -0.01   0.03 
-X31          0.00   0.03 
-X32         -0.03   0.03 
-X33          0.00   0.03 
-X34          0.03   0.03 
-X35          0.02   0.03 
-X36          0.00   0.03 
-X37         -0.02   0.03 
-X38         -0.02   0.03 
-X39          0.00   0.03 
-X40          0.05   0.03 
-X41          0.04   0.03 
-X42          0.04   0.03 
-X43         -0.03   0.03 
-X44          0.04   0.03 
-X45         -0.03   0.03 
-X46         -0.03   0.03 
-X47          0.01   0.03 
-X48         -0.08   0.03 
-X49          0.04   0.03 
-X50         -0.01   0.03 
-X51          0.02   0.03 
-X52          0.05   0.03 
-X53          0.00   0.03 
-X54          0.00   0.03 
-X55         -0.07   0.03 
-X56         -0.03   0.03 
-X57          0.01   0.03 
-X58          0.04   0.03 
-X59         -0.04   0.03 
-X60          0.02   0.03 
-X61          0.03   0.03 
-X62          0.04   0.03 
-X63          0.01   0.03 
-X64          0.01   0.03 
-X65          0.01   0.03 
-X66          0.02   0.03 
-X67         -0.01   0.03 
-X68          0.01   0.03 
-X69         -0.02   0.03 
-X70         -0.01   0.03 
-X71         -0.02   0.03 
-X72          0.02   0.03 
-X73          0.02   0.03 
-X74          0.04   0.03 
-X75         -0.03   0.03 
-X76         -0.01   0.03 
-X77         -0.04   0.03 
-X78         -0.01   0.03 
-X79         -0.04   0.03 
-X80          0.01   0.03 
-X81          0.00   0.03 
-X82          0.00   0.03 
-X83          0.01   0.03 
-X84          0.00   0.03 
-X85         -0.03   0.03 
-X86         -0.04   0.03 
-X87          0.03   0.03 
-X88         -0.03   0.03 
-X89          0.00   0.03 
-X90         -0.07   0.03 
-X91          0.05   0.03 
-X92         -0.01   0.03 
-X93          0.02   0.03 
-X94         -0.01   0.03 
-X95         -0.07   0.03 
-X96          0.02   0.03 
-X97         -0.02   0.03 
-X98          0.04   0.03 
-X99          0.04   0.03 
-
-Auxiliary parameter(s):
-      Median MAD_SD
-sigma 10.02   0.02 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
+<pre><code>25.285 sec elapsed</code></pre>
+<pre class="r"><code>#print(fit2, digits=2)</code></pre>
+<p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>7.273 sec elapsed</code></pre>
-<pre class="r"><code>print(fit3, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       gaussian [identity]
- formula:      y ~ .
- observations: 100000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  2.04   0.03 
-x            2.99   0.03 
-X1          -0.01   0.03 
-X2           0.00   0.03 
-X3          -0.01   0.03 
-X4           0.02   0.03 
-X5           0.00   0.03 
-X6           0.04   0.03 
-X7          -0.05   0.03 
-X8          -0.02   0.03 
-X9          -0.03   0.03 
-X10          0.03   0.03 
-X11          0.01   0.03 
-X12         -0.04   0.03 
-X13         -0.02   0.03 
-X14          0.03   0.03 
-X15          0.01   0.03 
-X16         -0.04   0.03 
-X17          0.00   0.03 
-X18          0.06   0.03 
-X19         -0.05   0.03 
-X20          0.02   0.03 
-X21          0.01   0.03 
-X22          0.02   0.03 
-X23         -0.03   0.03 
-X24          0.01   0.03 
-X25          0.00   0.03 
-X26         -0.03   0.03 
-X27          0.01   0.03 
-X28          0.07   0.03 
-X29         -0.02   0.03 
-X30         -0.01   0.03 
-X31          0.00   0.03 
-X32         -0.03   0.03 
-X33          0.00   0.03 
-X34          0.03   0.03 
-X35          0.02   0.03 
-X36          0.00   0.03 
-X37         -0.02   0.03 
-X38         -0.02   0.03 
-X39          0.00   0.03 
-X40          0.05   0.03 
-X41          0.04   0.03 
-X42          0.04   0.03 
-X43         -0.02   0.03 
-X44          0.04   0.03 
-X45         -0.03   0.03 
-X46         -0.03   0.03 
-X47          0.01   0.03 
-X48         -0.08   0.03 
-X49          0.04   0.03 
-X50         -0.01   0.03 
-X51          0.01   0.03 
-X52          0.05   0.03 
-X53          0.00   0.03 
-X54          0.00   0.03 
-X55         -0.07   0.03 
-X56         -0.03   0.03 
-X57          0.02   0.03 
-X58          0.05   0.03 
-X59         -0.04   0.03 
-X60          0.02   0.03 
-X61          0.04   0.03 
-X62          0.04   0.03 
-X63          0.01   0.03 
-X64          0.01   0.03 
-X65          0.01   0.03 
-X66          0.02   0.03 
-X67         -0.01   0.03 
-X68          0.02   0.03 
-X69         -0.02   0.03 
-X70         -0.01   0.03 
-X71         -0.02   0.03 
-X72          0.02   0.03 
-X73          0.03   0.03 
-X74          0.04   0.03 
-X75         -0.03   0.03 
-X76         -0.01   0.03 
-X77         -0.04   0.03 
-X78         -0.01   0.03 
-X79         -0.04   0.03 
-X80          0.01   0.03 
-X81         -0.01   0.03 
-X82          0.01   0.03 
-X83          0.01   0.03 
-X84          0.00   0.03 
-X85         -0.03   0.03 
-X86         -0.04   0.03 
-X87          0.03   0.03 
-X88         -0.03   0.03 
-X89          0.00   0.03 
-X90         -0.07   0.03 
-X91          0.05   0.03 
-X92         -0.01   0.03 
-X93          0.02   0.03 
-X94         -0.01   0.03 
-X95         -0.07   0.03 
-X96          0.02   0.04 
-X97         -0.02   0.03 
-X98          0.05   0.03 
-X99          0.04   0.03 
-
-Auxiliary parameter(s):
-      Median MAD_SD
-sigma 10.02   0.02 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation, but without Pareto smoothed importance resampling provides coefficient standard errors, but no diagnostic whether normal approximation at the mode is appropriate.</p>
-<pre class="r"><code>tic()
-fit4 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0,
-                 importance_resampling = FALSE) 
-toc()</code></pre>
-<pre><code>7.136 sec elapsed</code></pre>
-<pre class="r"><code>print(fit4, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       gaussian [identity]
- formula:      y ~ .
- observations: 100000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  2.04   0.03 
-x            2.99   0.03 
-X1          -0.01   0.03 
-X2          -0.01   0.03 
-X3          -0.02   0.03 
-X4           0.02   0.03 
-X5           0.00   0.03 
-X6           0.04   0.03 
-X7          -0.05   0.03 
-X8          -0.02   0.03 
-X9          -0.03   0.03 
-X10          0.03   0.03 
-X11          0.02   0.03 
-X12         -0.04   0.03 
-X13         -0.02   0.03 
-X14          0.03   0.03 
-X15          0.01   0.03 
-X16         -0.04   0.03 
-X17          0.00   0.03 
-X18          0.05   0.03 
-X19         -0.05   0.03 
-X20          0.02   0.03 
-X21          0.01   0.03 
-X22          0.02   0.03 
-X23         -0.03   0.03 
-X24          0.01   0.03 
-X25          0.00   0.03 
-X26         -0.03   0.03 
-X27          0.01   0.03 
-X28          0.07   0.03 
-X29         -0.02   0.03 
-X30         -0.01   0.03 
-X31          0.00   0.03 
-X32         -0.03   0.03 
-X33          0.00   0.03 
-X34          0.03   0.03 
-X35          0.02   0.03 
-X36         -0.01   0.03 
-X37         -0.02   0.03 
-X38         -0.02   0.03 
-X39          0.00   0.03 
-X40          0.05   0.03 
-X41          0.04   0.03 
-X42          0.04   0.03 
-X43         -0.03   0.03 
-X44          0.04   0.03 
-X45         -0.03   0.03 
-X46         -0.03   0.03 
-X47          0.01   0.03 
-X48         -0.08   0.03 
-X49          0.04   0.03 
-X50         -0.01   0.03 
-X51          0.02   0.03 
-X52          0.05   0.03 
-X53          0.00   0.03 
-X54          0.00   0.03 
-X55         -0.07   0.03 
-X56         -0.03   0.03 
-X57          0.01   0.03 
-X58          0.04   0.03 
-X59         -0.04   0.03 
-X60          0.02   0.03 
-X61          0.03   0.03 
-X62          0.03   0.03 
-X63          0.01   0.03 
-X64          0.01   0.03 
-X65          0.01   0.03 
-X66          0.02   0.03 
-X67         -0.01   0.03 
-X68          0.02   0.03 
-X69         -0.03   0.03 
-X70         -0.01   0.03 
-X71         -0.02   0.03 
-X72          0.02   0.03 
-X73          0.03   0.03 
-X74          0.04   0.03 
-X75         -0.03   0.03 
-X76         -0.01   0.03 
-X77         -0.04   0.03 
-X78          0.00   0.03 
-X79         -0.03   0.03 
-X80          0.01   0.03 
-X81         -0.01   0.03 
-X82          0.00   0.03 
-X83          0.01   0.03 
-X84          0.00   0.03 
-X85         -0.02   0.03 
-X86         -0.03   0.03 
-X87          0.03   0.03 
-X88         -0.03   0.03 
-X89          0.00   0.03 
-X90         -0.07   0.03 
-X91          0.05   0.03 
-X92         -0.01   0.03 
-X93          0.02   0.03 
-X94         -0.01   0.03 
-X95         -0.07   0.03 
-X96          0.02   0.03 
-X97         -0.02   0.03 
-X98          0.04   0.03 
-X99          0.05   0.03 
-
-Auxiliary parameter(s):
-      Median MAD_SD
-sigma 10.02   0.02 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Logistic regression</strong><br> <strong>Create fake data with 10,000 observations and p=100</strong></p>
+<pre><code>6.45 sec elapsed</code></pre>
+<pre class="r"><code>#print(fit3, digits=2)</code></pre>
+<p><strong>Logistic regression</strong></p>
+<p><strong>Create fake data with 10,000 observations and p=100</strong></p>
 <pre class="r"><code>SEED &lt;- 1655
 set.seed(SEED)
 n &lt;- 1e4
+k &lt;- 100
 x &lt;- rnorm(n)
-xn &lt;- matrix(rnorm(n*99),nrow=n)
+xn &lt;- matrix(rnorm(n*(k-1)),nrow=n)
 a &lt;- 2
 b &lt;- 3
 sigma &lt;- 1
 y &lt;- (a + b*x + sigma*rnorm(n))&gt;0+0
 fake &lt;- data.frame(x, xn, y)</code></pre>
-<p><strong>Fit and display using glm</strong><br></p>
+<p><strong>Fit using glm</strong><br></p>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>1.301 sec elapsed</code></pre>
-<pre class="r"><code>display(fit1)</code></pre>
-<pre><code>glm(formula = y ~ ., family = binomial(), data = fake)
-            coef.est coef.se
-(Intercept)  3.72     0.09  
-x            5.46     0.14  
-X1           0.00     0.04  
-X2          -0.07     0.04  
-X3           0.06     0.04  
-X4           0.01     0.04  
-X5           0.00     0.04  
-X6           0.00     0.04  
-X7           0.02     0.04  
-X8          -0.02     0.04  
-X9          -0.03     0.04  
-X10          0.04     0.04  
-X11         -0.03     0.04  
-X12          0.01     0.04  
-X13          0.02     0.04  
-X14         -0.09     0.04  
-X15          0.11     0.04  
-X16          0.00     0.04  
-X17          0.00     0.04  
-X18         -0.07     0.04  
-X19         -0.03     0.04  
-X20          0.05     0.04  
-X21         -0.07     0.04  
-X22         -0.01     0.04  
-X23          0.06     0.04  
-X24          0.09     0.04  
-X25         -0.06     0.04  
-X26         -0.02     0.04  
-X27          0.01     0.04  
-X28          0.03     0.04  
-X29          0.07     0.04  
-X30          0.01     0.04  
-X31         -0.01     0.04  
-X32          0.08     0.04  
-X33         -0.05     0.04  
-X34          0.04     0.04  
-X35          0.02     0.04  
-X36         -0.02     0.04  
-X37         -0.06     0.04  
-X38         -0.02     0.04  
-X39         -0.03     0.04  
-X40          0.02     0.04  
-X41          0.02     0.04  
-X42         -0.06     0.04  
-X43         -0.05     0.04  
-X44          0.00     0.04  
-X45          0.00     0.04  
-X46         -0.06     0.04  
-X47          0.06     0.04  
-X48          0.02     0.04  
-X49         -0.01     0.04  
-X50         -0.03     0.04  
-X51          0.00     0.04  
-X52          0.05     0.04  
-X53         -0.01     0.04  
-X54          0.03     0.04  
-X55         -0.05     0.04  
-X56         -0.02     0.04  
-X57         -0.01     0.04  
-X58          0.00     0.04  
-X59          0.01     0.04  
-X60          0.07     0.04  
-X61          0.00     0.04  
-X62         -0.05     0.04  
-X63          0.00     0.04  
-X64          0.02     0.04  
-X65         -0.04     0.04  
-X66         -0.01     0.04  
-X67         -0.04     0.04  
-X68          0.06     0.04  
-X69         -0.08     0.04  
-X70         -0.06     0.04  
-X71          0.03     0.04  
-X72         -0.04     0.04  
-X73          0.08     0.04  
-X74          0.00     0.04  
-X75          0.00     0.04  
-X76         -0.03     0.04  
-X77         -0.04     0.04  
-X78         -0.05     0.04  
-X79          0.03     0.04  
-X80          0.01     0.04  
-X81         -0.03     0.04  
-X82         -0.01     0.04  
-X83          0.06     0.04  
-X84          0.05     0.04  
-X85          0.09     0.04  
-X86         -0.02     0.04  
-X87          0.13     0.04  
-X88         -0.02     0.04  
-X89          0.00     0.04  
-X90         -0.03     0.04  
-X91         -0.02     0.04  
-X92          0.04     0.04  
-X93          0.06     0.04  
-X94         -0.01     0.04  
-X95         -0.04     0.04  
-X96         -0.06     0.04  
-X97         -0.02     0.04  
-X98          0.10     0.04  
-X99          0.03     0.04  
----
-  n = 10000, k = 101
-  residual deviance = 3629.5, null deviance = 11288.3 (difference = 7658.7)</code></pre>
-<p><strong>Fit and display using stan_glm and MCMC</strong><br></p>
+<pre><code>1.039 sec elapsed</code></pre>
+<pre class="r"><code>#display(fit1)</code></pre>
+<p><strong>Fit using stan_glm and MCMC</strong><br></p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
                  init_r=0.1, seed=SEED)
 toc()</code></pre>
-<pre><code>644.893 sec elapsed</code></pre>
-<pre class="r"><code>print(fit2, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       binomial [logit]
- formula:      y ~ .
- observations: 10000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  3.82   0.10 
-x            5.61   0.14 
-X1           0.00   0.04 
-X2          -0.08   0.04 
-X3           0.06   0.04 
-X4           0.01   0.04 
-X5           0.00   0.04 
-X6          -0.01   0.04 
-X7           0.02   0.04 
-X8          -0.01   0.04 
-X9          -0.03   0.04 
-X10          0.04   0.04 
-X11         -0.03   0.04 
-X12          0.01   0.04 
-X13          0.02   0.04 
-X14         -0.09   0.04 
-X15          0.11   0.04 
-X16          0.00   0.05 
-X17          0.00   0.04 
-X18         -0.07   0.04 
-X19         -0.03   0.04 
-X20          0.06   0.04 
-X21         -0.07   0.04 
-X22         -0.01   0.04 
-X23          0.06   0.04 
-X24          0.10   0.04 
-X25         -0.06   0.04 
-X26         -0.02   0.04 
-X27          0.01   0.04 
-X28          0.03   0.04 
-X29          0.07   0.04 
-X30          0.01   0.04 
-X31         -0.01   0.04 
-X32          0.08   0.04 
-X33         -0.05   0.04 
-X34          0.04   0.04 
-X35          0.02   0.04 
-X36         -0.02   0.04 
-X37         -0.06   0.04 
-X38         -0.02   0.04 
-X39         -0.04   0.05 
-X40          0.02   0.05 
-X41          0.03   0.04 
-X42         -0.06   0.04 
-X43         -0.05   0.04 
-X44          0.00   0.04 
-X45          0.00   0.04 
-X46         -0.06   0.04 
-X47          0.06   0.04 
-X48          0.03   0.04 
-X49         -0.01   0.04 
-X50         -0.03   0.04 
-X51          0.00   0.04 
-X52          0.05   0.04 
-X53         -0.01   0.04 
-X54          0.03   0.04 
-X55         -0.05   0.04 
-X56         -0.02   0.04 
-X57         -0.01   0.04 
-X58          0.00   0.04 
-X59          0.01   0.04 
-X60          0.07   0.05 
-X61          0.00   0.05 
-X62         -0.05   0.05 
-X63          0.00   0.04 
-X64          0.02   0.04 
-X65         -0.04   0.04 
-X66         -0.01   0.04 
-X67         -0.04   0.04 
-X68          0.06   0.05 
-X69         -0.09   0.04 
-X70         -0.06   0.04 
-X71          0.03   0.04 
-X72         -0.04   0.05 
-X73          0.09   0.04 
-X74          0.00   0.04 
-X75          0.00   0.04 
-X76         -0.03   0.04 
-X77         -0.04   0.04 
-X78         -0.05   0.04 
-X79          0.03   0.04 
-X80          0.01   0.04 
-X81         -0.04   0.04 
-X82         -0.01   0.04 
-X83          0.06   0.05 
-X84          0.05   0.04 
-X85          0.09   0.04 
-X86         -0.02   0.04 
-X87          0.13   0.04 
-X88         -0.02   0.04 
-X89          0.00   0.04 
-X90         -0.03   0.04 
-X91         -0.02   0.04 
-X92          0.05   0.04 
-X93          0.06   0.04 
-X94         -0.01   0.04 
-X95         -0.04   0.04 
-X96         -0.06   0.04 
-X97         -0.02   0.04 
-X98          0.10   0.04 
-X99          0.03   0.04 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
+<pre><code>135.877 sec elapsed</code></pre>
+<pre class="r"><code>#print(fit2, digits=2)</code></pre>
+<p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                 algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>10.211 sec elapsed</code></pre>
-<pre class="r"><code>print(fit3, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       binomial [logit]
- formula:      y ~ .
- observations: 10000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  3.81   0.09 
-x            5.60   0.15 
-X1           0.00   0.05 
-X2          -0.08   0.04 
-X3           0.06   0.05 
-X4           0.01   0.04 
-X5           0.00   0.05 
-X6           0.00   0.05 
-X7           0.03   0.04 
-X8          -0.01   0.04 
-X9          -0.03   0.04 
-X10          0.04   0.04 
-X11         -0.03   0.04 
-X12          0.01   0.04 
-X13          0.02   0.04 
-X14         -0.09   0.04 
-X15          0.11   0.03 
-X16          0.00   0.04 
-X17          0.00   0.05 
-X18         -0.07   0.04 
-X19         -0.03   0.05 
-X20          0.06   0.05 
-X21         -0.08   0.04 
-X22         -0.01   0.04 
-X23          0.06   0.04 
-X24          0.09   0.04 
-X25         -0.06   0.04 
-X26         -0.03   0.04 
-X27          0.00   0.04 
-X28          0.03   0.05 
-X29          0.07   0.04 
-X30          0.02   0.04 
-X31         -0.02   0.04 
-X32          0.08   0.05 
-X33         -0.05   0.05 
-X34          0.04   0.05 
-X35          0.02   0.04 
-X36         -0.02   0.04 
-X37         -0.05   0.04 
-X38         -0.02   0.04 
-X39         -0.04   0.04 
-X40          0.02   0.04 
-X41          0.03   0.05 
-X42         -0.07   0.05 
-X43         -0.05   0.04 
-X44          0.00   0.05 
-X45          0.00   0.03 
-X46         -0.06   0.04 
-X47          0.05   0.04 
-X48          0.03   0.05 
-X49         -0.01   0.04 
-X50         -0.02   0.04 
-X51          0.00   0.04 
-X52          0.05   0.04 
-X53          0.00   0.04 
-X54          0.03   0.05 
-X55         -0.06   0.04 
-X56         -0.01   0.05 
-X57         -0.01   0.04 
-X58          0.00   0.04 
-X59          0.01   0.05 
-X60          0.07   0.04 
-X61          0.00   0.04 
-X62         -0.05   0.05 
-X63         -0.01   0.04 
-X64          0.02   0.05 
-X65         -0.04   0.05 
-X66         -0.01   0.04 
-X67         -0.04   0.05 
-X68          0.07   0.04 
-X69         -0.09   0.05 
-X70         -0.06   0.04 
-X71          0.03   0.05 
-X72         -0.04   0.04 
-X73          0.09   0.04 
-X74          0.01   0.04 
-X75          0.01   0.04 
-X76         -0.04   0.04 
-X77         -0.03   0.04 
-X78         -0.05   0.04 
-X79          0.03   0.05 
-X80          0.02   0.04 
-X81         -0.04   0.04 
-X82         -0.01   0.04 
-X83          0.06   0.05 
-X84          0.05   0.04 
-X85          0.09   0.04 
-X86         -0.02   0.04 
-X87          0.13   0.04 
-X88         -0.02   0.05 
-X89          0.00   0.04 
-X90         -0.03   0.05 
-X91         -0.02   0.05 
-X92          0.05   0.05 
-X93          0.06   0.05 
-X94         -0.01   0.05 
-X95         -0.04   0.05 
-X96         -0.06   0.04 
-X97         -0.02   0.05 
-X98          0.10   0.04 
-X99          0.03   0.04 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation, but without Pareto smoothed importance resampling provides coefficient standard errors, but no diagnostic whether normal approximation at the mode is appropriate.</p>
-<pre class="r"><code>tic()
-fit4 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
-               algorithm='optimizing',
-               importance_resampling = FALSE,
-                init=0) 
-toc()</code></pre>
-<pre><code>2.513 sec elapsed</code></pre>
-<pre class="r"><code>print(fit4, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       binomial [logit]
- formula:      y ~ .
- observations: 10000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  3.71   0.09 
-x            5.45   0.14 
-X1           0.00   0.04 
-X2          -0.07   0.05 
-X3           0.06   0.04 
-X4           0.01   0.04 
-X5           0.00   0.04 
-X6          -0.01   0.04 
-X7           0.02   0.04 
-X8          -0.01   0.04 
-X9          -0.03   0.04 
-X10          0.04   0.05 
-X11         -0.03   0.04 
-X12          0.01   0.04 
-X13          0.02   0.04 
-X14         -0.09   0.04 
-X15          0.11   0.04 
-X16          0.00   0.04 
-X17          0.00   0.04 
-X18         -0.07   0.04 
-X19         -0.02   0.04 
-X20          0.05   0.04 
-X21         -0.07   0.04 
-X22         -0.01   0.05 
-X23          0.06   0.04 
-X24          0.09   0.04 
-X25         -0.06   0.05 
-X26         -0.02   0.04 
-X27          0.01   0.04 
-X28          0.03   0.04 
-X29          0.07   0.04 
-X30          0.01   0.04 
-X31         -0.01   0.04 
-X32          0.08   0.04 
-X33         -0.05   0.04 
-X34          0.04   0.04 
-X35          0.02   0.04 
-X36         -0.01   0.05 
-X37         -0.05   0.04 
-X38         -0.02   0.04 
-X39         -0.03   0.04 
-X40          0.02   0.05 
-X41          0.02   0.04 
-X42         -0.06   0.04 
-X43         -0.05   0.04 
-X44          0.00   0.04 
-X45          0.00   0.04 
-X46         -0.06   0.04 
-X47          0.06   0.04 
-X48          0.02   0.04 
-X49         -0.01   0.04 
-X50         -0.03   0.04 
-X51          0.00   0.04 
-X52          0.05   0.04 
-X53         -0.01   0.04 
-X54          0.03   0.04 
-X55         -0.05   0.04 
-X56         -0.02   0.04 
-X57         -0.01   0.04 
-X58          0.00   0.05 
-X59          0.01   0.05 
-X60          0.07   0.05 
-X61          0.00   0.04 
-X62         -0.05   0.04 
-X63          0.00   0.04 
-X64          0.02   0.04 
-X65         -0.04   0.05 
-X66         -0.01   0.04 
-X67         -0.03   0.04 
-X68          0.06   0.05 
-X69         -0.08   0.04 
-X70         -0.06   0.04 
-X71          0.03   0.04 
-X72         -0.04   0.04 
-X73          0.08   0.04 
-X74          0.00   0.04 
-X75          0.00   0.04 
-X76         -0.03   0.05 
-X77         -0.04   0.04 
-X78         -0.05   0.04 
-X79          0.03   0.04 
-X80          0.01   0.04 
-X81         -0.03   0.04 
-X82         -0.01   0.04 
-X83          0.06   0.04 
-X84          0.05   0.04 
-X85          0.09   0.04 
-X86         -0.03   0.04 
-X87          0.13   0.04 
-X88         -0.02   0.04 
-X89          0.00   0.04 
-X90         -0.03   0.04 
-X91         -0.02   0.04 
-X92          0.05   0.04 
-X93          0.06   0.05 
-X94         -0.01   0.04 
-X95         -0.04   0.04 
-X96         -0.06   0.04 
-X97         -0.02   0.04 
-X98          0.10   0.04 
-X99          0.03   0.04 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Logistic regression</strong><br> <strong>Create fake data with 100,000 observations and p=100</strong></p>
+<pre><code>2.433 sec elapsed</code></pre>
+<pre class="r"><code>#print(fit3, digits=2)</code></pre>
+<p><strong>Logistic regression</strong></p>
+<p><strong>Create fake data with 100,000 observations and p=100</strong></p>
 <pre class="r"><code>SEED &lt;- 1655
 set.seed(SEED)
 n &lt;- 1e5
+k &lt;- 100
 x &lt;- rnorm(n)
-xn &lt;- matrix(rnorm(n*99),nrow=n)
+xn &lt;- matrix(rnorm(n*(k-1)),nrow=n)
 a &lt;- 2
 b &lt;- 3
 sigma &lt;- 1
 y &lt;- (a + b*x + sigma*rnorm(n))&gt;0+0
 fake &lt;- data.frame(x, xn, y)</code></pre>
-<p><strong>Fit and display using glm</strong><br></p>
+<p><strong>Fit using glm</strong><br></p>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>12.565 sec elapsed</code></pre>
-<pre class="r"><code>display(fit1)</code></pre>
-<pre><code>glm(formula = y ~ ., family = binomial(), data = fake)
-            coef.est coef.se
-(Intercept)  3.60     0.03  
-x            5.43     0.04  
-X1           0.00     0.01  
-X2           0.04     0.01  
-X3           0.00     0.01  
-X4           0.00     0.01  
-X5           0.02     0.01  
-X6           0.01     0.01  
-X7          -0.01     0.01  
-X8           0.01     0.01  
-X9           0.00     0.01  
-X10          0.00     0.01  
-X11          0.01     0.01  
-X12          0.00     0.01  
-X13         -0.01     0.01  
-X14         -0.01     0.01  
-X15         -0.02     0.01  
-X16          0.01     0.01  
-X17          0.02     0.01  
-X18         -0.01     0.01  
-X19          0.02     0.01  
-X20         -0.01     0.01  
-X21         -0.03     0.01  
-X22         -0.03     0.01  
-X23          0.01     0.01  
-X24          0.00     0.01  
-X25          0.00     0.01  
-X26          0.00     0.01  
-X27         -0.01     0.01  
-X28          0.00     0.01  
-X29         -0.01     0.01  
-X30         -0.01     0.01  
-X31          0.00     0.01  
-X32         -0.02     0.01  
-X33          0.00     0.01  
-X34          0.01     0.01  
-X35          0.00     0.01  
-X36         -0.01     0.01  
-X37          0.00     0.01  
-X38          0.00     0.01  
-X39          0.01     0.01  
-X40          0.00     0.01  
-X41         -0.03     0.01  
-X42         -0.02     0.01  
-X43         -0.01     0.01  
-X44          0.00     0.01  
-X45          0.00     0.01  
-X46         -0.02     0.01  
-X47          0.00     0.01  
-X48         -0.01     0.01  
-X49          0.01     0.01  
-X50          0.00     0.01  
-X51         -0.01     0.01  
-X52          0.01     0.01  
-X53          0.00     0.01  
-X54          0.00     0.01  
-X55          0.01     0.01  
-X56         -0.01     0.01  
-X57          0.00     0.01  
-X58          0.01     0.01  
-X59         -0.02     0.01  
-X60         -0.01     0.01  
-X61         -0.01     0.01  
-X62         -0.01     0.01  
-X63          0.01     0.01  
-X64          0.01     0.01  
-X65          0.01     0.01  
-X66          0.03     0.01  
-X67         -0.02     0.01  
-X68          0.01     0.01  
-X69         -0.01     0.01  
-X70          0.00     0.01  
-X71          0.02     0.01  
-X72          0.00     0.01  
-X73         -0.01     0.01  
-X74         -0.01     0.01  
-X75         -0.02     0.01  
-X76          0.01     0.01  
-X77          0.00     0.01  
-X78         -0.01     0.01  
-X79          0.01     0.01  
-X80          0.01     0.01  
-X81         -0.02     0.01  
-X82         -0.01     0.01  
-X83          0.00     0.01  
-X84          0.01     0.01  
-X85         -0.01     0.01  
-X86          0.01     0.01  
-X87         -0.01     0.01  
-X88          0.02     0.01  
-X89         -0.01     0.01  
-X90          0.00     0.01  
-X91         -0.02     0.01  
-X92         -0.03     0.01  
-X93          0.02     0.01  
-X94         -0.01     0.01  
-X95         -0.04     0.01  
-X96         -0.01     0.01  
-X97          0.01     0.01  
-X98         -0.01     0.01  
-X99          0.01     0.01  
----
-  n = 100000, k = 101
-  residual deviance = 37000.9, null deviance = 115155.9 (difference = 78155.0)</code></pre>
-<p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
+<pre><code>12.195 sec elapsed</code></pre>
+<pre class="r"><code>#display(fit1)</code></pre>
+<p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                  algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>77.506 sec elapsed</code></pre>
-<pre class="r"><code>print(fit3, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       binomial [logit]
- formula:      y ~ .
- observations: 100000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  3.61   0.03 
-x            5.45   0.05 
-X1           0.00   0.01 
-X2           0.04   0.01 
-X3           0.00   0.01 
-X4           0.00   0.01 
-X5           0.02   0.01 
-X6           0.01   0.01 
-X7          -0.01   0.01 
-X8           0.01   0.01 
-X9           0.00   0.01 
-X10          0.00   0.01 
-X11          0.01   0.01 
-X12          0.00   0.01 
-X13         -0.01   0.01 
-X14         -0.01   0.01 
-X15         -0.02   0.01 
-X16          0.01   0.01 
-X17          0.02   0.01 
-X18         -0.01   0.01 
-X19          0.02   0.01 
-X20         -0.01   0.01 
-X21         -0.03   0.01 
-X22         -0.03   0.01 
-X23          0.01   0.01 
-X24          0.00   0.01 
-X25          0.01   0.01 
-X26          0.00   0.01 
-X27         -0.01   0.01 
-X28          0.01   0.01 
-X29         -0.01   0.01 
-X30         -0.01   0.01 
-X31          0.00   0.01 
-X32         -0.02   0.01 
-X33          0.00   0.01 
-X34          0.01   0.01 
-X35          0.00   0.01 
-X36         -0.01   0.02 
-X37          0.01   0.01 
-X38          0.00   0.01 
-X39          0.01   0.01 
-X40          0.00   0.01 
-X41         -0.03   0.01 
-X42         -0.02   0.01 
-X43          0.00   0.01 
-X44          0.00   0.01 
-X45          0.00   0.01 
-X46         -0.02   0.01 
-X47          0.00   0.01 
-X48         -0.01   0.01 
-X49          0.01   0.01 
-X50          0.00   0.01 
-X51          0.00   0.01 
-X52          0.01   0.01 
-X53          0.00   0.01 
-X54          0.00   0.01 
-X55          0.01   0.01 
-X56         -0.01   0.01 
-X57          0.00   0.01 
-X58          0.01   0.01 
-X59         -0.02   0.01 
-X60         -0.01   0.01 
-X61         -0.02   0.01 
-X62         -0.01   0.01 
-X63          0.01   0.01 
-X64          0.01   0.01 
-X65          0.01   0.01 
-X66          0.03   0.01 
-X67         -0.02   0.01 
-X68          0.01   0.01 
-X69         -0.01   0.01 
-X70          0.00   0.01 
-X71          0.02   0.01 
-X72          0.00   0.01 
-X73         -0.01   0.01 
-X74         -0.01   0.01 
-X75         -0.02   0.01 
-X76          0.01   0.01 
-X77         -0.01   0.01 
-X78         -0.01   0.01 
-X79          0.01   0.01 
-X80          0.01   0.01 
-X81         -0.02   0.01 
-X82         -0.01   0.01 
-X83          0.00   0.01 
-X84          0.01   0.01 
-X85         -0.01   0.01 
-X86          0.01   0.01 
-X87         -0.01   0.01 
-X88          0.02   0.01 
-X89         -0.01   0.01 
-X90          0.00   0.01 
-X91         -0.02   0.01 
-X92         -0.03   0.01 
-X93          0.02   0.01 
-X94         -0.01   0.01 
-X95         -0.04   0.01 
-X96         -0.01   0.01 
-X97          0.01   0.01 
-X98         -0.01   0.01 
-X99          0.01   0.01 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
-<p><strong>Fit and display using stan_glm and optimization</strong><br> Using optimization with normal approximation, but without Pareto smoothed importance resampling provides coefficient standard errors, but no diagnostic whether normal approximation at the mode is appropriate.</p>
-<pre class="r"><code>tic()
-fit4 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
-                 algorithm='optimizing',
-                 importance_resampling = FALSE,
-                 init=0) 
-toc()</code></pre>
-<pre><code>21.221 sec elapsed</code></pre>
-<pre class="r"><code>print(fit4, digits=2)</code></pre>
-<pre><code>stan_glm
- family:       binomial [logit]
- formula:      y ~ .
- observations: 100000
- predictors:   101
-------
-            Median MAD_SD
-(Intercept)  3.60   0.03 
-x            5.43   0.04 
-X1           0.00   0.01 
-X2           0.04   0.01 
-X3           0.00   0.01 
-X4          -0.01   0.01 
-X5           0.02   0.01 
-X6           0.01   0.01 
-X7          -0.01   0.01 
-X8           0.01   0.01 
-X9           0.00   0.01 
-X10          0.00   0.01 
-X11          0.01   0.01 
-X12          0.00   0.01 
-X13         -0.01   0.01 
-X14         -0.01   0.01 
-X15         -0.02   0.01 
-X16          0.01   0.01 
-X17          0.02   0.01 
-X18         -0.01   0.01 
-X19          0.02   0.01 
-X20         -0.01   0.01 
-X21         -0.03   0.01 
-X22         -0.03   0.01 
-X23          0.01   0.01 
-X24          0.00   0.01 
-X25          0.00   0.01 
-X26          0.00   0.01 
-X27         -0.01   0.01 
-X28          0.01   0.01 
-X29         -0.01   0.01 
-X30         -0.01   0.01 
-X31          0.00   0.01 
-X32         -0.02   0.01 
-X33          0.00   0.01 
-X34          0.01   0.01 
-X35          0.00   0.01 
-X36         -0.01   0.01 
-X37          0.00   0.01 
-X38          0.00   0.01 
-X39          0.01   0.01 
-X40          0.00   0.01 
-X41         -0.03   0.01 
-X42         -0.02   0.01 
-X43          0.00   0.01 
-X44          0.00   0.01 
-X45          0.00   0.01 
-X46         -0.02   0.01 
-X47         -0.01   0.01 
-X48         -0.01   0.01 
-X49          0.01   0.01 
-X50          0.00   0.01 
-X51         -0.01   0.01 
-X52          0.01   0.01 
-X53          0.00   0.01 
-X54          0.00   0.01 
-X55          0.01   0.01 
-X56         -0.01   0.01 
-X57          0.00   0.01 
-X58          0.01   0.01 
-X59         -0.02   0.01 
-X60         -0.01   0.01 
-X61         -0.02   0.01 
-X62         -0.01   0.01 
-X63          0.01   0.01 
-X64          0.01   0.01 
-X65          0.01   0.01 
-X66          0.03   0.01 
-X67         -0.02   0.01 
-X68          0.01   0.01 
-X69         -0.01   0.01 
-X70          0.00   0.01 
-X71          0.02   0.01 
-X72          0.00   0.01 
-X73         -0.01   0.01 
-X74         -0.01   0.01 
-X75         -0.02   0.01 
-X76          0.01   0.01 
-X77          0.00   0.01 
-X78         -0.01   0.01 
-X79          0.01   0.01 
-X80          0.01   0.01 
-X81         -0.02   0.01 
-X82         -0.01   0.01 
-X83          0.00   0.01 
-X84          0.01   0.01 
-X85         -0.01   0.01 
-X86          0.01   0.01 
-X87         -0.01   0.01 
-X88          0.02   0.01 
-X89         -0.01   0.01 
-X90          0.00   0.01 
-X91         -0.02   0.01 
-X92         -0.03   0.01 
-X93          0.02   0.01 
-X94         -0.01   0.01 
-X95         -0.04   0.01 
-X96         -0.01   0.01 
-X97          0.01   0.01 
-X98         -0.01   0.01 
-X99          0.01   0.01 
-
-------
-* For help interpreting the printed output see ?print.stanreg
-* For info on the priors used see ?prior_summary.stanreg</code></pre>
+<pre><code>20.151 sec elapsed</code></pre>
+<pre class="r"><code>#print(fit3, digits=2)</code></pre>
 
 
 
@@ -1743,6 +487,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

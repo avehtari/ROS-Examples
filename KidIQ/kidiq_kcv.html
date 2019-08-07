@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-02-15" />
+<meta name="date" content="2019-08-07" />
 
 <title>Regression and Other Stories: KidIQ cross-validation</title>
 
@@ -256,9 +257,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -289,8 +288,6 @@ summary {
 </style>
 
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -348,20 +345,17 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -371,8 +365,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Regression and Other Stories: KidIQ cross-validation</h1>
-<h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2019-02-15</em></h4>
+<h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
+<h4 class="date">2019-08-07</h4>
 
 </div>
 
@@ -408,10 +402,6 @@ Auxiliary parameter(s):
       Median MAD_SD
 sigma 18.2    0.6  
 
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 86.8    1.2  
-
 ------
 * For help interpreting the printed output see ?print.stanreg
 * For info on the priors used see ?prior_summary.stanreg</code></pre>
@@ -434,10 +424,12 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <pre class="r"><code>kcv3 &lt;- kfold(stan_fit_3)
 kcv3</code></pre>
 <pre><code>
- 10-fold cross-validation
+Based on 10-fold cross-validation
 
            Estimate   SE
-elpd_kfold  -1876.0 14.2</code></pre>
+elpd_kfold  -1876.1 14.2
+p_kfold          NA   NA
+kfoldic      3752.3 28.3</code></pre>
 
 
 
@@ -456,6 +448,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

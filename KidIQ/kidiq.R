@@ -116,10 +116,10 @@ ggplot(kidiq, aes(mom_iq, kid_score)) +
 print(fit_2)
 sims_2 <- as.matrix(fit_2)
 n_sims_2 <- nrow(sims_2)
-sims_display <- sample(n_sims_2, 10)
+subset <- sample(n_sims_2, 10)
 plot(kidiq$mom_iq, kidiq$kid_score,
      xlab="Mother IQ score", ylab="Child test score")
-for (i in sims_display){
+for (i in subset){
   abline(sims_2[i,1], sims_2[i,2], col="gray")
 }
 abline(coef(fit_2)[1], coef(fit_2)[2], col="black")
@@ -128,8 +128,8 @@ abline(coef(fit_2)[1], coef(fit_2)[2], col="black")
 ggplot(kidiq, aes(mom_iq, kid_score)) +
   geom_point() +
   geom_abline(
-    intercept = sims_2[sims_display, 1],
-    slope = sims_2[sims_display, 2],
+    intercept = sims_2[subset, 1],
+    slope = sims_2[subset, 2],
     color = "gray",
     size = 0.25) +
   geom_abline(
@@ -151,8 +151,8 @@ plot(kidiq$mom_iq, kidiq$kid_score, xlab="Mother IQ score", ylab="Child test sco
 axis(1, seq(80, 140, 20))
 axis(2, seq(20, 140, 40))
 mom_hs_bar <- mean(kidiq$mom_hs)
-sims_display <- sample(n_sims_2, 10)
-for (i in sims_display){
+subset <- sample(n_sims_2, 10)
+for (i in subset){
   curve(cbind(1, mom_hs_bar, x) %*% sims_3[i,1:3], lwd=.5,
      col="gray", add=TRUE)
 }
@@ -162,7 +162,7 @@ plot(kidiq$mom_hs + jitt, kidiq$kid_score, xlab="Mother completed high school", 
 axis(1, c(0,1))
 axis(2, seq(20, 140, 40))
 mom_iq_bar <- mean(kidiq$mom_iq)
-for (i in sims_display){
+for (i in subset){
   curve(cbind(1, x, mom_iq_bar) %*% sims_3[i,1:3], lwd=.5,
      col="gray", add=TRUE)
 }
