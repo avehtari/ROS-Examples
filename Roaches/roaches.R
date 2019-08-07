@@ -50,6 +50,8 @@ loo_1 <- loo(fit_1)
 
 #' **Graphical posterior predictive checking**
 yrep_1 <- posterior_predict(fit_1)
+n_sims <- nrow(yrep_1)
+sims_display <- sample(n_sims, 100)
 (ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[sims_display,]+1))+
      xlab('log10(y+1)'))
 
