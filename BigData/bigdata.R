@@ -126,4 +126,4 @@ tic()
 fit3 <- stan_glm(y ~ ., data=fake, family=binomial(),
                  algorithm='optimizing', init=0) 
 toc()
-#print(fit3, digits=2)
+summary(fit3, digits=2)

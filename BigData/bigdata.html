@@ -395,20 +395,20 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- lm(y ~ ., data=fake)
 toc()</code></pre>
-<pre><code>2.089 sec elapsed</code></pre>
+<pre><code>2.106 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and MCMC</strong><br> stan_glm is fast for linear regression with n&gt;k</p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, mean_PPD=FALSE,
                  refresh=100, seed=SEED)
 toc()</code></pre>
-<pre><code>25.285 sec elapsed</code></pre>
+<pre><code>14.215 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit2, digits=2)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>6.45 sec elapsed</code></pre>
+<pre><code>7.303 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit3, digits=2)</code></pre>
 <p><strong>Logistic regression</strong></p>
 <p><strong>Create fake data with 10,000 observations and p=100</strong></p>
@@ -427,21 +427,21 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>1.039 sec elapsed</code></pre>
+<pre><code>1.085 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and MCMC</strong><br></p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
                  init_r=0.1, seed=SEED)
 toc()</code></pre>
-<pre><code>135.877 sec elapsed</code></pre>
+<pre><code>132.599 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit2, digits=2)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                 algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>2.433 sec elapsed</code></pre>
+<pre><code>2.354 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit3, digits=2)</code></pre>
 <p><strong>Logistic regression</strong></p>
 <p><strong>Create fake data with 100,000 observations and p=100</strong></p>
@@ -460,15 +460,235 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>12.195 sec elapsed</code></pre>
+<pre><code>12.426 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                  algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>20.151 sec elapsed</code></pre>
-<pre class="r"><code>#print(fit3, digits=2)</code></pre>
+<pre><code>20.445 sec elapsed</code></pre>
+<pre class="r"><code>summary(fit3, digits=2)</code></pre>
+<pre><code>
+Model Info:
+ function:     stan_glm
+ family:       binomial [logit]
+ formula:      y ~ .
+ algorithm:    optimizing
+ priors:       see help('prior_summary')
+ observations: 100000
+ predictors:   101
+
+Estimates:
+              Median   MAD_SD   10%   50%   90%
+(Intercept)  3.61     0.03     3.58  3.61  3.65
+x            5.45     0.05     5.39  5.45  5.50
+X1           0.00     0.01    -0.02  0.00  0.01
+X2           0.04     0.01     0.03  0.04  0.06
+X3           0.00     0.01    -0.02  0.00  0.01
+X4           0.00     0.01    -0.02  0.00  0.01
+X5           0.02     0.01     0.00  0.02  0.03
+X6           0.01     0.01     0.00  0.01  0.03
+X7          -0.01     0.01    -0.03 -0.01  0.01
+X8           0.01     0.01    -0.01  0.01  0.02
+X9           0.00     0.01    -0.01  0.00  0.02
+X10          0.00     0.01    -0.02  0.00  0.02
+X11          0.01     0.01    -0.01  0.01  0.02
+X12          0.00     0.01    -0.02  0.00  0.01
+X13         -0.01     0.01    -0.03 -0.01  0.01
+X14         -0.01     0.01    -0.02 -0.01  0.01
+X15         -0.02     0.01    -0.04 -0.02  0.00
+X16          0.01     0.01    -0.01  0.01  0.03
+X17          0.02     0.01     0.00  0.02  0.04
+X18         -0.01     0.01    -0.02 -0.01  0.01
+X19          0.02     0.01     0.00  0.02  0.03
+X20         -0.01     0.01    -0.02 -0.01  0.01
+X21         -0.03     0.01    -0.05 -0.03 -0.01
+X22         -0.03     0.01    -0.05 -0.03 -0.01
+X23          0.01     0.01    -0.01  0.01  0.03
+X24          0.00     0.01    -0.02  0.00  0.01
+X25          0.01     0.01    -0.01  0.01  0.02
+X26          0.00     0.01    -0.02  0.00  0.01
+X27         -0.01     0.01    -0.02 -0.01  0.01
+X28          0.01     0.01    -0.01  0.01  0.02
+X29         -0.01     0.01    -0.02 -0.01  0.01
+X30         -0.01     0.01    -0.03 -0.01  0.01
+X31          0.00     0.01    -0.02  0.00  0.02
+X32         -0.02     0.01    -0.03 -0.02  0.00
+X33          0.00     0.01    -0.02  0.00  0.01
+X34          0.01     0.01    -0.01  0.01  0.03
+X35          0.00     0.01    -0.02  0.00  0.02
+X36         -0.01     0.02    -0.03 -0.01  0.00
+X37          0.01     0.01    -0.01  0.01  0.02
+X38          0.00     0.01    -0.02  0.00  0.02
+X39          0.01     0.01     0.00  0.01  0.03
+X40          0.00     0.01    -0.01  0.00  0.02
+X41         -0.03     0.01    -0.05 -0.03 -0.02
+X42         -0.02     0.01    -0.03 -0.02  0.00
+X43          0.00     0.01    -0.02  0.00  0.01
+X44          0.00     0.01    -0.01  0.00  0.02
+X45          0.00     0.01    -0.02  0.00  0.02
+X46         -0.02     0.01    -0.03 -0.02  0.00
+X47          0.00     0.01    -0.02  0.00  0.01
+X48         -0.01     0.01    -0.02 -0.01  0.01
+X49          0.01     0.01    -0.01  0.01  0.02
+X50          0.00     0.01    -0.02  0.00  0.02
+X51          0.00     0.01    -0.02  0.00  0.01
+X52          0.01     0.01    -0.01  0.01  0.02
+X53          0.00     0.01    -0.02  0.00  0.02
+X54          0.00     0.01    -0.01  0.00  0.02
+X55          0.01     0.01    -0.01  0.01  0.03
+X56         -0.01     0.01    -0.03 -0.01  0.00
+X57          0.00     0.01    -0.02  0.00  0.01
+X58          0.01     0.01    -0.01  0.01  0.02
+X59         -0.02     0.01    -0.04 -0.02 -0.01
+X60         -0.01     0.01    -0.02 -0.01  0.01
+X61         -0.02     0.01    -0.03 -0.02  0.00
+X62         -0.01     0.01    -0.03 -0.01  0.00
+X63          0.01     0.01    -0.01  0.01  0.02
+X64          0.01     0.01    -0.01  0.01  0.03
+X65          0.01     0.01    -0.01  0.01  0.03
+X66          0.03     0.01     0.01  0.03  0.04
+X67         -0.02     0.01    -0.04 -0.02  0.00
+X68          0.01     0.01     0.00  0.01  0.03
+X69         -0.01     0.01    -0.03 -0.01  0.01
+X70          0.00     0.01    -0.02  0.00  0.01
+X71          0.02     0.01     0.01  0.02  0.04
+X72          0.00     0.01    -0.02  0.00  0.02
+X73         -0.01     0.01    -0.03 -0.01  0.01
+X74         -0.01     0.01    -0.03 -0.01  0.01
+X75         -0.02     0.01    -0.03 -0.02  0.00
+X76          0.01     0.01    -0.01  0.01  0.02
+X77          0.00     0.01    -0.02  0.00  0.01
+X78         -0.01     0.01    -0.03 -0.01  0.00
+X79          0.01     0.01    -0.01  0.01  0.02
+X80          0.01     0.01    -0.01  0.01  0.02
+X81         -0.02     0.01    -0.04 -0.02  0.00
+X82         -0.01     0.01    -0.03 -0.01  0.01
+X83          0.00     0.01    -0.02  0.00  0.02
+X84          0.01     0.01    -0.01  0.01  0.03
+X85         -0.01     0.01    -0.03 -0.01  0.00
+X86          0.01     0.01    -0.01  0.01  0.03
+X87         -0.01     0.01    -0.03 -0.01  0.00
+X88          0.02     0.01     0.00  0.02  0.03
+X89         -0.01     0.01    -0.03 -0.01  0.01
+X90          0.00     0.01    -0.02  0.00  0.01
+X91         -0.02     0.01    -0.03 -0.02  0.00
+X92         -0.03     0.01    -0.05 -0.03 -0.01
+X93          0.02     0.01     0.00  0.02  0.04
+X94         -0.01     0.01    -0.03 -0.01  0.01
+X95         -0.04     0.01    -0.06 -0.04 -0.03
+X96         -0.01     0.01    -0.02 -0.01  0.01
+X97          0.01     0.01    -0.01  0.01  0.03
+X98         -0.01     0.01    -0.03 -0.01  0.01
+X99          0.01     0.01    -0.01  0.01  0.02
+
+Monte Carlo diagnostics
+            mcse  khat  n_eff
+(Intercept)  0.00 -0.14 506  
+x            0.00 -0.13 532  
+X1           0.00 -0.14 631  
+X2           0.00 -0.14 715  
+X3           0.00 -0.14 694  
+X4           0.00 -0.14 706  
+X5           0.00 -0.14 621  
+X6           0.00 -0.14 646  
+X7           0.00 -0.14 642  
+X8           0.00 -0.14 623  
+X9           0.00 -0.14 664  
+X10          0.00 -0.14 757  
+X11          0.00 -0.14 736  
+X12          0.00 -0.14 623  
+X13          0.00 -0.14 627  
+X14          0.00 -0.14 701  
+X15          0.00 -0.14 709  
+X16          0.00 -0.14 693  
+X17          0.00 -0.14 663  
+X18          0.00 -0.14 699  
+X19          0.00 -0.14 707  
+X20          0.00 -0.14 738  
+X21          0.00 -0.14 694  
+X22          0.00 -0.14 676  
+X23          0.00 -0.14 637  
+X24          0.00 -0.14 733  
+X25          0.00 -0.14 701  
+X26          0.00 -0.14 626  
+X27          0.00 -0.14 671  
+X28          0.00 -0.14 685  
+X29          0.00 -0.14 707  
+X30          0.00 -0.14 710  
+X31          0.00 -0.14 745  
+X32          0.00 -0.14 613  
+X33          0.00 -0.14 651  
+X34          0.00 -0.14 696  
+X35          0.00 -0.14 739  
+X36          0.00 -0.14 635  
+X37          0.00 -0.14 692  
+X38          0.00 -0.14 682  
+X39          0.00 -0.14 679  
+X40          0.00 -0.14 627  
+X41          0.00 -0.14 732  
+X42          0.00 -0.14 647  
+X43          0.00 -0.14 698  
+X44          0.00 -0.14 698  
+X45          0.00 -0.14 689  
+X46          0.00 -0.14 690  
+X47          0.00 -0.14 710  
+X48          0.00 -0.14 661  
+X49          0.00 -0.14 685  
+X50          0.00 -0.14 639  
+X51          0.00 -0.14 681  
+X52          0.00 -0.14 668  
+X53          0.00 -0.14 655  
+X54          0.00 -0.14 709  
+X55          0.00 -0.14 686  
+X56          0.00 -0.14 633  
+X57          0.00 -0.14 639  
+X58          0.00 -0.14 644  
+X59          0.00 -0.14 675  
+X60          0.00 -0.14 658  
+X61          0.00 -0.14 686  
+X62          0.00 -0.14 637  
+X63          0.00 -0.14 620  
+X64          0.00 -0.14 696  
+X65          0.00 -0.14 724  
+X66          0.00 -0.14 617  
+X67          0.00 -0.14 667  
+X68          0.00 -0.14 649  
+X69          0.00 -0.14 687  
+X70          0.00 -0.14 709  
+X71          0.00 -0.14 627  
+X72          0.00 -0.14 772  
+X73          0.00 -0.14 638  
+X74          0.00 -0.14 701  
+X75          0.00 -0.14 684  
+X76          0.00 -0.14 677  
+X77          0.00 -0.14 654  
+X78          0.00 -0.14 668  
+X79          0.00 -0.14 689  
+X80          0.00 -0.14 673  
+X81          0.00 -0.13 646  
+X82          0.00 -0.14 713  
+X83          0.00 -0.14 656  
+X84          0.00 -0.14 668  
+X85          0.00 -0.14 684  
+X86          0.00 -0.14 637  
+X87          0.00 -0.14 703  
+X88          0.00 -0.14 653  
+X89          0.00 -0.14 683  
+X90          0.00 -0.14 639  
+X91          0.00 -0.14 652  
+X92          0.00 -0.14 637  
+X93          0.00 -0.14 654  
+X94          0.00 -0.14 697  
+X95          0.00 -0.14 635  
+X96          0.00 -0.14 675  
+X97          0.00 -0.14 725  
+X98          0.00 -0.14 663  
+X99          0.00 -0.14 640  
+
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and khat is the Pareto k diagnostic for importance sampling.
+ (perfomance is usually good when khat &lt; 0.7).</code></pre>
 
 
 
