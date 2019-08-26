@@ -95,6 +95,9 @@ fit_2 <- stan_glm(y ~ roach100 + treatment + senior, family=poisson,
   offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
 prior_summary(fit_2)
 print(fit_2, digits=2)
+loo_2 <- loo(fit_2)
+
+loo_compare(loo_1, loo_2)
 
 #' **Graphical posterior predictive checking**<br>
 #'
@@ -131,7 +134,7 @@ fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior,
 #+
 print(fit_3)
 loo_3 <- loo(fit_3)
-loo_compare(loo_2, loo_3)
+loo_compare(loo_1, loo_3)
 
 #' **Graphical posterior predictive checking**
 yrep_3 <- posterior_predict(fit_3)
