@@ -4,7 +4,7 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Nonlinear models (Loess, B-spline, GP-spline, and BART) and
+#' Nonlinear models (Loess, spline, GP, and BART) and
 #' political attitudes as a function of age
 #' 
 #' -------------
@@ -23,7 +23,7 @@ library("rstan")
 library("mgcv")
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
-library("dbarts")
+library("BART")
 
 #' **Define common plot functions**
 gay_plot <- function(fit=NULL, question=NULL, title=NULL, savefigs=FALSE) {
@@ -142,7 +142,8 @@ for (j in 1:2){
   gay_GP_fit <- posterior_linpred(gay_GP[[j]], data.frame(age=gay_sum[[j]]$age))
   gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty", savefigs = savefigs)
   # BART
-  gay_bart[[j]] <- bart(y ~ age, gay[[j]], uniq_age, ntree = 20)
+  output <- capture.output(
+    gay_bart[[j]] <- pbart(gay[[j]]$age, gay[[j]]$y, uniq_age, ntree = 20))
   gay_bart_fit <- pnorm(gay_bart[[j]]$yhat.test)
   gay_plot(gay_bart_fit, question=question[j], title="Bart fit and uncertainty", savefigs = savefigs)
 
