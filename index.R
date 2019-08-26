@@ -85,6 +85,8 @@
 #' ### 8 Fitting regression models
 #'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
+#'   - [Influence/](https://github.com/avehtari/RAOS-Examples/tree/master/Influence/)
+#'     - [influence.html](Influence/influence.html) - Influence of individual points in a fitted regression
 #' 
 #' ### 9 Prediction and Bayesian inference 
 #'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
@@ -114,6 +116,8 @@
 #'     - [kidiq_loo.html](KidIQ/kidiq_loo.html) - Linear regression and leave-one-out cross-validation
 #'     - [kidiq_R2.html](KidIQ/kidiq_R2.html) - Linear regression and Bayes-R2 and LOO-R2
 #'     - [kidiq_kcv.html](KidIQ/kidiq_kcv.html) - Linear regression and K-fold cross-validation
+#'   - [Residuals/](https://github.com/avehtari/RAOS-Examples/tree/master/Residuals/)
+#'     - [residuals.html](Residuals/residuals.html) - Plotting the data and fitted model
 #'   - [Newcomb/](https://github.com/avehtari/RAOS-Examples/tree/master/Newcomb/)
 #'     - [newcomb.html](Newcomb/newcomb.html) - Posterior predictive checking of Normal model for Newcomb's speed of light data
 #'   - [Unemployment/](https://github.com/avehtari/RAOS-Examples/tree/master/Unemployment/)
@@ -174,6 +178,22 @@
 #'     - [imputation.html](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
 #'     - [imputation_gg.html](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
 #'
+#' ### 18  Causal inference theory and randomized experiments
+#'   - [Sesame/](https://github.com/avehtari/RAOS-Examples/tree/master/Sesame/)
+#'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
+#' 
+#' ### 19  Causal inference using regression on the treatment variable
+#'   - [ElectricCompany/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectricCompany/)
+#'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
+#' 
+#' ### 20  Observational studies with all confounders assumed to be measured
+#'   - [ElectricCompany/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectricCompany/)
+#'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
+#' 
+#' ### 21  More advanced topics in causal inference
+#'   - [Sesame/](https://github.com/avehtari/RAOS-Examples/tree/master/Sesame/)
+#'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
+#' 
 #' ### 22  Advanced regression and multilevel models
 #'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
@@ -243,6 +263,8 @@
 #'   - [Imputation/](https://github.com/avehtari/RAOS-Examples/tree/master/Imputation/)
 #'     - [imputation.html](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
 #'     - [imputation_gg.html](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
+#'   - [Influence/](https://github.com/avehtari/RAOS-Examples/tree/master/Influence/)
+#'     - [influence.html](Influence/influence.html) - Influence of individual points in a fitted regression
 #'   - [Interactions/](https://github.com/avehtari/RAOS-Examples/tree/master/Interactions/)
 #'     - [interactions.html](Interactions/interactions.html) - Plot interaction example figure
 #'   - [Introclass/](https://github.com/avehtari/RAOS-Examples/tree/master/Introclass/)
@@ -281,6 +303,8 @@
 #'     - [probsim.html](ProbabilitySimulation/probsim.html) - Simulation of probability models
 #'   - [Pyth/](https://github.com/avehtari/RAOS-Examples/tree/master/Pyth/)
 #'   - [Redistricting/](https://github.com/avehtari/RAOS-Examples/tree/master/Redistricting/)
+#'   - [Residuals/](https://github.com/avehtari/RAOS-Examples/tree/master/Residuals/)
+#'     - [residuals.html](Residuals/residuals.html) - Plotting the data and fitted model
 #'   - [Restaurant/](https://github.com/avehtari/RAOS-Examples/tree/master/Restaurant/)
 #'     - [restaurant.html](Restaurant/restaurant.html) - Demonstration of using Stan for optimization
 #'   - [RiskyBehavior/](https://github.com/avehtari/RAOS-Examples/tree/master/RiskyBehavior/)
@@ -290,6 +314,7 @@
 #'   - [Rsquared/](https://github.com/avehtari/RAOS-Examples/tree/master/Rsquared/)
 #'     - [rsquared.html](Rsquared/rsquared.html) - Bayesian R^2
 #'   - [Sesame/](https://github.com/avehtari/RAOS-Examples/tree/master/Sesame/)
+#'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
 #'   - [SexRatio/](https://github.com/avehtari/RAOS-Examples/tree/master/SexRatio/)
 #'     - [sexratio.html](SexRatio/sexratio.html) - Example where an informative prior makes a difference
 #'   - [SimpleCausal/](https://github.com/avehtari/RAOS-Examples/tree/master/SimpleCausal/)
