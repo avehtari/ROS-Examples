@@ -33,19 +33,19 @@ fit_1a <- stan_glm(watched ~ encouraged, data=sesame, refresh=0)
 print(fit_1a, digits=2)
 
 #' **Compute the intent-to-treat estimate, obtained in this case using
-#' the regression of the outcome (in the data, labeled {\tt postlet},
-#' that is, the {\em post}-treatment measurement of the {\em letter}
-#' recognition task) on the instrument**
+#' the regression of the outcome (in the data, labeled postlet, that
+#' is, the post-treatment measurement of the letter recognition task)
+#' on the instrument**
 fit_1b <- stan_glm(postlet ~ encouraged, data=sesame, refresh=0)
 print(fit_1b, digits=2)
 
-#' **``inflate'' by dividing by the percentage of children affected by
+#' **"Inflate" by dividing by the percentage of children affected by
 #' the intervention**
 iv_est <- coef(fit_1b)["encouraged"] / coef(fit_1a)["encouraged"]
 
 #' **Two stage approach**
 #'
-#' The first step is to regress the ``treatment'' variable---an
+#' The first step is to regress the "treatment" variable---an
 #' indicator for regular watching (watched)---on the randomized
 #' instrument, encouragement to watch (encouraged).  Then we plug
 #' predicted values of watched into the equation predicting the letter
@@ -74,17 +74,16 @@ X_adj[,"watched_hat_3"] <- sesame$watched
 #' **Compute the standard deviation of the adjusted residuals**
 residual_sd_adj <- sd(sesame$postlet - X_adj %*% coef(fit_3c))
 se_adj <- se(fit_3c)["watched_hat_3"] * residual_sd_adj / sigma(fit_3c)
-print(se_adj)
+print(se_adj, digits=2)
 
-#' **Performing two-stage approach automatically using brms**
+#' **Perform two-stage approach automatically using brms**
 f1 <- bf(watched ~ encour)
 f2 <- bf(postlet ~ watched)
 IV_brm <- brm(f1 + f2, data=sesame)
 print(IV_brm)
 
-#' **Performing two-stage approach automatically using brms**
-#'
-#' Incorporate other pre-treatment variables as controls
+#' **Perform two-stage approach incorporating other pre-treatment
+#' variables as controls using brms**
 f1 <- bf(watched ~ encour + prelet + setting + factor(site))
 f2 <- bf(postlet ~ watched + prelet + setting + factor(site))
 IV_brm_2 <- brm(f1 + f2, data=sesame)
