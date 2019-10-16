@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Different ways of displaying logistic regression
+#' Different ways of displaying logistic regression. See Chapter 14 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Analysis of "Electric company" data
+#' Analysis of "Electric company" data. See Chapters 1, 16, 19 and 20
+#' in Regression and Other Stories.
 #' 
 #' -------------
 #' 

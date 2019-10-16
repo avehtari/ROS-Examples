@@ -4,8 +4,9 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Regression-based imputation for the Social Indicators Survey<br>
-#' dplyr + ggplot version
+#' Regression-based imputation for the Social Indicators Survey. See
+#' Chapter 17 in Regression and Other Stories.<br>
+#' dplyr + ggplot version. 
 #' 
 #' -------------
 #' 

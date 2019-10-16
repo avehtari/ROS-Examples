@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Predicting the yields of mesquite bushes
+#' Predicting the yields of mesquite bushes. See Chapter 12 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

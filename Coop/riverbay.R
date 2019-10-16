@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Coop - Example of hypothesis testing
+#' Coop - Example of hypothesis testing. See Chapter 4 in Regression
+#' and Other Stories.
 #' 
 #' -------------
 #' 

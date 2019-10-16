@@ -3,19 +3,21 @@ title: "Regression and Other Stories: National election study"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Fitting the same regression to many datasets
+Fitting the same regression to many datasets. See Chapter 10 in
+Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -34,11 +36,10 @@ data <- read.table(root("NES/data","nes.dat"))
 ```{r }
 regress_year <- function (yr) {
   this_year <- data[data$year==yr,]
-  output <- capture.output(
-      fit <- stan_glm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) +
-                          educ1 + female + income,
-                      data=this_year, warmup = 500, iter = 1500, refresh = 0,
-                      save_warmup = FALSE, cores = 1, open_progress = FALSE))
+  fit <- stan_glm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) +
+                      educ1 + female + income,
+                  data=this_year, warmup = 500, iter = 1500, refresh = 0,
+                  save_warmup = FALSE, cores = 1, open_progress = FALSE)
   coefs <- cbind(coef(fit),se(fit))
 }
 summary <- array (NA, c(9,2,8))

@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Present uncertainty in parameter estimates
+#' Present uncertainty in parameter estimates. See Chapter 7 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

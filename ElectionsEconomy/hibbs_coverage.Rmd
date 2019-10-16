@@ -1,0 +1,106 @@
+---
+title: "Regression and Other Stories: Elections Economy -- model checking"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Elections Economy -- model checking. Checking the model-fitting
+procedure using fake-data simulation. See Chapter 7 in Regression
+and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
+```
+
+**Load data**
+
+```{r }
+hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+```
+
+**Step 1: Creating the pretend world**
+
+```{r }
+a <- 46.2
+b <- 3.1
+sigma <- 3.8
+x <- hibbs$growth
+n <- length(x)
+```
+
+**Step 2: Simulating fake data**
+
+```{r }
+set.seed(1)
+y <- a + b*x + rnorm(n, 0, sigma)
+fake <- data.frame(x, y)
+```
+
+**Step 3: Fitting the model and comparing fitted to pretend values**
+
+```{r results='hide'}
+fit <- stan_glm(y ~ x, data = fake, refresh = 0)
+```
+```{r }
+print(fit)
+
+pi50 <- posterior_interval(fit, prob = 0.5)['x',]
+pi90 <- posterior_interval(fit, prob = 0.9)['x',]
+cover_50 <- as.numeric(b > pi50[1] & b < pi50[2])
+cover_90 <- as.numeric(b > pi90[1] & b < pi90[2])
+cat(paste("50% coverage: ", cover_50, "\n"))
+cat(paste("90% coverage: ", cover_90, "\n"))
+```
+
+**Step 4:  Embedding the simulation in a loop**
+
+```{r results='hide'}
+n_fake <- 1000
+cover_50 <- rep(NA, n_fake)
+cover_68 <- rep(NA, n_fake)
+cover_68b <- rep(NA, n_fake)
+cover_90 <- rep(NA, n_fake)
+cover_95 <- rep(NA, n_fake)
+cover_95b <- rep(NA, n_fake)
+pb <- txtProgressBar(min=0, max=n_fake, initial=0, style=3)
+for (s in 1:n_fake){
+  setTxtProgressBar(pb, s)
+  set.seed(s)
+  y <- a + b*x + rnorm(n, 0, sigma)
+  fake <- data.frame(x, y)
+  fit <- stan_glm(y ~ x, data = fake, warmup = 500, iter = 1500, refresh = 0,
+                      save_warmup = FALSE, cores = 1, open_progress = FALSE,
+                      seed = s)
+  pi50 <- posterior_interval(fit, prob = 0.5)['x',]
+  pi68 <- posterior_interval(fit, prob = 0.68)['x',]
+  pi90 <- posterior_interval(fit, prob = 0.9)['x',]
+  pi95 <- posterior_interval(fit, prob = 0.95)['x',]
+  cover_50[s] <- as.numeric(b > pi50[1] & b < pi50[2])
+  cover_68[s] <- as.numeric(b > pi68[1] & b < pi68[2])
+  cover_90[s] <- as.numeric(b > pi90[1] & b < pi90[2])
+  cover_95[s] <- as.numeric(b > pi95[1] & b < pi95[2])
+  cover_68b[s] <- as.numeric(abs(b-coef(fit)['x']) < se(fit)['x'])
+  cover_95b[s] <- as.numeric(abs(b-coef(fit)['x']) < 2*se(fit)['x'])
+}
+close(pb)
+```
+```{r }
+cat(paste("50% coverage: ", mean(cover_50), "\n"))
+cat(paste("68% coverage: ", mean(cover_68), "\n"))
+cat(paste("90% coverage: ", mean(cover_90), "\n"))
+cat(paste("95% coverage: ", mean(cover_95), "\n"))
+cat(paste("68% coverage: ", mean(cover_68b), "\n"))
+cat(paste("95% coverage: ", mean(cover_95b), "\n"))
+```
+

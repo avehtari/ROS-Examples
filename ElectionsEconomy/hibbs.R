@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Predicting presidential vote share from the economy
+#' Predicting presidential vote share from the economy. See Chapters
+#' 1, 7, 8, 9, and 22 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

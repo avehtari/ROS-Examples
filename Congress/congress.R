@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Predictive uncertainty for congressional elections
+#' Predictive uncertainty for congressional elections. See Chapters 10
+#' and 15 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

@@ -4,7 +4,7 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' French Election data
+#' French Election data.
 #' 
 #' -------------
 #'

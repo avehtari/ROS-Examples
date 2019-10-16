@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Building a logistic regression model: wells in Bangladesh
+#' Building a logistic regression model: wells in Bangladesh. See
+#' Chapter 13 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

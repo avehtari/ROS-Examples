@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-03-03" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: Logistic regression priors</title>
 
@@ -256,9 +257,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -272,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -289,8 +287,6 @@ summary {
 </style>
 
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -348,20 +344,17 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -371,13 +364,13 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Regression and Other Stories: Logistic regression priors</h1>
-<h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2019-03-03</em></h4>
+<h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Effect of priors in logistic regression</p>
+<p>Effect of priors in logistic regression. See Chapter 13 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;arm&quot;)
@@ -415,10 +408,6 @@ stan_glm
 (Intercept) -1.6    0.8  
 x            0.6    0.5  
 
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 0.2    0.1   
-
 ------
 * For help interpreting the printed output see ?print.stanreg
 * For info on the priors used see ?prior_summary.stanreg</code></pre>
@@ -439,10 +428,6 @@ stan_glm
             Median MAD_SD
 (Intercept) -2.0    0.3  
 x            0.8    0.4  
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 0.1    0.0   
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -465,10 +450,6 @@ stan_glm
 (Intercept) -2.1    0.1  
 x            1.0    0.2  
 
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 0.1    0.0   
-
 ------
 * For help interpreting the printed output see ?print.stanreg
 * For info on the priors used see ?prior_summary.stanreg</code></pre>
@@ -490,6 +471,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

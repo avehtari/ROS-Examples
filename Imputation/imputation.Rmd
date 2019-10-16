@@ -3,19 +3,21 @@ title: "Regression and Other Stories: Imputation"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Regression-based imputation for the Social Indicators Survey
+Regression-based imputation for the Social Indicators Survey. See
+Chapter 17 in Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")

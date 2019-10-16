@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Demonstrate computation speed with bigger data.
+#' Demonstrate computation speed with bigger data. See Chapter 22 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #'
@@ -40,10 +41,11 @@ toc()
 #display(fit1)
 
 #' **Fit using stan_glm and MCMC**<br>
-#' stan_glm is fast for linear regression with n>k
+#' stan_glm is fast for linear regression with n>k and small or
+#' moderate k (using OLS trick)
 tic()
 fit2 <- stan_glm(y ~ ., data=fake, mean_PPD=FALSE,
-                 refresh=100, seed=SEED)
+                 refresh=500, seed=SEED, cores=1)
 toc()
 #print(fit2, digits=2)
 
@@ -92,7 +94,7 @@ toc()
 #' appropriate.
 tic()
 fit3 <- stan_glm(y ~ ., data=fake, family=binomial(),
-                algorithm='optimizing', init=0) 
+                algorithm='optimizing', init=0, draws = 16000, keep_every = 4) 
 toc()
 #print(fit3, digits=2)
 

@@ -1,0 +1,128 @@
+---
+title: "Regression and Other Stories: Residuals"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Plotting the data and fitted model. See Chapter 11 in Regression
+and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("rstanarm")
+```
+
+**Simple model with const term, one pre-treatment predictor, and treatment indicator**
+
+**Fake data**
+
+```{r }
+N <- 100
+x <- runif(N, 0, 1)
+z <- sample(c(0, 1), N, replace=TRUE)
+a <- 1
+b <- 2
+theta <- 5
+sigma <- 2
+y <- a + b*x + theta*z +  rnorm(N, 0, sigma)
+fake <- data.frame(x=x, y=y, z=z)
+```
+
+**Model**
+
+```{r }
+fit <- stan_glm(y ~ x + z, data=fake, refresh = 0)
+```
+
+**Plot Predictor vs Outcome**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Residuals/figs","resid_0a.pdf"), height=3.5, width=9)
+```
+```{r }
+par(mfrow=c(1,2), mar=c(3,3,2,2), mgp=c(1.7,.5,0), tck=-.01)
+for (i in 0:1){
+  plot(range(x), range(y), type="n", xlab="Pre-treatment predictor, x", ylab="Outcome, y", main=paste("z =", i), bty="l")
+  points(x[z==i], y[z==i], pch=20+i)
+  abline(coef(fit)["(Intercept)"] + coef(fit)["z"]*i, coef(fit)["x"])
+}
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**More complicated model with multiple pre-treatment predictors.**
+
+**Fake data**
+
+Creating the linear predictor from the fitted multiple regression
+model
+
+```{r }
+N <- 100
+K <- 10
+X <- array(runif(N*K, 0, 1), c(N, K))
+z <- sample(c(0, 1), N, replace=TRUE)
+a <- 1
+b <- 1:K
+theta <- 10
+sigma <- 5
+y <- a + X %*% b + theta*z +  rnorm(N, 0, sigma)
+fake <- data.frame(X=X, y=y, z=z)
+```
+
+**Model**
+
+```{r }
+fit <- stan_glm(y ~ X + z, data=fake, refresh = 0)
+```
+
+**Plot Predictor vs Outcome**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Residuals/figs","resid_0b.pdf"), height=4, width=9)
+```
+```{r }
+y_hat <- predict(fit)
+par(mfrow=c(1,2), mar=c(3,3,2,2), mgp=c(1.7,.5,0), tck=-.01)
+par(mfrow=c(1,2), pty="s")
+for (i in 0:1){
+  plot(range(y_hat,y), range(y_hat,y), type="n", xlab=expression(paste("Linear predictor, ", hat(y))), ylab="Outcome, y", main=paste("z =", i), bty="l")
+  points(y_hat[z==i], y[z==i], pch=20+i)
+abline(0, 1)
+}
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**Plot Predictor vs Residual**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Residuals/figs","resid_0c.pdf"), height=3.5, width=9)
+```
+```{r }
+r <- y - y_hat
+par(mfrow=c(1,2), mar=c(3,3,2,2), mgp=c(1.7,.5,0), tck=-.01)
+par(mfrow=c(1,2))
+for (i in 0:1){
+  plot(range(y_hat), range(r), type="n", xlab=expression(paste("Linear predictor, ", hat(y))), ylab="Residual, r", main=paste("z =", i), bty="l")
+  points(y_hat[z==i], r[z==i], pch=20+i)
+  abline(0, 0)
+}
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+

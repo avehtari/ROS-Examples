@@ -3,19 +3,21 @@ title: "Regression and Other Stories: Newcomb"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Posterior predictive checking of Normal model for Newcomb's speed of light data
+Posterior predictive checking of Normal model for Newcomb's speed
+of light data. See Chapter 11 in Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -23,6 +25,9 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
+```
+```{r eval=FALSE, include=FALSE}
+# grayscale figures for the book
 color_scheme_set(scheme = "gray")
 ```
 
@@ -38,10 +43,33 @@ newcomb <- data.frame(y=c(28,26,33,24,34,-44,27,16,40,-2,29,22,24,21,25,30,
                           33,26,32,32,24,39,28,24,25,32,25,29,27,28,29,16,23))
 ```
 
-**Fit a regression model with just the intercept term**
+Plot histogram of the data
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Newcomb/figs","newcomb_hist.pdf"), height=4, width=5)
+```
+```{r }
+hist(newcomb$y, main=NULL, ylab="", xlab="", yaxt="n", breaks=30)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+Plot histogram of the data with bayesplot
 
 ```{r }
-fit <- stan_glm(y ~ 1, data=newcomb)
+mcmc_hist(newcomb, pars="y") + xlab("")
+```
+
+**Fit a regression model with just the intercept term**
+
+The option `refresh = 0` supresses the default Stan sampling
+progress output. This is useful for small data with fast
+computation. For more complex models and bigger data, it can be
+useful to see the progress.
+
+```{r }
+fit <- stan_glm(y ~ 1, data=newcomb, refresh=0)
 ```
 
 **Simulate from the predictive distribution**
@@ -52,15 +80,21 @@ n_sims <- nrow(sims)
 n <- length(newcomb$y)
 y_rep <- array(NA, c(n_sims, n))
 for (s in 1:n_sims)
-  y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
+    y_rep[s,] <- rnorm(n, sims[s,1], sims[s,2])
 ```
 
 **Plot histogram of 20 replicates**
 
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Newcomb/figs","newcomb_rep_hist.pdf"), height=4, width=8)
+```
 ```{r }
-par(mfrow=c(5,4), mar=rep(2,4))
-for (s in sample(n_sims, 20))
-  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n")
+par(mfrow=c(4,5), mar=rep(2,4))
+for (s in sample(n_sims, 20)) {
+  hist(y_rep[s,], main=NULL, ylab="", xlab="", yaxt="n") }
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
 ```
 
 **Simulate using built-in function**
@@ -71,35 +105,47 @@ y_rep <- posterior_predict(fit)
 
 **Plot data and 19 replications using built-in function**
 
-```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf(root("Newcomb/figs","newcomb_ppc_hist.pdf"), height=3, width=9)
-```
 ```{r }
-ppc_hist(newcomb$y, y_rep[1:19, ])
+ppc_hist(newcomb$y, y_rep[1:19, ], binwidth = 8)
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) dev.off()
+if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_hist.pdf"), width = 9, height = 4)
+```
+
+**Plot kernel density estimate of data and 100 replications using built-in function**
+
+```{r }
+ppc_dens_overlay(newcomb$y, y_rep[1:100, ]) + scale_y_continuous(breaks=NULL)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_dens_overlay.pdf"), width = 6, height = 2.5)
 ```
 
 **Plot test statistic for data and replicates**
 
 ```{r }
-Test <- function (y)
-  min(y)
+Test <- function (y) {
+  min(y) }
 test_rep <- apply(y_rep, 1, Test)
-hist(test_rep, xlim=range(Test(newcomb$y), test_rep))
-lines(rep(Test(newcomb$y),2), c(0,n_sims))
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("Newcomb/figs","newcomb_test_hist.pdf"), height=4, width=5)
+```
+```{r }
+hist(test_rep, xlim=range(Test(newcomb$y), test_rep), breaks=20, yaxt="n",
+     xlab="", ylab="", main=NULL)
+lines(rep(Test(newcomb$y),2), c(0,n_sims), lwd=3)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
 ```
 
 **Plot test statistic for data and replicates using built-in function**
 
-```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf(root("Newcomb/figs","newcomb_ppc_stat.pdf"), height=3, width=6)
-```
 ```{r }
-ppc_stat(newcomb$y, y_rep, stat = "min")
+ppc_stat(newcomb$y, y_rep, stat = "min", binwidth = 2)
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) dev.off()
+if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_stat.pdf"), width = 6, height = 4)
 ```
 

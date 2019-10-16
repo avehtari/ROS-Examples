@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Plot influence of individual points in a fitted regression
+#' Plot influence of individual points in a fitted regression. See
+#' Chapter 8 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

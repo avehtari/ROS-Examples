@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-08-07" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: Big data</title>
 
@@ -271,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,12 +365,12 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Big data</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-08-07</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Demonstrate computation speed with bigger data.</p>
+<p>Demonstrate computation speed with bigger data. See Chapter 22 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(arm)
@@ -395,20 +394,96 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- lm(y ~ ., data=fake)
 toc()</code></pre>
-<pre><code>2.106 sec elapsed</code></pre>
+<pre><code>1.676 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
-<p><strong>Fit using stan_glm and MCMC</strong><br> stan_glm is fast for linear regression with n&gt;k</p>
+<p><strong>Fit using stan_glm and MCMC</strong><br> stan_glm is fast for linear regression with n&gt;k and small or moderate k (using OLS trick)</p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, mean_PPD=FALSE,
-                 refresh=100, seed=SEED)
-toc()</code></pre>
-<pre><code>14.215 sec elapsed</code></pre>
+                 refresh=500, seed=SEED, cores=1)</code></pre>
+<pre><code>
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 0.000108 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.08 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 1.97835 seconds (Warm-up)
+Chain 1:                0.539957 seconds (Sampling)
+Chain 1:                2.51831 seconds (Total)
+Chain 1: 
+
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
+Chain 2: 
+Chain 2: Gradient evaluation took 8.9e-05 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.89 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 1.06728 seconds (Warm-up)
+Chain 2:                0.537025 seconds (Sampling)
+Chain 2:                1.6043 seconds (Total)
+Chain 2: 
+
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
+Chain 3: 
+Chain 3: Gradient evaluation took 8.1e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.81 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 1.71761 seconds (Warm-up)
+Chain 3:                0.567517 seconds (Sampling)
+Chain 3:                2.28513 seconds (Total)
+Chain 3: 
+
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 6.5e-05 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.65 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 1.7304 seconds (Warm-up)
+Chain 4:                0.552688 seconds (Sampling)
+Chain 4:                2.28309 seconds (Total)
+Chain 4: </code></pre>
+<pre class="r"><code>toc()</code></pre>
+<pre><code>17.185 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit2, digits=2)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>7.303 sec elapsed</code></pre>
+<pre><code>11.329 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit3, digits=2)</code></pre>
 <p><strong>Logistic regression</strong></p>
 <p><strong>Create fake data with 10,000 observations and p=100</strong></p>
@@ -427,21 +502,21 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>1.085 sec elapsed</code></pre>
+<pre><code>1.132 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and MCMC</strong><br></p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
                  init_r=0.1, seed=SEED)
 toc()</code></pre>
-<pre><code>132.599 sec elapsed</code></pre>
+<pre><code>150.938 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit2, digits=2)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
-                algorithm='optimizing', init=0) 
+                algorithm='optimizing', init=0, draws = 16000, keep_every = 4) 
 toc()</code></pre>
-<pre><code>2.354 sec elapsed</code></pre>
+<pre><code>24.642 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit3, digits=2)</code></pre>
 <p><strong>Logistic regression</strong></p>
 <p><strong>Create fake data with 100,000 observations and p=100</strong></p>
@@ -460,14 +535,14 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>12.426 sec elapsed</code></pre>
+<pre><code>12.916 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                  algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>20.445 sec elapsed</code></pre>
+<pre><code>22.086 sec elapsed</code></pre>
 <pre class="r"><code>summary(fit3, digits=2)</code></pre>
 <pre><code>
 Model Info:
@@ -687,8 +762,7 @@ X97          0.00 -0.14 725
 X98          0.00 -0.14 663  
 X99          0.00 -0.14 640  
 
-For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and khat is the Pareto k diagnostic for importance sampling.
- (perfomance is usually good when khat &lt; 0.7).</code></pre>
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and khat is the Pareto k diagnostic for importance sampling (perfomance is usually good when khat &lt; 0.7).</code></pre>
 
 
 

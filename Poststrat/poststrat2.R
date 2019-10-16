@@ -1,10 +1,12 @@
 #' ---
-#' title: "Regression and Other Stories: Poststrat"
+#' title: "Regression and Other Stories: Poststratification 2"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Demonstrate Poststratification with simulated census and poll data 
+#' Demonstrate poststratification with simulated census and poll data
+#' See Chapter 17 in Regression and Other Stories.
+#' 
 #' 
 #' -------------
 #' 

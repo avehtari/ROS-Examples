@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Posterior predictive checking of Normal model for Newcomb's speed of light data
+#' Posterior predictive checking of Normal model for Newcomb's speed
+#' of light data. See Chapter 11 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

@@ -1,3 +1,5 @@
+See Chapter 19 in Regression and Other Stories.
+
 Information on the cow data in file cow.dat
 
 The file cows.dat has data from an experiment performed on 50 cows.  The variables have the following meaning:

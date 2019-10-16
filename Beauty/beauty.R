@@ -6,7 +6,8 @@
 
 #' Hamermesh and Parker (2005) data on student evaluations of
 #' instructors’ beauty and teaching quality for several courses at the
-#' University of Texas.
+#' University of Texas. See Chapter 10 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 

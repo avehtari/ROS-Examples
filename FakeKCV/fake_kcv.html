@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-04-15" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: FakeKCV</title>
 
@@ -270,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -344,18 +344,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,12 +365,12 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: FakeKCV</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-04-15</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Demonstration of <span class="math inline">\(K\)</span>-fold cross-validation using simulated data</p>
+<p>Demonstration of <span class="math inline">\(K\)</span>-fold cross-validation using simulated data. See Chapter 11 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;MASS&quot;)      # needed for mvrnorm()
@@ -410,18 +398,18 @@ fake &lt;- data.frame(X, y)</code></pre>
 Computed from 4000 by 60 log-likelihood matrix
 
          Estimate   SE
-elpd_loo   -153.4  5.1
-p_loo        28.3  3.3
-looic       306.8 10.2
+elpd_loo   -153.2  5.1
+p_loo        28.0  3.2
+looic       306.4 10.1
 ------
 Monte Carlo SE of elpd_loo is NA.
 
 Pareto k diagnostic values:
                          Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     19    31.7%   476       
- (0.5, 0.7]   (ok)       27    45.0%   207       
-   (0.7, 1]   (bad)      13    21.7%   62        
-   (1, Inf)   (very bad)  1     1.7%   46        
+(-Inf, 0.5]   (good)     17    28.3%   602       
+ (0.5, 0.7]   (ok)       30    50.0%   175       
+   (0.7, 1]   (bad)      13    21.7%   33        
+   (1, Inf)   (very bad)  0     0.0%   &lt;NA&gt;      
 See help('pareto-k-diagnostic') for details.</code></pre>
 <p>In this case, Pareto smoothed importance sampling LOO fails, but the diagnostic recognizes this with many high Pareto k values. We can run slower, but more robust K-fold-CV</p>
 <pre class="r"><code>kfold_1 &lt;- kfold(fit_1)</code></pre>
@@ -436,17 +424,17 @@ fit_2 &lt;- stan_glm(y ~ ., prior=hs_prior, data=fake, seed=SEED,
 Computed from 4000 by 60 log-likelihood matrix
 
          Estimate   SE
-elpd_loo   -143.5  8.0
+elpd_loo   -142.9  8.0
 p_loo        11.2  3.0
-looic       287.0 16.0
+looic       285.7 16.0
 ------
 Monte Carlo SE of elpd_loo is NA.
 
 Pareto k diagnostic values:
                          Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     56    93.3%   371       
- (0.5, 0.7]   (ok)        3     5.0%   84        
-   (0.7, 1]   (bad)       1     1.7%   86        
+(-Inf, 0.5]   (good)     54    90.0%   466       
+ (0.5, 0.7]   (ok)        5     8.3%   379       
+   (0.7, 1]   (bad)       1     1.7%   54        
    (1, Inf)   (very bad)  0     0.0%   &lt;NA&gt;      
 See help('pareto-k-diagnostic') for details.</code></pre>
 <p>PSIS-LOO performs better now, but there is still one bad diagnostic value, and thus we run again slower, but more robust K-fold-CV</p>
@@ -454,12 +442,12 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <p><strong>Comparison of models</strong></p>
 <pre class="r"><code>loo_compare(loo_1,loo_2)</code></pre>
 <pre><code>      elpd_diff se_diff
-fit_2  0.0       0.0   
-fit_1 -9.9       5.7   </code></pre>
+fit_2   0.0       0.0  
+fit_1 -10.3       5.3  </code></pre>
 <pre class="r"><code>loo_compare(kfold_1,kfold_2)</code></pre>
 <pre><code>      elpd_diff se_diff
 fit_2   0.0       0.0  
-fit_1 -16.4       5.0  </code></pre>
+fit_1 -16.4       5.1  </code></pre>
 <p>As PSIS-LOO fails is underestimates the difference between the models. The Pareto k diagnostic correctly identified the problem, and more robust K-fold-CV shows that by using a better prior we can get better predictions.</p>
 
 
@@ -479,6 +467,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

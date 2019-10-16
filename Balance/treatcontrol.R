@@ -4,6 +4,13 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
+#' Figures for hypothetical example of zero causal effect but positive
+#' predictive comparison.  See Chapter 20 in Regression and Other
+#' Stories.
+#' 
+#' -------------
+#' 
+
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files

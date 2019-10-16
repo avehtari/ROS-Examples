@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Effect of priors in logistic regression
+#' Effect of priors in logistic regression. See Chapter 13 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

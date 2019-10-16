@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-04-09" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: Elections Economy – model checking</title>
 
@@ -270,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -344,18 +344,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,12 +365,12 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Elections Economy – model checking</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-04-09</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Checking the model-fitting procedure using fake-data simulation.</p>
+<p>Elections Economy – model checking. Checking the model-fitting procedure using fake-data simulation. See Chapter 7 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
@@ -488,6 +476,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

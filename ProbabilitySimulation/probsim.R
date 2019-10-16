@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Simulation of probability models
+#' Simulation of probability models. See Chapter 5 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

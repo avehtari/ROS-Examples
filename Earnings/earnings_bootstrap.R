@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Bootstrapping to simulate the sampling distribution
+#' Bootstrapping to simulate the sampling distribution. See Chapter 5 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

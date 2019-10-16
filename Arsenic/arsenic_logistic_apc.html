@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-03-03" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: Arsenic</title>
 
@@ -256,9 +257,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -272,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -289,8 +287,6 @@ summary {
 </style>
 
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -348,20 +344,17 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -371,13 +364,13 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Regression and Other Stories: Arsenic</h1>
-<h4 class="author"><em>Andrew Gelman, Jennifer Hill, Aki Vehtari</em></h4>
-<h4 class="date"><em>2019-03-03</em></h4>
+<h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Average predictice comparisons for a logistic regression model: wells in Bangladesh</p>
+<p>Average predictive comparisons for a logistic regression model: wells in Bangladesh. See Chapter 14 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
@@ -401,14 +394,10 @@ n &lt;- nrow(wells)</code></pre>
  predictors:   4
 ------
             Median MAD_SD
-(Intercept) -0.22   0.09 
-dist100     -0.90   0.11 
+(Intercept) -0.22   0.10 
+dist100     -0.90   0.10 
 arsenic      0.47   0.04 
 educ4        0.17   0.04 
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 0.57   0.01  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -420,7 +409,7 @@ lo &lt;- 0
 delta &lt;- invlogit (b[1] + b[2]*hi + b[3]*wells$arsenic + b[4]*wells$educ4) -
          invlogit (b[1] + b[2]*lo + b[3]*wells$arsenic + b[4]*wells$educ4)
 round(mean(delta), 2)</code></pre>
-<pre><code>[1] -0.2</code></pre>
+<pre><code>[1] -0.21</code></pre>
 <p><strong>Average predictive difference in probability of switching, comparing households with existing arsenic levels of 0.5 and 1.0</strong></p>
 <pre class="r"><code>b &lt;- coef(fit_7)
 hi &lt;- 1.0
@@ -452,16 +441,12 @@ fit_8 &lt;- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
  predictors:   6
 ------
                   Median MAD_SD
-(Intercept)        0.35   0.04 
+(Intercept)        0.34   0.04 
 c_dist100         -0.92   0.11 
 c_arsenic          0.49   0.04 
 c_educ4            0.19   0.04 
-c_dist100:c_educ4  0.33   0.10 
+c_dist100:c_educ4  0.33   0.11 
 c_arsenic:c_educ4  0.08   0.04 
-
-Sample avg. posterior predictive distribution of y:
-         Median MAD_SD
-mean_PPD 0.58   0.01  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -496,6 +481,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

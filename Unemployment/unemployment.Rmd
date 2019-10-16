@@ -3,20 +3,22 @@ title: "Regression and Other Stories: Unemployment"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Time series fit and posterior predictive model checking for unemployment series
+Time series fit and posterior predictive model checking for
+unemployment series. See Chapter 11 in Regression and Other
+Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -24,7 +26,10 @@ options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
-color_scheme_set(scheme = "gray")
+```
+```{r eval=FALSE, include=FALSE}
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
 ```
 
 **Load data**
@@ -58,11 +63,7 @@ if (savefigs) dev.off()
 ```{r }
 n <- nrow(unemp)
 unemp$y_lag <- c(NA, unemp$y[1:(n-1)])
-```
-```{r results='hide'}
-fit_lag <- stan_glm(y ~ y_lag, data=unemp)
-```
-```{r }
+fit_lag <- stan_glm(y ~ y_lag, data=unemp, refresh=0)
 print(fit_lag, digits=2)
 ```
 
@@ -111,6 +112,6 @@ print(quantile(test_rep, c(.1,.5,.9)))
 **Plot test statistic for data and histogram of test statistics for replications**
 
 ```{r }
-ppc_stat(y=unemp$y, yrep=y_rep, stat=Test)
+ppc_stat(y=unemp$y, yrep=y_rep, stat=Test, binwidth = 1) + scale_y_continuous(breaks=NULL)
 ```
 

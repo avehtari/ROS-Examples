@@ -5,7 +5,8 @@
 #' ---
 
 #' Analyse the effect of integrated pest management on reducing
-#' cockroach levels in urban apartments
+#' cockroach levels in urban apartments. See Chapter 15 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
@@ -47,6 +48,13 @@ fit_1 <- stan_glm(y ~ roach100 + treatment + senior, family=neg_binomial_2,
 prior_summary(fit_1)
 print(fit_1, digits=2)
 loo_1 <- loo(fit_1)
+
+fit_0 <- stan_glm(y ~ roach100 + senior, family=neg_binomial_2,
+                  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
+prior_summary(fit_0)
+print(fit_0, digits=2)
+loo_0 <- loo(fit_0)
+
 
 #' **Graphical posterior predictive checking**
 yrep_1 <- posterior_predict(fit_1)
@@ -97,6 +105,11 @@ prior_summary(fit_2)
 print(fit_2, digits=2)
 loo_2 <- loo(fit_2)
 
+roaches$id <- 1:n
+fit_2b <- stan_glmer(y ~ roach100 + treatment + senior + (1 | id), family=poisson,
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0, iter=20000)
+loo_2b <- loo(fit_2b)
+
 loo_compare(loo_1, loo_2)
 
 #' **Graphical posterior predictive checking**<br>
@@ -135,6 +148,15 @@ fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior,
 print(fit_3)
 loo_3 <- loo(fit_3)
 loo_compare(loo_1, loo_3)
+
+fit_3x <- brm(bf(y ~ logp1_roach1 + senior,
+                zi ~ logp1_roach1 + senior),
+             family=zero_inflated_negbinomial(), data=roaches,
+             prior=set_prior("normal(0,1)"), seed=SEED, refresh=500)
+#+
+print(fit_3x)
+loo_3x <- loo(fit_3x)
+loo_compare(loo_3, loo_3x)
 
 #' **Graphical posterior predictive checking**
 yrep_3 <- posterior_predict(fit_3)

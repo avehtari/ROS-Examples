@@ -5,7 +5,8 @@
 #' ---
 
 #' Outcomes after civil war in countries with and without United
-#' Nations peacekeeping
+#' Nations peacekeeping. See Chapter 1 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 

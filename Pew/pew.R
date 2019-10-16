@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Miscellaneous analyses using raw Pew data
+#' Miscellaneous analyses using raw Pew data. See Chapter 2 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

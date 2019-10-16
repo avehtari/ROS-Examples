@@ -4,7 +4,9 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Age-Period-Cohort - Age adjustment
+#' Age-Period-Cohort - Demonstration of age adjustment to estimate
+#' trends in mortality rates. See Chapter 3 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 

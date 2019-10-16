@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Stents - comparing distributions
+#' Stents - comparing distributions. See Chapter 3 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

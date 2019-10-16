@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Names - Distributions of names of American babies
+#' Names - Distributions of names of American babies. See Chapter 2 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
@@ -148,7 +149,7 @@ namesplot(boys70)
 if (savefigs) dev.off()
 
 #' **Restrict to top 1000 and remove Laura's list of bad names**
-error.names <- as.matrix(read.csv(root("Names/data","Error Names.csv")))
+error.names <- as.matrix(read.csv(root("Names/data","Names.csv")))
 error.names.girl <- error.names[,2]=="F"
 bad.girl.names <- error.names[error.names.girl,1]
 bad.boy.names <- error.names[!error.names.girl,1]

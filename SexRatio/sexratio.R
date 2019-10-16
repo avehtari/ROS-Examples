@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Example where an informative prior makes a difference
+#' Example where an informative prior makes a difference. See Chapter 9
+#' in Regression and Other Stories.
 #' 
 #' -------------
 #' 

@@ -78,7 +78,8 @@
 #'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
 #'     - [hills.html](ElectionsEconomy/hills.html) - Present uncertainty in parameter estimates
-#'     - [hibbs_coverage.html](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/hibbs_coverage.html) - Checking the #'   - [Simplest/](Simplest/)
+#'     - [hibbs_coverage.html](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/hibbs_coverage.html) - Checking the coverage of intervals
+#    - [Simplest/](Simplest/)
 #'     - [simplest.html](Simplest/simplest.html) - Linear regression with a single predictor
 #'     - [simplest_lm.html](Simplest/simplest_lm.html) - Linear least squares regression with a single predictor
 #'
@@ -105,7 +106,7 @@
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
 #'   - [Congress/](https://github.com/avehtari/RAOS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
-#'   - [NES/](https://github.com/avehtari/RAOS-examples/nes/)
+#'   - [NES/](https://github.com/avehtari/RAOS-Examples/nes/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'   - [Beauty/](https://github.com/avehtari/RAOS-Examples/tree/master/Beauty/)
 #'     - [beauty.html](Beauty/beauty.html) - Student evaluations of instructors’ beauty and teaching quality
@@ -118,6 +119,8 @@
 #'     - [kidiq_kcv.html](KidIQ/kidiq_kcv.html) - Linear regression and K-fold cross-validation
 #'   - [Residuals/](https://github.com/avehtari/RAOS-Examples/tree/master/Residuals/)
 #'     - [residuals.html](Residuals/residuals.html) - Plotting the data and fitted model
+#'   - [Introclass/](https://github.com/avehtari/RAOS-Examples/tree/master/Introclass/)
+#'     - [fakeresid.html](Introclass/fakeresid.html) - Plot residuals vs.\ predicted values, or residuals vs.\ observed values?
 #'   - [Newcomb/](https://github.com/avehtari/RAOS-Examples/tree/master/Newcomb/)
 #'     - [newcomb.html](Newcomb/newcomb.html) - Posterior predictive checking of Normal model for Newcomb's speed of light data
 #'   - [Unemployment/](https://github.com/avehtari/RAOS-Examples/tree/master/Unemployment/)
@@ -138,15 +141,17 @@
 #'   - [Pollution/](https://github.com/avehtari/RAOS-Examples/tree/master/Pollution/)
 #' 
 #' ### 13  Logistic regression
-#'   - [NES/](https://github.com/avehtari/raos-examples/NES/)
+#'   - [NES/](https://github.com/avehtari/RAOS-Examples/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
+#'   - [LogisticPriors/](https://github.com/avehtari/RAOS-Examples/tree/master/LogisticPriors/)
+#'     - [logistic_priors.html](LogisticPriors/logistic_priors.html) - Effect of priors in logistic regression
 #'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
 #'     - [arsenic_logistic_building.html](Arsenic/arsenic_logistic_building.html) - Building a logistic regression model: wells in Bangladesh
 #'
 #' ### 14  Working with logistic regression
-#'   - [LogitGraphs/](https://github.com/avehtari/raos-examples/LogitGraphs/)
+#'   - [LogitGraphs/](https://github.com/avehtari/RAOS-Examples/LogitGraphs/)
 #'     - [logitgraphs.html](LogitGraphs/logitgraphs.html) - Different ways of displaying logistic regression
-#'   - [NES/](https://github.com/avehtari/raos-examples/NES/)
+#'   - [NES/](https://github.com/avehtari/RAOS-Examples/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Rodents/](https://github.com/avehtari/RAOS-Examples/tree/master/Rodents/)
 #'   - [Arsenic/](https://github.com/avehtari/RAOS-Examples/tree/master/Arsenic/)
@@ -154,6 +159,8 @@
 #'     - [arsenic_logistic_apc.html](Arsenic/arsenic_logistic_apc.html) - Average predictice comparisons for a logistic regression model: wells in Bangladesh
 #'
 #' ### 15  Other generalized linear models
+#'   - [PoissonExample/](https://github.com/avehtari/RAOS-Examples/tree/master/PoissonExample/)
+#'     - [PoissonExample.html](PoissonExample/PoissonExample.html) - Demonstrate Poisson regression with simulated data.
 #'   - [Roaches/](https://github.com/avehtari/RAOS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Storable/](https://github.com/avehtari/RAOS-Examples/tree/master/Storable/) 
@@ -161,7 +168,7 @@
 #'   - [Earnings/](https://github.com/avehtari/RAOS-Examples/tree/master/Earnings/)
 #'     - [earnings_compound.html](Earnings/earnings_compound.html) - Compound discrete-continuos model
 #'   - [RiskyBehavior/](https://github.com/avehtari/RAOS-Examples/tree/master/RiskyBehavior/)
-#'   - [NES/](HTTPS://GITHUB.COM/AVEHTARI/RAOS-EXAMPLES/NES/)
+#'   - [NES/](https://github.com/avehtari/RAOS-Examples/NES/)
 #'   - [Lalonde/](https://github.com/avehtari/RAOS-Examples/tree/master/Lalonde/)
 #'   - [Congress/](https://github.com/avehtari/RAOS-Examples/tree/master/Congress/)
 #'   - [AcademyAwards/](https://github.com/avehtari/RAOS-Examples/tree/master/AcademyAwards/)
@@ -178,13 +185,14 @@
 #'     - [imputation.html](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
 #'     - [imputation_gg.html](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
 #'
-#' ### 18  Causal inference theory and randomized experiments
+#' ### 18  Causal inference basics and randomized experiments
 #'   - [Sesame/](https://github.com/avehtari/RAOS-Examples/tree/master/Sesame/)
 #'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
 #' 
 #' ### 19  Causal inference using regression on the treatment variable
 #'   - [ElectricCompany/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectricCompany/)
 #'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
+#'   - [Cows/](https://github.com/avehtari/RAOS-Examples/tree/master/Cows/)
 #' 
 #' ### 20  Observational studies with all confounders assumed to be measured
 #'   - [ElectricCompany/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectricCompany/)
@@ -193,13 +201,26 @@
 #' ### 21  More advanced topics in causal inference
 #'   - [Sesame/](https://github.com/avehtari/RAOS-Examples/tree/master/Sesame/)
 #'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
+#'   - [Bypass/](https://github.com/avehtari/RAOS-Examples/tree/master/Pypass/)
 #' 
 #' ### 22  Advanced regression and multilevel models
+#'   - [Golf/](https://github.com/avehtari/RAOS-Examples/tree/master/Golf/)
+#'     - [golf.html](Golf/golf.html) - Gold putting accuracy: Fitting a nonlinear model using Stan
+#'   - [Gay/](https://github.com/avehtari/RAOS-Examples/tree/master/Gay/)
+#'     - [gay.html](Gay/gay.html) - Nonlinear models (Loess, B-spline, GP-spline, and BART) and political attitudes as a function of age
 #'   - [ElectionsEconomy/](https://github.com/avehtari/RAOS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
 #'   - [BigData/](https://github.com/avehtari/RAOS-Examples/tree/master/BigData/)
 #'     - [bigdata.html](BigData/bigdata.html) - Demonstrate computation speed with 100 000 observations.
-#' 
+#'
+#' ### Appendix B
+#'   - [Coins/](https://github.com/avehtari/RAOS-Examples/tree/master/Coins/)
+#'   - [Mile/](https://github.com/avehtari/RAOS-Examples/tree/master/Mile/)
+#'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
+#'   - [Restaurant/](https://github.com/avehtari/RAOS-Examples/tree/master/Restaurant/)
+#'     - [restaurant.html](Restaurant/restaurant.html) - Demonstration of using Stan for optimization
+#'   - [DifferentSoftware/](https://github.com/avehtari/RAOS-Examples/tree/master/DifferentSoftware/)
+#'     - [linear.html](DifferentSoftware/linear.html) - Linear regression using different software options
 #'
 #' -------------
 #' 
@@ -212,6 +233,7 @@
 #'     - [arsenic_logistic_building.html](Arsenic/arsenic_logistic_building.html) - Building a logistic regression model: wells in Bangladesh
 #'     - [arsenic_logistic_residuals.html](Arsenic/arsenic_logistic_residuals.html) - Residual plots for a logistic regression model: wells in Bangladesh
 #'     - [arsenic_logistic_apc.html](Arsenic/arsenic_logistic_apc.html) - Average predictice comparisons for a logistic regression model: wells in Bangladesh
+#'     - [arsenic_logistic_building_optimizing.html](Arsenic/arsenic_logistic_building_optimizing.html) - Building a logistic regression model: wells in Bangladesh. A version with normal approximation at the mode.
 #'   - [Balance/](https://github.com/avehtari/RAOS-Examples/tree/master/Balance/)
 #'     - [treatcontrol.html](Balance/treatcontrol.html)
 #'   - [Beauty/](https://github.com/avehtari/RAOS-Examples/tree/master/Beauty/)
@@ -254,7 +276,7 @@
 #'   - [Girls/](https://github.com/avehtari/RAOS-Examples/tree/master/Girls/)
 #'   - [Golf/](https://github.com/avehtari/RAOS-Examples/tree/master/Golf/)
 #'     - [golf.html](Golf/golf.html) - Gold putting accuracy: Fitting a nonlinear model using Stan
-#'   - [HDI/](HTTPS://GITHUB.COM/AVEHTARI/RAOS-EXAMPLES/HDI/)
+#'   - [HDI/](https://github.com/avehtari/RAOS-Examples/HDI/)
 #'     - [hdi.html](HDI/hdi.html) - Human Development Index - Looking at data in different ways
 #'   - [HealthExpenditure/](https://github.com/avehtari/RAOS-Examples/tree/master/HealthExpenditure/)
 #'     - [healthexpenditure.html](HealthExpenditure/healthexpenditure.html) - Discovery through graphs of data and models
@@ -284,7 +306,7 @@
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
 #'   - [Names/](https://github.com/avehtari/RAOS-Examples/tree/master/Names/)
 #'     - [names.html](Names/names.html) - Names - Distributions of names of American babies
-#'   - [NES/](HTTPS://GITHUB.COM/AVEHTARI/RAOS-EXAMPLES/NES/)
+#'   - [NES/](https://github.com/avehtari/RAOS-Examples/NES/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Newcomb/](https://github.com/avehtari/RAOS-Examples/tree/master/Newcomb/)
@@ -295,6 +317,8 @@
 #'     - [PearsonLee.html](PearsonLee/PearsonLee.html) - The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
 #'   - [Pew/](https://github.com/avehtari/RAOS-Examples/tree/master/Pew/)
 #'     - [pew.html](Pew/pew.html) - Miscellaneous analyses using raw Pew data
+#'   - [PoissonExample/](https://github.com/avehtari/RAOS-Examples/tree/master/PoissonExample/)
+#'     - [poissonexample.html](PoissonExample/poissonexample.html) - Demonstrate Poisson regression with simulated data.
 #'   - [Pollution/](https://github.com/avehtari/RAOS-Examples/tree/master/Pollution/)
 #'   - [Poststrat/](https://github.com/avehtari/RAOS-Examples/tree/master/Poststrat/)
 #'     - [poststrat.html](Poststrat/poststrat.html) - Poststratification after estimation

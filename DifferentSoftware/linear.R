@@ -1,11 +1,12 @@
 #' ---
-#' title: "Regression and Other Stories: Linear Regression"
+#' title: "Regression and Other Stories: Different software options"
 #' author: "Andrew Gelman, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 #' 
 
-#' Linear regression using different software options
+#' Linear regression using different software options. See Appendix B in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

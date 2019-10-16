@@ -1,11 +1,12 @@
 #' ---
-#' title: "Regression and Other Stories: Pearson Lee Heights"
+#' title: "Regression and Other Stories: Pearson and Lee Heights"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 #'
 
-#' The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
+#' The heredity of height. Published in 1903 by Karl Pearson and Alice
+#' Lee. See Chapter 6 in Regression and Other Stories.
 #' 
 #' -------------
 #' 
@@ -31,7 +32,7 @@ n <- length(mother_height)
 #' **Linear regression**
 # MCMC sampling
 #+ results='hide'
-tic();fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, algorithm='optimizing', thin=1);toc()
+fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights)
 # optimization and normal approximation at the mode is faster with similar
 # accuracy, because n is big and there are only three parameters to estimate
 # fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights,

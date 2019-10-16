@@ -1,0 +1,130 @@
+---
+title: "Regression and Other Stories: Human Development Index"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Human Development Index - Looking at data in different ways. See
+Chapter 2 in Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("foreign")
+library("maps")
+```
+
+**Load data**
+
+```{r }
+hdi <- read.table(root("HDI/data","hdi.dat"), header=TRUE)
+votes <- read.dta(root("HDI/data","state vote and income, 68-00.dta"))
+income2000 <- votes[votes[,"st_year"]==2000, "st_income"]
+state.income <- c(income2000[1:8],NA,income2000[9:50])
+state.abb.long <- c(state.abb[1:8],"DC",state.abb[9:50])
+state.name.long <- c(state.name[1:8],"Washington, D.C.",state.name[9:50])
+hdi.ordered <- rep(NA, 51)
+can <- rep(NA, 51)
+for (i in 1:51){
+  ok <- hdi[,"state"]==state.name.long[i]
+  hdi.ordered[i] <- hdi[ok,"hdi"]
+  can[i] <- hdi[ok,"canada.dist"]
+}
+no.dc <- state.abb.long != "DC"
+```
+
+**Plot average state income and Human Development Index**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) png(root("HDI/figs","hdi1.png"), height=400, width=400)
+```
+```{r }
+par(mar=c(3,3,2.5,1), mgp=c(1.5,.2,0), tck=-.01, pty="s")
+plot(state.income, hdi.ordered,
+     xlab="Average state income in 2000", ylab="Human Development Index", type="n")
+text(state.income, hdi.ordered, state.abb.long)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**Plot rank of average state income and  Human Development Index**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) png(root("HDI/figs","hdi2.png"), height=400, width=400)
+```
+```{r }
+par(mar=c(3,3,2.5,1), mgp=c(1.5,.2,0), tck=-.01, pty="s")
+plot(rank(state.income[no.dc]), rank(hdi.ordered[no.dc]),
+     xlab="Rank of average state income in 2000", ylab="Rank of Human Development Index", type="n")
+text(rank(state.income[no.dc]), rank(hdi.ordered[no.dc]), state.abb)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+```{r }
+print(cor(rank(hdi.ordered[no.dc]),rank(state.income[no.dc])), digits=2)
+```
+
+**Plot a map of Human Devlopment index**
+
+```{r }
+statemaps <- function(a, grayscale=FALSE, ...){
+  if (length(a)==51){
+    no.dc <- c(1:8,10:51)
+    a <- a[no.dc]
+  }
+  if (length(a)==50){
+    lower48 <- state.abb!="AK" & state.abb!="HI"
+    a <- a[lower48]
+  }
+  else if (length(a)!=48) stop("wrong number of states")
+  mapping <- list(1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20:22,23:24,25,26,27,28,29,30,31,32,33,34:37,38:40,41,42,43,44,45,46,47,48,49,50,51,52,53:55,56:60,61,62,63)
+  # for (i in 1:length(mapping)) print(regions[mapping[[i]]])
+  a.long <- rep(NA, 63)
+  projection <- "bonne"
+  for (i in 1:48){
+    a.long[mapping[[i]]] <- a[i]
+  }
+ if (grayscale){
+   a.long.scaled <- .95*(a.long-min(a,na.rm=TRUE))/(max(a,na.rm=TRUE)-min(a,na.rm=TRUE))
+   shades <- a.long.scaled
+   not.dc <- !is.na(a.long.scaled)
+   shades[not.dc] <- gray(shades[not.dc])
+   map('state', proj=projection, param=25, lty=0, ...)
+   m <- map('state', proj=projection, param=25, fill=TRUE, plot=FALSE)
+   polygon(m$x,m$y, col=shades, lwd=0.5, border="gray30")
+ }
+ else {
+   map('state', proj=projection, param=25, lty=0, ...)
+   m <- map('state', proj=projection, param=25, fill=TRUE, plot=FALSE)
+   polygon(m$x,m$y, col=a.long, lwd=0.5, border="gray30")
+ }
+}
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) png(root("HDI/figs","hdi3.png"), height=300, width=400)
+```
+```{r }
+par(mar=c(0,0,0,0))
+statemaps(ifelse (can==1, "darkgreen", ifelse (can==2, "green4",
+                     ifelse (can==3, "green3", ifelse (can==4, "green2",
+                     ifelse (can==5, "palegreen2", "yellowgreen"))))))
+mtext("Human Development Index by State", line=-2)
+mtext("(Colors indicate number of states you need to drive through to reach the Canadian border.)",
+      side=1, cex=.75, line=-2)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+

@@ -1,10 +1,11 @@
 #' ---
-#' title: "Regression and Other Stories: Death"
+#' title: "Regression and Other Stories: Death penalty poll"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Death - Proportion of American adults supporting the death penalty
+#' Death penalty poll - Proportion of American adults supporting the death
+#' penalty. See Chapter 4 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

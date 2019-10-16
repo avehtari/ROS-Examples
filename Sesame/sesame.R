@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Causal analysis of Sesame Street experiment
+#' Causal analysis of Sesame Street experiment. See Chapters 18 and 21
+#' in Regression and Other Stories.
 #' 
 #' -------------
 #' 

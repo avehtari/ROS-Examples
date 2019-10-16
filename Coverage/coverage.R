@@ -4,6 +4,12 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
+#' Coverage - Illustration of coverage of intervals. See Chapter 4 in
+#' Regression and Other Stories.
+#' 
+#' -------------
+#'
+
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files

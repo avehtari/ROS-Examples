@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-08-07" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: Earnings</title>
 
@@ -271,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,12 +365,12 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Earnings</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-08-07</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Predict respondents’ yearly earnings using survey data from 1990.</p>
+<p>Predict respondents’ yearly earnings using survey data from 1990. See Chapter 15 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
@@ -405,9 +404,9 @@ sims_2a &lt;- as.matrix(fit_2a)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) -3.92   2.05 
+(Intercept) -3.88   1.98 
 height       0.08   0.03 
-male         1.68   0.33 
+male         1.70   0.31 
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -424,7 +423,7 @@ sims_2b &lt;- as.matrix(fit_2b)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) 8.12   0.59  
+(Intercept) 8.10   0.60  
 height      0.02   0.01  
 male        0.42   0.07  
 

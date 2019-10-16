@@ -3,20 +3,22 @@ title: "Regression and Other Stories: Gay"
 author: "Andrew Gelman, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Nonlinear models (Loess, B-spline, GP-spline, and BART) and
-political attitudes as a function of age
+Nonlinear models (loess, spline, GP, and BART) and political
+attitudes as a function of age. See Chapter 22 in Regression and
+Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -24,7 +26,7 @@ library("rstan")
 library("mgcv")
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
-library("dbarts")
+library("BART")
 ```
 
 **Define common plot functions**
@@ -155,7 +157,8 @@ for (j in 1:2){
   gay_GP_fit <- posterior_linpred(gay_GP[[j]], data.frame(age=gay_sum[[j]]$age))
   gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty", savefigs = savefigs)
   # BART
-  gay_bart[[j]] <- bart(y ~ age, gay[[j]], uniq_age, ntree = 20)
+  output <- capture.output(
+    gay_bart[[j]] <- pbart(gay[[j]]$age, gay[[j]]$y, uniq_age, ntree = 20))
   gay_bart_fit <- pnorm(gay_bart[[j]]$yhat.test)
   gay_plot(gay_bart_fit, question=question[j], title="Bart fit and uncertainty", savefigs = savefigs)
 

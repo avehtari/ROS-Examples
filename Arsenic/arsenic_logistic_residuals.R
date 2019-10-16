@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Residual plots for a logistic regression model: wells in Bangladesh
+#' Binned residual plots for a logistic regression model: wells in
+#' Bangladesh. See Chapter 14 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

@@ -1,10 +1,11 @@
 #' ---
-#' title: "Regression and Other Stories: Interactions"
+#' title: "Regression and Other Stories: Interaction example"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Plot interaction example figure
+#' Plot interaction example figure. See Chapter 1 in Regression and
+#' Other Stories.
 #' 
 #' -------------
 #' 

@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Example data file for helicopter flying time exercise
+#' Example data file for helicopter flying time exercise. See Chapter
+#' 1 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

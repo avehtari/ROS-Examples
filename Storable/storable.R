@@ -5,7 +5,8 @@
 #' ---
 
 #' Ordered categorical data analysis with a study from experimental
-#' economics, on the topic of ``storable votes.''
+#' economics, on the topic of ``storable votes''. See Chapter 15 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

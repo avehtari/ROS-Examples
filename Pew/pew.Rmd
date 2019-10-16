@@ -3,19 +3,21 @@ title: "Regression and Other Stories: Pew"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Miscellaneous analyses using raw Pew data
+Miscellaneous analyses using raw Pew data. See Chapter 2 in
+Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("foreign")
@@ -31,7 +33,7 @@ n <- nrow(pew_pre)
 **Glance data**
 
 ```{r }
-table (pew_pre[,"date"])
+table(pew_pre[,"date"])
 which_question <- ifelse(!is.na(pew_pre$heat2), 2, ifelse (!is.na(pew_pre$heat4), 4, 0))
 table(pew_pre$date, which_question)
 ```
@@ -66,8 +68,8 @@ Date
 ```{r }
 early <- pew_pre$date < 90008
 late <- pew_pre$date > 90008
-month <- floor (pew_pre$date/10000)
-day <- floor (pew_pre$date/100) - 100*month
+month <- floor(pew_pre$date/10000)
+day <- floor(pew_pre$date/100) - 100*month
 day.numeric <- month*31 + day
 poll.id <- ifelse (month==6, 1,
              ifelse (month==7 & day<28, 2,
@@ -83,7 +85,7 @@ n.poll.id <- max(poll.id)
 State (1-51, in alfa order, including DC)
 
 ```{r }
-stnum <- as.numeric (pew_pre$state)
+stnum <- as.numeric(pew_pre$state)
 ```
 
 Identify out DC

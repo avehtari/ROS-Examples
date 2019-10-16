@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Logistic regression, identifiability, and separation
+#' Logistic regression, identifiability, and separation. See Chapters
+#' 13 and 14 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

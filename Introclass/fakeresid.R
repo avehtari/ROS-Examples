@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Plot residuals vs.\ predicted values, or residuals vs.\ observed values?
+#' Plot residuals vs.\ predicted values, or residuals vs.\ observed
+#' values? See Chapter 11 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

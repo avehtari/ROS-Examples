@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Demonstration of using Stan for optimization
+#' Demonstration of using Stan for optimization. See Appendix B in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

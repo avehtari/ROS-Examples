@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Human Development Index - Looking at data in different ways
+#' Human Development Index - Looking at data in different ways. See
+#' Chapter 2 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

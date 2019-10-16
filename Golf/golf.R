@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Gold putting accuracy: Fitting a nonlinear model using Stan
+#' Gold putting accuracy: Fitting a nonlinear model using Stan. See
+#' Chapter 22 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

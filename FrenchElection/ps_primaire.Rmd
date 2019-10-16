@@ -3,13 +3,18 @@ title: "Regression and Other Stories: French Election"
 author: "Andrew Gelman, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-French Election data
+French Election data.
 
 -------------
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+```
+
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 ```

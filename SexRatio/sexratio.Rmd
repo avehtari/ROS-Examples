@@ -3,19 +3,21 @@ title: "Regression and Other Stories: Beauty and sex ratio"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Example where an informative prior makes a difference
+Example where an informative prior makes a difference. See Chapter 9
+in Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("arm")
@@ -70,7 +72,7 @@ if (savefigs) dev.off()
 **Bayesian regression with weakly informative prior**
 
 ```{r }
-fit_default <- stan_glm(y ~ x, data = sexratio)
+fit_default <- stan_glm(y ~ x, data = sexratio, refresh = 0)
 prior_summary(fit_default)
 print(fit_default)
 ```
@@ -78,13 +80,10 @@ print(fit_default)
 **Bayesian regression with informative prior**
 
 ```{r }
-fit_post <-
-  stan_glm(
-    y ~ x,
-    data = sexratio,
-    prior = normal(0, 0.2, autoscale = FALSE),
-    prior_intercept = normal(48.8, 0.5, autoscale = FALSE)
-  )#, prior_aux=normal(0, 2, autoscale=FALSE))
+fit_post <- stan_glm(y ~ x, data = sexratio,
+                     prior = normal(0, 0.2, autoscale = FALSE),
+                     prior_intercept = normal(48.8, 0.5, autoscale = FALSE),
+                     refresh = 0)
 prior_summary(fit_post)
 print(fit_post)
 ```

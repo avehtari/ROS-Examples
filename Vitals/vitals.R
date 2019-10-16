@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Predict weight
+#' Predict weight. See Chapters 3, 9 and 10 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 

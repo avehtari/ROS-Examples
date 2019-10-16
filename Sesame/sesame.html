@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-08-28" />
+<meta name="date" content="2019-10-16" />
 
 <title>Regression and Other Stories: Sesame street</title>
 
@@ -365,12 +365,12 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Sesame street</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-08-28</h4>
+<h4 class="date">2019-10-16</h4>
 
 </div>
 
 
-<p>Causal analysis of Sesame Street experiment</p>
+<p>Causal analysis of Sesame Street experiment. See Chapters 18 and 21 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
@@ -395,7 +395,7 @@ print(fit_1a, digits=2)</code></pre>
  predictors:   2
 ------
             Median MAD_SD
-(Intercept) 0.55   0.04  
+(Intercept) 0.54   0.04  
 encouraged  0.36   0.05  
 
 Auxiliary parameter(s):
@@ -415,12 +415,12 @@ print(fit_1b, digits=2)</code></pre>
  predictors:   2
 ------
             Median MAD_SD
-(Intercept) 24.93   1.36 
-encouraged   2.88   1.80 
+(Intercept) 24.93   1.47 
+encouraged   2.87   1.84 
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 13.34   0.60 
+sigma 13.33   0.61 
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -440,12 +440,12 @@ print(fit_2b, digits = 2)</code></pre>
  predictors:   2
 ------
               Median MAD_SD
-(Intercept)   20.54   3.83 
-watched_hat_2  7.93   4.76 
+(Intercept)   20.61   3.86 
+watched_hat_2  7.91   4.79 
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 13.37   0.58 
+sigma 13.35   0.59 
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -464,18 +464,18 @@ print(fit_3b, digits = 2)</code></pre>
  predictors:   8
 ------
                  Median MAD_SD
-(Intercept)       1.35   4.95 
-watched_hat_3    13.96   4.14 
+(Intercept)       1.14   4.77 
+watched_hat_3    14.07   4.03 
 prelet            0.70   0.08 
-as.factor(site)2  8.42   1.79 
-as.factor(site)3 -4.05   1.86 
-as.factor(site)4  0.82   2.52 
-as.factor(site)5  2.60   2.85 
-setting           1.55   1.46 
+as.factor(site)2  8.34   1.82 
+as.factor(site)3 -3.96   1.74 
+as.factor(site)4  0.87   2.34 
+as.factor(site)5  2.80   2.85 
+setting           1.61   1.45 
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.70   0.47  
+sigma 9.67   0.45  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -507,22 +507,27 @@ Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
 Population-Level Effects: 
-                  Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-watched_Intercept     0.55      0.04     0.47     0.63       4661 1.00
-postlet_Intercept    20.55      3.74    13.51    28.32       2177 1.00
-watched_encour        0.36      0.05     0.25     0.45       4536 1.00
-postlet_watched       7.96      4.74    -1.76    16.90       2232 1.00
+                  Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+watched_Intercept     0.55      0.04     0.47     0.63 1.00     4489
+postlet_Intercept    20.59      3.68    13.62    28.51 1.00     2010
+watched_encour        0.36      0.05     0.26     0.46 1.00     4448
+postlet_watched       7.93      4.64    -1.70    16.82 1.00     1952
+                  Tail_ESS
+watched_Intercept     2601
+postlet_Intercept     1608
+watched_encour        2760
+postlet_watched       1660
 
 Family Specific Parameters: 
-              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_watched     0.38      0.02     0.35     0.42       4140 1.00
-sigma_postlet    12.64      0.70    11.47    14.18       2696 1.00
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma_watched     0.38      0.02     0.35     0.42 1.00     4957     2681
+sigma_postlet    12.64      0.69    11.47    14.28 1.00     3049     1789
 
 Residual Correlations: 
-                        Estimate Est.Error l-95% CI u-95% CI Eff.Sample
-rescor(watched,postlet)     0.17      0.15    -0.13     0.45       2338
-                        Rhat
-rescor(watched,postlet) 1.00
+                        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+rescor(watched,postlet)     0.17      0.15    -0.12     0.46 1.00     1927
+                        Tail_ESS
+rescor(watched,postlet)     1578
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 
@@ -542,34 +547,51 @@ Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
          total post-warmup samples = 4000
 
 Population-Level Effects: 
-                    Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-watched_Intercept       0.67      0.11     0.45     0.88       4246 1.00
-postlet_Intercept       1.15      4.67    -8.38     9.87       1913 1.00
-watched_encour          0.34      0.05     0.23     0.44       5468 1.00
-watched_prelet          0.01      0.00    -0.00     0.01       6663 1.00
-watched_setting        -0.06      0.05    -0.15     0.05       5124 1.00
-watched_factorsite2     0.03      0.07    -0.10     0.16       3977 1.00
-watched_factorsite3    -0.11      0.07    -0.24     0.02       3581 1.00
-watched_factorsite4    -0.34      0.07    -0.48    -0.21       3893 1.00
-watched_factorsite5    -0.29      0.10    -0.49    -0.10       3979 1.00
-postlet_watched        14.02      3.96     6.52    22.15       1733 1.00
-postlet_prelet          0.70      0.08     0.55     0.85       4583 1.00
-postlet_setting         1.62      1.49    -1.17     4.58       3482 1.00
-postlet_factorsite2     8.44      1.79     4.80    11.79       3864 1.00
-postlet_factorsite3    -3.90      1.80    -7.49    -0.43       3695 1.00
-postlet_factorsite4     0.95      2.39    -3.59     5.91       2496 1.00
-postlet_factorsite5     2.83      2.75    -2.51     8.35       2807 1.00
+                    Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+watched_Intercept       0.67      0.11     0.46     0.88 1.00     4265
+postlet_Intercept       1.17      4.72    -8.38     9.91 1.00     1599
+watched_encour          0.34      0.05     0.23     0.43 1.00     4867
+watched_prelet          0.01      0.00    -0.00     0.01 1.00     6555
+watched_setting        -0.06      0.05    -0.16     0.05 1.00     5215
+watched_factorsite2     0.03      0.07    -0.10     0.16 1.00     3664
+watched_factorsite3    -0.11      0.07    -0.25     0.02 1.00     3473
+watched_factorsite4    -0.35      0.07    -0.49    -0.21 1.00     4134
+watched_factorsite5    -0.30      0.10    -0.49    -0.10 1.00     4400
+postlet_watched        14.07      4.08     6.44    22.56 1.00     1451
+postlet_prelet          0.70      0.08     0.55     0.85 1.00     5303
+postlet_setting         1.61      1.45    -1.20     4.39 1.00     3037
+postlet_factorsite2     8.44      1.78     4.96    11.93 1.00     3905
+postlet_factorsite3    -3.94      1.73    -7.47    -0.59 1.00     3565
+postlet_factorsite4     0.94      2.38    -3.59     5.77 1.00     2252
+postlet_factorsite5     2.79      2.85    -2.64     8.46 1.00     2959
+                    Tail_ESS
+watched_Intercept       2864
+postlet_Intercept       1648
+watched_encour          2684
+watched_prelet          3166
+watched_setting         3089
+watched_factorsite2     3313
+watched_factorsite3     3497
+watched_factorsite4     3301
+watched_factorsite5     3233
+postlet_watched         1533
+postlet_prelet          2942
+postlet_setting         3064
+postlet_factorsite2     2994
+postlet_factorsite3     3243
+postlet_factorsite4     2791
+postlet_factorsite5     2711
 
 Family Specific Parameters: 
-              Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
-sigma_watched     0.36      0.02     0.32     0.39       5350 1.00
-sigma_postlet     9.45      0.54     8.56    10.62       2324 1.00
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma_watched     0.36      0.02     0.33     0.39 1.00     5815     3043
+sigma_postlet     9.46      0.56     8.53    10.77 1.00     2432     1711
 
 Residual Correlations: 
-                        Estimate Est.Error l-95% CI u-95% CI Eff.Sample
-rescor(watched,postlet)    -0.18      0.15    -0.47     0.12       1771
-                        Rhat
-rescor(watched,postlet) 1.00
+                        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+rescor(watched,postlet)    -0.18      0.16    -0.48     0.13 1.00     1474
+                        Tail_ESS
+rescor(watched,postlet)     1680
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 

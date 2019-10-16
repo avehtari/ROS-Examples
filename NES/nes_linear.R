@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Fitting the same regression to many datasets
+#' Fitting the same regression to many datasets. See Chapter 10 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

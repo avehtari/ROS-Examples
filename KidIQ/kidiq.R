@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Linear regression with multiple predictors.
+#' Linear regression with multiple predictors. See Chapters 10, 11 and
+#' 12 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

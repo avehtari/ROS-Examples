@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Linear regression with a single predictor
+#' Linear regression with a single predictor. See Chapters 6 and 7 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
@@ -61,7 +62,7 @@ if (savefigs) dev.off()
 #' #### Formulating comparisons as regression models
 #' 
 #' **Simulate fake data**
-n_0 <- 20
+n_0 <- 200
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
 set.seed(2141)
@@ -79,7 +80,7 @@ fit_2 <- stan_glm(y_0 ~ 1, data = fake_0, seed=2141, refresh = 0,
 print(fit_2)
 
 #' **Simulate fake data**
-n_1 <- 30
+n_1 <- 300
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
 set.seed(2141)

@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Predict respondents' yearly earnings using survey data from 1990.
+#' Predict respondents' yearly earnings using survey data from
+#' 1990. See Chapters 6, 9 and 12 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

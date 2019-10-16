@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Demonstrate Poisson regression
+#' Demonstrate Poisson regression. See Chapter 15 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

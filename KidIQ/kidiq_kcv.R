@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Linear regression and K-fold cross-validation.
+#' Linear regression and K-fold cross-validation. See Chapter 11 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 

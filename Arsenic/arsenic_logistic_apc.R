@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Average predictice comparisons for a logistic regression model: wells in Bangladesh
+#' Average predictive comparisons for a logistic regression model:
+#' wells in Bangladesh. See Chapter 14 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

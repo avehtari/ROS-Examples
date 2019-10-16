@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Simple graphs illustrating regression for causal inference
+#' Simple graphs illustrating regression for causal inference. See
+#' Chapter 1 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

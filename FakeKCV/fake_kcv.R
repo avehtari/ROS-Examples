@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Demonstration of $K$-fold cross-validation using simulated data
+#' Demonstration of $K$-fold cross-validation using simulated
+#' data. See Chapter 11 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

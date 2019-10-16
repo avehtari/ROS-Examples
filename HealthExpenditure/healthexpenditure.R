@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Health Expenditure - Discovery through graphs of data and models
+#' Health Expenditure - Discovery through graphs of data and
+#' models. See Chapter 2 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

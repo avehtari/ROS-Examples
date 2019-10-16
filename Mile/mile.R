@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Trend of record times in the mile run
+#' Trend of record times in the mile run. See Chapter 3 in Regression
+#' and Other Stories.
 #' 
 #' -------------
 #' 

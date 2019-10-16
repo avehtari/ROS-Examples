@@ -1,0 +1,276 @@
+---
+title: "Regression and Other Stories: Roaches"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Analyse the effect of integrated pest management on reducing
+cockroach levels in urban apartments. See Chapter 15 in
+Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("RAOS-Examples")$make_fix_file()
+library("rstanarm")
+options(mc.cores = parallel::detectCores())
+library("brms")
+library("loo")
+library("ggplot2")
+library("bayesplot")
+theme_set(bayesplot::theme_default(base_family = "sans"))
+```
+```{r eval=FALSE, include=FALSE}
+# grayscale figures for the book
+if (savefigs) color_scheme_set(scheme = "gray")
+```
+
+Set random seed for reproducability
+
+```{r }
+SEED <- 3579
+```
+
+**Load data**
+
+```{r }
+data(roaches)
+(n <- nrow(roaches))
+```
+
+scale the number of roaches by 100
+
+```{r }
+roaches$roach100 <- roaches$roach1 / 100
+```
+
+### Negative-binomial model
+
+negative-binomial model is over-dispersed compared to Poisson
+
+
+```{r }
+fit_1 <- stan_glm(y ~ roach100 + treatment + senior, family=neg_binomial_2,
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
+prior_summary(fit_1)
+print(fit_1, digits=2)
+loo_1 <- loo(fit_1)
+
+fit_0 <- stan_glm(y ~ roach100 + senior, family=neg_binomial_2,
+                  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
+prior_summary(fit_0)
+print(fit_0, digits=2)
+loo_0 <- loo(fit_0)
+```
+
+**Graphical posterior predictive checking**
+
+```{r }
+yrep_1 <- posterior_predict(fit_1)
+n_sims <- nrow(yrep_1)
+sims_display <- sample(n_sims, 100)
+(ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[sims_display,]+1))+
+     xlab('log10(y+1)'))
+
+```
+```{r eval=FALSE, include=FALSE}
+pbg <- bayesplot_grid(ppc_1, ppc_1,
+                      grid_args = list(ncol = 2),
+                      titles = c("Poisson", "negative-binomial"))
+if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9)
+```
+
+**Predictive checking with test statistic**<br>
+ppc with proportion of zero counts test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==0))
+```
+
+or
+
+```{r }
+print(mean(roaches$y==0), digits=2)
+print(mean(yrep_1==0), digits=2)
+```
+
+**Predictive checking with test statistic**<br>
+ppc with proportion of counts of 1 test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==1))
+```
+
+or
+
+```{r }
+print(mean(roaches$y==1), digits=2)
+print(mean(yrep_1==1), digits=2)
+```
+
+ppc with 95% quantile test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) quantile(y, probs=0.95))
+```
+
+ppc with 99% quantile test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) quantile(y, probs=0.99))
+```
+
+ppc with max count test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_1, stat=max)
+```
+
+or
+
+```{r }
+print(max(roaches$y), digits=2)
+print(max(yrep_1), digits=2)
+```
+
+### Poisson model
+
+Poisson is a special case of negative-binomial
+
+
+```{r }
+fit_2 <- stan_glm(y ~ roach100 + treatment + senior, family=poisson,
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0)
+prior_summary(fit_2)
+print(fit_2, digits=2)
+loo_2 <- loo(fit_2)
+
+roaches$id <- 1:n
+fit_2b <- stan_glmer(y ~ roach100 + treatment + senior + (1 | id), family=poisson,
+  offset=log(exposure2), data=roaches, seed=SEED, refresh=0, iter=20000)
+loo_2b <- loo(fit_2b)
+
+loo_compare(loo_1, loo_2)
+```
+
+**Graphical posterior predictive checking**<br>
+
+instead of y, we plot log10(y+1) to better show the differences in
+the shape of the predictive distribution
+
+```{r }
+yrep_2 <- posterior_predict(fit_2)
+n_sims <- nrow(yrep_2)
+sims_display <- sample(n_sims, 100)
+(ppc_2 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_2[sims_display,]+1))+
+     xlim(0,3) + xlab('log10(y+1)'))
+```
+
+**Predictive checking with test statistic**<br>
+test statistic used is the proportion of zero counts
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_2, stat=function(y) mean(y==0))
+```
+
+or
+
+```{r }
+print(mean(roaches$y==0), digits=2)
+print(mean(yrep_2==0), digits=2)
+```
+
+### Zero-inflated negative-binomial model
+
+Zero-inflated negative-binomial model model is mixture of two models
+ - logistic regression to model the proportion of extra zero counts
+ - negative-binomial model
+
+we switch to brms as rstanarm doesn't support zero-inflated
+negative-binomial model
+
+```{r }
+roaches$logp1_roach1 <- log(roaches$roach1+1)
+roaches$log_exposure2 <- log(roaches$exposure2)
+```
+```{r results='hide'}
+fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior,
+                 zi ~ logp1_roach1 + treatment + senior),
+             family=zero_inflated_negbinomial(), data=roaches,
+             prior=set_prior("normal(0,1)"), seed=SEED, refresh=500)
+```
+```{r }
+print(fit_3)
+loo_3 <- loo(fit_3)
+loo_compare(loo_1, loo_3)
+
+fit_3x <- brm(bf(y ~ logp1_roach1 + senior,
+                zi ~ logp1_roach1 + senior),
+             family=zero_inflated_negbinomial(), data=roaches,
+             prior=set_prior("normal(0,1)"), seed=SEED, refresh=500)
+```
+```{r }
+print(fit_3x)
+loo_3x <- loo(fit_3x)
+loo_compare(loo_3, loo_3x)
+```
+
+**Graphical posterior predictive checking**
+
+```{r }
+yrep_3 <- posterior_predict(fit_3)
+(ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[sims_display,]+1))+
+     xlab('log10(y+1)'))
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5)
+```
+
+**Predictive checking with test statistic**<br>
+ppc with zero count test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_3, stat=function(y) mean(y==0))
+```
+
+or
+
+```{r }
+print(mean(roaches$y==0), digits=2)
+print(mean(yrep_3==0), digits=2)
+```
+
+ppc with 95% quantile test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_3, stat=function(y) quantile(y, probs=0.95))
+```
+
+ppc with 99% quantile test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_3, stat=function(y) quantile(y, probs=0.99))
+```
+
+ppc with max count test statistic
+
+```{r }
+ppc_stat(y=roaches$y, yrep=yrep_3, stat=max)
+```
+
+or
+
+```{r }
+print(max(roaches$y), digits=2)
+print(max(yrep_3), digits=2)
+```
+

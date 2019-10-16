@@ -1,12 +1,17 @@
 #' ---
-#' title: "Regression and Other Stories: Poststrat"
+#' title: "Regression and Other Stories: Poststratification"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Poststratification after estimation
+#' Poststratification after estimation. See Chapter 17 in Regression
+#' and Other Stories.
 #' 
-#' The CBS News poll conducted from 12--16 October 2016 reported that, among likely voters who preferred one of the two major-party candidates, 45\% intended to vote for Donald Trump and 55\% for Hillary Clinton.  Of these respondents, Party ID 33\% Republican, 40\% Republican, 27\% independent.
+#' The CBS News poll conducted from 12--16 October 2016 reported that,
+#' among likely voters who preferred one of the two major-party
+#' candidates, 45\% intended to vote for Donald Trump and 55\% for
+#' Hillary Clinton.  Of these respondents, Party ID 33\% Republican,
+#' 40\% Republican, 27\% independent.
 #' 
 #' source:  http://www.cbsnews.com/news/cbs-poll-clintons-lead-over-trump-widens-with-three-weeks-to-go/
 #' and https://www.scribd.com/document/327938789/CBS-News-Poll-10-17-toplines

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-08-07" />
+<meta name="date" content="2019-10-15" />
 
 <title>Regression and Other Stories: KidIQ cross-validation</title>
 
@@ -271,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,12 +365,12 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: KidIQ cross-validation</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-08-07</h4>
+<h4 class="date">2019-10-15</h4>
 
 </div>
 
 
-<p>Linear regression and leave-one-out cross-validation.</p>
+<p>Linear regression and leave-one-out cross-validation. See Chapter 11 in Regression and Other Stories.</p>
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
@@ -535,10 +534,10 @@ print(fit_4)</code></pre>
  predictors:   4
 ------
               Median MAD_SD
-(Intercept)   -6.5   12.4  
-mom_hs        45.6   13.7  
+(Intercept)   -7.7   13.0  
+mom_hs        46.6   14.3  
 mom_iq         0.9    0.1  
-mom_hs:mom_iq -0.4    0.1  
+mom_hs:mom_iq -0.4    0.2  
 
 Auxiliary parameter(s):
       Median MAD_SD
@@ -553,9 +552,9 @@ print(loo_4)</code></pre>
 Computed from 4000 by 434 log-likelihood matrix
 
          Estimate   SE
-elpd_loo  -1872.4 14.3
-p_loo         4.7  0.5
-looic      3744.8 28.7
+elpd_loo  -1872.6 14.4
+p_loo         4.9  0.5
+looic      3745.2 28.7
 ------
 Monte Carlo SE of elpd_loo is 0.0.
 
@@ -564,7 +563,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <pre class="r"><code>loo_compare(loo_3, loo_4)</code></pre>
 <pre><code>      elpd_diff se_diff
 fit_4  0.0       0.0   
-fit_3 -3.7       2.5   </code></pre>
+fit_3 -3.5       2.6   </code></pre>
 <p><strong>Linear regression with log-transformation and interaction</strong></p>
 <pre class="r"><code>fit_5 &lt;- stan_glm(kid_score ~ mom_hs + log(mom_iq) + log(mom_iq):mom_hs,
                   data=kidiq, seed=SEED, refresh = 0)
@@ -576,10 +575,10 @@ print(fit_5)</code></pre>
  predictors:   4
 ------
                    Median MAD_SD
-(Intercept)        -232.5   42.6
-mom_hs               60.4   39.4
-log(mom_iq)          68.8    9.5
-mom_hs:log(mom_iq)  -12.1    8.8
+(Intercept)        -233.4   44.1
+mom_hs               60.3   40.2
+log(mom_iq)          68.9    9.7
+mom_hs:log(mom_iq)  -12.1    8.9
 
 Auxiliary parameter(s):
       Median MAD_SD
@@ -596,7 +595,7 @@ Computed from 4000 by 434 log-likelihood matrix
          Estimate   SE
 elpd_loo  -1872.3 14.4
 p_loo         4.3  0.4
-looic      3744.6 28.8
+looic      3744.7 28.9
 ------
 Monte Carlo SE of elpd_loo is 0.0.
 
@@ -610,9 +609,9 @@ fit_3 -3.8       1.4   </code></pre>
 <pre class="r"><code>loo_compare(loo_1, loo_3, loo_4, loo_5)</code></pre>
 <pre><code>      elpd_diff se_diff
 fit_5   0.0       0.0  
-fit_4  -0.1       1.7  
+fit_4  -0.3       1.7  
 fit_3  -3.8       1.4  
-fit_1 -42.5       8.8  </code></pre>
+fit_1 -42.5       8.9  </code></pre>
 </div>
 
 

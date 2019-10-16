@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Plot causal diagram
+#' Plot a causal diagram. See Chapter 19 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 

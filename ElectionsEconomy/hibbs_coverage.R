@@ -4,7 +4,9 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Checking the model-fitting procedure using fake-data simulation.
+#' Elections Economy -- model checking. Checking the model-fitting
+#' procedure using fake-data simulation. See Chapter 7 in Regression
+#' and Other Stories.
 #' 
 #' -------------
 #' 

@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Fake dataset of 1000 students' scores on a midterm and final exam
+#' Fake dataset of 1000 students' scores on a midterm and final
+#' exam. See Chapter 6 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

@@ -1,10 +1,11 @@
 #' ---
-#' title: "Regression and Other Stories: Simple regression"
+#' title: "Regression and Other Stories: Simple least square regression"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Linear least squares regression with a single predictor
+#' Linear least squares regression with a single predictor. See
+#' Chapters 6 and 7 in Regression and Other Stories.
 #' 
 #' -------------
 #' 

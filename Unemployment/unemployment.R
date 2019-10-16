@@ -5,7 +5,8 @@
 #' ---
 
 #' Time series fit and posterior predictive model checking for
-#' unemployment series
+#' unemployment series. See Chapter 11 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 

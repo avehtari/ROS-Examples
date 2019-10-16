@@ -3,19 +3,21 @@ title: "Regression and Other Stories: Mile"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Trend of record times in the mile run
+Trend of record times in the mile run. See Chapter 3 in Regression
+and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 library("rstanarm")
@@ -35,8 +37,13 @@ mile <- data.frame(mile, year, seconds)
 
 **Linear model**
 
+The option `refresh = 0` supresses the default Stan sampling
+progress output. This is useful for small data with fast
+computation. For more complex models and bigger data, it can be
+useful to see the progress.
+
 ```{r }
-fit <- stan_glm(seconds ~ year, data = mile)
+fit <- stan_glm(seconds ~ year, data = mile, refresh = 0)
 print(fit, digits=2)
 ```
 

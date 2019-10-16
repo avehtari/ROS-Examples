@@ -3,25 +3,27 @@ title: "Regression and Other Stories: Golf"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Gold putting accuracy: Fitting a nonlinear model using Stan
+Gold putting accuracy: Fitting a nonlinear model using Stan. See
+Chapter 22 in Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
-library("arm")
 library("rstan")
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
+invlogit <- plogis
 ```
 
 **Set up the data**
@@ -61,14 +63,8 @@ if (savefigs) dev.off()
 
 ```{r }
 stanfile_golf1 <- root("Golf","golf1.stan")
-```
-```{r comment=NA}
 writeLines(readLines(stanfile_golf1))
-```
-```{r results='hide'}
 fit1 <- stan(file = stanfile_golf1, data = golf_data)
-```
-```{r }
 print(fit1)
 ```
 
@@ -83,14 +79,8 @@ sigma_hat <- median(sims1$sigma)
 
 ```{r }
 stanfile_golf2 <- root("Golf","golf_logistic.stan")
-```
-```{r comment=NA}
 writeLines(readLines(stanfile_golf2))
-```
-```{r results='hide'}
 fit2 <- stan(file = stanfile_golf2, data = golf_data)
-```
-```{r }
 print(fit2)
 ```
 

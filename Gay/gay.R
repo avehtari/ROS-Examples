@@ -4,8 +4,9 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Nonlinear models (Loess, spline, GP, and BART) and
-#' political attitudes as a function of age
+#' Nonlinear models (loess, spline, GP, and BART) and political
+#' attitudes as a function of age. See Chapter 22 in Regression and
+#' Other Stories.
 #' 
 #' -------------
 #' 

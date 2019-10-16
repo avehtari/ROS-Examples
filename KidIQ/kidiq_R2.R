@@ -4,10 +4,11 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Linear regression and Bayes-R2 and LOO-R2
+#' Linear regression and Bayes-R2 and LOO-R2. See Chapter 11 in
+#' Regression and Other Stories.
 #' 
 #' See also Gelman, Goodrich, Gabry, and Vehtari (2018). R-squared for
-#' Bayesian regression models. The American Statistician,
+#' Bayesian regression models. The American Statistician 73:307-309,
 #' [doi:10.1080/00031305.2018.1549100](https://doi.org/10.1080/00031305.2018.1549100)
 #'
 #' -------------
@@ -33,7 +34,7 @@ SEED<-1507
 #' 
 #' **LOO-R2**
 looR2 <- function(fit) {
-    y <- get_y(fit)
+    y <- rstanarm::get_y(fit)
     ypred <- posterior_linpred(fit)
     ll <- log_lik(fit)
     r_eff <- relative_eff(exp(ll), chain_id = rep(1:4, each = 1000))

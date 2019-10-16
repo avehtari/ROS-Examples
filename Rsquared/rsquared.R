@@ -4,10 +4,12 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Bayesian R^2
+#' Bayesian R^2. See Chapter 11 in Regression and Other Stories.
 #'
 #' See also
-#' - Andrew Gelman, Ben Goodrich, Jonah Gabry, and Aki Vehtari (2018). R-squared for Bayesian regression models. The American Statistician, doi:10.1080/00031305.2018.1549100. [Online](https://doi.org/10.1080/00031305.2018.1549100) [Preprint](http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2_v3.pdf).
+#' - Andrew Gelman, Ben Goodrich, Jonah Gabry, and Aki Vehtari (2018).
+#'   R-squared for Bayesian regression models. The American Statistician, 73:307-209
+#'   [doi:10.1080/00031305.2018.1549100](https://doi.org/10.1080/00031305.2018.1549100).
 #' 
 #' -------------
 #' 

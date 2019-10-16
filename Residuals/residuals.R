@@ -4,7 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Plotting the data and fitted model
+#' Plotting the data and fitted model. See Chapter 11 in Regression
+#' and Other Stories.
 #' 
 #' -------------
 #' 
