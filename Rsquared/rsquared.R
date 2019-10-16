@@ -1,10 +1,10 @@
 #' ---
-#' title: "Regression and Other Stories: Rsquared"
+#' title: "Regression and Other Stories: Bayesian $R^2$"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Bayesian R^2. See Chapter 11 in Regression and Other Stories.
+#' Bayesian $R^2$. See Chapter 11 in Regression and Other Stories.
 #'
 #' See also
 #' - Andrew Gelman, Ben Goodrich, Jonah Gabry, and Aki Vehtari (2018).
@@ -16,23 +16,23 @@
 
 #' Gelman, Goodrich, Gabry, and Vehtari (2018) define Bayesian $R^2$ as
 #' $$
-#' R^2 = \frac{{\mathrm Var}_{\mu}}{{\mathrm Var}_{\mu}+{\mathrm Var}_{\mathrm res}},
+#' R^2 = \frac{\mathrm{Var}_{\mu}}{\mathrm{Var}_{\mu}+\mathrm{Var}_\mathrm{res}},
 #' $$
-#' where ${\mathrm Var}_{\mu}$ is variance of modelled predictive means,
-#' and ${\mathrm Var}_{\mathrm res}$ is the modelled residual variance.
+#' where $\mathrm{Var}_{\mu}$ is variance of modelled predictive means,
+#' and $\mathrm{Var}_\mathrm{res}$ is the modelled residual variance.
 #' Specifically both of these are computed only using posterior
 #' quantities from the fitted model.
 #' The model based $R^2$ uses draws from the model and residual variances.
 #' For linear regression $\mu_n=X_n\beta$ we define
 #' $$
-#' {\mathrm Var}_{\mathrm \mu}^s = V_{n=1}^N \mu_n^s\\
-#' {\mathrm Var}_{\mathrm res}^s = (\sigma^2)^s,
+#' \mathrm{Var}_\mathrm{\mu}^s = V_{n=1}^N \mu_n^s\\
+#' \mathrm{Var}_\mathrm{res}^s = (\sigma^2)^s,
 #' $$
 #' and for logistic regression, following Tjur (2009),
 #' we define $\mu_n=\pi_n$ and 
 #' $$
-#' {\mathrm Var}_{\mathrm \mu}^s = V_{n=1}^N \mu_n^s\\
-#' {\mathrm Var}_{\mathrm res}^s = \frac{1}{N}\sum_{n=1}^N (\pi_n^s(1-\pi_n^s)),
+#' \mathrm{Var}_\mathrm{\mu}^s = V_{n=1}^N \mu_n^s\\
+#' \mathrm{Var}_\mathrm{res}^s = \frac{1}{N}\sum_{n=1}^N (\pi_n^s(1-\pi_n^s)),
 #' $$
 #' where $\pi_n^s$ are predicted probabilities.
 #' 
