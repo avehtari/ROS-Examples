@@ -1,0 +1,51 @@
+---
+title: "Regression and Other Stories: Parabola"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Demonstration of using Stan for optimization. See Appendix B in
+Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+library("rstan")
+rstan_options(auto_write = TRUE)
+```
+
+**Plot a parabola $y = 15 + 10 x - 2 x^2$ **
+
+```{r }
+curve(15+10*x-2*x^2, from=-2, to=5)
+```
+
+**Show Stan code**
+
+```{r }
+writeLines(readLines(root("Parabola","parabola.stan")))
+```
+
+**Compile Stan code**
+
+```{r results='hide'}
+model <- stan_model(root("Parabola","parabola.stan"))
+# alternative way
+# model <- stan_model(model_code="parameters {real x;} model {target += 15 + 10*x - 2*x^2;}")
+```
+
+**Optimize**
+
+```{r }
+fit <- optimizing(model)
+print(fit)
+```
+

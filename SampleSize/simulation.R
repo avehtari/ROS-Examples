@@ -1,10 +1,10 @@
 #' ---
-#' title: "Regression and Other Stories: Data collection"
+#' title: "Regression and Other Stories: Sample size simulation"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Standard errors, parameterization and interactions
+#' Sample size simulation. See Chapter 16 in Regression and Other Stories.
 #' 
 #' -------------
 #' 
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
 #' **Load packages**
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 
