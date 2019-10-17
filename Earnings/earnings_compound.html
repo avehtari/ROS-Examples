@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-15" />
+<meta name="date" content="2019-10-17" />
 
 <title>Regression and Other Stories: Earnings</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Earnings</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-15</h4>
+<h4 class="date">2019-10-17</h4>
 
 </div>
 
@@ -374,7 +374,7 @@ summary {
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
-root&lt;-has_dirname(&quot;RAOS-Examples&quot;)$make_fix_file()
+root&lt;-has_dirname(&quot;ROS-Examples&quot;)$make_fix_file()
 library(&quot;rstanarm&quot;)
 options(mc.cores = parallel::detectCores())
 library(&quot;ggplot2&quot;)
@@ -404,9 +404,9 @@ sims_2a &lt;- as.matrix(fit_2a)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) -3.88   1.98 
+(Intercept) -4.01   2.07 
 height       0.08   0.03 
-male         1.70   0.31 
+male         1.68   0.33 
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -423,9 +423,9 @@ sims_2b &lt;- as.matrix(fit_2b)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) 8.10   0.60  
+(Intercept) 8.12   0.61  
 height      0.02   0.01  
-male        0.42   0.07  
+male        0.43   0.07  
 
 Auxiliary parameter(s):
       Median MAD_SD

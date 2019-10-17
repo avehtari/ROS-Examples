@@ -17,7 +17,7 @@ savefigs <- FALSE
 
 #' **Load packages**
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("ggplot2")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 

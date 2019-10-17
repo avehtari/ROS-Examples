@@ -16,7 +16,7 @@ savefigs <- FALSE
 
 #' **Load packages**
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
 #' **Load data**
 allnames <- read.csv(root("Names/data","SSA-longtail-names.csv"))
@@ -161,7 +161,7 @@ if (savefigs) dev.off()
 #+
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Names/figs", "namestimeboys3.pdf",) height=4, width=6)
+if (savefigs) pdf(root("Names/figs", "namestimeboys3.pdf"), height=4, width=6)
 #+
 par(mar=c(2,3,2,1), mgp=c(1.7,.3,0), tck=-.01)
 popular <- c(14,25,4)

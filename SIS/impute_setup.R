@@ -14,7 +14,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
 #' **Load packages**
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
 ## Read in data from wave 3 of the Social Indicators Survey
 attach.overwrite <- function(a, overwrite=TRUE, name="attach.all"){

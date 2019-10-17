@@ -6,7 +6,7 @@
 
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("ggplot2")
