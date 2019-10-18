@@ -149,7 +149,7 @@ namesplot(boys70)
 if (savefigs) dev.off()
 
 #' **Restrict to top 1000 and remove Laura's list of bad names**
-error.names <- as.matrix(read.csv(root("Names/data","Names.csv")))
+error.names <- as.matrix(read.csv(root("Names/data","ErrorNames.csv")))
 error.names.girl <- error.names[,2]=="F"
 bad.girl.names <- error.names[error.names.girl,1]
 bad.boy.names <- error.names[!error.names.girl,1]
