@@ -1,9 +1,10 @@
 ---
-title: "Regression and Other Stories: Names"
+title: "Regression and Other Stories: Last letters of names"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Names - Distributions of names of American babies
+Last letters of names - Distributions of last letters of names of
+American babies. See Chapter 2 in Regression and Other Stories.
 
 -------------
 

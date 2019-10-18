@@ -37,6 +37,7 @@
 #'     - [healthexpenditure.html](HealthExpenditure/healthexpenditure.html) - Discovery through graphs of data and models
 #'   - [Names/](https://github.com/avehtari/ROS-Examples/tree/master/Names/)
 #'     - [names.html](Names/names.html) - Names - Distributions of names of American babies
+#'     - [lastletters.html](Names/lastletters.html) - Last letters - Distributions of last letters of names of American babies
 #'   - [AgePeriodCohort/](https://github.com/avehtari/ROS-Examples/tree/master/AgePeriodCohort/)
 #'     - [births.html](AgePeriodCohort/births.html) - Age adjustment
 #' 
@@ -310,6 +311,7 @@
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
 #'   - [Names/](https://github.com/avehtari/ROS-Examples/tree/master/Names/)
 #'     - [names.html](Names/names.html) - Names - Distributions of names of American babies
+#'     - [lastletters.html](Names/lastletters.html) - Last letters - Distributions of last letters of names of American babies
 #'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
