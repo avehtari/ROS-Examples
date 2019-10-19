@@ -80,7 +80,7 @@
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
 #'     - [hills.html](ElectionsEconomy/hills.html) - Present uncertainty in parameter estimates
 #'     - [hibbs_coverage.html](https://github.com/avehtari/ROS-Examples/tree/master/ElectionsEconomy/hibbs_coverage.html) - Checking the coverage of intervals
-#    - [Simplest/](Simplest/)
+#'    - [Simplest/](Simplest/)
 #'     - [simplest.html](Simplest/simplest.html) - Linear regression with a single predictor
 #'     - [simplest_lm.html](Simplest/simplest_lm.html) - Linear least squares regression with a single predictor
 #'
