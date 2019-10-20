@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Logistic regression priors</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Logistic regression priors</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -374,8 +374,7 @@ summary {
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;arm&quot;)
-library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())</code></pre>
+library(&quot;rstanarm&quot;)</code></pre>
 <p><strong>Define a function running glm and stan_glm with simulated data</strong><br> Arguments are the number of simulated observations, and prior parameters a and</p>
 <pre class="r"><code>bayes_sim &lt;- function(n, a=-2, b=0.8){
   x &lt;- runif(n, -1, 1)

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Sample size simulation</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Sample size simulation</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -375,8 +375,7 @@ summary {
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rprojroot&quot;)
 root&lt;-has_dirname(&quot;ROS-Examples&quot;)$make_fix_file()
-library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())</code></pre>
+library(&quot;rstanarm&quot;)</code></pre>
 <p><strong>Simulated data 1: predictor range (-0.5, 0.5)</strong></p>
 <pre class="r"><code>N &lt;- 1000
 sigma &lt;- 10
@@ -395,12 +394,12 @@ fit_1b &lt;- stan_glm(y ~ x1 + x2 + x1:x2, data = fake, refresh = 0)</code></pre
  predictors:   2
 ------
             Median MAD_SD
-(Intercept) -0.1    0.3  
-x1           0.5    0.6  
+(Intercept)  0.2    0.3  
+x1          -0.7    0.6  
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.7    0.2   
+sigma 10.3    0.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -413,14 +412,14 @@ sigma 9.7    0.2
  predictors:   4
 ------
             Median MAD_SD
-(Intercept) -0.1    0.3  
-x1           0.5    0.6  
+(Intercept)  0.2    0.3  
+x1          -0.6    0.7  
 x2           0.0    0.6  
-x1:x2        0.4    1.3  
+x1:x2        2.2    1.3  
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.7    0.2   
+sigma 10.3    0.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -439,12 +438,12 @@ fit_2b &lt;- stan_glm(y ~ x1 + x2 + x1:x2, data = fake, refresh = 0)</code></pre
  predictors:   2
 ------
             Median MAD_SD
-(Intercept) -0.7    0.4  
-x1           1.2    0.6  
+(Intercept)  0.4    0.4  
+x1          -0.4    0.6  
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.7    0.2   
+sigma 10.3    0.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -457,14 +456,14 @@ sigma 9.7    0.2
  predictors:   4
 ------
             Median MAD_SD
-(Intercept) -0.2    0.6  
-x1           0.9    0.9  
-x2          -1.0    0.9  
-x1:x2        0.5    1.3  
+(Intercept)  0.8    0.6  
+x1          -1.0    0.9  
+x2          -0.7    0.9  
+x1:x2        1.3    1.2  
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.7    0.2   
+sigma 10.3    0.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -483,12 +482,12 @@ fit_3b &lt;- stan_glm(y ~ x1 + x2 + x1:x2, data = fake, refresh = 0)</code></pre
  predictors:   2
 ------
             Median MAD_SD
-(Intercept) -0.1    0.3  
-x1          -0.1    0.3  
+(Intercept) 0.2    0.3   
+x1          0.0    0.3   
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.7    0.2   
+sigma 10.3    0.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -501,14 +500,14 @@ sigma 9.7    0.2
  predictors:   4
 ------
             Median MAD_SD
-(Intercept) -0.1    0.3  
-x1          -0.1    0.3  
-x2           0.3    0.3  
-x1:x2        0.0    0.3  
+(Intercept) 0.2    0.3   
+x1          0.0    0.3   
+x2          0.3    0.3   
+x1:x2       0.1    0.3   
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 9.7    0.2   
+sigma 10.3    0.2  
 
 ------
 * For help interpreting the printed output see ?print.stanreg

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Poststratification 2</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Poststratification 2</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -374,7 +374,6 @@ summary {
 <hr />
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())
 invlogit &lt;- plogis</code></pre>
 <p><strong>Create some fake data</strong></p>
 <p>Create an empty poststratification table, with rows for each of the <span class="math inline">\(2 \times 4 \times 4\)</span> sorts of people.</p>
@@ -419,38 +418,38 @@ for (j in 1:prod(J)){
 }
 print(cbind(poststrat, n_cell/n, poststrat$N/sum(poststrat$N)))</code></pre>
 <pre><code>##    sex age eth        N n_cell/n poststrat$N/sum(poststrat$N)
-## 1    1   1   1 18200000    0.051                       0.0728
-## 2    1   1   2  2600000    0.006                       0.0104
-## 3    1   1   3  2600000    0.011                       0.0104
-## 4    1   1   4  2600000    0.006                       0.0104
-## 5    1   2   1 22750000    0.089                       0.0910
-## 6    1   2   2  3250000    0.007                       0.0130
-## 7    1   2   3  3250000    0.012                       0.0130
-## 8    1   2   4  3250000    0.007                       0.0130
-## 9    1   3   1 27300000    0.140                       0.1092
-## 10   1   3   2  3900000    0.021                       0.0156
-## 11   1   3   3  3900000    0.005                       0.0156
-## 12   1   3   4  3900000    0.006                       0.0156
-## 13   1   4   1 22750000    0.166                       0.0910
-## 14   1   4   2  3250000    0.025                       0.0130
-## 15   1   4   3  3250000    0.021                       0.0130
-## 16   1   4   4  3250000    0.008                       0.0130
-## 17   2   1   1 16800000    0.044                       0.0672
-## 18   2   1   2  2400000    0.006                       0.0096
+## 1    1   1   1 18200000    0.056                       0.0728
+## 2    1   1   2  2600000    0.008                       0.0104
+## 3    1   1   3  2600000    0.006                       0.0104
+## 4    1   1   4  2600000    0.002                       0.0104
+## 5    1   2   1 22750000    0.081                       0.0910
+## 6    1   2   2  3250000    0.006                       0.0130
+## 7    1   2   3  3250000    0.007                       0.0130
+## 8    1   2   4  3250000    0.005                       0.0130
+## 9    1   3   1 27300000    0.123                       0.1092
+## 10   1   3   2  3900000    0.018                       0.0156
+## 11   1   3   3  3900000    0.015                       0.0156
+## 12   1   3   4  3900000    0.014                       0.0156
+## 13   1   4   1 22750000    0.174                       0.0910
+## 14   1   4   2  3250000    0.022                       0.0130
+## 15   1   4   3  3250000    0.025                       0.0130
+## 16   1   4   4  3250000    0.011                       0.0130
+## 17   2   1   1 16800000    0.041                       0.0672
+## 18   2   1   2  2400000    0.003                       0.0096
 ## 19   2   1   3  2400000    0.002                       0.0096
-## 20   2   1   4  2400000    0.003                       0.0096
-## 21   2   2   1 21000000    0.059                       0.0840
-## 22   2   2   2  3000000    0.010                       0.0120
-## 23   2   2   3  3000000    0.011                       0.0120
-## 24   2   2   4  3000000    0.005                       0.0120
-## 25   2   3   1 25200000    0.097                       0.1008
+## 20   2   1   4  2400000    0.007                       0.0096
+## 21   2   2   1 21000000    0.073                       0.0840
+## 22   2   2   2  3000000    0.004                       0.0120
+## 23   2   2   3  3000000    0.007                       0.0120
+## 24   2   2   4  3000000    0.002                       0.0120
+## 25   2   3   1 25200000    0.098                       0.1008
 ## 26   2   3   2  3600000    0.011                       0.0144
-## 27   2   3   3  3600000    0.005                       0.0144
-## 28   2   3   4  3600000    0.016                       0.0144
-## 29   2   4   1 21000000    0.115                       0.0840
-## 30   2   4   2  3000000    0.009                       0.0120
-## 31   2   4   3  3000000    0.015                       0.0120
-## 32   2   4   4  3000000    0.011                       0.0120</code></pre>
+## 27   2   3   3  3600000    0.008                       0.0144
+## 28   2   3   4  3600000    0.008                       0.0144
+## 29   2   4   1 21000000    0.117                       0.0840
+## 30   2   4   2  3000000    0.015                       0.0120
+## 31   2   4   3  3000000    0.018                       0.0120
+## 32   2   4   4  3000000    0.013                       0.0120</code></pre>
 <p>Assume the survey responses come from a logistic regression with these coefficients</p>
 <pre class="r"><code>coef_intercept &lt;- 0.6
 coef_sex &lt;- c(0, -0.2)
@@ -470,8 +469,108 @@ age &lt;- poststrat[people,2]
 eth &lt;- poststrat[people,3]
 fake &lt;- data.frame(y, sex, age, eth)
 fit &lt;- stan_glm(y ~ factor(sex) + factor(age) + factor(eth),
-                family=binomial(link=&quot;logit&quot;), data=fake)
-print(fit)</code></pre>
+                family=binomial(link=&quot;logit&quot;), data=fake)</code></pre>
+<pre><code>## 
+## SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 6.1e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.817571 seconds (Warm-up)
+## Chain 1:                0.722938 seconds (Sampling)
+## Chain 1:                1.54051 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 4.5e-05 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 0.640174 seconds (Warm-up)
+## Chain 2:                0.710637 seconds (Sampling)
+## Chain 2:                1.35081 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 5.5e-05 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.55 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 0.611121 seconds (Warm-up)
+## Chain 3:                0.605524 seconds (Sampling)
+## Chain 3:                1.21664 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 4.5e-05 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.45 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 0.597551 seconds (Warm-up)
+## Chain 4:                0.611928 seconds (Sampling)
+## Chain 4:                1.20948 seconds (Total)
+## Chain 4:</code></pre>
+<pre class="r"><code>print(fit)</code></pre>
 <pre><code>## stan_glm
 ##  family:       binomial [logit]
 ##  formula:      y ~ factor(sex) + factor(age) + factor(eth)
@@ -479,14 +578,14 @@ print(fit)</code></pre>
 ##  predictors:   8
 ## ------
 ##              Median MAD_SD
-## (Intercept)   0.2    0.2  
-## factor(sex)2 -0.1    0.1  
-## factor(age)2  0.1    0.2  
-## factor(age)3  0.2    0.2  
-## factor(age)4  0.0    0.2  
-## factor(eth)2  0.4    0.2  
+## (Intercept)   0.7    0.2  
+## factor(sex)2 -0.4    0.1  
+## factor(age)2 -0.4    0.2  
+## factor(age)3 -0.1    0.2  
+## factor(age)4 -0.4    0.2  
+## factor(eth)2  0.9    0.3  
 ## factor(eth)3  0.3    0.2  
-## factor(eth)4  0.3    0.3  
+## factor(eth)4  0.6    0.3  
 ## 
 ## ------
 ## * For help interpreting the printed output see ?print.stanreg
@@ -497,46 +596,46 @@ print(fit)</code></pre>
 pred_est &lt;- colMeans(pred_sim)
 round(cbind(poststrat, prob_yes, pred_est), 2)</code></pre>
 <pre><code>##    sex age eth        N prob_yes pred_est
-## 1    1   1   1 18200000     0.65     0.55
-## 2    1   1   2  2600000     0.77     0.64
-## 3    1   1   3  2600000     0.71     0.63
-## 4    1   1   4  2600000     0.71     0.62
-## 5    1   2   1 22750000     0.60     0.58
-## 6    1   2   2  3250000     0.73     0.67
-## 7    1   2   3  3250000     0.67     0.66
-## 8    1   2   4  3250000     0.67     0.65
-## 9    1   3   1 27300000     0.57     0.61
-## 10   1   3   2  3900000     0.71     0.69
-## 11   1   3   3  3900000     0.65     0.69
-## 12   1   3   4  3900000     0.65     0.67
-## 13   1   4   1 22750000     0.55     0.55
-## 14   1   4   2  3250000     0.69     0.64
-## 15   1   4   3  3250000     0.62     0.63
-## 16   1   4   4  3250000     0.62     0.62
-## 17   2   1   1 16800000     0.60     0.52
-## 18   2   1   2  2400000     0.73     0.61
-## 19   2   1   3  2400000     0.67     0.60
-## 20   2   1   4  2400000     0.67     0.59
-## 21   2   2   1 21000000     0.55     0.55
-## 22   2   2   2  3000000     0.69     0.64
-## 23   2   2   3  3000000     0.62     0.63
+## 1    1   1   1 18200000     0.65     0.66
+## 2    1   1   2  2600000     0.77     0.83
+## 3    1   1   3  2600000     0.71     0.73
+## 4    1   1   4  2600000     0.71     0.77
+## 5    1   2   1 22750000     0.60     0.57
+## 6    1   2   2  3250000     0.73     0.77
+## 7    1   2   3  3250000     0.67     0.65
+## 8    1   2   4  3250000     0.67     0.70
+## 9    1   3   1 27300000     0.57     0.63
+## 10   1   3   2  3900000     0.71     0.81
+## 11   1   3   3  3900000     0.65     0.70
+## 12   1   3   4  3900000     0.65     0.75
+## 13   1   4   1 22750000     0.55     0.57
+## 14   1   4   2  3250000     0.69     0.77
+## 15   1   4   3  3250000     0.62     0.65
+## 16   1   4   4  3250000     0.62     0.70
+## 17   2   1   1 16800000     0.60     0.58
+## 18   2   1   2  2400000     0.73     0.77
+## 19   2   1   3  2400000     0.67     0.65
+## 20   2   1   4  2400000     0.67     0.70
+## 21   2   2   1 21000000     0.55     0.48
+## 22   2   2   2  3000000     0.69     0.70
+## 23   2   2   3  3000000     0.62     0.56
 ## 24   2   2   4  3000000     0.62     0.62
-## 25   2   3   1 25200000     0.52     0.58
-## 26   2   3   2  3600000     0.67     0.66
-## 27   2   3   3  3600000     0.60     0.66
-## 28   2   3   4  3600000     0.60     0.64
-## 29   2   4   1 21000000     0.50     0.51
-## 30   2   4   2  3000000     0.65     0.61
-## 31   2   4   3  3000000     0.57     0.60
-## 32   2   4   4  3000000     0.57     0.59</code></pre>
+## 25   2   3   1 25200000     0.52     0.55
+## 26   2   3   2  3600000     0.67     0.75
+## 27   2   3   3  3600000     0.60     0.62
+## 28   2   3   4  3600000     0.60     0.68
+## 29   2   4   1 21000000     0.50     0.48
+## 30   2   4   2  3000000     0.65     0.70
+## 31   2   4   3  3000000     0.57     0.56
+## 32   2   4   4  3000000     0.57     0.62</code></pre>
 <p><strong>Poststratification</strong></p>
 <pre class="r"><code>poststrat_est &lt;- sum(poststrat$N*pred_est)/sum(poststrat$N)
 round(poststrat_est, 2)</code></pre>
-<pre><code>## [1] 0.58</code></pre>
+<pre><code>## [1] 0.61</code></pre>
 <p>plus uncertainty</p>
 <pre class="r"><code>poststrat_sim &lt;- pred_sim %*% poststrat$N / sum(poststrat$N)
 round(c(mean(poststrat_sim), sd(poststrat_sim)), 3)</code></pre>
-<pre><code>## [1] 0.584 0.016</code></pre>
+<pre><code>## [1] 0.607 0.016</code></pre>
 
 
 

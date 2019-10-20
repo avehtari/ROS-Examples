@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Earnings</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Earnings</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -376,7 +376,6 @@ summary {
 <pre class="r"><code>library(&quot;rprojroot&quot;)
 root&lt;-has_dirname(&quot;ROS-Examples&quot;)$make_fix_file()
 library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())
 library(&quot;ggplot2&quot;)
 library(&quot;bayesplot&quot;)
 theme_set(bayesplot::theme_default(base_family = &quot;sans&quot;))</code></pre>
@@ -394,7 +393,7 @@ height_jitter_add &lt;- runif(n, -.2, .2)</code></pre>
 <p><strong>Logistic regression on non-zero earnings</strong></p>
 <pre class="r"><code>fit_2a &lt;- stan_glm(positive ~ height + male,
                    family = binomial(link = &quot;logit&quot;),
-                   data = earnings_all)
+                   data = earnings_all, refresh = 0)
 sims_2a &lt;- as.matrix(fit_2a)</code></pre>
 <pre class="r"><code>print(fit_2a, digits=2)</code></pre>
 <pre><code>stan_glm
@@ -404,16 +403,16 @@ sims_2a &lt;- as.matrix(fit_2a)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) -4.01   2.07 
+(Intercept) -3.89   2.20 
 height       0.08   0.03 
-male         1.68   0.33 
+male         1.70   0.32 
 
 ------
 * For help interpreting the printed output see ?print.stanreg
 * For info on the priors used see ?prior_summary.stanreg</code></pre>
 <p><strong>Linear regression on log scale</strong></p>
 <pre class="r"><code>earnings$log_earn &lt;- log(earnings$earn)</code></pre>
-<pre class="r"><code>fit_2b &lt;- stan_glm(log_earn ~ height + male, data = earnings)
+<pre class="r"><code>fit_2b &lt;- stan_glm(log_earn ~ height + male, data = earnings, refresh = 0)
 sims_2b &lt;- as.matrix(fit_2b)</code></pre>
 <pre class="r"><code>print(fit_2b, digits=2)</code></pre>
 <pre><code>stan_glm
@@ -423,9 +422,9 @@ sims_2b &lt;- as.matrix(fit_2b)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) 8.12   0.61  
+(Intercept) 8.11   0.63  
 height      0.02   0.01  
-male        0.43   0.07  
+male        0.42   0.08  
 
 Auxiliary parameter(s):
       Median MAD_SD

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Storable</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Storable</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -378,7 +378,6 @@ root&lt;-has_dirname(&quot;ROS-Examples&quot;)$make_fix_file()
 library(&quot;rstan&quot;)
 rstan_options(auto_write = TRUE)
 library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())
 invlogit&lt;-plogis</code></pre>
 <p><strong>Load data</strong></p>
 <pre class="r"><code>data_2player &lt;- read.csv(root(&quot;Storable/data&quot;,&quot;2playergames.csv&quot;))

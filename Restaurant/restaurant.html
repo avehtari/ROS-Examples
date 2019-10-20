@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Restaurant</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Restaurant</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -376,8 +376,7 @@ summary {
 <pre class="r"><code>library(&quot;rprojroot&quot;)
 root&lt;-has_dirname(&quot;ROS-Examples&quot;)$make_fix_file()
 library(&quot;rstan&quot;)
-rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())</code></pre>
+rstan_options(auto_write = TRUE)</code></pre>
 <p><strong>Show Stan code</strong></p>
 <pre class="r"><code>writeLines(readLines(root(&quot;Restaurant&quot;,&quot;restaurant.stan&quot;)))</code></pre>
 <pre><code>parameters {
@@ -393,7 +392,7 @@ model {
 print(fit)</code></pre>
 <pre><code>$par
        x 
-21.99979 
+22.00034 
 
 $value
 [1] 113.6364
@@ -403,7 +402,7 @@ $return_code
 
 $theta_tilde
             x
-[1,] 21.99979</code></pre>
+[1,] 22.00034</code></pre>
 
 
 

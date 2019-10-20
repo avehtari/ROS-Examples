@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Big data</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Big data</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -394,7 +394,7 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- lm(y ~ ., data=fake)
 toc()</code></pre>
-<pre><code>2.08 sec elapsed</code></pre>
+<pre><code>1.918 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and MCMC</strong><br> stan_glm is fast for linear regression with n&gt;k and small or moderate k (using OLS trick)</p>
 <pre class="r"><code>tic()
@@ -403,8 +403,8 @@ fit2 &lt;- stan_glm(y ~ ., data=fake, mean_PPD=FALSE,
 <pre><code>
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 Chain 1: 
-Chain 1: Gradient evaluation took 0.0001 seconds
-Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1 seconds.
+Chain 1: Gradient evaluation took 6e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.6 seconds.
 Chain 1: Adjust your expectations accordingly!
 Chain 1: 
 Chain 1: 
@@ -415,15 +415,15 @@ Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 1: 
-Chain 1:  Elapsed Time: 1.92045 seconds (Warm-up)
-Chain 1:                0.51667 seconds (Sampling)
-Chain 1:                2.43712 seconds (Total)
+Chain 1:  Elapsed Time: 1.59099 seconds (Warm-up)
+Chain 1:                0.531899 seconds (Sampling)
+Chain 1:                2.12288 seconds (Total)
 Chain 1: 
 
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
 Chain 2: 
-Chain 2: Gradient evaluation took 6.7e-05 seconds
-Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.67 seconds.
+Chain 2: Gradient evaluation took 4.2e-05 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
 Chain 2: Adjust your expectations accordingly!
 Chain 2: 
 Chain 2: 
@@ -434,15 +434,15 @@ Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 2: 
-Chain 2:  Elapsed Time: 1.02768 seconds (Warm-up)
-Chain 2:                0.578829 seconds (Sampling)
-Chain 2:                1.60651 seconds (Total)
+Chain 2:  Elapsed Time: 0.872046 seconds (Warm-up)
+Chain 2:                0.43791 seconds (Sampling)
+Chain 2:                1.30996 seconds (Total)
 Chain 2: 
 
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
 Chain 3: 
-Chain 3: Gradient evaluation took 8e-05 seconds
-Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.8 seconds.
+Chain 3: Gradient evaluation took 4.7e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.47 seconds.
 Chain 3: Adjust your expectations accordingly!
 Chain 3: 
 Chain 3: 
@@ -453,15 +453,15 @@ Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 3: 
-Chain 3:  Elapsed Time: 1.64248 seconds (Warm-up)
-Chain 3:                0.516812 seconds (Sampling)
-Chain 3:                2.15929 seconds (Total)
+Chain 3:  Elapsed Time: 1.35609 seconds (Warm-up)
+Chain 3:                0.447196 seconds (Sampling)
+Chain 3:                1.80329 seconds (Total)
 Chain 3: 
 
 SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
 Chain 4: 
-Chain 4: Gradient evaluation took 7e-05 seconds
-Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.7 seconds.
+Chain 4: Gradient evaluation took 4.8e-05 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.48 seconds.
 Chain 4: Adjust your expectations accordingly!
 Chain 4: 
 Chain 4: 
@@ -472,18 +472,18 @@ Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
 Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 Chain 4: 
-Chain 4:  Elapsed Time: 1.76567 seconds (Warm-up)
-Chain 4:                0.51608 seconds (Sampling)
-Chain 4:                2.28175 seconds (Total)
+Chain 4:  Elapsed Time: 1.44477 seconds (Warm-up)
+Chain 4:                0.451251 seconds (Sampling)
+Chain 4:                1.89602 seconds (Total)
 Chain 4: </code></pre>
 <pre class="r"><code>toc()</code></pre>
-<pre><code>15.702 sec elapsed</code></pre>
+<pre><code>13.747 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit2, digits=2)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>9.863 sec elapsed</code></pre>
+<pre><code>9.455 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit3, digits=2)</code></pre>
 <p><strong>Logistic regression</strong></p>
 <p><strong>Create fake data with 10,000 observations and p=100</strong></p>
@@ -502,21 +502,21 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>1.032 sec elapsed</code></pre>
+<pre><code>1.044 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and MCMC</strong><br></p>
 <pre class="r"><code>tic()
 fit2 &lt;- stan_glm(y ~ ., data=fake, family=binomial(), mean_PPD=FALSE,
                  init_r=0.1, seed=SEED)
 toc()</code></pre>
-<pre><code>128.398 sec elapsed</code></pre>
+<pre><code>161.627 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit2, digits=2)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                 algorithm='optimizing', init=0, draws = 16000, keep_every = 4) 
 toc()</code></pre>
-<pre><code>21.53 sec elapsed</code></pre>
+<pre><code>22.591 sec elapsed</code></pre>
 <pre class="r"><code>#print(fit3, digits=2)</code></pre>
 <p><strong>Logistic regression</strong></p>
 <p><strong>Create fake data with 100,000 observations and p=100</strong></p>
@@ -535,14 +535,14 @@ fake &lt;- data.frame(x, xn, y)</code></pre>
 <pre class="r"><code>tic()
 fit1 &lt;- glm(y ~ ., data=fake, family=binomial())
 toc()</code></pre>
-<pre><code>11.803 sec elapsed</code></pre>
+<pre><code>12.59 sec elapsed</code></pre>
 <pre class="r"><code>#display(fit1)</code></pre>
 <p><strong>Fit using stan_glm and optimization</strong><br> Using optimization with normal approximation and Pareto smoothed importance resampling provides coefficient standard errors, but also diagnostic whether normal approximation at the mode is appropriate.</p>
 <pre class="r"><code>tic()
 fit3 &lt;- stan_glm(y ~ ., data=fake, family=binomial(),
                  algorithm='optimizing', init=0) 
 toc()</code></pre>
-<pre><code>18.986 sec elapsed</code></pre>
+<pre><code>19.626 sec elapsed</code></pre>
 <pre class="r"><code>summary(fit3, digits=2)</code></pre>
 <pre><code>
 Model Info:

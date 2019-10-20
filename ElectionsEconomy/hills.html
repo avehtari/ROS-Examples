@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Elections Economy</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Elections Economy</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -376,8 +376,7 @@ summary {
 <pre class="r"><code>library(&quot;rprojroot&quot;)
 root&lt;-has_dirname(&quot;ROS-Examples&quot;)$make_fix_file()
 library(&quot;arm&quot;)
-library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())</code></pre>
+library(&quot;rstanarm&quot;)</code></pre>
 <p><strong>Load data</strong></p>
 <pre class="r"><code>hibbs &lt;- read.table(root(&quot;ElectionsEconomy/data&quot;,&quot;hibbs.dat&quot;), header=TRUE)
 colnames(hibbs) &lt;- c(&quot;year&quot;, &quot;growth&quot;, &quot;vote&quot;, &quot;inc&quot;, &quot;other&quot;)</code></pre>

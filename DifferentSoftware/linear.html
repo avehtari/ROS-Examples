@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: Different software options</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Different software options</h1>
 <h4 class="author">Andrew Gelman, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -375,7 +375,6 @@ summary {
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;arm&quot;)
 library(&quot;rstanarm&quot;)
-options(mc.cores = parallel::detectCores())
 library(&quot;brms&quot;)</code></pre>
 <p><strong>Create fake data</strong></p>
 <pre class="r"><code>N &lt;- 100
@@ -391,31 +390,31 @@ dat &lt;- data.frame(y, x1, x2)</code></pre>
 display(fit1)</code></pre>
 <pre><code>lm(formula = y ~ x1 + x2, data = dat)
             coef.est coef.se
-(Intercept) 1.44     0.20   
-x1          1.91     0.24   
-x2          2.91     0.21   
+(Intercept) 1.01     0.20   
+x1          2.13     0.20   
+x2          2.93     0.20   
 ---
 n = 100, k = 3
-residual sd = 2.00, R-Squared = 0.73</code></pre>
+residual sd = 1.99, R-Squared = 0.78</code></pre>
 <p><strong>Extract estimates and uncertainties</strong></p>
 <pre class="r"><code>b_hat &lt;- coef(fit1)
 b_se &lt;- se.coef(fit1)
 print(cbind(b_hat, b_se), digits=3)</code></pre>
 <pre><code>            b_hat  b_se
-(Intercept)  1.44 0.205
-x1           1.91 0.238
-x2           2.91 0.209</code></pre>
+(Intercept)  1.01 0.201
+x1           2.13 0.204
+x2           2.93 0.200</code></pre>
 <p><strong>Fit and display using lm, using matrix of predictors</strong></p>
 <pre class="r"><code>fit2 &lt;- lm(y ~ X)
 display(fit2)</code></pre>
 <pre><code>lm(formula = y ~ X)
             coef.est coef.se
-(Intercept) 1.44     0.20   
-Xx1         1.91     0.24   
-Xx2         2.91     0.21   
+(Intercept) 1.01     0.20   
+Xx1         2.13     0.20   
+Xx2         2.93     0.20   
 ---
 n = 100, k = 3
-residual sd = 2.00, R-Squared = 0.73</code></pre>
+residual sd = 1.99, R-Squared = 0.78</code></pre>
 <p><strong>Fit and display using stan_glm</strong></p>
 <pre class="r"><code>fit3 &lt;- stan_glm(y ~ x1 + x2, data = dat, refresh = 0)
 print(fit3, digits=2)</code></pre>
@@ -426,13 +425,13 @@ print(fit3, digits=2)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) 1.44   0.20  
-x1          1.91   0.24  
-x2          2.91   0.21  
+(Intercept) 1.01   0.21  
+x1          2.13   0.20  
+x2          2.92   0.20  
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 2.01   0.15  
+sigma 1.99   0.15  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -447,13 +446,13 @@ print(fit3, digits=2)</code></pre>
  predictors:   3
 ------
             Median MAD_SD
-(Intercept) 1.44   0.22  
-x1          1.91   0.24  
-x2          2.90   0.21  
+(Intercept) 1.00   0.21  
+x1          2.13   0.21  
+x2          2.93   0.20  
 
 Auxiliary parameter(s):
       Median MAD_SD
-sigma 2.01   0.14  
+sigma 2.00   0.15  
 
 ------
 * For help interpreting the printed output see ?print.stanreg
@@ -463,9 +462,9 @@ sigma 2.01   0.14
 b_se &lt;- se(fit3)
 print(cbind(b_hat, b_se), digits=3)</code></pre>
 <pre><code>            b_hat  b_se
-(Intercept)  1.44 0.216
-x1           1.91 0.237
-x2           2.90 0.210</code></pre>
+(Intercept)  1.00 0.207
+x1           2.13 0.206
+x2           2.93 0.202</code></pre>
 <p><strong>Fit and display using brms</strong><br> This will take longer as the model is not pre-compiled as in stan_glm.</p>
 <pre class="r"><code>fit4 &lt;- brm(y ~ x1 + x2, data = dat, refresh = 0)
 print(fit4, digits=2)</code></pre>
@@ -478,13 +477,13 @@ Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
 
 Population-Level Effects: 
           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept     1.44      0.20     1.04     1.83 1.00     3695     2683
-x1            1.91      0.24     1.44     2.37 1.00     3711     3088
-x2            2.91      0.21     2.50     3.32 1.00     3896     2013
+Intercept     1.00      0.20     0.61     1.40 1.00     4561     3235
+x1            2.13      0.21     1.74     2.54 1.00     3981     3091
+x2            2.92      0.21     2.53     3.33 1.00     4346     2929
 
 Family Specific Parameters: 
       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma     2.02      0.14     1.76     2.33 1.00     4072     2939
+sigma     2.01      0.15     1.75     2.33 1.00     3642     2903
 
 Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
 is a crude measure of effective sample size, and Rhat is the potential 

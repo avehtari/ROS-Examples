@@ -12,7 +12,7 @@
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-20" />
 
 <title>Regression and Other Stories: FakeKCV</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: FakeKCV</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-20</h4>
 
 </div>
 
@@ -375,8 +375,7 @@ summary {
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;MASS&quot;)      # needed for mvrnorm()
 library(&quot;rstanarm&quot;)
-library(&quot;loo&quot;)
-options(mc.cores = parallel::detectCores())</code></pre>
+library(&quot;loo&quot;)</code></pre>
 <p>Set random seed for reproducability</p>
 <pre class="r"><code>SEED &lt;- 1754</code></pre>
 <p><strong>Generate fake data</strong></p>
@@ -418,8 +417,108 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 tau0 &lt;- k0/(k-k0) * 1/sqrt(n)
 hs_prior &lt;- hs(df=1, global_df=1, global_scale=tau0, slab_scale=3, slab_df=7)
 fit_2 &lt;- stan_glm(y ~ ., prior=hs_prior, data=fake, seed=SEED,
-                  control=list(adapt_delta=0.995), refresh=200)
-(loo_2 &lt;- loo(fit_2))</code></pre>
+                  control=list(adapt_delta=0.995), refresh=200)</code></pre>
+<pre><code>
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 5e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.5 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 4.71557 seconds (Warm-up)
+Chain 1:                5.81374 seconds (Sampling)
+Chain 1:                10.5293 seconds (Total)
+Chain 1: 
+
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
+Chain 2: 
+Chain 2: Gradient evaluation took 3.8e-05 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.38 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 4.53119 seconds (Warm-up)
+Chain 2:                3.10307 seconds (Sampling)
+Chain 2:                7.63425 seconds (Total)
+Chain 2: 
+
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
+Chain 3: 
+Chain 3: Gradient evaluation took 3.3e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.33 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 5.20464 seconds (Warm-up)
+Chain 3:                5.79206 seconds (Sampling)
+Chain 3:                10.9967 seconds (Total)
+Chain 3: 
+
+SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 3.6e-05 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 4.71992 seconds (Warm-up)
+Chain 4:                6.39888 seconds (Sampling)
+Chain 4:                11.1188 seconds (Total)
+Chain 4: </code></pre>
+<pre class="r"><code>(loo_2 &lt;- loo(fit_2))</code></pre>
 <pre><code>
 Computed from 4000 by 60 log-likelihood matrix
 
@@ -447,7 +546,7 @@ fit_1 -10.3       5.3  </code></pre>
 <pre class="r"><code>loo_compare(kfold_1,kfold_2)</code></pre>
 <pre><code>      elpd_diff se_diff
 fit_2   0.0       0.0  
-fit_1 -16.4       5.1  </code></pre>
+fit_1 -17.7       5.3  </code></pre>
 <p>As PSIS-LOO fails is underestimates the difference between the models. The Pareto k diagnostic correctly identified the problem, and more robust K-fold-CV shows that by using a better prior we can get better predictions.</p>
 
 
