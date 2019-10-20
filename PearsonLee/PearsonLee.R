@@ -20,7 +20,6 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("HistData")
 
 #' **Load data**
@@ -32,11 +31,7 @@ n <- length(mother_height)
 #' **Linear regression**
 # MCMC sampling
 #+ results='hide'
-fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights)
-# optimization and normal approximation at the mode is faster with similar
-# accuracy, because n is big and there are only three parameters to estimate
-# fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights,
-#                   algorithm="optimizing")
+fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, refresh = 0)
 #+
 print(fit_1, digits=2)
 ab_hat <- coef(fit_1)

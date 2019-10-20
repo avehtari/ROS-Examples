@@ -17,7 +17,6 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 #' **Load packages**
 library("arm")
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("brms")
 
 #' **Create fake data**

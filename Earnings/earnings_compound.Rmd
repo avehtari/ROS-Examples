@@ -19,7 +19,6 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
@@ -44,7 +43,7 @@ height_jitter_add <- runif(n, -.2, .2)
 ```{r results='hide'}
 fit_2a <- stan_glm(positive ~ height + male,
                    family = binomial(link = "logit"),
-                   data = earnings_all)
+                   data = earnings_all, refresh = 0)
 sims_2a <- as.matrix(fit_2a)
 ```
 ```{r }
@@ -57,7 +56,7 @@ print(fit_2a, digits=2)
 earnings$log_earn <- log(earnings$earn)
 ```
 ```{r results='hide'}
-fit_2b <- stan_glm(log_earn ~ height + male, data = earnings)
+fit_2b <- stan_glm(log_earn ~ height + male, data = earnings, refresh = 0)
 sims_2b <- as.matrix(fit_2b)
 ```
 ```{r }

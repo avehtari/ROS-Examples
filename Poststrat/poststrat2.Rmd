@@ -1,25 +1,27 @@
-#' ---
-#' title: "Regression and Other Stories: Poststratification 2"
-#' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
-#' date: "`r format(Sys.Date())`"
-#' ---
+---
+title: "Regression and Other Stories: Poststratification 2"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Demonstrate poststratification with simulated census and poll data
+See Chapter 17 in Regression and Other Stories.
 
-#' Demonstrate poststratification with simulated census and poll data
-#' See Chapter 17 in Regression and Other Stories.
-#' 
-#' 
-#' -------------
-#' 
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+-------------
+
+**Load packages**
+
+```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rstanarm")
 invlogit <- plogis
+```
 
-#' **Create some fake data**
-#'
-#' Create an empty poststratification table, with rows for each of the
-#' $2 \times 4 \times 4$ sorts of people.
+**Create some fake data**
+
+Create an empty poststratification table, with rows for each of the
+$2 \times 4 \times 4$ sorts of people.
+
+```{r }
 J <- c(2, 4, 4)
 poststrat <- as.data.frame(array(NA, c(prod(J), length(J)+1)))
 colnames(poststrat) <- c("sex", "age", "eth", "N")
@@ -32,8 +34,11 @@ for (i1 in 1:J[1]){
     }
   }
 }
+```
 
-#' make up numbers for the populations of the cells
+make up numbers for the populations of the cells
+
+```{r }
 p_sex <- c(0.52, 0.48)
 p_age <- c(0.2, 0.25, 0.3, 0.25)
 p_eth <- c(0.7, 0.1, 0.1, 0.1)
@@ -41,10 +46,13 @@ for (j in 1:prod(J)){
   poststrat$N[j] <- 250e6 * p_sex[poststrat[j,1]] * p_age[poststrat[j,2]] *
   p_eth[poststrat[j,3]]
 }
+```
 
-#' Hypothesize a nonresponse pattern in which women, older people, and
-#' whites are more likely to respond than men, younger people, and
-#' minorities
+Hypothesize a nonresponse pattern in which women, older people, and
+whites are more likely to respond than men, younger people, and
+minorities
+
+```{r }
 p_response_baseline <- 0.1
 p_response_sex <- c(1, 0.8)
 p_response_age <- c(1, 1.2, 1.6, 2.5)
@@ -54,9 +62,12 @@ for (j in 1:prod(J)){
   p_response[j] <- p_response_baseline * p_response_sex[poststrat[j,1]] *
     p_response_age[poststrat[j,2]] * p_response_eth[poststrat[j,3]]
 }
+```
 
-#' Sample from the assumed population with the assumed nonresponse
-#' probabilities
+Sample from the assumed population with the assumed nonresponse
+probabilities
+
+```{r }
 n <- 1000
 people <- sample(prod(J), n, replace=TRUE, prob=poststrat$N*p_response)
 # For respondent i, people[i] is that person's poststrat cell,
@@ -66,25 +77,37 @@ for (j in 1:prod(J)){
   n_cell[j] <- sum(people==j)
 }
 print(cbind(poststrat, n_cell/n, poststrat$N/sum(poststrat$N)))
+```
 
-#' Assume the survey responses come from a logistic regression with
-#' these coefficients
+Assume the survey responses come from a logistic regression with
+these coefficients
+
+```{r }
 coef_intercept <- 0.6
 coef_sex <- c(0, -0.2)
 coef_age <- c(0, -0.2, -0.3, -0.4)
 coef_eth <- c(0, 0.6, 0.3, 0.3)
+```
 
-#' The probabilities are:
+The probabilities are:
+
+```{r }
 prob_yes <- rep(NA, prod(J))
 for (j in 1:prod(J)){
   prob_yes[j] <- invlogit(coef_intercept + coef_sex[poststrat[j,1]] +
   coef_age[poststrat[j,2]] + coef_eth[poststrat[j,3]])
 }
+```
 
-#' Simulate the fake data:
+Simulate the fake data:
+
+```{r }
 y <- rbinom(n, 1, prob_yes[people])
+```
 
-#' **Regression**
+**Regression**
+
+```{r }
 sex <- poststrat[people,1]
 age <- poststrat[people,2]
 eth <- poststrat[people,3]
@@ -92,16 +115,28 @@ fake <- data.frame(y, sex, age, eth)
 fit <- stan_glm(y ~ factor(sex) + factor(age) + factor(eth),
                 family=binomial(link="logit"), data=fake)
 print(fit)
+```
 
-#' **Prediction**
+**Prediction**
+
+```{r }
 pred_sim <- posterior_linpred(fit, transform=TRUE,
   newdata=as.data.frame(poststrat))
 pred_est <- colMeans(pred_sim)
 round(cbind(poststrat, prob_yes, pred_est), 2)
+```
 
-#' **Poststratification**
+**Poststratification**
+
+```{r }
 poststrat_est <- sum(poststrat$N*pred_est)/sum(poststrat$N)
 round(poststrat_est, 2)
-#' plus uncertainty
+```
+
+plus uncertainty
+
+```{r }
 poststrat_sim <- pred_sim %*% poststrat$N / sum(poststrat$N)
 round(c(mean(poststrat_sim), sd(poststrat_sim)), 3)
+```
+

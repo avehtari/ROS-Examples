@@ -18,7 +18,6 @@ library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstan")
 rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())
 
 #' **Show Stan code**
 writeLines(readLines(root("Restaurant","restaurant.stan")))

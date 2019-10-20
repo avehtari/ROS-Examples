@@ -19,7 +19,6 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("brms")
 library("foreign")
 ```

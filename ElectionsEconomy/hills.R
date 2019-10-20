@@ -20,7 +20,6 @@ library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
 #' **Load data**
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)

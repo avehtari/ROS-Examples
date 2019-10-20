@@ -20,7 +20,6 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("dplyr")
 library("ggplot2")
 theme_set(bayesplot::theme_default(base_family = "sans"))

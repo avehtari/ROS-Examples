@@ -19,7 +19,6 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
 #' **Load data**
 source(root("Imputation/data","imputation_setup.R"))

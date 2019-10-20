@@ -16,7 +16,6 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 #' **Load packages**
 library("arm")
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
 #' **Define a function running glm and stan_glm with simulated data**<br>
 #' Arguments are the number of simulated observations, and prior

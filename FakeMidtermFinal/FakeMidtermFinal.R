@@ -17,7 +17,6 @@ savefigs <- FALSE
 
 #' **Load packages**
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
 #' **Simulate fake data**
 N <- 1000

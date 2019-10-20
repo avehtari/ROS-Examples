@@ -19,7 +19,6 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 ```{r }
 library("arm")
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("brms")
 ```
 

@@ -19,7 +19,6 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
 #' #### Fitting a regression using a data frame in R
 #' 

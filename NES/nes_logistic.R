@@ -20,7 +20,6 @@ library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 library("foreign")
 
 #' **Load data**

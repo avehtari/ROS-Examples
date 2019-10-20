@@ -17,7 +17,6 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 library("MASS")      # needed for mvrnorm()
 library("rstanarm")
 library("loo")
-options(mc.cores = parallel::detectCores())
 #' Set random seed for reproducability
 SEED <- 1754
 

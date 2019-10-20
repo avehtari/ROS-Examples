@@ -22,7 +22,6 @@ root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstan")
 rstan_options(auto_write = TRUE)
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 invlogit<-plogis
 
 #' **Load data**
