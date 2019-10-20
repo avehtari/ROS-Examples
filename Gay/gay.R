@@ -20,10 +20,9 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-library("rstan")
-library("mgcv")
-rstan_options(auto_write = TRUE)
+# Enable parallel computation in stan_gamm4 used for splines and GPs
 options(mc.cores = parallel::detectCores())
+library("mgcv")
 library("BART")
 
 #' **Define common plot functions**
@@ -132,13 +131,11 @@ for (j in 1:2){
   gay_plot(gay_loess_fit, question=question[j], title="Loess fit", savefigs = savefigs)
 
   # Splines
-  ##  gay_spline <- stan_gamm4(y/n ~ s(age), data=gay_sum, family = betar)
   gay_spline[[j]] <- stan_gamm4(I(y/n) ~ s(age), data=gay_sum[[j]], adapt_delta=0.99)
   gay_spline_fit <- posterior_linpred(gay_spline[[j]], data.frame(age=gay_sum[[j]]$age))
   gay_plot(gay_spline_fit, question=question[j], title="Spline fit and uncertainty", savefigs = savefigs)
 
   # GP represented with splines
-  ## gay_gp <- stan_gamm4(cbind(y, n-y) ~ s(age, bs="gp"), family=binomial(link="logit"), data=gay_sum)
   gay_GP[[j]] <- stan_gamm4(I(y/n) ~ age + s(age, bs="gp"), data=gay_sum[[j]], prior_smooth=student_t(df=4, scale=100), adapt_delta=0.99)
   gay_GP_fit <- posterior_linpred(gay_GP[[j]], data.frame(age=gay_sum[[j]]$age))
   gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty", savefigs = savefigs)
