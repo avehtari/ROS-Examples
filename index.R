@@ -304,7 +304,6 @@
 #'   - [Lalonde/](https://github.com/avehtari/ROS-Examples/tree/master/Lalonde/)
 #'   - [LogisticPriors/](https://github.com/avehtari/ROS-Examples/tree/master/LogisticPriors/)
 #'     - [logistic_priors.html](LogisticPriors/logistic_priors.html) - Effect of priors in logistic regression
-#'   - [LowBwt/](https://github.com/avehtari/ROS-Examples/tree/master/LowBwt/)
 #'   - [Mesquite/](https://github.com/avehtari/ROS-Examples/tree/master/Mesquite/)
 #'     - [mesquite.html](Mesquite/mesquite.html) - Predicting the yields of mesquite bushes
 #'   - [Mile/](https://github.com/avehtari/ROS-Examples/tree/master/Mile/)
