@@ -71,7 +71,7 @@ xn <- matrix(rnorm(n*(k-1)),nrow=n)
 a <- 2
 b <- 3
 sigma <- 1
-y <- (a + b*x + sigma*rnorm(n))>0+0
+y <- as.numeric(a + b*x + sigma*rnorm(n) > 0)
 fake <- data.frame(x, xn, y)
 
 #' **Fit using glm**<br>
@@ -110,7 +110,7 @@ xn <- matrix(rnorm(n*(k-1)),nrow=n)
 a <- 2
 b <- 3
 sigma <- 1
-y <- (a + b*x + sigma*rnorm(n))>0+0
+y <- as.numeric(a + b*x + sigma*rnorm(n) > 0)
 fake <- data.frame(x, xn, y)
 
 #' **Fit using glm**<br>
