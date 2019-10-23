@@ -10,6 +10,9 @@
 #' - [Code and data folders alphabetically](#alphabetically)
 #' - [Git repo for the code and data](https://github.com/avehtari/ROS-Examples)
 #'
+#' Below folders (ending /) point to the code folders in github, and
+#' .html -files point to pretty notebooks.
+#' 
 #' -------------
 #' 
 
