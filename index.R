@@ -4,7 +4,7 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Index for the code and data for the book Regression and Other Stories
+#' Index for the code and data for the book [Regression and Other Stories](http://www.stat.columbia.edu/~gelman/regression/)
 #'
 #' - [Code and data by chapters](#by_chapters)
 #' - [Code and data folders alphabetically](#alphabetically)
