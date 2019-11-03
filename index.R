@@ -9,6 +9,7 @@
 #' - [Code and data by chapters](#by_chapters)
 #' - [Code and data folders alphabetically](#alphabetically)
 #' - [Git repo for the code and data](https://github.com/avehtari/ROS-Examples)
+#' - [Download all examples as a ZIP file](https://github.com/avehtari/ROS-Examples/archive/master.zip)
 #'
 #' Below folders (ending /) point to the code folders in github, and
 #' .html -files point to pretty notebooks.
