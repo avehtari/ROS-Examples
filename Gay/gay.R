@@ -22,8 +22,7 @@ root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 # Enable parallel computation in stan_gamm4 used for splines and GPs
 options(mc.cores = parallel::detectCores())
-library("mgcv")
-library("BART")
+library("dbarts")
 
 #' **Define common plot functions**
 gay_plot <- function(fit=NULL, question=NULL, title=NULL, savefigs=FALSE) {
@@ -141,7 +140,7 @@ for (j in 1:2){
   gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty", savefigs = savefigs)
   # BART
   output <- capture.output(
-    gay_bart[[j]] <- pbart(gay[[j]]$age, gay[[j]]$y, uniq_age, ntree = 20))
+    gay_bart[[j]] <- bart(gay[[j]]$age, gay[[j]]$y, matrix(uniq_age), ntree = 20))
   gay_bart_fit <- pnorm(gay_bart[[j]]$yhat.test)
   gay_plot(gay_bart_fit, question=question[j], title="Bart fit and uncertainty", savefigs = savefigs)
 
