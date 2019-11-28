@@ -49,6 +49,7 @@
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
 #'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
+#'     - [heightweight.html](Vitals/heightweight.html) - Illustrate central limit theorem and normal distribution
 #'   - [Stents/](https://github.com/avehtari/ROS-Examples/tree/master/Stents/)
 #'     - [stents.html](Stents/stents.html) - Stents - comparing distributions
 #' 
@@ -96,6 +97,7 @@
 #' ### 9 Prediction and Bayesian inference 
 #'   - [ElectionsEconomy/](https://github.com/avehtari/ROS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
+#'     - [bayes.html](ElectionsEconomy/bayes.html) - Demonstration of Bayesian information aggregation
 #'   - [SexRatio/](https://github.com/avehtari/ROS-Examples/tree/master/SexRatio/)
 #'     - [sexratio.html](SexRatio/sexratio.html) - Example where an informative prior makes a difference
 #'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
@@ -268,6 +270,7 @@
 #'     - [earnings_bootstrap.html](Earnings/earnings_bootstrap.html) - Bootstrapping to simulate the sampling distribution
 #'     - [earnings_compound.html](Earnings/earnings_compound.html) - Compound discrete-continuos model
 #'   - [ElectionsEconomy/](https://github.com/avehtari/ROS-Examples/tree/master/ElectionsEconomy/)
+#'     - [bayes.html](ElectionsEconomy/bayes.html) - Demonstration of Bayesian information aggregation
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
 #'     - [hills.html](ElectionsEconomy/hills.html) - Present uncertainty in parameter estimates
 #'     - [hibbs_coverage.html](ElectionsEconomy/hibbs_coverage.html) - Checking the model-fitting procedure using fake-data simulation.
@@ -363,4 +366,5 @@
 #'   - [Unemployment/](https://github.com/avehtari/ROS-Examples/tree/master/Unemployment/)
 #'     - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
 #'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
+#'     - [heightweight.html](Vitals/heightweight.html) - Illustrate central limit theorem and normal distribution
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
