@@ -1,11 +1,11 @@
 #' ---
-#' title: "Regression and Other Stories: Big data"
+#' title: "Regression and Other Stories: Scalability"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Demonstrate computation speed with bigger data. See Chapter 22 in
-#' Regression and Other Stories.
+#' Demonstrate how the computation time scales with bigger data. See
+#' Chapter 22 in Regression and Other Stories.
 #' 
 #' -------------
 #'

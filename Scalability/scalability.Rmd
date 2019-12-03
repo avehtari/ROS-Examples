@@ -1,10 +1,10 @@
 ---
-title: "Regression and Other Stories: Big data"
+title: "Regression and Other Stories: Scalability"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Demonstrate computation speed with bigger data. See Chapter 22 in
-Regression and Other Stories.
+Demonstrate how the computation time scales with bigger data. See
+Chapter 22 in Regression and Other Stories.
 
 -------------
 
@@ -88,7 +88,7 @@ xn <- matrix(rnorm(n*(k-1)),nrow=n)
 a <- 2
 b <- 3
 sigma <- 1
-y <- (a + b*x + sigma*rnorm(n))>0+0
+y <- as.numeric(a + b*x + sigma*rnorm(n) > 0)
 fake <- data.frame(x, xn, y)
 ```
 
@@ -139,7 +139,7 @@ xn <- matrix(rnorm(n*(k-1)),nrow=n)
 a <- 2
 b <- 3
 sigma <- 1
-y <- (a + b*x + sigma*rnorm(n))>0+0
+y <- as.numeric(a + b*x + sigma*rnorm(n) > 0)
 fake <- data.frame(x, xn, y)
 ```
 
