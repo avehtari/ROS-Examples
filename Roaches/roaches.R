@@ -118,7 +118,7 @@ print(mean(yrep_2==0), digits=2)
 
 #' ### Zero-inflated negative-binomial model
 #'
-#' Zero-inflated negative-binomial model model is mixture of two models
+#' Zero-inflated negative-binomial model is mixture of two models
 #'  - logistic regression to model the proportion of extra zero counts
 #'  - negative-binomial model
 #'
@@ -127,8 +127,8 @@ print(mean(yrep_2==0), digits=2)
 roaches$logp1_roach1 <- log(roaches$roach1+1)
 roaches$log_exposure2 <- log(roaches$exposure2)
 #+ results='hide'
-fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior,
-                 zi ~ logp1_roach1 + treatment + senior),
+fit_3 <- brm(bf(y ~ logp1_roach1 + treatment + senior + offset(log_exposure2),
+                zi ~ logp1_roach1 + treatment + senior + offset(log_exposure2)),
              family=zero_inflated_negbinomial(), data=roaches,
              prior=set_prior("normal(0,1)"), seed=SEED, refresh=500)
 #+
