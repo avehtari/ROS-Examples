@@ -52,10 +52,21 @@ unemp$y_lag <- c(NA, unemp$y[1:(n-1)])
 fit_lag <- stan_glm(y ~ y_lag, data=unemp, refresh=0)
 print(fit_lag, digits=2)
 
-#' **Simulate replicated datasets**
+#' **Simulate replicated datasets using posterior predict**
 y_rep <- posterior_predict(fit_lag)
 y_rep <- cbind(unemp$y[1], y_rep)
 n_sims <- nrow(y_rep)
+
+#' **Simulate replicated datasets "manually"**
+sims <- as.matrix(fit_lag)
+n_sims <- nrow(sims)
+y_rep <- array(NA, c(n_sims, n))
+for (s in 1:n_sims){
+  y_rep[s,1] <- unemp$y[1]
+  for (t in 2:n){
+    y_rep[s,t] <- sims[s,"(Intercept)"] + sims[s,"y_lag"] * y_rep[s,t-1] + rnorm(1, 0, sims[s,"sigma"])
+  }
+}
 
 #' **Plot the simulated unemployment rate series**
 #+ eval=FALSE, include=FALSE
