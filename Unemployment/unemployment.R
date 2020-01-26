@@ -62,7 +62,7 @@ sims <- as.matrix(fit_lag)
 n_sims <- nrow(sims)
 y_rep <- array(NA, c(n_sims, n))
 for (s in 1:n_sims){
-  y_rep[s,1] <- y[1]
+  y_rep[s,1] <- unemp$y[1]
   for (t in 2:n){
     y_rep[s,t] <- sims[s,"(Intercept)"] + sims[s,"y_lag"] * y_rep[s,t-1] + rnorm(1, 0, sims[s,"sigma"])
   }
