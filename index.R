@@ -184,6 +184,8 @@
 #'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
 #'   - [SampleSize/](https://github.com/avehtari/ROS-Examples/tree/master/SampleSize/)
 #'     - [simulation.html](DataCollection/simulation.html) - Sample size simulation
+#'   - [FakeMidtermFinal/](https://github.com/avehtari/ROS-Examples/tree/master/FakeMidtermFinal/)
+#'     - [SimulationBasedDesign.html](FakeMidtermFinal/SimulationBasedDesign.html) - Fake dataset of a randomized experiment on student grades
 #'
 #' ### 17  Poststratification and missing-data imputation
 #'   - [Poststrat/](https://github.com/avehtari/ROS-Examples/tree/master/Poststrat/)
@@ -280,6 +282,7 @@
 #'     - [fake_kcv.html](FakeKCV/fake_kcv.html) - Demonstration of $K$-fold cross-validation using simulated data
 #'   - [FakeMidtermFinal/](https://github.com/avehtari/ROS-Examples/tree/master/FakeMidtermFinal/)
 #'     - [FakeMidtermFinal.html](FakeMidtermFinal/FakeMidtermFinal.html) - Fake dataset of 1000 students' scores on a midterm and final exam
+#'     - [SimulationBasedDesign.html](FakeMidtermFinal/SimulationBasedDesign.html) - Fake dataset of a randomized experiment on student grades
 #'   - [FrenchElection/](https://github.com/avehtari/ROS-Examples/tree/master/FrenchElection/)
 #'     - [ps_primaire.html](FrenchElection/ps_primaire.html) - French Election data
 #'   - [Gay/](https://github.com/avehtari/ROS-Examples/tree/master/Gay/)
