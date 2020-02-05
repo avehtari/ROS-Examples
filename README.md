@@ -8,5 +8,5 @@ This git repository has data and code for the examples and exercises in the book
 
 ## Index and notebooks in html
 
-For easier viewing the index and the notebooks in html are available at [avehtari.github.io/RAOS-Examples](https://avehtari.github.io/RAOS-Examples/).
+For easier viewing the index and the notebooks in html are available at [avehtari.github.io/ROS-Examples](https://avehtari.github.io/ROS-Examples/).
 
