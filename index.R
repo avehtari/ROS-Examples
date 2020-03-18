@@ -134,6 +134,8 @@
 #'     - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
 #'   - [Rsquared/](https://github.com/avehtari/ROS-Examples/tree/master/Rsquared/)
 #'     - [rsquared.html](Rsquared/rsquared.html) - Bayesian R^2
+#'   - [CrossValidation/](https://github.com/avehtari/ROS-Examples/tree/master/CrossValidation/)
+#'     - [crossvalidation.html](CrossValidation/crossvalidation.html) - Demonstration of cross validation
 #'   - [FakeKCV/](https://github.com/avehtari/ROS-Examples/tree/master/FakeKCV/)
 #'     - [fake_kcv.html](FakeKCV/fake_kcv.html) - Demonstration of $K$-fold cross-validation using simulated data
 #'   - [Pyth/](https://github.com/avehtari/ROS-Examples/tree/master/Pyth/)
@@ -262,6 +264,8 @@
 #'   - [Coverage/](https://github.com/avehtari/ROS-Examples/tree/master/Coverage/)
 #'     - [coverage.html](Coverage/coverage.html) - Example of coverage
 #'   - [Cows/](https://github.com/avehtari/ROS-Examples/tree/master/Cows/)
+#'   - [CrossValidation/](https://github.com/avehtari/ROS-Examples/tree/master/CrossValidation/)
+#'     - [crossvalidation.html](CrossValidation/crossvalidation.html) - Demonstration of cross validation
 #'   - [SampleSize/](https://github.com/avehtari/ROS-Examples/tree/master/SampleSize/)
 #'     - [simulation.html](DataCollection/simulation.html) - Sample size simulation
 #'   - [Death/](https://github.com/avehtari/ROS-Examples/tree/master/Death/)
