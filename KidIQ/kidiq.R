@@ -151,7 +151,7 @@ plot(kidiq$mom_iq, kidiq$kid_score, xlab="Mother IQ score", ylab="Child test sco
 axis(1, seq(80, 140, 20))
 axis(2, seq(20, 140, 40))
 mom_hs_bar <- mean(kidiq$mom_hs)
-subset <- sample(n_sims_2, 10)
+subset <- sample(n_sims_3, 10)
 for (i in subset){
   curve(cbind(1, mom_hs_bar, x) %*% sims_3[i,1:3], lwd=.5,
      col="gray", add=TRUE)
