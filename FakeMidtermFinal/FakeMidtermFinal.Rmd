@@ -24,13 +24,13 @@ library("rstanarm")
 **Simulate fake data**
 
 ```{r }
-N <- 1000
+n <- 1000
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
 set.seed(2243)
-true_ability <- rnorm(N, 50, 10)
-noise_1 <- rnorm(N, 0, 10)
-noise_2 <- rnorm(N, 0, 10)
+true_ability <- rnorm(n, 50, 10)
+noise_1 <- rnorm(n, 0, 10)
+noise_2 <- rnorm(n, 0, 10)
 midterm <- true_ability + noise_1
 final <- true_ability + noise_2
 exams <- data.frame(midterm, final)
