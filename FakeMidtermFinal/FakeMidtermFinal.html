@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
-<meta name="date" content="2019-10-20" />
+<meta name="date" content="2020-03-19" />
 
 <title>Regression and Other Stories: Fake midterm and final exam</title>
 
@@ -332,6 +331,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Regression and Other Stories: Fake midterm and final exam</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">2019-10-20</h4>
+<h4 class="date">2020-03-19</h4>
 
 </div>
 
@@ -375,13 +375,13 @@ summary {
 <p><strong>Load packages</strong></p>
 <pre class="r"><code>library(&quot;rstanarm&quot;)</code></pre>
 <p><strong>Simulate fake data</strong></p>
-<pre class="r"><code>N &lt;- 1000
+<pre class="r"><code>n &lt;- 1000
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
 set.seed(2243)
-true_ability &lt;- rnorm(N, 50, 10)
-noise_1 &lt;- rnorm(N, 0, 10)
-noise_2 &lt;- rnorm(N, 0, 10)
+true_ability &lt;- rnorm(n, 50, 10)
+noise_1 &lt;- rnorm(n, 0, 10)
+noise_2 &lt;- rnorm(n, 0, 10)
 midterm &lt;- true_ability + noise_1
 final &lt;- true_ability + noise_2
 exams &lt;- data.frame(midterm, final)</code></pre>
