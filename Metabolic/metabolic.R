@@ -7,6 +7,10 @@
 #' An example of how to interpret a power law or log-log
 #' regression. See Chapter 3 in Regression and Other Stories.
 #' 
+#' Animals' body mass and metabolism comes from section 3.8.2 of
+#' Gelman and Nolan: Teaching Statistics: A Bag of Tricks, second
+#' edition. Oxford University Press, 2017.
+#'
 #' -------------
 #' 
 
