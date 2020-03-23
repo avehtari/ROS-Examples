@@ -48,6 +48,8 @@
 #' ### 3  Some basic methods in mathematics and probability
 #'   - [Mile/](https://github.com/avehtari/ROS-Examples/tree/master/Mile/)
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
+#'   - [Metabolic/](https://github.com/avehtari/ROS-Examples/tree/master/Metabolic/)
+#'     - [metabolic.html](Metabolic/metabolic.html) - How to interpret a power law or log-log regression
 #'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
 #'     - [heightweight.html](Vitals/heightweight.html) - Illustrate central limit theorem and normal distribution
@@ -320,6 +322,8 @@
 #'     - [logistic_priors.html](LogisticPriors/logistic_priors.html) - Effect of priors in logistic regression
 #'   - [Mesquite/](https://github.com/avehtari/ROS-Examples/tree/master/Mesquite/)
 #'     - [mesquite.html](Mesquite/mesquite.html) - Predicting the yields of mesquite bushes
+#'   - [Metabolic/](https://github.com/avehtari/ROS-Examples/tree/master/Metabolic/)
+#'     - [metabolic.html](Metabolic/metabolic.html) - How to interpret a power law or log-log regression
 #'   - [Mile/](https://github.com/avehtari/ROS-Examples/tree/master/Mile/)
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
 #'   - [Names/](https://github.com/avehtari/ROS-Examples/tree/master/Names/)

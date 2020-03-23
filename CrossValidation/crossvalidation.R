@@ -51,7 +51,6 @@ fit_1loo <- stan_glm(y ~ x, data = fake[-18,], seed=2141, refresh=0)
 #' **Extract posterior draws**
 sims <- as.matrix(fit_1)
 simsloo <- as.matrix(fit_1loo)
-n_sims <- nrow(sims)
 
 #' **Compute posterior predictive distribution given x=18**
 condpred<-data.frame(y=seq(0,9,length.out=100))
