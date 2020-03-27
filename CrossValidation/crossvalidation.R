@@ -43,14 +43,14 @@ fake <- data.frame(x, y)
 
 #' **Fit linear model**
 #+ results='hide'
-fit_1 <- stan_glm(y ~ x, data = fake, seed=2141, chains=10, refresh=0)
+fit_all <- stan_glm(y ~ x, data = fake, seed=2141, chains=10, refresh=0)
 
 #' **Fit linear model without 18th observation**
-fit_1loo <- stan_glm(y ~ x, data = fake[-18,], seed=2141, refresh=0)
+fit_minus_18 <- stan_glm(y ~ x, data = fake[-18,], seed=2141, refresh=0)
 
 #' **Extract posterior draws**
-sims <- as.matrix(fit_1)
-simsloo <- as.matrix(fit_1loo)
+sims <- as.matrix(fit_all)
+sims_minus_18 <- as.matrix(fit_minus_18)
 
 #' **Compute posterior predictive distribution given x=18**
 condpred<-data.frame(y=seq(0,9,length.out=100))
@@ -58,7 +58,7 @@ condpred$x <- sapply(condpred$y, FUN=function(y) mean(dnorm(y, sims[,1] + sims[,
 
 #' **Compute LOO posterior predictive distribution given x=18**
 condpredloo<-data.frame(y=seq(0,9,length.out=100))
-condpredloo$x <- sapply(condpredloo$y, FUN=function(y) mean(dnorm(y, simsloo[,1] + simsloo[,2]*18, simsloo[,3])*6+18))
+condpredloo$x <- sapply(condpredloo$y, FUN=function(y) mean(dnorm(y, sims_minus_18[,1] + sims_minus_18[,2]*18, sims_minus_18[,3])*6+18))
 
 #' **Create a plot with posterior mean and posterior predictive distribution**
 p1 <- ggplot(fake, aes(x = x, y = y)) +
@@ -79,8 +79,8 @@ p3 <- p2 +
 p4 <- p3 +
   geom_point(data=fake[18,], color = "grey50", size = 5, shape=1) +
   geom_abline(
-    intercept = mean(simsloo[, 1]),
-    slope = mean(simsloo[, 2]),
+    intercept = mean(sims_minus_18[, 1]),
+    slope = mean(sims_minus_18[, 2]),
     size = 1,
     color = "grey50",
     linetype=2
@@ -93,8 +93,8 @@ if (savefigs) ggsave(root("CrossValidation/figs","fakeloo1a.pdf"),p4,width=6,hei
 
 #' **Compute posterior and LOO residuals**</br>
 #' `loo_predict()` computes mean of LOO predictive distribution.
-fake$residual <- fake$y-fit_1$fitted
-fake$looresidual <- fake$y-loo_predict(fit_1)$value
+fake$residual <- fake$y-fit_all$fitted
+fake$looresidual <- fake$y-loo_predict(fit_all)$value
 
 #' **Plot posterior and LOO residuals**
 p1 <- ggplot(fake, aes(x = x, y = residual)) +
@@ -118,14 +118,14 @@ round(1-var(fake$looresidual)/var(y),2)
 
 #' **Compute log posterior predictive densities**</br>
 #' `log_lik` returns $\log(p(y_i|\theta^{(s)}))$
-ll_1 <- log_lik(fit_1)
+ll_1 <- log_lik(fit_all)
 #' compute $\log(\frac{1}{S}\sum_{s=1}^S p(y_i|\theta^{(s)})$ in
 #' computationally stable way
 fake$lpd_post <- matrixStats::colLogSumExps(ll_1) - log(nrow(ll_1))
 
 #' **Compute log LOO predictive densities**</br>
 #' `loo` uses fast approximate leave-one-out cross-validation
-loo_1 <- loo(fit_1)
+loo_1 <- loo(fit_all)
 fake$lpd_loo <-loo_1$pointwise[,"elpd_loo"]
 
 #' **Plot posterior and LOO log predictive densities**
