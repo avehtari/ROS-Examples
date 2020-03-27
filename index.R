@@ -13,6 +13,8 @@
 #'
 #' Below folders (ending /) point to the code folders in github, and
 #' .html -files point to pretty notebooks.
+#'
+#' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues.
 #' 
 #' -------------
 #' 
@@ -115,7 +117,7 @@
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
-#'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
+#'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'   - [Beauty/](https://github.com/avehtari/ROS-Examples/tree/master/Beauty/)
 #'     - [beauty.html](Beauty/beauty.html) - Student evaluations of instructors’ beauty and teaching quality
@@ -152,7 +154,7 @@
 #'   - [Pollution/](https://github.com/avehtari/ROS-Examples/tree/master/Pollution/)
 #' 
 #' ### 13  Logistic regression
-#'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
+#'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [LogisticPriors/](https://github.com/avehtari/ROS-Examples/tree/master/LogisticPriors/)
 #'     - [logistic_priors.html](LogisticPriors/logistic_priors.html) - Effect of priors in logistic regression
@@ -162,7 +164,7 @@
 #' ### 14  Working with logistic regression
 #'   - [LogitGraphs/](https://github.com/avehtari/ROS-Examples/LogitGraphs/)
 #'     - [logitgraphs.html](LogitGraphs/logitgraphs.html) - Different ways of displaying logistic regression
-#'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
+#'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Rodents/](https://github.com/avehtari/ROS-Examples/tree/master/Rodents/)
 #'   - [Arsenic/](https://github.com/avehtari/ROS-Examples/tree/master/Arsenic/)
@@ -179,7 +181,7 @@
 #'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
 #'     - [earnings_compound.html](Earnings/earnings_compound.html) - Compound discrete-continuos model
 #'   - [RiskyBehavior/](https://github.com/avehtari/ROS-Examples/tree/master/RiskyBehavior/)
-#'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
+#'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
 #'   - [Lalonde/](https://github.com/avehtari/ROS-Examples/tree/master/Lalonde/)
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'   - [AcademyAwards/](https://github.com/avehtari/ROS-Examples/tree/master/AcademyAwards/)
@@ -329,7 +331,7 @@
 #'   - [Names/](https://github.com/avehtari/ROS-Examples/tree/master/Names/)
 #'     - [names.html](Names/names.html) - Names - Distributions of names of American babies
 #'     - [lastletters.html](Names/lastletters.html) - Last letters - Distributions of last letters of names of American babies
-#'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
+#'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'     - [nes_logistic.html](NES/nes_logistic.html) - Logistic regression, identifiability, and separation
 #'   - [Newcomb/](https://github.com/avehtari/ROS-Examples/tree/master/Newcomb/)
