@@ -115,7 +115,7 @@
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
-#'   - [NES/](https://github.com/avehtari/ROS-Examples/nes/)
+#'   - [NES/](https://github.com/avehtari/ROS-Examples/NES/)
 #'     - [nes_linear.html](NES/nes_linear.html) - Fitting the same regression to many datasets
 #'   - [Beauty/](https://github.com/avehtari/ROS-Examples/tree/master/Beauty/)
 #'     - [beauty.html](Beauty/beauty.html) - Student evaluations of instructors’ beauty and teaching quality
