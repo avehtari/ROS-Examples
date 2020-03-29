@@ -46,6 +46,8 @@
 #'     - [lastletters.html](Names/lastletters.html) - Last letters - Distributions of last letters of names of American babies
 #'   - [AgePeriodCohort/](https://github.com/avehtari/ROS-Examples/tree/master/AgePeriodCohort/)
 #'     - [births.html](AgePeriodCohort/births.html) - Age adjustment
+#'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
+#'     - [congress_plots.html](Congress/congress_plots.html) - Predictive uncertainty for congressional elections
 #' 
 #' ### 3  Some basic methods in mathematics and probability
 #'   - [Mile/](https://github.com/avehtari/ROS-Examples/tree/master/Mile/)
@@ -263,6 +265,8 @@
 #'   - [Coins/](https://github.com/avehtari/ROS-Examples/tree/master/Coins/)
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
+#'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
+#'     - [congress_plots.html](Congress/congress_plots.html) - Predictive uncertainty for congressional elections
 #'   - [Coop/](https://github.com/avehtari/ROS-Examples/tree/master/Coop/)
 #'     - [riverbay.html](Coop/riverbay.html) - Example of hypothesis testing
 #'   - [Coverage/](https://github.com/avehtari/ROS-Examples/tree/master/Coverage/)
