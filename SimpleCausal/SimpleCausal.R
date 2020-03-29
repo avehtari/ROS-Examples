@@ -58,7 +58,7 @@ text(3.2, 15, paste("Estimated treatment\neffect per unit of x is\nslope of fitt
 if (savefigs) dev.off()
 
 #' **Simulated data from nonlinear model**
-y <- rnorm(N, 10 + 25*exp(-x), 3)
+y <- rnorm(N, 5 + 30*exp(-x), 2)
 data$y <- y
 
 #' **Classical regression with continuous predictor**
@@ -70,7 +70,7 @@ if (savefigs) pdf(root("SimpleCausal/figs","overview_2a.pdf"), height=3.5, width
 #+
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Nonlinear treatment effect", cex.main=.9, cex.lab=.9, cex.axis=.9)
-curve(10 + 25*exp(-x), add=TRUE)
+curve(5 + 30*exp(-x), add=TRUE)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
