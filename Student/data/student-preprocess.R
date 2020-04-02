@@ -2,11 +2,11 @@
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-# read mathematics and Portugal language results
+# read mathematics and Portuguese language results
 d1=read.table(root("Student/data","student-mat.csv"),sep=";",header=TRUE)
 d2=read.table(root("Student/data","student-por.csv"),sep=";",header=TRUE)
 
-# merge mathematics and Portugal language results
+# merge mathematics and Portuguese language results
 d3=merge(d1,d2,by=c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet"))
 print(nrow(d3)) # 382 students
 

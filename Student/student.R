@@ -51,7 +51,7 @@ if (savefigs) color_scheme_set(scheme = "gray")
 #' 
 
 #' **Load data**
-# use the merged data with students having both math and Portugal language grades
+# use the merged data with students having both math and Portuguese language grades
 data <- read.table(root("Student/data","student-merged.csv"),sep=";",header=TRUE)
 # select only students with non-zero third year math grade
 data <- data[data$G3mat>0,]
