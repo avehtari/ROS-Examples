@@ -31,10 +31,10 @@ for (i in 1:49){
 region_name <- c("Northeast", "Midwest", "South", "West")
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Congress/figs","congress_plot_grid.pdf"), height=2.5, width=7)
+if (savefigs) pdf(root("Congress/figs","congress_plot_grid.pdf"), height=3.8, width=7)
 #+
-par(mfrow=c(2,5), mar=c(0,3,0,0), mgp=c(1.7, .3, 0), tck=-.02, oma=c(1,0,2,0))
-for (i in c(27, 47)) {
+par(mfrow=c(3,5), mar=c(0,3,0,0), mgp=c(1.7, .3, 0), tck=-.02, oma=c(1,0,2,0))
+for (i in c(27, 37, 47)) {
   year <- 1896 + 2*(i-1)
   cong1 <- congress[[i]]
   cong2 <- congress[[i+1]]

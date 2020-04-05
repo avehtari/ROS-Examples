@@ -151,6 +151,8 @@
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
 #'     - [earnings_regression.html](Earnings/earnings_regression.html) - Predict respondents' yearly earnings using survey data from 1990.
+#'   - [Gay/](https://github.com/avehtari/ROS-Examples/tree/master/Gay/)
+#'     - [gay_simple.html](Gay/gay_simple.html) - Simple models (linear and discretized age) and political attitudes as a function of age
 #'   - [Mesquite/](https://github.com/avehtari/ROS-Examples/tree/master/Mesquite/)
 #'     - [mesquite.html](Mesquite/mesquite.html) - Predicting the yields of mesquite bushes
 #'   - [Pollution/](https://github.com/avehtari/ROS-Examples/tree/master/Pollution/)
@@ -299,6 +301,7 @@
 #'   - [FrenchElection/](https://github.com/avehtari/ROS-Examples/tree/master/FrenchElection/)
 #'     - [ps_primaire.html](FrenchElection/ps_primaire.html) - French Election data
 #'   - [Gay/](https://github.com/avehtari/ROS-Examples/tree/master/Gay/)
+#'     - [gay_simple.html](Gay/gay_simple.html) - Simple models (linear and discretized age) and political attitudes as a function of age
 #'     - [gay.html](Gay/gay.html) - Nonlinear models (Loess, B-spline, GP-spline, and BART) and political attitudes as a function of age
 #'   - [Girls/](https://github.com/avehtari/ROS-Examples/tree/master/Girls/)
 #'   - [Golf/](https://github.com/avehtari/ROS-Examples/tree/master/Golf/)
