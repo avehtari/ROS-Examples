@@ -155,6 +155,8 @@
 #'     - [gay_simple.html](Gay/gay_simple.html) - Simple models (linear and discretized age) and political attitudes as a function of age
 #'   - [Mesquite/](https://github.com/avehtari/ROS-Examples/tree/master/Mesquite/)
 #'     - [mesquite.html](Mesquite/mesquite.html) - Predicting the yields of mesquite bushes
+#'   - [Student/](https://github.com/avehtari/ROS-Examples/tree/master/Student/)
+#'     - [student.html](Student/student.html) - Models for regression coefficients
 #'   - [Pollution/](https://github.com/avehtari/ROS-Examples/tree/master/Pollution/)
 #' 
 #' ### 13  Logistic regression
@@ -384,6 +386,8 @@
 #'     - [stents.html](Stents/stents.html) - Stents - comparing distributions
 #'   - [Storable/](https://github.com/avehtari/ROS-Examples/tree/master/Storable/)
 #'     - [storable.html](Storable/storable.html) - Ordered categorical data analysis with a study from experimental economics, on the topic of ``storable votes.''
+#'   - [Student/](https://github.com/avehtari/ROS-Examples/tree/master/Student/)
+#'     - [student.html](Student/student.html) - Models for regression coefficients
 #'   - [Unemployment/](https://github.com/avehtari/ROS-Examples/tree/master/Unemployment/)
 #'     - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
 #'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
