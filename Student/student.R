@@ -285,8 +285,6 @@ fit3 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED,
                  prior=hs(global_scale=global_scale, slab_scale=slab_scale),
                  refresh=0)
 
-#' Compare Bayesian $R^2$ and LOO $R^2$
-#'
 #' **Compare Bayesian $R^2$ and LOO $R^2$**
 round(median(loo_R2(fit3)), 2)
 round(median(bayes_R2(fit3)), 2)
