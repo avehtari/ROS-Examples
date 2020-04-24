@@ -82,7 +82,7 @@ curve(dlnorm(x,5.13,.17), 50, 350,xlab="weight in pounds", ylab="", bty="n", yax
 if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Vitals/figs","normal_picture.pdf"), height=3.5, width=7)
+if (savefigs) pdf(root("Vitals/figs","normal_picture.pdf"), height=3.5, width=7, colormodel="gray")
 #+
 par(mar=c(2,0,2,0), tck=-.01)
 curve(dnorm(x), -4, 4, xlab="", ylab="", bty="n", yaxs="i", main="normal distribution", xaxt="n", yaxt="n")

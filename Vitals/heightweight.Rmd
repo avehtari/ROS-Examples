@@ -117,7 +117,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf(root("Vitals/figs","normal_picture.pdf"), height=3.5, width=7)
+if (savefigs) pdf(root("Vitals/figs","normal_picture.pdf"), height=3.5, width=7, colormodel="gray")
 ```
 ```{r }
 par(mar=c(2,0,2,0), tck=-.01)
