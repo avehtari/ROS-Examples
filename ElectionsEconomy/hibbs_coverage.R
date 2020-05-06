@@ -21,6 +21,7 @@ library("rstanarm")
 
 #' **Load data**
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+head(hibbs)
 
 #' **Step 1: Creating the pretend world**
 a <- 46.2

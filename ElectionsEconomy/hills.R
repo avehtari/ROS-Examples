@@ -23,7 +23,7 @@ library("rstanarm")
 
 #' **Load data**
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
-colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
+head(hibbs)
 
 #' **Likelihood for 2 parameters**
 M1 <- lm(vote ~ growth, data = hibbs)
@@ -110,7 +110,7 @@ b <- sims[,2]
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
-plot(rng.x, rng.y, xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n")
+plot(c(39.8, 52.5), c(.3, 5.8), xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n", cex.main=1.5, cex.lab=1.5, cex.axis=1.5)
 points(a, b, pch=20, cex=.2)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
