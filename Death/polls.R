@@ -21,14 +21,28 @@ root<-has_dirname("ROS-Examples")$make_fix_file()
 library("ggplot2")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 
+#' **Load data**
+polls <- matrix(scan(root("Death/data","polls.dat")), ncol=5, byrow=TRUE)
+support <- polls[,3]/(polls[,3]+polls[,4])
+year <-  polls[,1] + (polls[,2]-6)/12
+death <- read.table(root("Death/data","dataforandy.txt"), header=TRUE)
+ex.rate <- death[,7]/100
+err.rate <- death[,6]/100
+hom.rate <- death[,4]/100000
+ds.per.homicide <- death[,2]/1000
+ds <- death[,1]
+ex <- ex.rate*ds
+err <- err.rate*ds
+hom <- ds/ds.per.homicide
+pop <- hom/hom.rate
+state.abbrs <- row.names(death)
+std.err.rate <- sqrt((err+1)*(ds+1-err)/((ds+2)^2*(ds+3)))
+
 #' **Percentage support for the death penalty**
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Death/figs","polls.ps"), horizontal=TRUE)
 #+
 par(mar=c(5,5,4,2)+.1)
-polls <- matrix(scan(root("Death/data","polls.dat")), ncol=5, byrow=TRUE)
-support <- polls[,3]/(polls[,3]+polls[,4])
-year <-  polls[,1] + (polls[,2]-6)/12
 plot(year, support*100, xlab="Year",
       ylab="Percentage support for the death penalty", cex=2, cex.main=2,
       cex.axis=2, cex.lab=2, type="l")
@@ -43,18 +57,6 @@ ggplot(aes(x = year, y = support*100), data = poll) + geom_line() +
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Death/figs","states.ps"), horizontal=TRUE)
 #+
-death <- read.table(root("Death/data","dataforandy.txt"), header=TRUE)
-ex.rate <- death[,7]/100
-err.rate <- death[,6]/100
-hom.rate <- death[,4]/100000
-ds.per.homicide <- death[,2]/1000
-ds <- death[,1]
-ex <- ex.rate*ds
-err <- err.rate*ds
-hom <- ds/ds.per.homicide
-pop <- hom/hom.rate
-state.abbrs <- row.names(death)
-std.err.rate <- sqrt((err+1)*(ds+1-err)/((ds+2)^2*(ds+3)))
 par(mar=c(5,5,4,2)+.1)
 plot(ds/hom, err.rate, xlab="Death sentences per homicide",
       ylab="Rate of reversal of death sentences", cex=2, cex.main=2,
@@ -79,9 +81,6 @@ ggplot(aes(x = ds/hom, y = err.rate,
 if (savefigs) postscript(root("Death/figs","deathpolls.ps"), horizontal=TRUE)
 #+
 par(mar=c(5,5,4,2)+.1)
-polls <- matrix(scan(root("Death/data","polls.dat")), ncol=5, byrow=TRUE)
-support <- polls[,3]/(polls[,3]+polls[,4])
-year <-  polls[,1] + (polls[,2]-6)/12
 plot(year, support*100, xlab="Year", ylim=c(min(100*support)-1, max(100*support)+1),
       ylab="Percentage support for the death penalty", cex=2, cex.main=2,
       cex.axis=2, cex.lab=2, pch=20)
