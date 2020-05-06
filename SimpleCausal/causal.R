@@ -102,11 +102,11 @@ points(xx[z==0], yy[z==0], pch=20, cex=.5)
 points(xx[z==1], yy[z==1], pch=1, cex=1)
 abline(coef(lm_2)[1], coef(lm_2)[2])
 abline(coef(lm_2)[1] + coef(lm_2)[3], coef(lm_2)[2])
-text(2.3, 27, "Controls", cex=.9, adj=0)
+text(2.3, 29.5, "Controls", cex=.9, adj=0)
 text(1.5, 45, "Treated", cex=.9, adj=0)
 x0 <- 5.2
 arrows(x0, coef(lm_2)[1] + coef(lm_2)[2]*x0, x0, coef(lm_2)[1] + coef(lm_2)[2]*x0 + coef(lm_2)[3], length=.1, code=3)
-text(x0+.1, coef(lm_2)[1] + coef(lm_2)[2]*x0 + .5*coef(lm_2)[3], paste("Estimated\ntreatment\neffect is", fround(coef(lm_2)[3], 1)), cex=.8, adj=0)
+text(x0+.15, 1 + coef(lm_2)[1] + coef(lm_2)[2]*x0 + .5*coef(lm_2)[3], paste("Estimated\ntreatment\neffect is", fround(coef(lm_2)[3], 1)), cex=.8, adj=0)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
