@@ -23,10 +23,8 @@ library("ggplot2")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 
 #' **Load data**
-mile <- read.table(root("Mile/data","mile2.txt"), header=TRUE)
-year <- mile$yr + mile$month/12
-seconds <- mile$min*60 + mile$sec
-mile <- data.frame(mile, year, seconds)
+mile <- read.csv(root("Mile/data","mile.csv"), header=TRUE)
+head(mile)
 
 #' **Linear model**
 #' 
