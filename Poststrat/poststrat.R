@@ -40,9 +40,11 @@
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
 #' **Load packages**
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
-#' **Create some fake data**
+#' **Simulate some fake data**
 n_pid <- c(254, 282, 242)
 n <- sum(n_pid)
 pid_names <- c("Republican", "Democrat", "Independent")
@@ -60,6 +62,10 @@ for (j in 1:3){
   round(y_bar_cells[j], 3)
 }
 poll <- data.frame(vote, pid)
+# write.csv(poll, root("Poststrat/data","poll.csv"), row.names=FALSE)
+# poll <- read.csv(root("Poststrat/data","poll.csv"))
+head(poll)
+summary(poll)
 
 #' **Simple poststrat**
 poststrat_data <- data.frame(pid=c("Republican", "Democrat", "Independent"),
@@ -106,27 +112,3 @@ predict_a <- predict(fit, type="response")
 round(mean(predict_a), 3)
 #' This doesn't work--it just spits back the raw estimate--because it's not using the external population info which is what makes poststrat work.
 #' 
-
-#' **More complicated example with two predictors**
-#' 
-#' Imagine a model, `fit <- stan_glm(vote ~ factor(pid) + male, family=binomial(link="logit"))`
-#' The poststrat population matrix now has 6 rows and 2 columns:
-#' ```
-poll <- data.frame(pid=rep(c("Republican", "Democrat", "Independent"),
-                           c(2,2,2)), male=rep(c(0,1), 3))
-N_population <- c(0.16, 0.17, 0.19, 0.17, 0.16, 0.15)
-
-# the following doesn't work
-fit_2 <- stan_glm(vote ~ factor(pid) + male + factor(pid):male, data=poll)
-
-N <- 5
-x <- 1:N
-y <- c(1,rep(0,N-1))
-fit <- stan_glm(y ~ x, family=binomial(link="logit"))
-print(fit)
-
-pred_1 <- predict(fit, type="response")
-print(pred_1)
-
-X_new <- data.frame(x=1:N)
-pred_2 <- posterior_predict(fit, newdata=X_new)
