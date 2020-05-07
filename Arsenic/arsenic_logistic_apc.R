@@ -22,12 +22,12 @@ invlogit <- plogis
 
 #' **Load data**
 wells <- read.csv(root("Arsenic/data","wells.csv"))
-wells$y <- wells$switch
+head(wells)
 n <- nrow(wells)
 
 #' **Predict switching with distance, arsenic, and education**
 #+ results='hide'
-fit_7 <- stan_glm(y ~ dist100 + arsenic + educ4,
+fit_7 <- stan_glm(switch ~ dist100 + arsenic + educ,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_7, digits=2)
@@ -37,8 +37,8 @@ print(fit_7, digits=2)
 b <- coef(fit_7)
 hi <- 1
 lo <- 0
-delta <- invlogit (b[1] + b[2]*hi + b[3]*wells$arsenic + b[4]*wells$educ4) -
-         invlogit (b[1] + b[2]*lo + b[3]*wells$arsenic + b[4]*wells$educ4)
+delta <- invlogit (b[1] + b[2]*hi + b[3]*wells$arsenic + b[4]*wells$educ) -
+         invlogit (b[1] + b[2]*lo + b[3]*wells$arsenic + b[4]*wells$educ)
 round(mean(delta), 2)
 
 #' **Average predictive difference in probability of switching,
@@ -46,8 +46,8 @@ round(mean(delta), 2)
 b <- coef(fit_7)
 hi <- 1.0
 lo <- 0.5
-delta <- invlogit (b[1] + b[2]*wells$dist100 + b[3]*hi + b[4]*wells$educ4) -
-         invlogit (b[1] + b[2]*wells$dist100 + b[3]*lo + b[4]*wells$educ4)
+delta <- invlogit (b[1] + b[2]*wells$dist100 + b[3]*hi + b[4]*wells$educ) -
+         invlogit (b[1] + b[2]*wells$dist100 + b[3]*lo + b[4]*wells$educ)
 round(mean(delta), 2)
 
 #' **Average predictive difference in probability of switching,
@@ -63,9 +63,9 @@ round(mean(delta), 2)
 #+ results='hide'
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
-wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
-fit_8 <- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
-                      c_dist100:c_educ4 + c_arsenic:c_educ4,
+wells$c_educ <- wells$educ - mean(wells$educ)
+fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ +
+                      c_dist100:c_educ + c_arsenic:c_educ,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_8, digits=2)
@@ -76,9 +76,9 @@ b <- coef(fit_8)
 hi <- 1
 lo <- 0
 delta <- invlogit(b[1] + b[2]*hi + b[3]*wells$c_arsenic +
-                  b[4]*wells$c_educ4 + b[5]*hi*wells$c_educ4 +
-                  b[6]*wells$c_arsenic*wells$c_educ4) -
+                  b[4]*wells$c_educ + b[5]*hi*wells$c_educ +
+                  b[6]*wells$c_arsenic*wells$c_educ) -
          invlogit(b[1] + b[2]*lo + b[3]*wells$c_arsenic +
-                  b[4]*wells$c_educ4 + b[5]*lo*wells$c_educ4 +
-                  b[6]*wells$c_arsenic*wells$c_educ4)
+                  b[4]*wells$c_educ + b[5]*lo*wells$c_educ +
+                  b[6]*wells$c_arsenic*wells$c_educ)
 round(mean(delta), 2)

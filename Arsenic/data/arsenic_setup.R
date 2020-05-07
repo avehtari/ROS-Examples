@@ -26,13 +26,5 @@ assoc <- ifelse (all$assn>0,1,0)
 educ <- all$ed
 educ4 <- all$ed/4
 
-wells.data <- cbind(switch, arsenic, dist, dist100, assoc, educ, educ4)
-write.table(wells.data, root("Arsenic/data","wells.dat"))
+wells.data <- cbind(switch, arsenic, dist, dist100, assoc, educ)
 write.csv(wells.data[keep,], root("Arsenic/data","wells.csv"), row.names=FALSE)
-
-wells2.data <- cbind(arsenic, dist, dist100, assoc, educ, switch)
-missing <- apply(is.na(wells2.data), 1, any)
-write.csv(wells2.data[!missing,], root("Arsenic/data","wells2.csv"), row.names=FALSE)
-
-write(colnames(wells2.data), root("Arsenic/data","wells2.csv"), ncol=ncol(wells2.data), sep=",")
-write(t(format(wells2.data,nsmall=4)), root("Arsenic/data","wells2.csv"), ncol=ncol(wells2.data), sep=",", append=TRUE)

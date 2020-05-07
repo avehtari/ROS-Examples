@@ -24,23 +24,23 @@ invlogit <- plogis
 
 #' **Load data**
 wells <- read.csv(root("Arsenic/data","wells.csv"))
-wells$y <- wells$switch
+head(wells)
 n <- nrow(wells)
 
 #' **Predict switching with distance, arsenic, education and intercations**
-#+ results='hide'
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
-wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
-fit_8 <- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
-                      c_dist100:c_educ4 + c_arsenic:c_educ4,
+wells$c_educ <- wells$educ - mean(wells$educ)
+#+ results='hide'
+fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ +
+                      c_dist100:c_educ + c_arsenic:c_educ,
                   family = binomial(link="logit"), data = wells)
 pred8 <- fitted(fit_8)
 
 #' **Error rates**
-error_rate_null <- mean(round(abs(wells$y-mean(pred8))))
+error_rate_null <- mean(round(abs(wells$switch-mean(pred8))))
 round(error_rate_null, 2)
-error_rate <- mean(round(abs(wells$y-pred8)))
+error_rate <- mean(round(abs(wells$switch-pred8)))
 round(error_rate, 2)
 
 #' ### Residual plot
@@ -51,7 +51,7 @@ if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsa.ps"),
 plot(c(0,1), c(-1,1), xlab="Estimated  Pr (switching)", ylab="Observed - estimated",
      type="n", main="Residual plot", mgp=c(2,.5,0))
 abline(0,0, col="gray", lwd=.5)
-points(pred8, wells$y-pred8, pch=20, cex=.2)
+points(pred8, wells$switch-pred8, pch=20, cex=.2)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
@@ -83,7 +83,7 @@ binned_resids <- function (x, y, nclass=sqrt(length(x))){
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsb.ps"),
                          height=3.5, width=4, horizontal=T)
 #+
-br8 <- binned_resids(pred8, wells$y-pred8, nclass=40)$binned
+br8 <- binned_resids(pred8, wells$switch-pred8, nclass=40)$binned
 plot(range(br8[,1]), range(br8[,2],br8[,6],-br8[,6]),
      xlab="Estimated  Pr (switching)", ylab="Average residual",
      type="n", main="Binned residual plot", mgp=c(2,.5,0))
@@ -99,12 +99,12 @@ if (savefigs) dev.off()
 if (savefigs) postscript(root("Arsenic/figs","logitresids.2a.ps"),
                          height=3.5, width=4, horizontal=T)
 #+
-br <- binned_resids(wells$dist, wells$y-pred8, nclass=40)$binned
+br <- binned_resids(wells$dist, wells$switch-pred8, nclass=40)$binned
 plot(range(br[,1]), range(br[,2],br[,6],-br[,6]),
      xlab="Distance to nearest safe well", ylab="Average residual",
      type="n", main="Binned residual plot", mgp=c(2,.5,0))
 abline(0,0, col="gray", lwd=.5)
-n_within_bin <- length(wells$y)/nrow(br)
+n_within_bin <- length(wells$switch)/nrow(br)
 lines(br[,1], br[,6], col="gray", lwd=.5)
 lines(br[,1], -br[,6], col="gray", lwd=.5)
 points(br[,1], br[,2], pch=20, cex=.5)
@@ -114,7 +114,7 @@ if (savefigs) dev.off()
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresids.2b.ps"),
                          height=3.5, width=4, horizontal=T)
 #+
-br <- binned_resids(wells$arsenic, wells$y-pred8, nclass=40)$binned
+br <- binned_resids(wells$arsenic, wells$switch-pred8, nclass=40)$binned
 plot(range(0,br[,1]), range(br[,2],br[,6],-br[,6]),
      xlab="Arsenic level", ylab="Average residual",
      type="n", main="Binned residual plot", mgp=c(2,.5,0))
@@ -129,21 +129,21 @@ if (savefigs) dev.off()
 #' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
-fit_8b <- stan_glm(y ~ dist100 + log_arsenic + educ4 +
-                      dist100:educ4 + log_arsenic:educ4,
+fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ +
+                      dist100:educ + log_arsenic:educ,
                    family = binomial(link="logit"), data = wells)
 
 #' **Predict switching with distance, log(arsenic), education and intercations**
 #' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
-fit_8b <- stan_glm(y ~ dist100 + log_arsenic + educ4 +
-                      dist100:educ4 + log_arsenic:educ4,
+fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ +
+                      dist100:educ + log_arsenic:educ,
                    family = binomial(link="logit"), data = wells)
 pred8b <- fitted(fit_8b)
 
 #' **Error rate**
-error_rate <- mean(round(abs(wells$y-pred8b)))
+error_rate <- mean(round(abs(wells$switch-pred8b)))
 round(error_rate, 2)
 
 #' **Plots for log model**
@@ -157,9 +157,9 @@ jitter_binary <- function(a, jitt=.05){
 plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
      xlab="Arsenic concentration in well water", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
-points(wells$arsenic, jitter_binary(wells$y), pch=20, cex=.1)
-curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*0+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ4)+coef(fit_8b)[5]*0*mean(wells$educ4)+coef(fit_8b)[6]*log(x)*mean(wells$educ4)), from=.5, lwd=.5, add=T)
-curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*.5+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ4)+coef(fit_8b)[5]*.5*mean(wells$educ4)+coef(fit_8b)[6]*log(x)*mean(wells$educ4)), from=.5, lwd=.5, add=T)
+points(wells$arsenic, jitter_binary(wells$switch), pch=20, cex=.1)
+curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*0+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ)+coef(fit_8b)[5]*0*mean(wells$educ)+coef(fit_8b)[6]*log(x)*mean(wells$educ)), from=.5, lwd=.5, add=T)
+curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*.5+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ)+coef(fit_8b)[5]*.5*mean(wells$educ)+coef(fit_8b)[6]*log(x)*mean(wells$educ)), from=.5, lwd=.5, add=T)
 text(.25, .80, "if dist = 0", adj=0, cex=.8)
 text(2, .63, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
@@ -169,12 +169,12 @@ if (savefigs) dev.off()
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresids.3b.ps"),
                          height=3.5, width=4, horizontal=TRUE)
 #+
-br <- binned_resids(wells$arsenic, wells$y-pred8b, nclass=40)$binned
+br <- binned_resids(wells$arsenic, wells$switch-pred8b, nclass=40)$binned
 plot(range(0,br[,1]), range(br[,2],br[,6],-br[,6]),
      xlab="Arsenic level", ylab="Average residual", type="n",
      main="Binned residual plot\nfor model with log (arsenic)", mgp=c(2,.5,0))
 abline(0,0, col="gray", lwd=.5)
-n.within.bin <- length(wells$y)/nrow(br)
+n.within.bin <- length(wells$switch)/nrow(br)
 lines(br[,1], br[,6], col="gray", lwd=.5)
 lines(br[,1], -br[,6], col="gray", lwd=.5)
 points(br[,1], br[,2], pch=20, cex=.5)

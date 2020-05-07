@@ -24,7 +24,7 @@ invlogit <- plogis
 
 #' **Load data**
 wells <- read.csv(root("Arsenic/data","wells.csv"))
-wells$y <- wells$switch
+head(wells)
 n <- nrow(wells)
 
 #' ### Null model
@@ -32,18 +32,18 @@ n <- nrow(wells)
 
 #' **Log-score for coin flipping**
 prob <- 0.5
-round(log(prob)*sum(wells$y) + log(1-prob)*sum(1-wells$y),1)
+round(log(prob)*sum(wells$switch) + log(1-prob)*sum(1-wells$switch),1)
 
 #' **Log-score for intercept model**
-round(prob <- mean(wells$y),2)
-round(log(prob)*sum(wells$y) + log(1-prob)*sum(1-wells$y),1)
+round(prob <- mean(wells$switch),2)
+round(log(prob)*sum(wells$switch) + log(1-prob)*sum(1-wells$switch),1)
 
 #' ### A single predictor
 #'
 
 #' **Fit a model using distance to the nearest safe well**
 #+ results='hide'
-fit_1 <- stan_glm(y ~ dist, family = binomial(link = "logit"), data=wells)
+fit_1 <- stan_glm(switch ~ dist, family = binomial(link = "logit"), data=wells)
 #'
 print(fit_1, digits=3)
 #' LOO log score
@@ -64,7 +64,7 @@ wells$dist100 <- wells$dist/100
 
 #' **Fit a model using scaled distance to the nearest safe well**
 #+ results='hide'
-fit_2 <- stan_glm(y ~ dist100, family = binomial(link = "logit"), data=wells)
+fit_2 <- stan_glm(switch ~ dist100, family = binomial(link = "logit"), data=wells)
 #'
 print(fit_2, digits=2)
 #' LOO log score
@@ -82,7 +82,7 @@ plot(c(0,max(wells$dist, na.rm=TRUE)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
 curve(invlogit(coef(fit_1)[1]+coef(fit_1)[2]*x), lwd=1, add=TRUE)
-points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
+points(wells$dist, jitter_binary(wells$switch), pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
@@ -114,7 +114,7 @@ for (j in 1:20) {
            col="darkgray", add=TRUE)
 }
 curve(invlogit(coef(fit_2)[1]+coef(fit_2)[2]*x/100), lwd=1, add=T)
-points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
+points(wells$dist, jitter_binary(wells$switch), pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
@@ -134,7 +134,7 @@ if (savefigs) dev.off()
 
 #' **Fit a model using scaled distance and arsenic level**
 #+ results='hide'
-fit_3 <- stan_glm(y ~ dist100 + arsenic, family = binomial(link = "logit"),
+fit_3 <- stan_glm(switch ~ dist100 + arsenic, family = binomial(link = "logit"),
                   data=wells)
 #'
 print(fit_3, digits=2)
@@ -147,7 +147,7 @@ loo_compare(loo2, loo3)
 #' from dist100 to dist100 + arsenic
 pred2 <- loo_predict(fit_2, psis_object = loo2$psis_object)$value
 pred3 <- loo_predict(fit_3, psis_object = loo3$psis_object)$value
-round(mean(c(pred3[wells$y==1]-pred2[wells$y==1],pred2[wells$y==0]-pred3[wells$y==0])),3)
+round(mean(c(pred3[wells$switch==1]-pred2[wells$switch==1],pred2[wells$switch==0]-pred3[wells$switch==0])),3)
 
 #' **Plot model fits**
 #+ eval=FALSE, include=FALSE
@@ -157,7 +157,7 @@ if (savefigs) postscript(root("Arsenic/figs","arsenic.2variables.a.ps"),
 plot(c(0,max(wells$dist,na.rm=T)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
-points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
+points(wells$dist, jitter_binary(wells$switch), pch=20, cex=.1)
 curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*x/100+coef(fit_3)[3]*.50), lwd=.5, add=T)
 curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*x/100+coef(fit_3)[3]*1.00), lwd=.5, add=T)
 text(50, .27, "if As = 0.5", adj=0, cex=.8)
@@ -171,7 +171,7 @@ if (savefigs) postscript(root("Arsenic/figs","arsenic.2variables.b.ps"),
 plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
      xlab="Arsenic concentration in well water", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
-points(wells$arsenic, jitter_binary(wells$y), pch=20, cex=.1)
+points(wells$arsenic, jitter_binary(wells$switch), pch=20, cex=.1)
 curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*0+coef(fit_3)[3]*x), from=0.5, lwd=.5, add=T)
 curve(invlogit(coef(fit_3)[1]+coef(fit_3)[2]*0.5+coef(fit_3)[3]*x), from=0.5, lwd=.5, add=T)
 text(.5, .78, "if dist = 0", adj=0, cex=.8)
@@ -184,7 +184,7 @@ if (savefigs) dev.off()
 
 #' **Fit a model using scaled distance, arsenic level, and an interaction**
 #+ results='hide'
-fit_4 <- stan_glm(y ~ dist100 + arsenic + dist100:arsenic,
+fit_4 <- stan_glm(switch ~ dist100 + arsenic + dist100:arsenic,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_4, digits=2)
@@ -196,7 +196,7 @@ loo_compare(loo3, loo4)
 #' **Centering the input variables**
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
-fit_5 <- stan_glm(y ~ c_dist100 + c_arsenic + c_dist100:c_arsenic,
+fit_5 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_dist100:c_arsenic,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_5, digits=2)
@@ -209,7 +209,7 @@ if (savefigs) postscript(root("Arsenic/figs","arsenic.interact.a.ps"),
 plot(c(0,max(wells$dist,na.rm=T)*1.02), c(0,1),
      xlab="Distance (in meters) to nearest safe well", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
-points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
+points(wells$dist, jitter_binary(wells$switch), pch=20, cex=.1)
 curve(invlogit(coef(fit_4)[1]+coef(fit_4)[2]*x/100+coef(fit_4)[3]*.50+coef(fit_4)[4]*x/100*.50), lwd=.5, add=T)
 curve(invlogit(coef(fit_4)[1]+coef(fit_4)[2]*x/100+coef(fit_4)[3]*1.00+coef(fit_4)[4]*x/100*1.00), lwd=.5, add=T)
 text (50, .29, "if As = 0.5", adj=0, cex=.8)
@@ -223,7 +223,7 @@ if (savefigs) postscript(root("Arsenic/figs","arsenic.interact.b.ps"),
 plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
      xlab="Arsenic concentration in well water", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
-points(wells$arsenic, jitter_binary(wells$y), pch=20, cex=.1)
+points(wells$arsenic, jitter_binary(wells$switch), pch=20, cex=.1)
 curve(invlogit(coef(fit_4)[1]+coef(fit_4)[2]*0+coef(fit_4)[3]*x+coef(fit_4)[4]*0*x), from=0.5, lwd=.5, add=T)
 curve(invlogit(coef(fit_4)[1]+coef(fit_4)[2]*0.5+coef(fit_4)[3]*x+coef(fit_4)[4]*0.5*x), from=0.5, lwd=.5, add=T)
 text (.5, .78, "if dist = 0", adj=0, cex=.8)
@@ -236,7 +236,7 @@ if (savefigs) dev.off()
 
 #' **Adding social predictors**
 #+ results='hide'
-fit_6 <- stan_glm(y ~ dist100 + arsenic + educ4 + assoc,
+fit_6 <- stan_glm(switch ~ dist100 + arsenic + educ + assoc,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_6, digits=2)
@@ -247,7 +247,7 @@ loo_compare(loo4, loo6)
 
 #' **Remove assoc**
 #+ results='hide'
-fit_7 <- stan_glm(y ~ dist100 + arsenic + educ4,
+fit_7 <- stan_glm(switch ~ dist100 + arsenic + educ,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_7, digits=2)
@@ -259,9 +259,9 @@ loo_compare(loo6, loo7)
 
 #' **Add interactions with education**
 #+ results='hide'
-wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
-fit_8 <- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
-                      c_dist100:c_educ4 + c_arsenic:c_educ4,
+wells$c_educ <- wells$educ - mean(wells$educ)
+fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ +
+                      c_dist100:c_educ + c_arsenic:c_educ,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_8, digits=2)
@@ -275,9 +275,9 @@ loo_compare(loo7, loo8)
 
 
 #' **Average improvement in LOO predictive probabilities**<br>
-#' from dist100 + arsenic to dist100 + arsenic + educ4 + dist100:educ4 + arsenic:educ4
+#' from dist100 + arsenic to dist100 + arsenic + educ + dist100:educ + arsenic:educ
 pred8 <- loo_predict(fit_8, psis_object = loo8$psis_object)$value
-round(mean(c(pred8[wells$y==1]-pred3[wells$y==1],pred3[wells$y==0]-pred8[wells$y==0])),3)
+round(mean(c(pred8[wells$switch==1]-pred3[wells$switch==1],pred3[wells$switch==0]-pred8[wells$switch==0])),3)
 
 #' ### Transformation of variable
 #' 
@@ -285,7 +285,7 @@ round(mean(c(pred8[wells$y==1]-pred3[wells$y==1],pred3[wells$y==0]-pred8[wells$y
 #' **Fit a model using scaled distance and log arsenic level**
 wells$log_arsenic <- log(wells$arsenic)
 #+ results='hide'
-fit_3a <- stan_glm(y ~ dist100 + log_arsenic, family = binomial(link = "logit"),
+fit_3a <- stan_glm(switch ~ dist100 + log_arsenic, family = binomial(link = "logit"),
                    data = wells)
 #'
 print(fit_3a, digits=2)
@@ -296,7 +296,7 @@ loo_compare(loo3, loo3a)
 
 #' **Fit a model using scaled distance, log arsenic level, and an interaction**<br>
 #+ results='hide'
-fit_4a <- stan_glm(y ~ dist100 + log_arsenic + dist100:log_arsenic,
+fit_4a <- stan_glm(switch ~ dist100 + log_arsenic + dist100:log_arsenic,
                   family = binomial(link = "logit"), data = wells)
 #'
 print(fit_4a, digits=2)
@@ -309,8 +309,8 @@ loo_compare(loo3a, loo4a)
 wells$c_log_arsenic <- wells$log_arsenic - mean(wells$log_arsenic)
 #+ results='hide'
 start_time = Sys.time()
-fit_8a <- stan_glm(y ~ c_dist100 + c_log_arsenic + c_educ4 +
-                      c_dist100:c_educ4 + c_log_arsenic:c_educ4,
+fit_8a <- stan_glm(switch ~ c_dist100 + c_log_arsenic + c_educ +
+                      c_dist100:c_educ + c_log_arsenic:c_educ,
                   family = binomial(link="logit"), data = wells)
 end_time = Sys.time()
 end_time - start_time
