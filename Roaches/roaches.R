@@ -37,6 +37,7 @@ data(roaches)
 (n <- nrow(roaches))
 #' scale the number of roaches by 100
 roaches$roach100 <- roaches$roach1 / 100
+head(roaches)
 
 #' ### Negative-binomial model
 #'
