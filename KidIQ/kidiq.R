@@ -25,7 +25,8 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 library("foreign")
 
 #' **Load children's test scores data**
-kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
+kidiq <- read.csv(root("KidIQ/data","kidiq.csv"))
+head(kidiq)
 
 #' ### A single predictor
 #' 

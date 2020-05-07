@@ -22,7 +22,8 @@ library("foreign")
 SEED <- 1507
 
 #' **Load children's test scores data**
-kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
+kidiq <- read.csv(root("KidIQ/data","kidiq.csv"))
+head(kidiq)
 
 #' **Bayesian regression with the original predictors**
 stan_fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq,
