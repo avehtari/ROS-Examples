@@ -59,8 +59,8 @@ print(fit_default)
 
 #' **Bayesian regression with informative prior**
 fit_post <- stan_glm(y ~ x, data = sexratio,
-                     prior = normal(0, 0.2, autoscale = FALSE),
-                     prior_intercept = normal(48.8, 0.5, autoscale = FALSE),
+                     prior = normal(0, 0.2),
+                     prior_intercept = normal(48.8, 0.5),
                      refresh = 0)
 prior_summary(fit_post)
 print(fit_post)
