@@ -28,9 +28,8 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 if (savefigs) color_scheme_set(scheme = "gray")
 
 #' **Load data**
-unemp <- read.table(root("Unemployment/data","unemployment_simple.dat"),
-                    header=TRUE)
-unemp$y <- unemp$unemployed.pct
+unemp <- read.table(root("Unemployment/data","unemp.txt"), header=TRUE)
+head(unemp)
 
 #' **Plot the unemployment rate**
 #+ eval=FALSE, include=FALSE
@@ -84,15 +83,15 @@ for (s in sort(sample(n_sims, 15))){
 if (savefigs) dev.off()
 
 #' **Numerical posterior predictive check**
-Test <- function (y){
+test <- function (y){
   n <- length(y)
   y_lag <- c(NA, y[1:(n-1)])
   y_lag_2 <- c(NA, NA, y[1:(n-2)])
   return(sum(sign(y-y_lag) != sign(y_lag-y_lag_2), na.rm=TRUE))
 }
-test_y <- Test(unemp$y)
-test_rep <- apply(y_rep, 1, Test)
+test_y <- test(unemp$y)
+test_rep <- apply(y_rep, 1, test)
 print(mean(test_rep > test_y))
 print(quantile(test_rep, c(.1,.5,.9)))
 #' **Plot test statistic for data and histogram of test statistics for replications**
-ppc_stat(y=unemp$y, yrep=y_rep, stat=Test, binwidth = 1) + scale_y_continuous(breaks=NULL)
+ppc_stat(y=unemp$y, yrep=y_rep, stat=test, binwidth = 1) + scale_y_continuous(breaks=NULL)
