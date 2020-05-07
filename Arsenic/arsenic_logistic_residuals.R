@@ -30,10 +30,10 @@ n <- nrow(wells)
 #' **Predict switching with distance, arsenic, education and intercations**
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
-wells$c_educ <- wells$educ - mean(wells$educ)
+wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
 #+ results='hide'
-fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ +
-                      c_dist100:c_educ + c_arsenic:c_educ,
+fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ4 +
+                      c_dist100:c_educ4 + c_arsenic:c_educ4,
                   family = binomial(link="logit"), data = wells)
 pred8 <- fitted(fit_8)
 
@@ -129,16 +129,16 @@ if (savefigs) dev.off()
 #' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
-fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ +
-                      dist100:educ + log_arsenic:educ,
+fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ4 +
+                      dist100:educ4 + log_arsenic:educ4,
                    family = binomial(link="logit"), data = wells)
 
 #' **Predict switching with distance, log(arsenic), education and intercations**
 #' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
-fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ +
-                      dist100:educ + log_arsenic:educ,
+fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ4 +
+                      dist100:educ4 + log_arsenic:educ4,
                    family = binomial(link="logit"), data = wells)
 pred8b <- fitted(fit_8b)
 
@@ -158,8 +158,8 @@ plot(c(0,max(wells$arsenic,na.rm=T)*1.02), c(0,1),
      xlab="Arsenic concentration in well water", ylab="Pr (switching)",
      type="n", xaxs="i", yaxs="i", mgp=c(2,.5,0))
 points(wells$arsenic, jitter_binary(wells$switch), pch=20, cex=.1)
-curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*0+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ)+coef(fit_8b)[5]*0*mean(wells$educ)+coef(fit_8b)[6]*log(x)*mean(wells$educ)), from=.5, lwd=.5, add=T)
-curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*.5+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ)+coef(fit_8b)[5]*.5*mean(wells$educ)+coef(fit_8b)[6]*log(x)*mean(wells$educ)), from=.5, lwd=.5, add=T)
+curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*0+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ4)+coef(fit_8b)[5]*0*mean(wells$educ4)+coef(fit_8b)[6]*log(x)*mean(wells$educ4)), from=.5, lwd=.5, add=T)
+curve(invlogit(coef(fit_8b)[1]+coef(fit_8b)[2]*.5+coef(fit_8b)[3]*log(x)+coef(fit_8b)[4]*mean(wells$educ4)+coef(fit_8b)[5]*.5*mean(wells$educ4)+coef(fit_8b)[6]*log(x)*mean(wells$educ4)), from=.5, lwd=.5, add=T)
 text(.25, .80, "if dist = 0", adj=0, cex=.8)
 text(2, .63, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE

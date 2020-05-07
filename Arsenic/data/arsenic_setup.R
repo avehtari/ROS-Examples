@@ -26,5 +26,5 @@ assoc <- ifelse (all$assn>0,1,0)
 educ <- all$ed
 educ4 <- all$ed/4
 
-wells.data <- cbind(switch, arsenic, dist, dist100, assoc, educ)
+wells.data <- cbind(switch, arsenic, dist, dist100, assoc, educ, educ4)
 write.csv(wells.data[keep,], root("Arsenic/data","wells.csv"), row.names=FALSE)

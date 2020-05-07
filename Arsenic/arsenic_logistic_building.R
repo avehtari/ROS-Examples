@@ -196,6 +196,7 @@ loo_compare(loo3, loo4)
 #' **Centering the input variables**
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
+#+ results='hide'
 fit_5 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_dist100:c_arsenic,
                   family = binomial(link="logit"), data = wells)
 #'
@@ -236,7 +237,7 @@ if (savefigs) dev.off()
 
 #' **Adding social predictors**
 #+ results='hide'
-fit_6 <- stan_glm(switch ~ dist100 + arsenic + educ + assoc,
+fit_6 <- stan_glm(switch ~ dist100 + arsenic + educ4 + assoc,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_6, digits=2)
@@ -247,7 +248,7 @@ loo_compare(loo4, loo6)
 
 #' **Remove assoc**
 #+ results='hide'
-fit_7 <- stan_glm(switch ~ dist100 + arsenic + educ,
+fit_7 <- stan_glm(switch ~ dist100 + arsenic + educ4,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_7, digits=2)
@@ -258,10 +259,10 @@ loo_compare(loo4, loo7)
 loo_compare(loo6, loo7)
 
 #' **Add interactions with education**
+wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
 #+ results='hide'
-wells$c_educ <- wells$educ - mean(wells$educ)
-fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ +
-                      c_dist100:c_educ + c_arsenic:c_educ,
+fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ4 +
+                      c_dist100:c_educ4 + c_arsenic:c_educ4,
                   family = binomial(link="logit"), data = wells)
 #'
 print(fit_8, digits=2)
@@ -275,7 +276,7 @@ loo_compare(loo7, loo8)
 
 
 #' **Average improvement in LOO predictive probabilities**<br>
-#' from dist100 + arsenic to dist100 + arsenic + educ + dist100:educ + arsenic:educ
+#' from dist100 + arsenic to dist100 + arsenic + educ4 + dist100:educ4 + arsenic:educ4
 pred8 <- loo_predict(fit_8, psis_object = loo8$psis_object)$value
 round(mean(c(pred8[wells$switch==1]-pred3[wells$switch==1],pred3[wells$switch==0]-pred8[wells$switch==0])),3)
 
@@ -308,12 +309,9 @@ loo_compare(loo3a, loo4a)
 #' **Add interactions with education**
 wells$c_log_arsenic <- wells$log_arsenic - mean(wells$log_arsenic)
 #+ results='hide'
-start_time = Sys.time()
-fit_8a <- stan_glm(switch ~ c_dist100 + c_log_arsenic + c_educ +
-                      c_dist100:c_educ + c_log_arsenic:c_educ,
+fit_8a <- stan_glm(switch ~ c_dist100 + c_log_arsenic + c_educ4 +
+                      c_dist100:c_educ4 + c_log_arsenic:c_educ4,
                   family = binomial(link="logit"), data = wells)
-end_time = Sys.time()
-end_time - start_time
 #'
 print(fit_8a, digits=2)
 #' LOO log score
