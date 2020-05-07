@@ -158,6 +158,8 @@ par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="x", ylab="y", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and range of possible linear fits", bty="l", cex.lab=1.3, cex.main=1.3)
 axis(1, 0:4, cex.axis=1.3)
 axis(2, seq(45, 60, 5), cex.axis=1.3)
+sims <- as.matrix(M1)
+n_sims <- nrow(sims)
 for (s in sample(n_sims, 50))
   abline(sims[s,1], sims[s,2], col="gray50", lwd=0.5)
 with(hibbs, points(growth, vote, pch=20))
@@ -328,8 +330,7 @@ if (savefigs) dev.off()
 
 #' ggplot version
 qplot(y_pred, binwidth = 1) +
-  xlim(35, 70) +
-  labs(
+    labs(
     x ="Clinton share of the two-party vote",
     title = "Simulations of Hillary Clinton vote share,\nbased on 2% rate of economic growth"
   ) +
