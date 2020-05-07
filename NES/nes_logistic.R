@@ -23,7 +23,8 @@ library("rstanarm")
 library("foreign")
 
 #' **Load data**
-nes <- read.table(root("NES/data","nes.dat"), header=TRUE)
+nes <- read.table(root("NES/data","nes.txt"), header=TRUE)
+head(nes)
 
 #' Use first only data from 1992 and remove missing data
 ok <- nes$year==1992 & !is.na(nes$rvote) & !is.na(nes$dvote) & (nes$rvote==1 | nes$dvote==1)

@@ -22,7 +22,8 @@ library("rstanarm")
 library("foreign")
 
 #' **Load data**
-data <- read.table(root("NES/data","nes.dat"))
+data <- read.table(root("NES/data","nes.txt"))
+head(data)
 
 #' **Partyid model to illustrate repeated model use (secret weapon)**
 regress_year <- function (yr) {
