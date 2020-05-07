@@ -116,3 +116,6 @@ retirement_top <- topcode(retirement, 100)
 interest_top <- topcode(interest, 100)
 assistance_top <- topcode(assistance, 10)
 other_top <- topcode(other, 10)
+
+SIS <- data.frame(earnings, retirement, interest, assistance, other, male, over65, white, immig, educ_r, workmos, workhrs_top, any_ssi, any_welfare, any_charity)
+write.csv(SIS, root("Imputation/data","SIS.csv"), row.names=FALSE)
