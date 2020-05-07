@@ -34,11 +34,11 @@ if (savefigs) color_scheme_set(scheme = "gray")
 
 #' **Load data**
 mesquite <- read.table(root("Mesquite/data","mesquite.dat"), header=TRUE)
-summary(mesquite)
+head(mesquite)
 
 #' **Regress `weight` on all of the predictors**
 fit_1 <- stan_glm(weight ~ diam1 + diam2 + canopy_height + total_height +
-                      density + group, data=mesquite, seed=SEED, refresh=0)
+                    density + group, data=mesquite, seed=SEED, refresh=0)
 print(fit_1)
 (loo_1 <- loo(fit_1))
 #' We get warnings about high Pareto k values, which indicates that
