@@ -21,9 +21,8 @@ root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
 #' **Load data**
-grades <- read.table(root("Introclass/data","gradesW4315.dat"), header=TRUE)
-introclass  <- data.frame(midterm = grades[,"Midterm"],
-                          final = grades[,"Final"])
+introclass <- read.table(root("Introclass/data","gradesW4315.dat"), header=TRUE)
+head(introclass)
 
 #' **Fit linear regression model**
 #' 
@@ -39,7 +38,7 @@ print(fit_1)
 sims <- as.matrix(fit_1)
 predicted <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
 #' or with built-in function
-predicted <- colMeans(posterior_linpred(fit_1))
+predicted <- predict(fit_1)
 resid <- introclass$final - predicted
 
 #' **Plot residuals vs predicted**
@@ -51,11 +50,11 @@ plot(predicted, resid, xlab="predicted value", ylab="residual",
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
 abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
 #' **Plot residuals vs observed**
 #+ eval=FALSE, include=FALSE
-postscript(root("Introclass/figs","fakeresid1b.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid1b.ps"), height=3.8, width=4.5)
 #+
 plot(introclass$final, resid, xlab="observed value", ylab="residual", main="Residuals vs.\ observed values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
@@ -69,14 +68,14 @@ b <- 0.7
 sigma <- 15
 n <- nrow(introclass)
 introclass$final_fake <- a + b*introclass$midterm + rnorm(n, 0, 15)
-fit_fake <- stan_glm(final_fake ~ midterm, data = introclass)
+fit_fake <- stan_glm(final_fake ~ midterm, data = introclass, refresh = 0)
 
 #' **Compute residuals**
 #' compute predictions from simulations
 sims <- as.matrix(fit_fake)
 predicted_fake <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
 #' or with built-in function
-predicted_fake <- colMeans(posterior_linpred(fit_fake))
+predicted_fake <- predict(fit_fake)
 resid_fake <- introclass$final_fake - predicted_fake
 
 #' **Plot residuals vs predicted**
