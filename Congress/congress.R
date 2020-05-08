@@ -81,9 +81,9 @@ pred90 <- posterior_predict(fit88, newdata=data90)
 dems_pred <- rowSums(pred90 > 0.5)
 #' Alternately calculate that sum in a loop
 n_sims <- 4000
-demspred <- rep(NA, n_sims)
+dems_pred <- rep(NA, n_sims)
 for (s in 1:n_sims) {
-  demspred[s] <- sum(pred90[s,] > 0.5)
+  dems_pred[s] <- sum(pred90[s,] > 0.5)
 }
 
 #' **Our posterior mean and sd of how many districts the Dems will win**
