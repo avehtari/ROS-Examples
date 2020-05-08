@@ -211,7 +211,7 @@ fig_1a <-
   ggtitle("Least squares and Bayes fits")
 plot(fig_1a)
 #+ eval=FALSE, include=FALSE
-ggsave("fig/rsquared1a-gg.pdf", width = 5, height = 4)
+if (savefigs) ggsave("fig/rsquared1a-gg.pdf", width = 5, height = 4)
 #+
 fig_1b <-
   ggplot(xy, aes(x, y)) +
@@ -232,7 +232,7 @@ fig_1b <-
   ggtitle("Bayes posterior simulations")
 plot(fig_1b)
 #+ eval=FALSE, include=FALSE
-ggsave("fig/rsquared1b-gg.pdf", width = 5, height = 4)
+if (savefigs) ggsave("fig/rsquared1b-gg.pdf", width = 5, height = 4)
 
 #' **Bayesian R^2 Posterior and median**
 mcmc_hist(data.frame(bayesR2), binwidth=0.02) + xlim(c(0,1)) +
@@ -241,7 +241,7 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.02) + xlim(c(0,1)) +
     geom_vline(xintercept=median(bayesR2)) +
     ggtitle('Bayesian R squared posterior and median')
 #+ eval=FALSE, include=FALSE
-ggsave("fig/bayesr2post.pdf", width = 5, height = 4)
+if (savefigs) ggsave("fig/bayesr2post.pdf", width = 5, height = 4)
 
 #' ## Toy logistic regression example, n=20
 set.seed(20)

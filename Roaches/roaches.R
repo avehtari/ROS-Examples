@@ -53,14 +53,10 @@ loo_1 <- loo(fit_1)
 yrep_1 <- posterior_predict(fit_1)
 n_sims <- nrow(yrep_1)
 sims_display <- sample(n_sims, 100)
-(ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[sims_display,]+1))+
-     xlab('log10(y+1)'))
-
-#+ eval=FALSE, include=FALSE
-pbg <- bayesplot_grid(ppc_1, ppc_1,
-                      grid_args = list(ncol = 2),
-                      titles = c("Poisson", "negative-binomial"))
-if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9)
+ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[sims_display,]+1))+
+  xlab('log10(y+1)') +
+  theme(axis.line.y = element_blank())
+ppc_1
 
 #' **Predictive checking with test statistic**<br>
 #' ppc with proportion of zero counts test statistic
@@ -107,8 +103,17 @@ loo_compare(loo_1, loo_2)
 yrep_2 <- posterior_predict(fit_2)
 n_sims <- nrow(yrep_2)
 sims_display <- sample(n_sims, 100)
-(ppc_2 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_2[sims_display,]+1))+
-     xlim(0,3) + xlab('log10(y+1)'))
+ppc_2 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_2[sims_display,]+1)) +
+  xlim(0,3) +
+  xlab('log10(y+1)') +
+  theme(axis.line.y = element_blank())
+ppc_2
+
+#+ eval=FALSE, include=FALSE
+pbg <- bayesplot_grid(ppc_2, ppc_1,
+                      grid_args = list(ncol = 2),
+                      titles = c("Poisson", "negative-binomial"))
+if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9, colormode="gray")
 
 #' **Predictive checking with test statistic**<br>
 #' test statistic used is the proportion of zero counts
@@ -139,10 +144,12 @@ loo_compare(loo_1, loo_3)
 
 #' **Graphical posterior predictive checking**
 yrep_3 <- posterior_predict(fit_3)
-(ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[sims_display,]+1))+
-     xlab('log10(y+1)'))
+ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[sims_display,]+1))+
+  xlab('log10(y+1)') +
+  theme(axis.line.y = element_blank())
+ppc_3
 #+ eval=FALSE, include=FALSE
-if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5)
+if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5, colormode="gray")
 
 #' **Predictive checking with test statistic**<br>
 #' ppc with zero count test statistic

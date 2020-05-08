@@ -69,10 +69,12 @@ loo_compare(kfold_1, loo_2_with_jacobian)
 yrep_1 <- posterior_predict(fit_1)
 n_sims <- nrow(yrep_1)
 sims_display <- sample(n_sims, 100)
-ppc_1 <- ppc_dens_overlay(mesquite$weight, yrep_1[sims_display,])
+ppc_1 <- ppc_dens_overlay(mesquite$weight, yrep_1[sims_display,]) +
+    theme(axis.line.y = element_blank())
 #' **Posterior predictive checking for model in log scale**
 yrep_2 <- posterior_predict(fit_2)
-ppc_2 <- ppc_dens_overlay(log(mesquite$weight), yrep_2[sims_display,])
+ppc_2 <- ppc_dens_overlay(log(mesquite$weight), yrep_2[sims_display,]) +
+  theme(axis.line.y = element_blank())
 bpg <- bayesplot_grid(
   ppc_1, ppc_2,
   grid_args = list(ncol = 2),
@@ -82,14 +84,14 @@ bpg <- bayesplot_grid(
 bpg
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-    ggsave(root("Mesquite/figs","mesquite_ppc.pdf"), bpg, height=3, width=9)
+  ggsave(root("Mesquite/figs","mesquite_ppc.pdf"), bpg, height=3, width=9, colormodel="gray")
 
 #' **Plot marginal posteriors**
 #+ fig.height=3, fig.width=6
 mcmc_areas(as.matrix(fit_2), regex_pars = "^log|^gro")
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-    ggsave(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5)
+    ggsave(root("Mesquite/figs","mesquite_areas.pdf"), height=3.5, width=5, colormodel="gray")
 
 #' **Plot joint marginal posterior for log(canopy_height) and log(total_height)
 mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"), size = 1) +
@@ -98,7 +100,7 @@ mcmc_scatter(as.matrix(fit_2), pars = c("log(canopy_height)","log(total_height)"
     labs(x="coef of log(canopy_height)", y="coef of log(total_height)")
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-    ggsave(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5)
+    ggsave(root("Mesquite/figs","mesquite_scatter.pdf"), height=3.5, width=5, colormodel="gray")
 
 #' **Additional transformed variables**
 mesquite$canopy_volume <- mesquite$diam1 * mesquite$diam2 * mesquite$canopy_height

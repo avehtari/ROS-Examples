@@ -43,7 +43,7 @@ resid <- introclass$final - predicted
 
 #' **Plot residuals vs predicted**
 #+ eval=FALSE, include=FALSE
-if (savefigs) postscript(root("Introclass/figs","fakeresid1a.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid1a.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
 plot(predicted, resid, xlab="predicted value", ylab="residual",
      main="Residuals vs.\ predicted values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
@@ -54,7 +54,7 @@ if (savefigs) dev.off()
 
 #' **Plot residuals vs observed**
 #+ eval=FALSE, include=FALSE
-if (savefigs) postscript(root("Introclass/figs","fakeresid1b.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid1b.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
 plot(introclass$final, resid, xlab="observed value", ylab="residual", main="Residuals vs.\ observed values", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
@@ -80,7 +80,7 @@ resid_fake <- introclass$final_fake - predicted_fake
 
 #' **Plot residuals vs predicted**
 #+ eval=FALSE, include=FALSE
-if (savefigs) postscript(root("Introclass/figs","fakeresid2a.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid2a.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
 plot(predicted_fake, resid_fake, xlab="predicted value", ylab="residual", main="Fake data:  resids vs.\ predicted", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))
@@ -90,7 +90,7 @@ if (savefigs) dev.off()
 
 #' **Plot residuals vs observed**
 #+ eval=FALSE, include=FALSE
-if (savefigs) postscript(root("Introclass/figs","fakeresid2b.ps"), height=3.8, width=4.5)
+if (savefigs) postscript(root("Introclass/figs","fakeresid2b.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
 plot(introclass$final_fake, resid_fake, xlab="observed value", ylab="residual", main="Fake data:  resids vs.\ observed", mgp=c(1.5,.5,0), pch=20, yaxt="n")
 axis(2, seq(-40,40,20), mgp=c(1.5,.5,0))

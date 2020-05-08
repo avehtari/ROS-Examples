@@ -130,7 +130,7 @@ ideology.label <- c("Very liberal", "Liberal", "Moderate", "Conservative", "Very
 n.ideology <- max(ideology, na.rm=TRUE)
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5, colormodel="gray")
 #+
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")
@@ -155,7 +155,7 @@ mtext("Self-declared party identification, by income", side=3, line=1, cex=1.2)
 if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5, colormodel="gray")
 #+
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")

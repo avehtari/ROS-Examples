@@ -19,6 +19,7 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
+library("rstantools")
 library("loo")
 library("ggplot2")
 library("bayesplot")
@@ -77,7 +78,7 @@ p0 <- p0 + scale_y_discrete(limits = rev(levels(p0$data$parameter)))
 p0
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit0_mcmc_areas.pdf"), p0, height=5, width=5)
+  ggsave(root("Student/figs","student_fit0_mcmc_areas.pdf"), p0, height=5, width=5, colormodel="gray")
 
 #' The above figure shows that after all predictors have been
 #' standardized to have equal standard deviation, the uncertainties on
@@ -105,7 +106,7 @@ p1 <- p1 + scale_y_discrete(limits = rev(levels(p1$data$parameter)))
 p1
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit1_mcmc_areas.pdf"), p1, height=5, width=5)
+  ggsave(root("Student/figs","student_fit1_mcmc_areas.pdf"), p1, height=5, width=5, colormodel="gray")
 
 #' The above figure shows that after all predictors have been
 #' standardized to have equal standard deviation, the uncertainties on
@@ -158,11 +159,14 @@ pp1 <- mcmc_hist(data.frame(Prior=ppR2,Posterior=bayes_R2(fit1)),
                  breaks=seq(0,1,length.out=100),
                  facet_args = list(nrow = 2)) +
   facet_text(size = 13) +
-  xlim(c(0,1)) + xlab("Bayesian R^2")
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0),
+                     labels = c("0","0.25","0.5","0.75","1")) +
+  theme(axis.line.y = element_blank()) +
+  xlab("Bayesian R^2")
 pp1
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit1_R2.pdf"), pp1, height=3, width=3)
+  ggsave(root("Student/figs","student_fit1_R2.pdf"), pp1, height=3, width=3, colormodel="gray")
 
 #' The above figure shows that with the default prior on regression
 #' coefficients and $\sigma$, the implied prior distribution for $R^2$
@@ -210,11 +214,14 @@ pp2 <- mcmc_hist(data.frame(Prior=ppR2,Posterior=bayes_R2(fit2)),
                  breaks=seq(0,1,length.out=100),
                  facet_args = list(nrow = 2)) +
   facet_text(size = 13) +
-  xlim(c(0,1)) + xlab("Bayesian R^2")
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0),
+                     labels = c("0","0.25","0.5","0.75","1")) +
+  theme(axis.line.y = element_blank()) +
+  xlab("Bayesian R^2")
 pp2
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit2_R2.pdf"), pp2, height=3, width=3)
+  ggsave(root("Student/figs","student_fit2_R2.pdf"), pp2, height=3, width=3, colormodel="gray")
 
 #' Comparison of the LOO log score reveals that the new model has
 #' better leave-one-out prediction.
@@ -234,7 +241,7 @@ p2 <- p2 + scale_y_discrete(limits = rev(levels(p2$data$parameter)))
 p2
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit2_mcmc_areas.pdf"), p2, height=5, width=5)
+  ggsave(root("Student/figs","student_fit2_mcmc_areas.pdf"), p2, height=5, width=5, colormodel="gray")
 
 #' The above figure shows the posterior distributions of coefficients,
 #' which are slightly more concentrated than for the previous model.
@@ -314,11 +321,14 @@ pp3 <- mcmc_hist(data.frame(Prior=ppR2,Posterior=bayes_R2(fit3)),
                  breaks=seq(0,1,length.out=100),
                  facet_args = list(nrow = 2)) +
   facet_text(size = 13) +
-  xlim(c(0,1)) + xlab("Bayesian R^2")
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0),
+                     labels = c("0","0.25","0.5","0.75","1")) +
+  theme(axis.line.y = element_blank()) +
+  xlab("Bayesian R^2")
 pp3
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit3_R2.pdf"), pp3, height=3, width=3)
+  ggsave(root("Student/figs","student_fit3_R2.pdf"), pp3, height=3, width=3, colormodel="gray")
 
 
 #' **Plot posterior marginals of coefficients**
@@ -329,7 +339,7 @@ p3 <- p3 + scale_y_discrete(limits = rev(levels(p3$data$parameter)))
 p3
 #+ eval=FALSE, include=FALSE
 if (savefigs)
-  ggsave(root("Student/figs","student_fit3_mcmc_areas.pdf"), p3, height=5, width=5)
+  ggsave(root("Student/figs","student_fit3_mcmc_areas.pdf"), p3, height=5, width=5, colormodel="gray")
 
 #' The above figure shows that the regularized horseshoe prior has the
 #' benefit of shrinking the posterior for many regression coefficients

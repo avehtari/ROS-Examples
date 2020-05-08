@@ -30,7 +30,7 @@ head(hibbs)
 
 #' ### Graphing the bread and peace model
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsdots.pdf"), height=4.5, width=7.5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsdots.pdf"), height=4.5, width=7.5, colormodel="gray")
 #+
 n <- nrow(hibbs)
 par(mar=c(0,0,1.2,0))
@@ -73,7 +73,7 @@ text(left-.3, -2.3, "Above matchups are all listed as incumbent party's candidat
 if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsscatter.pdf"), height=4.5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsscatter.pdf"), height=4.5, width=5, colormodel="gray")
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="Avg recent growth in personal income", ylab="Incumbent party's vote share", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Forecasting the election from the economy      ", bty="l")
@@ -105,7 +105,7 @@ round(posterior_interval(M1),1)
 
 #' **Plot regression line**
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline.pdf"), height=4.5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline.pdf"), height=4.5, width=5, colormodel="gray")
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="Average recent growth in personal income", ylab="Incumbent party's vote share", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and linear fit", bty="l")
@@ -120,7 +120,7 @@ if (savefigs) dev.off()
 
 #' **Plot prediction given 2% growth**
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict.pdf"), height=3.5, width=6.5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict.pdf"), height=3.5, width=6.5, colormodel="gray")
 #+
 par(mar=c(3,3,3,1), mgp=c(1.7,.5,0), tck=-.01)
 mu <- 52.3
@@ -139,7 +139,7 @@ if (savefigs) dev.off()
 
 #' **Plot data and linear fit**
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2a.pdf"), height=4.5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2a.pdf"), height=4.5, width=5, colormodel="gray")
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="x", ylab="y", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and linear fit", bty="l", cex.lab=1.3, cex.main=1.3)
@@ -153,7 +153,7 @@ if (savefigs) dev.off()
 
 #' **Plot data and range of possible linear fits**
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2b.pdf"), height=4.5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2b.pdf"), height=4.5, width=5, colormodel="gray")
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="x", ylab="y", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and range of possible linear fits", bty="l", cex.lab=1.3, cex.main=1.3)
 axis(1, 0:4, cex.axis=1.3)
@@ -231,7 +231,7 @@ y_linpred_grid <- posterior_linpred(M1, newdata=new_grid)
 y_pred_grid <- posterior_predict(M1, newdata=new_grid)
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10, colormodel="gray")
 #+
 par(mfrow=c(1,2), mar=c(3,2,3,0), mgp=c(1.5,.5,0), tck=-.01)
 hist(a, ylim=c(0,0.25*n_sims), xlab="a", ylab="", main="Posterior simulations of the intercept, a,\nand posterior median +/- 1 and 2 std err", cex.axis=.9, cex.lab=.9, yaxt="n", col="gray90")
@@ -259,7 +259,7 @@ ggplot(data.frame(a = sims[, 1], b = sims[, 2]), aes(a, b)) +
   labs(title = "Posterior draws of the regression coefficients a, b")
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_2b.pdf"), height=4.5, width=5)
+if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_2b.pdf"), height=4.5, width=5, colormodel="gray")
 #+
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="Average recent growth in personal income", ylab="Incumbent party's vote share", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and 100 posterior draws of the line, y = a + bx           ", bty="l")
