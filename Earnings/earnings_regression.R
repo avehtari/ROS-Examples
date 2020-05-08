@@ -30,18 +30,17 @@ if (savefigs) color_scheme_set(scheme = "gray")
 SEED <- 7783
 
 #' **Load data**
-earnings_all <- read.csv(root("Earnings/data","earnings.csv"))
-earnings_all$positive <- earnings_all$earn > 0
-# scale earnings to thousands of dollars
-earnings_all$earnk <- earnings_all$earn/1000 
-# only non-zero earnings
-earnings <- earnings_all[earnings_all$positive, ]
+earnings <- read.csv(root("Earnings/data","earnings.csv"))
+head(earnings)
 n <- nrow(earnings)
 height_jitter_add <- runif(n, -.2, .2)
 
-#' ### Normal linear regression
+#' **Earnings in thousands dollars**
+earnings$earnk <- earnings$earn/1000
+# (earnk is actually already included in the data frame `earnings` for
+# convenience for running examples in different arts of the book)
 
-#' **Model on 1k dollars scale**
+#' ### Normal linear regression
 #' 
 #' The option `refresh = 0` supresses the default Stan sampling
 #' progress output. This is useful for small data with fast
@@ -98,10 +97,8 @@ gg_earnings +
 
 
 #' **Include male/female**
-#+ results='hide'
 fit_2 <- stan_glm(earnk ~ height + male, data = earnings,
-                  seed = SEED)
-#+
+                  seed = SEED, refresh = 0)
 print(fit_2)
 #' for plotting scale back to dollar scale
 coef2 <- coef(fit_2)*1000
@@ -149,10 +146,8 @@ ggplot(earnings, aes(height, earn)) +
 
 
 #' **Include interaction**
-#+ results='hide'
 fit_3 <- stan_glm(earnk ~ height + male + height:male, data = earnings,
                   seed = SEED, refresh = 0)
-#+
 print(fit_3)
 #' for plotting scale back to dollar scale
 coef3 <- coef(fit_3)*1000
@@ -200,48 +195,40 @@ ggplot(earnings, aes(height, earn)) +
 #' ### Linear regression on log scale
 
 #' **Models on log scale**
-earnings$log_earn <- log(earnings$earn)
-#+ results='hide'
-logmodel_1 <- stan_glm(log_earn ~ height, data = earnings,
+logmodel_1 <- stan_glm(log(earn) ~ height, data = earnings,
+                       subset = earn>0,
                        seed = SEED, refresh = 0)
-#+
 print(logmodel_1, digits=2)
 
 #' **Model on log10 scale**
-earnings$log10_earn <- log10(earnings$earn)
-#+ results='hide'
-log10model_1 <- stan_glm(log10_earn ~ height, data = earnings,
+log10model_1 <- stan_glm(log10(earn) ~ height, data = earnings,
+                         subset = earn>0,
                          seed = SEED, refresh = 0)
-#+
 print(log10model_1, digits=3)
 
 #' **Model on log scale with two predictors**
-#+ results='hide'
-logmodel_2 <- stan_glm(log_earn ~ height + male, data = earnings,
+logmodel_2 <- stan_glm(log(earn) ~ height + male, data = earnings,
+                       subset = earn>0,
                        seed = SEED, refresh = 0)
-#+
 print(logmodel_2, digits=2)
 
 #' **Model on log scale for the target and one predictor**
-earnings$log_height <- log(earnings$height)
-#+ results='hide'
-loglogmodel_2 <- stan_glm(log_earn ~ log_height + male, data = earnings,
+loglogmodel_2 <- stan_glm(log(earn) ~ log(height) + male, data = earnings,
+                          subset = earn>0,
                           seed = SEED, refresh = 0)
-#+
 print(loglogmodel_2, digits=2)
 
 #' **Model on log scale with two predictors and interaction**
-logmodel_3 <- stan_glm(log_earn ~ height + male + height:male, data = earnings,
+logmodel_3 <- stan_glm(log(earn) ~ height + male + height:male, data = earnings,
+                       subset = earn>0,
                        seed = SEED, refresh = 0)
-#+
 print(logmodel_3, digits=2)
 
 #' **Model on log scale with standardized interaction**
 earnings$z_height <- with(earnings, (height - mean(height))/sd(height))
-#+ results='hide'
-logmodel_3a <- stan_glm(log_earn ~ z_height + male + z_height:male,
-                        data = earnings, seed = SEED, refresh = 0)
-#+
+logmodel_3a <- stan_glm(log(earn) ~ z_height + male + z_height:male,
+                        data = earnings, subset = earn>0,
+                        seed = SEED, refresh = 0)
 print(logmodel_3a, digits=2)
 
 #' ### Uncertainty
@@ -255,7 +242,7 @@ n_sims <- nrow(sims)
 postscript(root("Earnings/figs","heights.log1a.ps"), horizontal=TRUE)
 #+
 par(mar=c(6,6,4,2)+.1)
-plot(earnings$height + runif(n,-.2,.2), earnings$log_earn, xlab="height", ylab="log (earnings)", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10",
+plot(earnings$height + runif(n,-.2,.2), log(earnings$earn), xlab="height", ylab="log (earnings)", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10",
       cex.main=3, main="Log regression, plotted on log scale")
 axis(2, seq(6,12,2), mgp=c(4,1.1,0),cex.axis=3)
 sims_display <- sample(n_sims, 10)
@@ -268,7 +255,7 @@ if (savefigs) dev.off()
 
 #' **Plot posterior draws of linear model on log scale, ggplot version**
 sims_display <- sample(n_sims, 10)
-ggplot(earnings, aes(height, log_earn)) +
+ggplot(earnings, aes(height, log(earn))) +
   geom_jitter(height = 0, width = 0.25) +
   geom_abline(
     intercept = sims[sims_display, 1],
@@ -287,38 +274,48 @@ ggplot(earnings, aes(height, log_earn)) +
 
 #' ### Posterior predictive checking
 
-#' **Posterior predictive checking for model in linear scale**
-yrep_1 <- posterior_predict(fit_1)
+#' **Posterior predictive checking for model in linear scale**<br>
+#' for fair comparison refit the linear scale model only for non.zero earnings
+fit_1b <- stan_glm(earnk ~ height, data = earnings, subset=earn>0,
+                   seed = SEED, refresh = 0)
+yrep_1 <- posterior_predict(fit_1b)
 n_sims <- nrow(yrep_1)
 sims_display <- sample(n_sims, 100)
-ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[sims_display,])
+ppc_1 <- ppc_dens_overlay(earnings$earnk[earnings$earn>0], yrep_1[sims_display,]) +
+  theme(axis.line.y = element_blank())
 #' **Posterior predictive checking for model in log scale**
-yrep_log_1 <- posterior_predict(logmodel_1)
+logmodel_1b <- stan_glm(log(earnk) ~ height, data = earnings, subset=earn>0,
+                   seed = SEED, refresh = 0)
+yrep_log_1 <- posterior_predict(logmodel_1b)
 n_sims <- nrow(yrep_log_1)
 sims_display <- sample(n_sims, 100)
-ppc_log_1 <- ppc_dens_overlay(earnings$log_earn, yrep_log_1[sims_display,])
+ppc_log_1 <- ppc_dens_overlay(log(earnings$earnk[earnings$earn>0]), yrep_log_1[sims_display,]) +
+    theme(axis.line.y = element_blank())
 (bpg <- bayesplot_grid(
   ppc_1, ppc_log_1,
   grid_args = list(ncol = 2),
   titles = c("earn", "log(earn)")
 ))
 #+ eval=FALSE, include=FALSE
-ggsave(root("Earnings/figs","earnings_ppc.pdf"), bpg, height=3, width=9)
+ggsave(root("Earnings/figs","earnings_ppc.pdf"), bpg, height=3, width=9, colormodel="gray")
 
-#' **Posterior predictive checking for model in linear scale**
-yrep_2 <- posterior_predict(fit_2)
+#' **Posterior predictive checking for model in linear scale**<br>
+#' for fair comparison refit the linear scale model only for non.zero earnings
+fit_2b <- stan_glm(earnk ~ height + male, data = earnings, subset=earn>0,
+                   seed = SEED, refresh = 0)
+yrep_2 <- posterior_predict(fit_2b)
 n_sims <- nrow(yrep_2)
 sims_display <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$earnk, yrep_2[sims_display,])
+ppc_dens_overlay(earnings$earnk[earnings$earn>0], yrep_2[sims_display,])
 
 #' **Posterior predictive checking for model in log scale**
 yrep_log_2 <- posterior_predict(logmodel_2)
 n_sims <- nrow(yrep_log_2)
 sims_display <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$log_earn, yrep_log_2[sims_display,])
+ppc_dens_overlay(log(earnings$earn[earnings$earn>0]), yrep_log_2[sims_display,])
 
 #' **Posterior predictive checking for model in log-log scale**
 yrep_loglog_2 <- posterior_predict(loglogmodel_2)
 n_sims <- nrow(yrep_loglog_2)
 sims_display <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$log_earn, yrep_loglog_2[sims_display,])
+ppc_dens_overlay(log(earnings$earn[earnings$earn>0]), yrep_loglog_2[sims_display,])

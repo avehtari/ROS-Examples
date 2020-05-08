@@ -19,20 +19,15 @@ root<-has_dirname("ROS-Examples")$make_fix_file()
 
 #' **Load data**
 earnings <- read.csv(root("Earnings/data","earnings.csv"))
-earnings_all <- read.csv(root("Earnings/data","earnings.csv"))
-earnings_all$positive <- earnings_all$earn > 0
-#' only non-zero earnings
-earnings <- earnings_all[earnings_all$positive, ]
-n <- nrow(earnings)
-earn <- earnings$earn
-male <- earnings$male
-print(earnings[1:10,])
+head(earnings)
 
 #' **Median of women's earnings, divided by the median of men's earnings**
+earn <- earnings$earn
+male <- earnings$male
 print(median(earn[male==0]) / median(earn[male==1]))
 
 #' **A single bootstrap sample**
-n <- length(earn)
+n <- nrow(earnings)
 boot <- sample(n, replace=TRUE)
 earn_boot <- earn[boot]
 male_boot <- male[boot]
@@ -52,4 +47,4 @@ output <- replicate(n_sims, Boot_ratio(data=earnings))
 
 #' **Summarize the results graphically and numerically**
 hist(output)
-print(sd(output))
+round(sd(output), 2)
