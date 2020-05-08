@@ -30,7 +30,7 @@
 #'   - [Peacekeeping/](https://github.com/avehtari/ROS-Examples/tree/master/Peacekeeping/)
 #'     - [peace.html](Peacekeeping/peace.html) - Outcomes after civil war in countries with and without United Nations peacekeeping
 #'   - [SimpleCausal/](https://github.com/avehtari/ROS-Examples/tree/master/SimpleCausal/)
-#'     - [SimpleCausal.html](SimpleCausal/SimpleCausal.html) - Simple graphs illustrating regression for causal inference
+#'     - [causal.html](SimpleCausal/causal.html) - Simple graphs illustrating regression for causal inference
 #'   - [Helicopters/](https://github.com/avehtari/ROS-Examples/tree/master/Helicopters/)
 #'     - [helicopters.html](Helicopters/helicopters.html) - Example data file for helicopter flying time exercise
 #' 
@@ -56,7 +56,8 @@
 #'     - [metabolic.html](Metabolic/metabolic.html) - How to interpret a power law or log-log regression
 #'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
 #'     - [vitals.html](Vitals/vitals.html) - Predict weight
-#'     - [heightweight.html](Vitals/heightweight.html) - Illustrate central limit theorem and normal distribution
+#'   - [CentralLimitTheorem/](https://github.com/avehtari/ROS-Examples/tree/master/CentralLimitTheorem/)
+#'     - [heightweight.html](CentralLimitTheorem/heightweight.html) - Illustrate central limit theorem and normal distribution
 #'   - [Stents/](https://github.com/avehtari/ROS-Examples/tree/master/Stents/)
 #'     - [stents.html](Stents/stents.html) - Stents - comparing distributions
 #' 
@@ -82,9 +83,9 @@
 #'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
 #'     - [earnings_regression.html](Earnings/earnings_regression.html) - Predict respondents' yearly earnings using survey data from 1990.
 #'   - [PearsonLee/](https://github.com/avehtari/ROS-Examples/tree/master/PearsonLee/)
-#'     - [PearsonLee.html](PearsonLee/PearsonLee.html) - The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
+#'     - [heights.html](PearsonLee/heights.html) - The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
 #'   - [FakeMidtermFinal/](https://github.com/avehtari/ROS-Examples/tree/master/FakeMidtermFinal/)
-#'     - [FakeMidtermFinal.html](FakeMidtermFinal/FakeMidtermFinal.html) - Fake dataset of 1000 students' scores on a midterm and final exam
+#'     - [simulation.html](FakeMidtermFinal/simulation.html) - Fake dataset of 1000 students' scores on a midterm and final exam
 #' 
 #' ### 7  Linear regression with a single predictor
 #'   - [ElectionsEconomy/](https://github.com/avehtari/ROS-Examples/tree/master/ElectionsEconomy/)
@@ -133,7 +134,7 @@
 #'   - [Residuals/](https://github.com/avehtari/ROS-Examples/tree/master/Residuals/)
 #'     - [residuals.html](Residuals/residuals.html) - Plotting the data and fitted model
 #'   - [Introclass/](https://github.com/avehtari/ROS-Examples/tree/master/Introclass/)
-#'     - [fakeresid.html](Introclass/fakeresid.html) - Plot residuals vs.\ predicted values, or residuals vs.\ observed values?
+#'     - [residual_plots.html](Introclass/residual_plots.html) - Plot residuals vs.\ predicted values, or residuals vs.\ observed values?
 #'   - [Newcomb/](https://github.com/avehtari/ROS-Examples/tree/master/Newcomb/)
 #'     - [newcomb.html](Newcomb/newcomb.html) - Posterior predictive checking of Normal model for Newcomb's speed of light data
 #'   - [Unemployment/](https://github.com/avehtari/ROS-Examples/tree/master/Unemployment/)
@@ -158,6 +159,7 @@
 #'   - [Student/](https://github.com/avehtari/ROS-Examples/tree/master/Student/)
 #'     - [student.html](Student/student.html) - Models for regression coefficients
 #'   - [Pollution/](https://github.com/avehtari/ROS-Examples/tree/master/Pollution/)
+#'     - [pollution.html](Pollution/pollution.html) - Pollution data.
 #' 
 #' ### 13  Logistic regression
 #'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
@@ -198,7 +200,7 @@
 #'   - [SampleSize/](https://github.com/avehtari/ROS-Examples/tree/master/SampleSize/)
 #'     - [simulation.html](DataCollection/simulation.html) - Sample size simulation
 #'   - [FakeMidtermFinal/](https://github.com/avehtari/ROS-Examples/tree/master/FakeMidtermFinal/)
-#'     - [SimulationBasedDesign.html](FakeMidtermFinal/SimulationBasedDesign.html) - Fake dataset of a randomized experiment on student grades
+#'     - [simulation_based_design.html](FakeMidtermFinal/simulation_based_design.html) - Fake dataset of a randomized experiment on student grades
 #'
 #' ### 17  Poststratification and missing-data imputation
 #'   - [Poststrat/](https://github.com/avehtari/ROS-Examples/tree/master/Poststrat/)
@@ -236,7 +238,7 @@
 #'   - [Scalability/](https://github.com/avehtari/ROS-Examples/tree/master/Scalability/)
 #'     - [scalability.html](Scalability/scalability.html) - Demonstrate computation speed with 100 000 observations.
 #'
-#' ### Appendix B
+#' ### Appendix A
 #'   - [Coins/](https://github.com/avehtari/ROS-Examples/tree/master/Coins/)
 #'   - [Mile/](https://github.com/avehtari/ROS-Examples/tree/master/Mile/)
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
@@ -266,10 +268,11 @@
 #'   - [Bypass/](https://github.com/avehtari/ROS-Examples/tree/master/Bypass/)
 #'   - [CausalDiagram/](https://github.com/avehtari/ROS-Examples/tree/master/CausalDiagram/)
 #'     - [diagrams.html](CausalDiagram/diagrams.html) - Plot causal diagram
+#'   - [CentralLimitTheorem/](https://github.com/avehtari/ROS-Examples/tree/master/CentralLimitTheorem/)
+#'     - [heightweight.html](CentralLimitTheorem/heightweight.html) - Illustrate central limit theorem and normal distribution
 #'   - [Coins/](https://github.com/avehtari/ROS-Examples/tree/master/Coins/)
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
-#'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress_plots.html](Congress/congress_plots.html) - Predictive uncertainty for congressional elections
 #'   - [Coop/](https://github.com/avehtari/ROS-Examples/tree/master/Coop/)
 #'     - [riverbay.html](Coop/riverbay.html) - Example of hypothesis testing
@@ -298,8 +301,8 @@
 #'   - [FakeKCV/](https://github.com/avehtari/ROS-Examples/tree/master/FakeKCV/)
 #'     - [fake_kcv.html](FakeKCV/fake_kcv.html) - Demonstration of $K$-fold cross-validation using simulated data
 #'   - [FakeMidtermFinal/](https://github.com/avehtari/ROS-Examples/tree/master/FakeMidtermFinal/)
-#'     - [FakeMidtermFinal.html](FakeMidtermFinal/FakeMidtermFinal.html) - Fake dataset of 1000 students' scores on a midterm and final exam
-#'     - [SimulationBasedDesign.html](FakeMidtermFinal/SimulationBasedDesign.html) - Fake dataset of a randomized experiment on student grades
+#'     - [simulation.html](FakeMidtermFinal/simulation.html) - Fake dataset of 1000 students' scores on a midterm and final exam
+#'     - [simulation_based_design.html](FakeMidtermFinal/simulation_based_design.html) - Fake dataset of a randomized experiment on student grades
 #'   - [FrenchElection/](https://github.com/avehtari/ROS-Examples/tree/master/FrenchElection/)
 #'     - [ps_primaire.html](FrenchElection/ps_primaire.html) - French Election data
 #'   - [Gay/](https://github.com/avehtari/ROS-Examples/tree/master/Gay/)
@@ -322,7 +325,7 @@
 #'   - [Interactions/](https://github.com/avehtari/ROS-Examples/tree/master/Interactions/)
 #'     - [interactions.html](Interactions/interactions.html) - Plot interaction example figure
 #'   - [Introclass/](https://github.com/avehtari/ROS-Examples/tree/master/Introclass/)
-#'     - [fakeresid.html](Introclass/fakeresid.html) - Plot residuals vs.\ predicted values, or residuals vs.\ observed values?
+#'     - [residual_plots.html](Introclass/residual_plots.html) - Plot residuals vs.\ predicted values, or residuals vs.\ observed values?
 #'   - [KidIQ/](https://github.com/avehtari/ROS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
 #'     - [kidiq_loo.html](KidIQ/kidiq_loo.html) - Linear regression and leave-one-out cross-validation
@@ -350,12 +353,13 @@
 #'   - [Peacekeeping/](https://github.com/avehtari/ROS-Examples/tree/master/Peacekeeping/)
 #'     - [peace.html](Peacekeeping/peace.html) - Outcomes after civil war in countries with and without United Nations peacekeeping
 #'   - [PearsonLee/](https://github.com/avehtari/ROS-Examples/tree/master/PearsonLee/)
-#'     - [PearsonLee.html](PearsonLee/PearsonLee.html) - The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
+#'     - [heights.html](PearsonLee/heights.html) - The heredity of height. Published in 1903 by Karl Pearson and Alice Lee.
 #'   - [Pew/](https://github.com/avehtari/ROS-Examples/tree/master/Pew/)
 #'     - [pew.html](Pew/pew.html) - Miscellaneous analyses using raw Pew data
 #'   - [PoissonExample/](https://github.com/avehtari/ROS-Examples/tree/master/PoissonExample/)
 #'     - [poissonexample.html](PoissonExample/poissonexample.html) - Demonstrate Poisson regression with simulated data.
 #'   - [Pollution/](https://github.com/avehtari/ROS-Examples/tree/master/Pollution/)
+#'     - [pollution.html](Pollution/pollution.html) - Pollution data.
 #'   - [Poststrat/](https://github.com/avehtari/ROS-Examples/tree/master/Poststrat/)
 #'     - [poststrat.html](Poststrat/poststrat.html) - Poststratification after estimation
 #'     - [poststrat2.html](Poststrat/poststrat2.html) - Poststratification after estimation
@@ -378,7 +382,7 @@
 #'   - [SexRatio/](https://github.com/avehtari/ROS-Examples/tree/master/SexRatio/)
 #'     - [sexratio.html](SexRatio/sexratio.html) - Example where an informative prior makes a difference
 #'   - [SimpleCausal/](https://github.com/avehtari/ROS-Examples/tree/master/SimpleCausal/)
-#'     - [SimpleCausal.html](SimpleCausal/SimpleCausal.html) - Simple graphs illustrating regression for causal inference
+#'     - [causal.html](SimpleCausal/causal.html) - Simple graphs illustrating regression for causal inference
 #'   - [Simplest/](https://github.com/avehtari/ROS-Examples/tree/master/Simplest/)
 #'     - [simplest.html](Simplest/simplest.html) - Linear regression with a single predictor
 #'     - [simplest_lm.html](Simplest/simplest_lm.html) - Linear least squares regression with a single predictor
