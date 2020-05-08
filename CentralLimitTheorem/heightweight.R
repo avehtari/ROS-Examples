@@ -32,8 +32,8 @@ height_counts <- height_counts_men + height_counts_women
 height_hist_names <- c("","55","","","","","60","","","","","65","","","","","70","","","","","75")
 
 #' **Bar plots**
-barplot (height_counts_women, names_arg=height_hist_names, xlab="height", ylab="Count", main="heights of women\n(histogram)")
-barplot (height_counts, names_arg=height_hist_names, xlab="height", ylab="Count", main="heights of all adults\n(histogram)")
+barplot (height_counts_women, names.arg=height_hist_names, xlab="height", ylab="Count", main="heights of women\n(histogram)")
+barplot (height_counts, names.arg=height_hist_names, xlab="height", ylab="Count", main="heights of all adults\n(histogram)")
 barplot (weight_counts_women, xlab="weight", ylab="Count", main="weights of women\n(histogram)")
 
 #' **Normal distribution for heights of women**
@@ -85,7 +85,7 @@ if (savefigs) dev.off()
 if (savefigs) pdf(root("Vitals/figs","normal_picture.pdf"), height=3.5, width=7, colormodel="gray")
 #+
 par(mar=c(2,0,2,0), tck=-.01)
-curve(dnorm(x), -4, 4, xlab="", ylab="", bty="n", yaxs="i", main="normal distribution", xaxt="n", yaxt="n")
+curve(dnorm(x), -4, 4, ylim=c(0, 0.4), xlab="", ylab="", bty="n", yaxs="i", main="normal distribution", xaxt="n", yaxt="n")
 axis(1, c(-4, -3, -2, -1,  0,  1, 2, 3, 4), c("", "-3", "-2", "-1",  "0",  "1", "2", "3", ""), mgp=c(1.5, .5, 0), cex.axis=1.2)
 colors <- c("gray70", "gray50", "gray30")
 for (i in 3:1){
