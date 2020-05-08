@@ -32,6 +32,7 @@ x_sd <- 4/b
 x <- rnorm(n, x_mean, x_sd)
 y <- rbinom(n, 1, invlogit(a + b*x))
 fake_1 <- data.frame(x, y)
+head(fake_1)
 
 #' **Fit the model and save the coefficient estimates**
 fit_1 <- stan_glm(y ~ x, family=binomial(link="logit"), data=fake_1, refresh=0)
