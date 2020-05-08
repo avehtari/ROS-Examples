@@ -31,9 +31,9 @@ for (i in 1:49){
 region_name <- c("Northeast", "Midwest", "South", "West")
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Congress/figs","congress_plot_grid.pdf"), height=3.8, width=7)
+if (savefigs) pdf(root("Congress/figs","congress_plot_grid.pdf"), height=3.8, width=7, colormodel="gray")
 #+
-par(mfrow=c(3,5), mar=c(0,3,0,0), mgp=c(1.7, .3, 0), tck=-.02, oma=c(1,0,2,0))
+par(mfrow=c(3,5), mar=c(0.1,3,0,0), mgp=c(1.7, .3, 0), tck=-.02, oma=c(1,0,2,0))
 for (i in c(27, 37, 47)) {
   year <- 1896 + 2*(i-1)
   cong1 <- congress[[i]]
@@ -58,7 +58,7 @@ for (i in c(27, 37, 47)) {
     abline(0, 0)
     if (i==27) mtext(region_name[j], side=3, line=1, cex=.75)
     ok <- contested & abs(inc)==1 & region==j
-    points(dvote1[ok], dvote2[ok] - dvote1[ok], pch=20, cex=.5, col="gray70")
+    points(dvote1[ok], dvote2[ok] - dvote1[ok], pch=20, cex=.3, col="gray60")
     ok <- contested & abs(inc)==0 & region==j
     points(dvote1[ok], dvote2[ok] - dvote1[ok], pch=20, cex=.5, col="black")
   }
