@@ -30,14 +30,14 @@ data_3player <- read.csv(root("Storable/data","3playergames.csv"))
 data_6player <- read.csv(root("Storable/data","6playergames.csv"))
 data_all <- rbind(data_2player, data_3player, data_6player)
 data_all$factor_vote <- factor(data_all$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
+head(data_all)
 
 #' **Simple analysis using data from just one person**
 data_401 <- subset(data_2player, person == 401, select = c("vote", "value"))
 data_401$factor_vote <- factor(data_401$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
-#+ results='hide'
+head(data_401)
 fit_1 <- stan_polr(factor_vote ~ value, data = data_401,
                    prior = R2(0.3, "mean"), refresh = 0)
-#+
 print(fit_1, digits=2)
 
 #' **6 people**
