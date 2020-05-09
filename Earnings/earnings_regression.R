@@ -47,7 +47,7 @@ print(fit_0)
 if (savefigs) pdf(root("Earnings/figs","heights.simple0a.pdf"), height=3, width=4.2, colormodel="gray")
 #+
 sims_0 <- as.matrix(fit_0)
-nsims <- nrow(sims_0)
+n_sims <- nrow(sims_0)
 keep <- earnings$earn <= 2e5
 par(mar=c(3,3,2,0), mgp=c(1.7,.5,0), tck=-.01)
 plot((earnings$height + height_jitter_add)[keep], earnings$earn[keep], xlab="height", ylab="earnings", pch=20, yaxt="n", col="gray10", bty="l", cex=.4)
@@ -89,16 +89,6 @@ print(fit_1)
 #' for plotting scale back to dollar scale
 coef1 <- coef(fit_1)*1000
 
-#' **Plot scaled linear model**
-keep <- earnings$earn <= 2e5
-par(mar=c(6,6,4,2)+.1)
-plot((earnings$height + height_jitter_add)[keep], earnings$earn[keep], xlab="height", ylab="earnings",
-     cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0),
-     col="gray10",  cex.main=3, main="Fitted linear model")
-abline(coef1, lwd=2)
-abline(0,0,col="gray")
-axis(2, c(0,100000,200000), c("0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
-
 #' **Plot linear model, ggplot version**
 gg_earnings <- ggplot(subset(earnings, subset=earn<2e5), aes(x = jitter(height, amount=0.2), y = earn)) +
   geom_point(alpha = 0.75) +
@@ -107,14 +97,6 @@ gg_earnings <- ggplot(subset(earnings, subset=earn<2e5), aes(x = jitter(height, 
   labs(x = "height", y = "earnings",
        title = "Fitted linear model")
 gg_earnings
-
-#' **Plot extrapolation**
-par(mar=c(6,6,4,2)+.1)
-plot(xlim=c(0,max(earnings$height)), ylim=c(-70000,200000), earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10", cex.main=3, main="Extrapolation")
-abline(coef1, lwd=2)
-abline(0,0,col="gray")
-intercept <- coef1[1]
-axis(2, c(intercept,0,100000,200000), c(round(intercept,-2),"0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
 
 #' **Plot extrapolation, ggplot version, modifying the gg_earnings object
 #' we already created**
@@ -129,16 +111,6 @@ fit_2 <- stan_glm(earnk ~ height + male, data = earnings,
 print(fit_2)
 #' for plotting scale back to dollar scale
 coef2 <- coef(fit_2)*1000
-
-#' **Plot linear model with male/female**
-par(mar=c(6,6,5,2)+.1)
-plot(range(earnings$height), range(predict(fit_2)*1000), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10",
-      cex.main=3, main="Fitted regression, displayed as\nseparate lines for men and women", bty="l")
-axis(2, c(20000,30000), cex.axis=3)
-abline(coef2[1], coef2[2], col="red", lwd=2)
-text(68, coef2[1] + coef2[2]*65, "women:\ny = -11 000 + 450x", cex=3, adj=0, col="red")
-abline(coef2[1]+coef2[3], coef2[2], col="blue", lwd=2)
-text(68, coef2[1]+coef2[3] + coef2[2]*65, "men:\ny = -2 000 + 450x", cex=3, adj=0, col="blue")
 
 #' **Include male/female, ggplot version**
 ggplot(earnings, aes(height, earn)) +
@@ -173,15 +145,6 @@ fit_3 <- stan_glm(earnk ~ height + male + height:male, data = earnings,
 print(fit_3)
 #' for plotting scale back to dollar scale
 coef3 <- coef(fit_3)*1000
-
-#' **Plot linear model with interaction**
-par(mar=c(6,6,5,2)+.1)
-plot(range(earnings$height), range(predict(fit_3)*1000), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10", cex.main=3, main="Fitted regression with interactions,\nseparate lines for men and women", bty="l")
-axis(2, c(20000,30000), cex.axis=3)
-abline(coef3[1], coef3[2], col="red", lwd=2)
-text(62, coef3[1] + coef3[2]*80, "women:\ny = -7 000 + 180x", cex=3, adj=0, col="red")
-abline(coef3[1]+coef3[3], coef3[2]+coef3[4], col="blue", lwd=2)
-text(68, coef3[1]+coef3[3] + (coef3[2]+coef3[4])*66, "men:\ny = -22 000 + 740x", cex=3, adj=0, col="blue")
 
 #' **Include interaction, ggplot version**
 ggplot(subset(earnings, subset=earn>0), aes(height, earn)) +
@@ -321,7 +284,7 @@ sims_display <- sample(n_sims, 100)
 ppc_log_1 <- ppc_dens_overlay(log(earnings$earn[earnings$earn>0]), yrep_log_1[sims_display,]) +
     theme(axis.line.y = element_blank())
 bpg <- bayesplot_grid(
-  ppc_1, ppc_log_1,
+  ppc_0, ppc_log_1,
   grid_args = list(ncol = 2),
   titles = c("earn", "log(earn)"))
 bpg
