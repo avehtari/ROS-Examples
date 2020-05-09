@@ -32,6 +32,7 @@ b <- 2
 linpred <- a + b*x
 y <- rpois(n, exp(linpred))
 fake <- data.frame(x=x, y=y)
+head(fake)
 
 #' ### Poisson regression
 #'
