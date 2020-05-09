@@ -35,39 +35,72 @@ head(earnings)
 n <- nrow(earnings)
 height_jitter_add <- runif(n, -.2, .2)
 
-#' **Earnings in thousands dollars**
+#' ### Normal linear regression
+#' 
+#' **Predict earnings in dollars**
+fit_0 <- stan_glm(earn ~ height, data=earnings,
+                  seed = SEED, refresh = 0)
+print(fit_0)
+
+#' **Plot linear model draws**
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Earnings/figs","heights.simple0a.pdf"), height=3, width=4.2, colormodel="gray")
+#+
+sims_0 <- as.matrix(fit_0)
+nsims <- nrow(sims_0)
+keep <- earnings$earn <= 2e5
+par(mar=c(3,3,2,0), mgp=c(1.7,.5,0), tck=-.01)
+plot((earnings$height + height_jitter_add)[keep], earnings$earn[keep], xlab="height", ylab="earnings", pch=20, yaxt="n", col="gray10", bty="l", cex=.4)
+mtext("Fitted linear model", 3, 1)
+axis(2, seq(0, 2e5, 1e5), c("0", "100000", "200000"))
+for (i in sample(n_sims, 10)){
+ curve(sims_0[i,1] + sims_0[i,2]*x, lwd=0.5, col="gray30", add=TRUE)
+}
+curve(coef(fit_0)[1] + coef(fit_0)[2]*x, add=TRUE)
+#+ eval=FALSE, include=FALSE
+dev.off()
+
+#' **Plot linear model draws with x-axis extended to 0**
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Earnings/figs","heights.intercept.pdf"), height=3, width=4.2, colormodel="gray")
+#+
+keep <- earnings$earn <= 2e5
+par(mar=c(3,3,2,0), mgp=c(1.7,.5,0), tck=-.01)
+plot((earnings$height + height_jitter_add)[keep], earnings$earn[keep], xlab="height", ylab="earnings", pch=20, yaxt="n", col="gray10", bty="l", cex=.4, xlim=c(0, max(earnings$height)), ylim=c(-1e5, 2.2e5))
+mtext("x-axis extended to 0", 3, 1)
+axis(2, seq(-1e5, 2e5, 1e5), c("-100000", "0", "100000", "200000"))
+for (i in sample(n_sims, 10)){
+ curve(sims_0[i,1] + sims_0[i,2]*x, lwd=0.5, col="gray30", add=TRUE)
+}
+curve(coef(fit_0)[1] + coef(fit_0)[2]*x, add=TRUE)
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+
+#' **Predict earnings in thousands dollars**
+#'
+#' By scaling the earnings, the model coefficients are scaled, but the
+#' results don't change otherwise.
 earnings$earnk <- earnings$earn/1000
 # (earnk is actually already included in the data frame `earnings` for
 # convenience for running examples in different arts of the book)
-
-#' ### Normal linear regression
-#' 
-#' The option `refresh = 0` supresses the default Stan sampling
-#' progress output. This is useful for small data with fast
-#' computation. For more complex models and bigger data, it can be
-#' useful to see the progress.
 fit_1 <- stan_glm(earnk ~ height, data = earnings,
                   seed = SEED, refresh = 0)
 print(fit_1)
 #' for plotting scale back to dollar scale
 coef1 <- coef(fit_1)*1000
 
-#' **Plot linear model**
-#+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Earnings/figs","heights1a.pdf"), height=8.5, width=11)
-#+
+#' **Plot scaled linear model**
+keep <- earnings$earn <= 2e5
 par(mar=c(6,6,4,2)+.1)
-plot(earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings",
+plot((earnings$height + height_jitter_add)[keep], earnings$earn[keep], xlab="height", ylab="earnings",
      cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0),
      col="gray10",  cex.main=3, main="Fitted linear model")
 abline(coef1, lwd=2)
 abline(0,0,col="gray")
 axis(2, c(0,100000,200000), c("0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
-#+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
 
 #' **Plot linear model, ggplot version**
-gg_earnings <- ggplot(earnings, aes(x = height + height_jitter_add, y = earn)) +
+gg_earnings <- ggplot(subset(earnings, subset=earn<2e5), aes(x = jitter(height, amount=0.2), y = earn)) +
   geom_point(alpha = 0.75) +
   geom_hline(yintercept = 0, color = "darkgray") +
   geom_abline(intercept = coef1[1], slope = coef1[2], size = 1) +
@@ -76,17 +109,12 @@ gg_earnings <- ggplot(earnings, aes(x = height + height_jitter_add, y = earn)) +
 gg_earnings
 
 #' **Plot extrapolation**
-#+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Earnings/figs","heights1b.pdf"), height=8.5, width=11)
-#+
 par(mar=c(6,6,4,2)+.1)
 plot(xlim=c(0,max(earnings$height)), ylim=c(-70000,200000), earnings$height + height_jitter_add, earnings$earn, xlab="height", ylab="earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10", cex.main=3, main="Extrapolation")
 abline(coef1, lwd=2)
 abline(0,0,col="gray")
 intercept <- coef1[1]
 axis(2, c(intercept,0,100000,200000), c(round(intercept,-2),"0","100000","200000"), mgp=c(4,1.1,0),cex.axis=3)
-#+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
 
 #' **Plot extrapolation, ggplot version, modifying the gg_earnings object
 #' we already created**
@@ -94,7 +122,6 @@ gg_earnings +
   ylim(-70000, 200000) +
   xlim(0, 80) +
   labs(title = "Extrapolation")
-
 
 #' **Include male/female**
 fit_2 <- stan_glm(earnk ~ height + male, data = earnings,
@@ -104,9 +131,6 @@ print(fit_2)
 coef2 <- coef(fit_2)*1000
 
 #' **Plot linear model with male/female**
-#+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Earnings/figs","heights2.pdf"), height=8.5, width=11)
-#+
 par(mar=c(6,6,5,2)+.1)
 plot(range(earnings$height), range(predict(fit_2)*1000), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10",
       cex.main=3, main="Fitted regression, displayed as\nseparate lines for men and women", bty="l")
@@ -115,8 +139,6 @@ abline(coef2[1], coef2[2], col="red", lwd=2)
 text(68, coef2[1] + coef2[2]*65, "women:\ny = -11 000 + 450x", cex=3, adj=0, col="red")
 abline(coef2[1]+coef2[3], coef2[2], col="blue", lwd=2)
 text(68, coef2[1]+coef2[3] + coef2[2]*65, "men:\ny = -2 000 + 450x", cex=3, adj=0, col="blue")
-#+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
 
 #' **Include male/female, ggplot version**
 ggplot(earnings, aes(height, earn)) +
@@ -153,9 +175,6 @@ print(fit_3)
 coef3 <- coef(fit_3)*1000
 
 #' **Plot linear model with interaction**
-#+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Earnings/figs","heights3.pdf"), height=8.5, width=11)
-#+
 par(mar=c(6,6,5,2)+.1)
 plot(range(earnings$height), range(predict(fit_3)*1000), type="n", xlab="height", ylab="predicted earnings", cex=.8, cex.lab=3, pch=20, cex.axis=3, mgp=c(4,1.5,0), yaxt="n", col="gray10", cex.main=3, main="Fitted regression with interactions,\nseparate lines for men and women", bty="l")
 axis(2, c(20000,30000), cex.axis=3)
@@ -163,8 +182,6 @@ abline(coef3[1], coef3[2], col="red", lwd=2)
 text(62, coef3[1] + coef3[2]*80, "women:\ny = -7 000 + 180x", cex=3, adj=0, col="red")
 abline(coef3[1]+coef3[3], coef3[2]+coef3[4], col="blue", lwd=2)
 text(68, coef3[1]+coef3[3] + (coef3[2]+coef3[4])*66, "men:\ny = -22 000 + 740x", cex=3, adj=0, col="blue")
-#+ eval=FALSE, include=FALSE
-if (savefigs) dev.off()
 
 #' **Include interaction, ggplot version**
 ggplot(subset(earnings, subset=earn>0), aes(height, earn)) +
@@ -195,67 +212,67 @@ ggplot(subset(earnings, subset=earn>0), aes(height, earn)) +
 #' ### Linear regression on log scale
 
 #' **Models on log scale**
-logmodel_1 <- stan_glm(log(earnk) ~ height, data = earnings,
+logmodel_1 <- stan_glm(log(earn) ~ height, data = earnings,
                        subset = earn>0,
                        seed = SEED, refresh = 0)
 print(logmodel_1, digits=2)
 
 #' **Model on log10 scale**
-log10model_1 <- stan_glm(log10(earnk) ~ height, data = earnings,
+log10model_1 <- stan_glm(log10(earn) ~ height, data = earnings,
                          subset = earn>0,
                          seed = SEED, refresh = 0)
 print(log10model_1, digits=3)
 
 #' **Model on log scale with two predictors**
-logmodel_2 <- stan_glm(log(earnk) ~ height + male, data = earnings,
+logmodel_2 <- stan_glm(log(earn) ~ height + male, data = earnings,
                        subset = earn>0,
                        seed = SEED, refresh = 0)
 print(logmodel_2, digits=2)
 
 #' **Model on log scale for the target and one predictor**
-loglogmodel_2 <- stan_glm(log(earnk) ~ log(height) + male, data = earnings,
+loglogmodel_2 <- stan_glm(log(earn) ~ log(height) + male, data = earnings,
                           subset = earn>0,
                           seed = SEED, refresh = 0)
 print(loglogmodel_2, digits=2)
 
 #' **Model on log scale with two predictors and interaction**
-logmodel_3 <- stan_glm(log(earnk) ~ height + male + height:male, data = earnings,
+logmodel_3 <- stan_glm(log(earn) ~ height + male + height:male, data = earnings,
                        subset = earn>0,
                        seed = SEED, refresh = 0)
 print(logmodel_3, digits=2)
 
 #' **Model on log scale with standardized interaction**
 earnings$z_height <- with(earnings, (height - mean(height))/sd(height))
-logmodel_3a <- stan_glm(log(earnk) ~ z_height + male + z_height:male,
+logmodel_3a <- stan_glm(log(earn) ~ z_height + male + z_height:male,
                         data = earnings, subset = earn>0,
                         seed = SEED, refresh = 0)
 print(logmodel_3a, digits=2)
 
-#' ### Uncertainty
+#' **PLot log models**
 
-#' **Posterior uncertainty for log model**
+#' get posterior draws
 sims <- as.matrix(logmodel_1)
 n_sims <- nrow(sims)
 
-#' **Plot posterior draws of linear model on log scale**
+#' Plot log model on log scale
 #+ eval=FALSE, include=FALSE
-postscript(root("Earnings/figs","heights.log1a.ps"), horizontal=TRUE)
+if (savefigs) pdf(root("Earnings/figs","heights.log1a.pdf"), height=3, width=4.2, colormodel="gray")
 #+
-par(mar=c(6,6,4,2)+.1)
-plot(earnings$height + runif(n,-.2,.2), log(earnings$earnk), xlab="height", ylab="log (earnings)", cex=.8, cex.lab=3, pch=20, cex.axis=3, yaxt="n", mgp=c(4,1.5,0), col="gray10",
-      cex.main=3, main="Log regression, plotted on log scale")
-axis(2, seq(6,12,2), mgp=c(4,1.1,0),cex.axis=3)
-sims_display <- sample(n_sims, 10)
-for (i in sims_display){
-  curve(sims[i,1] + sims[i,2]*x, lwd=0.5, col="gray30", add=TRUE)
+keep <- earnings$earn > 0
+par(mar=c(3,3,2,0), mgp=c(1.7,.5,0), tck=-.01)
+plot((earnings$height + height_jitter_add)[keep], log(earnings$earn)[keep], xlab="height", ylab="log (earnings)", pch=20, yaxt="n", col="gray10", bty="l", cex=.4)
+mtext("Log regression plotted on log scale", 3, 1)
+axis(2, seq(6,12,2))
+for (i in sample(n_sims, 10)){
+ curve(sims[i,1] + sims[i,2]*x, lwd=0.5, col="gray30", add=TRUE)
 }
-curve(coef(logmodel_2)[1] + coef(logmodel_2)[2]*x, add=TRUE)
+curve(coef(logmodel_1)[1] + coef(logmodel_1)[2]*x, add=TRUE)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
 #' **Plot posterior draws of linear model on log scale, ggplot version**
 sims_display <- sample(n_sims, 10)
-ggplot(earnings, aes(height, log(earnk))) +
+ggplot(subset(earnings, subset=earn>0), aes(height, log(earn))) +
   geom_jitter(height = 0, width = 0.25) +
   geom_abline(
     intercept = sims[sims_display, 1],
@@ -263,8 +280,8 @@ ggplot(earnings, aes(height, log(earnk))) +
     color = "darkgray"
   ) +
   geom_abline(
-    intercept = coef(logmodel_2)[1],
-    slope = coef(logmodel_2)[2]
+    intercept = coef(logmodel_1)[1],
+    slope = coef(logmodel_1)[2]
   ) +
   labs(
     x = "height",
@@ -272,45 +289,61 @@ ggplot(earnings, aes(height, log(earnk))) +
     title = "Log regression, plotted on log scale"
   )
 
+#' Plot log model on linear scale
+#+ eval=FALSE, include=FALSE
+if (savefigs) pdf(root("Earnings/figs","heights.log1b.pdf"), height=3, width=4.2, colormodel="gray")
+#+
+keep <- earnings$earn > 0 & earnings$earn <= 2e5
+par(mar=c(3,3,2,0), mgp=c(1.7,.5,0), tck=-.01)
+plot((earnings$height + height_jitter_add)[keep], earnings$earn[keep], xlab="height", ylab="earnings", pch=20, yaxt="n", col="gray10", bty="l", cex=.4)
+mtext("Log regression plotted on original scale", 3, 1)
+axis(2, seq(0, 2e5, 1e5), c("0", "100000", "200000"))
+for (i in sample(n_sims, 10)){
+ curve(exp(sims[i,1] + sims[i,2]*x), lwd=0.5, col="gray30", add=TRUE)
+}
+curve(exp(coef(logmodel_1)[1] + coef(logmodel_1)[2]*x), add=TRUE)
+#+ eval=FALSE, include=FALSE
+if (savefigs) dev.off()
+
 #' ### Posterior predictive checking
 
 #' **Posterior predictive checking for model in linear scale**<br>
 #' for fair comparison refit the linear scale model only for non.zero earnings
-yrep_1 <- posterior_predict(fit_1)
-n_sims <- nrow(yrep_1)
+yrep_0 <- posterior_predict(fit_0)
+n_sims <- nrow(yrep_0)
 sims_display <- sample(n_sims, 100)
-ppc_1 <- ppc_dens_overlay(earnings$earnk, yrep_1[sims_display,]) +
+ppc_0 <- ppc_dens_overlay(earnings$earn, yrep_0[sims_display,]) +
   theme(axis.line.y = element_blank())
 #' **Posterior predictive checking for model in log scale**
 yrep_log_1 <- posterior_predict(logmodel_1)
 n_sims <- nrow(yrep_log_1)
 sims_display <- sample(n_sims, 100)
-ppc_log_1 <- ppc_dens_overlay(log(earnings$earnk[earnings$earn>0]), yrep_log_1[sims_display,]) +
+ppc_log_1 <- ppc_dens_overlay(log(earnings$earn[earnings$earn>0]), yrep_log_1[sims_display,]) +
     theme(axis.line.y = element_blank())
 bpg <- bayesplot_grid(
   ppc_1, ppc_log_1,
   grid_args = list(ncol = 2),
-  titles = c("earnk", "log(earnk)"))
+  titles = c("earn", "log(earn)"))
 bpg
 #+ eval=FALSE, include=FALSE
 ggsave(root("Earnings/figs","earnings_ppc.pdf"), bpg, height=3, width=9, colormodel="gray")
 
 #' **Posterior predictive checking for model in linear scale**
-fit_2b <- stan_glm(earnk ~ height + male, data = earnings, subset=earn>0,
+fit_2b <- stan_glm(earn ~ height + male, data = earnings, subset=earn>0,
                    seed = SEED, refresh = 0)
 yrep_2 <- posterior_predict(fit_2b)
 n_sims <- nrow(yrep_2)
 sims_display <- sample(n_sims, 100)
-ppc_dens_overlay(earnings$earnk[earnings$earn>0], yrep_2[sims_display,])
+ppc_dens_overlay(earnings$earn[earnings$earn>0], yrep_2[sims_display,])
 
 #' **Posterior predictive checking for model in log scale**
 yrep_log_2 <- posterior_predict(logmodel_2)
 n_sims <- nrow(yrep_log_2)
 sims_display <- sample(n_sims, 100)
-ppc_dens_overlay(log(earnings$earnk[earnings$earn>0]), yrep_log_2[sims_display,])
+ppc_dens_overlay(log(earnings$earn[earnings$earn>0]), yrep_log_2[sims_display,])
 
 #' **Posterior predictive checking for model in log-log scale**
 yrep_loglog_2 <- posterior_predict(loglogmodel_2)
 n_sims <- nrow(yrep_loglog_2)
 sims_display <- sample(n_sims, 100)
-ppc_dens_overlay(log(earnings$earnk[earnings$earn>0]), yrep_loglog_2[sims_display,])
+ppc_dens_overlay(log(earnings$earn[earnings$earn>0]), yrep_loglog_2[sims_display,])
