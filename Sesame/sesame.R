@@ -18,7 +18,6 @@ library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 library("brms")
-library("foreign")
 
 #' Set random seed for reproducability
 SEED <- 1234
