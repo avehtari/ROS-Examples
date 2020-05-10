@@ -40,8 +40,31 @@ print(fit_1)
 
 #' **Predictions**
 new <- data.frame(income=5)
-linpred <- posterior_linpred(fit_1, transform=TRUE, newdata=new)
-predict <- posterior_predict(fit_1, newdata=new)
+#' Predict vote preference point estimate
+pred <- predict(fit_1, type="response", newdata=new)
+print(pred, digits=2)
+#' Linear predictor with uncertaintt
+linpred <- posterior_linpred(fit_1, newdata=new)
+print(c(mean(linpred), sd(linpred)), digits=2)
+#' Expected outcome with uncertainty
+epred <- posterior_epred(fit_1, newdata=new)
+print(c(mean(epred), sd(epred)), digits=2)
+#' Predictive distribution for a new observation
+postpred <- posterior_predict(fit_1, newdata=new)
+print(c(mean(postpred), sd(postpred)), digits=2)
+
+#' **Prediction given a range of input values**
+new <- data.frame(income=1:5)
+pred <- predict(fit_1, type="response", newdata=new)
+linpred <- posterior_linpred(fit_1, newdata=new)
+epred <- posterior_epred(fit_1, newdata=new)
+postpred <- posterior_predict(fit_1, newdata=new)
+#' the posterior probability, according to the fitted model, that Bush
+#' was more popular among people with income level 5 than among people
+#' with income level 4
+mean(epred[,5] > epred[,4])
+#' 95\% posterior distribution for the difference in support for Bush, comparing people in the richest to the poorest category
+quantile(epred[,5] - epred[,4], c(0.025, 0.975))
 
 #' **Fake data example**
 data <- data.frame(rvote=rep(c(0,1), 10), income=1:20)
