@@ -10,11 +10,17 @@
 #' - [Code and data folders alphabetically](#alphabetically)
 #' - [Git repo for the code and data](https://github.com/avehtari/ROS-Examples)
 #' - [Download all examples as a ZIP file](https://github.com/avehtari/ROS-Examples/archive/master.zip)
+#' - [Sample exams](https://github.com/avehtari/ROS-Examples/tree/master/Exams/)
+#' - See also an article [Teaching Bayes to Graduate Students in Political Science, Sociology, Public Health, Education, Economics, ...](http://www.stat.columbia.edu/~gelman/research/published/teachingbayes.pdf)
 #'
-#' Below folders (ending /) point to the code folders in github, and
-#' .html -files point to pretty notebooks.
+#' The folders below (ending /) point to the code (.R and .Rmd) and
+#' data folders in github, and .html -files point to pretty
+#' notebooks. Most examples have cleaned data in csv file in data
+#' subfolder for easy experimenting. The data subfolders have also the
+#' raw data and *_setup.R file showing how the data cleaning has been
+#' done.
 #'
-#' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues.
+#' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
 #' 
 #' -------------
 #' 
@@ -54,8 +60,8 @@
 #'     - [mile.html](Mile/mile.html) - Trend of record times in the mile run
 #'   - [Metabolic/](https://github.com/avehtari/ROS-Examples/tree/master/Metabolic/)
 #'     - [metabolic.html](Metabolic/metabolic.html) - How to interpret a power law or log-log regression
-#'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
-#'     - [vitals.html](Vitals/vitals.html) - Predict weight
+#'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
+#'     - [height_and_weight.html](Earnings/height_and_weight.html) - Predict weight
 #'   - [CentralLimitTheorem/](https://github.com/avehtari/ROS-Examples/tree/master/CentralLimitTheorem/)
 #'     - [heightweight.html](CentralLimitTheorem/heightweight.html) - Illustrate central limit theorem and normal distribution
 #'   - [Stents/](https://github.com/avehtari/ROS-Examples/tree/master/Stents/)
@@ -108,16 +114,15 @@
 #'     - [bayes.html](ElectionsEconomy/bayes.html) - Demonstration of Bayesian information aggregation
 #'   - [SexRatio/](https://github.com/avehtari/ROS-Examples/tree/master/SexRatio/)
 #'     - [sexratio.html](SexRatio/sexratio.html) - Example where an informative prior makes a difference
-#'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
-#'     - [vitals.html](Vitals/vitals.html) - Predict weight
 #'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
+#'     - [height_and_weight.html](Earnings/height_and_weight.html) - Predict weight
 #'     - [earnings_regression.html](Earnings/earnings_regression.html) - Predict respondents' yearly earnings using survey data from 1990.
 #' 
 #' ### 10  Linear regression with multiple predictors
 #'   - [KidIQ/](https://github.com/avehtari/ROS-Examples/tree/master/KidIQ/)
 #'     - [kidiq.html](KidIQ/kidiq.html) - Linear regression with multiple predictors
-#'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
-#'     - [vitals.html](Vitals/vitals.html) - Predict weight
+#'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
+#'     - [height_and_weight.html](Earnings/height_and_weight.html) - Predict weight
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
 #'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
@@ -222,11 +227,15 @@
 #' ### 20  Observational studies with all confounders assumed to be measured
 #'   - [ElectricCompany/](https://github.com/avehtari/ROS-Examples/tree/master/ElectricCompany/)
 #'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
+#'   - [Childcare/](https://github.com/avehtari/ROS-Examples/tree/master/Childcare/)
+#'     - [childcare.html](Childcare/childcare.html) - Infant Health and Development Program (IHDP) example.
 #' 
 #' ### 21  More advanced topics in causal inference
 #'   - [Sesame/](https://github.com/avehtari/ROS-Examples/tree/master/Sesame/)
 #'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
 #'   - [Bypass/](https://github.com/avehtari/ROS-Examples/tree/master/Pypass/)
+#'   - [ChileSchools/](https://github.com/avehtari/ROS-Examples/tree/master/ChileSchools/)
+#'     - [chile_schools.html](ChileSchools/chile_schoolse.html) - ChileSchools example.
 #' 
 #' ### 22  Advanced regression and multilevel models
 #'   - [Golf/](https://github.com/avehtari/ROS-Examples/tree/master/Golf/)
@@ -270,6 +279,10 @@
 #'     - [diagrams.html](CausalDiagram/diagrams.html) - Plot causal diagram
 #'   - [CentralLimitTheorem/](https://github.com/avehtari/ROS-Examples/tree/master/CentralLimitTheorem/)
 #'     - [heightweight.html](CentralLimitTheorem/heightweight.html) - Illustrate central limit theorem and normal distribution
+#'   - [Childcare/](https://github.com/avehtari/ROS-Examples/tree/master/Childcare/)
+#'     - [childcare.html](Childcare/childcare.html) - Infant Health and Development Program (IHDP) example.
+#'   - [ChileSchools/](https://github.com/avehtari/ROS-Examples/tree/master/ChileSchools/)
+#'     - [chile_schools.html](ChileSchools/chile_schoolse.html) - ChileSchools example.
 #'   - [Coins/](https://github.com/avehtari/ROS-Examples/tree/master/Coins/)
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'     - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
@@ -394,6 +407,6 @@
 #'     - [student.html](Student/student.html) - Models for regression coefficients
 #'   - [Unemployment/](https://github.com/avehtari/ROS-Examples/tree/master/Unemployment/)
 #'     - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
-#'   - [Vitals/](https://github.com/avehtari/ROS-Examples/tree/master/Vitals/)
-#'     - [heightweight.html](Vitals/heightweight.html) - Illustrate central limit theorem and normal distribution
-#'     - [vitals.html](Vitals/vitals.html) - Predict weight
+#'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
+#'     - [heightweight.html](Earnings/heightweight.html) - Illustrate central limit theorem and normal distribution
+#'     - [height_and_weight.html](Earnings/height_and_weight.html) - Predict weight
