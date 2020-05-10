@@ -90,12 +90,11 @@ age <- poststrat[people,2]
 eth <- poststrat[people,3]
 fake <- data.frame(y, sex, age, eth)
 fit <- stan_glm(y ~ factor(sex) + factor(age) + factor(eth),
-                family=binomial(link="logit"), data=fake)
+                family=binomial(link="logit"), data=fake, refresh=0)
 print(fit)
 
 #' **Prediction**
-pred_sim <- posterior_linpred(fit, transform=TRUE,
-  newdata=as.data.frame(poststrat))
+pred_sim <- posterior_epred(fit, newdata=as.data.frame(poststrat))
 pred_est <- colMeans(pred_sim)
 round(cbind(poststrat, prob_yes, pred_est), 2)
 

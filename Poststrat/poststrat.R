@@ -82,12 +82,12 @@ fit_1 <- stan_glm(vote ~ factor(pid), data = poll, refresh = 0)
 print(fit_1, digits=2)
 
 #' **Poststrat using posterior_linpred()**
-predict_1 <- posterior_linpred(fit_1, newdata=poststrat_data)
-poststrat_est_1 <- predict_1 %*% poststrat_data$N/sum(poststrat_data$N)
+epred_1 <- posterior_epred(fit_1, newdata=poststrat_data)
+poststrat_est_1 <- epred_1 %*% poststrat_data$N/sum(poststrat_data$N)
 print(c(mean(poststrat_est_1), mad(poststrat_est_1)), digits=2)
 
 #' **Add extra uncertainty**
-n_sim <- nrow(predict_1)
+n_sim <- nrow(epred_1)
 poststrat_est_2 <- poststrat_est_1 + rnorm(n_sim, 0, 0.02)
 print(c(mean(poststrat_est_2), mad(poststrat_est_2)), digits=2)
 
@@ -103,7 +103,7 @@ round(mean(poll$vote, na.rm=TRUE), 3)
 #' **Poststrat using the predict function**
 X_population <- data.frame(pid=c("Republican", "Democrat", "Independent"))
 N_population <- c(0.33, 0.36, 0.31)
-predict_poststrat <- colMeans(posterior_predict(fit, newdata=X_population))
+predict_poststrat <- colMeans(posterior_epred(fit, newdata=X_population))
 poststrat_est_2 <- sum(N_population*predict_poststrat)/sum(N_population)
 round(poststrat_est_2, digits=3)
 
