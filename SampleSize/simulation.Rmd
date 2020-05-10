@@ -33,11 +33,9 @@ fake <- data.frame(c(y,x1,x2))
 
 **Fit models**
 
-```{r results='hide'}
+```{r }
 fit_1a <- stan_glm(y ~ x1, data = fake, refresh = 0)
 fit_1b <- stan_glm(y ~ x1 + x2 + x1:x2, data = fake, refresh = 0)
-```
-```{r }
 print(fit_1a)
 print(fit_1b)
 ```
@@ -51,11 +49,9 @@ x2 <- sample(c(0,1), N, replace=TRUE)
 
 **Fit models**
 
-```{r results='hide'}
+```{r }
 fit_2a <- stan_glm(y ~ x1, data = fake, refresh = 0)
 fit_2b <- stan_glm(y ~ x1 + x2 + x1:x2, data = fake, refresh = 0)
-```
-```{r }
 print(fit_2a)
 print(fit_2b)
 ```
@@ -69,11 +65,9 @@ x2 <- sample(c(-1,1), N, replace=TRUE)
 
 **Fit models**
 
-```{r results='hide'}
+```{r }
 fit_3a <- stan_glm(y ~ x1, data = fake, refresh = 0)
 fit_3b <- stan_glm(y ~ x1 + x2 + x1:x2, data = fake, refresh = 0)
-```
-```{r }
 print(fit_3a)
 print(fit_3b)
 ```

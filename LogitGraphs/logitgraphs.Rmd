@@ -37,6 +37,7 @@ x_sd <- 4/b
 x <- rnorm(n, x_mean, x_sd)
 y <- rbinom(n, 1, invlogit(a + b*x))
 fake_1 <- data.frame(x, y)
+head(fake_1)
 ```
 
 **Fit the model and save the coefficient estimates**

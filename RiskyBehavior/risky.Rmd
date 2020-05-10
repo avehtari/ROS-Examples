@@ -1,0 +1,38 @@
+---
+title: "Regression and Other Stories: RiskyBehavior"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+
+Data from a randomized trial targeting couples at high risk of HIV
+infection. The intervention provided counseling sessions regarding
+practices that could reduce their likelihood of contracting
+HIV. Couples were randomized either to a control group, a group in
+which just the woman participated, or a group in which both members
+of the couple participated. One of the outcomes examined after
+three months was “number of unprotected sex acts.”. See Chapter 15
+in Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+```
+
+**Load data**
+
+```{r }
+risky <- read.csv(root("RiskyBehavior/data","risky.csv"))
+head(risky)
+```
+

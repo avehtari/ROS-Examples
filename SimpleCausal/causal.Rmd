@@ -1,0 +1,152 @@
+---
+title: "Regression and Other Stories: SimpleCausal"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+Simple graphs illustrating regression for causal inference. See
+Chapter 1 in Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+library("arm")
+```
+
+**Simulated data from linear model**
+
+```{r }
+N <- 50
+x <- runif(N, 1, 5)
+y <- rnorm(N, 10 + 3*x, 3)
+x_binary <- ifelse(x<3, 0, 1)
+data <- data.frame(N, x, y, x_binary)
+```
+
+**Regression with binary predictor**
+
+```{r }
+lm_1a <- lm(y ~ x_binary, data = data)
+display(lm_1a)
+```
+
+**Plots**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("SimpleCausal/figs","overview_1a.pdf"), height=3.5, width=4.5)
+```
+```{r }
+par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(x_binary, y, xlab="", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Regression with binary treatment", cex.main=.9, xaxt="n", cex.lab=.9, cex.axis=.9)
+axis(1, c(0,1), c("    Control", "Treatment    "), cex.axis=.9)
+abline(coef(lm_1a)[1], coef(lm_1a)[2])
+text(0.3, 13, paste("Estimated treatment effect is\nslope of fitted line: ", fround(coef(lm_1a)[2], 1)), cex=.8, adj=0)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**Classical regression with continuous predictor**
+
+```{r }
+lm_1b <- lm(y ~ x, data = data)
+display(lm_1b)
+
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("SimpleCausal/figs","overview_1b.pdf"), height=3.5, width=4.5)
+```
+```{r }
+par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Regression with continuous treatment", cex.main=.9, cex.lab=.9, cex.axis=.9)
+abline(coef(lm_1b)[1], coef(lm_1b)[2])
+text(3.2, 15, paste("Estimated treatment\neffect per unit of x is\nslope of fitted line: ", fround(coef(lm_1b)[2], 1)), cex=.8, adj=0)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**Simulated data from nonlinear model**
+
+```{r }
+y <- rnorm(N, 5 + 30*exp(-x), 2)
+data$y <- y
+```
+
+**Classical regression with continuous predictor**
+
+```{r }
+lm_2a <- lm(y ~ x, data = data)
+display(lm_2a)
+
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("SimpleCausal/figs","overview_2a.pdf"), height=3.5, width=4.5)
+```
+```{r }
+par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Nonlinear treatment effect", cex.main=.9, cex.lab=.9, cex.axis=.9)
+curve(5 + 30*exp(-x), add=TRUE)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("SimpleCausal/figs","overview_2b.pdf"), height=3.5, width=4.5)
+```
+```{r }
+par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Nonlinear effect, estimated with straight line fit", cex.main=.9, cex.lab=.9, cex.axis=.9)
+abline(coef(lm_2a)[1], coef(lm_2a)[2])
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+
+**Simulated data from two groups**
+
+```{r }
+N <- 100
+xx <- rnorm(N, 0, 1)^2
+z <- rep(0:1, N/2)
+xx <- ifelse(z==0, rnorm(N, 0, 1.2)^2, rnorm(N, 0, .8)^2)
+yy <- rnorm(N, 20 + 5*xx + 10*z, 3)
+data <- data.frame(xx, z, yy)
+lm_2 <- lm(yy ~ xx + z, data=data)
+display(lm_2)
+
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("SimpleCausal/figs","overview_3.pdf"), height=3.5, width=4.5)
+```
+```{r }
+par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
+plot(xx, yy, xlab="Pre-treatment predictor", ylab="Outcome measurement", bty="l", main="Continuous pre-treatment predictor and binary treatment    ", cex.main=.9, cex.lab=.9, cex.axis=.9, type="n")
+points(xx[z==0], yy[z==0], pch=20, cex=.5)
+points(xx[z==1], yy[z==1], pch=1, cex=1)
+abline(coef(lm_2)[1], coef(lm_2)[2])
+abline(coef(lm_2)[1] + coef(lm_2)[3], coef(lm_2)[2])
+text(2.3, 29.5, "Controls", cex=.9, adj=0)
+text(1.5, 45, "Treated", cex=.9, adj=0)
+x0 <- 5.2
+arrows(x0, coef(lm_2)[1] + coef(lm_2)[2]*x0, x0, coef(lm_2)[1] + coef(lm_2)[2]*x0 + coef(lm_2)[3], length=.1, code=3)
+text(x0+.15, 1 + coef(lm_2)[1] + coef(lm_2)[2]*x0 + .5*coef(lm_2)[3], paste("Estimated\ntreatment\neffect is", fround(coef(lm_2)[3], 1)), cex=.8, adj=0)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+
+for (j in 0:1) print(mean(yy[z==j]))
+for (j in 0:1) print(mean(xx[z==j]))
+```
+

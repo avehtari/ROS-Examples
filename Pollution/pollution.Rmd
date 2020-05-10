@@ -1,0 +1,34 @@
+---
+title: "Regression and Other Stories: Pollution"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+---
+A pollution data set. See Chapter 12 in Regression and Other
+Stories.
+
+Source: McDonald, G.C. and Schwing, R.C. (1973) 'Instabilities of
+regression estimates relating air pollution to mortality',
+Technometrics, vol.15, 463-482. See data/pollution.txt for the
+explanation of the variables.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+```
+
+**Load data**
+
+```{r }
+pollution <- read.csv(root("Pollution/data","pollution.csv"))
+head(pollution)
+```
+

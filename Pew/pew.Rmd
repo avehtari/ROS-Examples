@@ -169,7 +169,7 @@ n.ideology <- max(ideology, na.rm=TRUE)
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5, colormodel="gray")
 ```
 ```{r }
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
@@ -197,7 +197,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5, colormodel="gray")
 ```
 ```{r }
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)

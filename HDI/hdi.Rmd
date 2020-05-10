@@ -28,7 +28,14 @@ library("maps")
 
 ```{r }
 hdi <- read.table(root("HDI/data","hdi.dat"), header=TRUE)
+head(hdi)
 votes <- read.dta(root("HDI/data","state vote and income, 68-00.dta"))
+head(votes)
+```
+
+**Pre-process**
+
+```{r }
 income2000 <- votes[votes[,"st_year"]==2000, "st_income"]
 state.income <- c(income2000[1:8],NA,income2000[9:50])
 state.abb.long <- c(state.abb[1:8],"DC",state.abb[9:50])

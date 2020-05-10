@@ -36,10 +36,8 @@ Simon Newcomb's measurements of the speed of light, from Stigler
 nanoseconds.
 
 ```{r }
-newcomb <- data.frame(y=c(28,26,33,24,34,-44,27,16,40,-2,29,22,24,21,25,30,
-                          23,29,31,19,24,20,36,32,36,28,25,21,28,29,37,25,28,
-                          26,30,32,36,26,30,22, 36,23,27,27,28,27,31,27,26,
-                          33,26,32,32,24,39,28,24,25,32,25,29,27,28,29,16,23))
+newcomb <- read.table(root("Newcomb/data","newcomb.txt"), header = TRUE)
+head(newcomb)
 ```
 
 Plot histogram of the data
@@ -123,17 +121,17 @@ if (savefigs) ggsave(root("Newcomb/figs","newcomb_ppc_dens_overlay.pdf"), width 
 **Plot test statistic for data and replicates**
 
 ```{r }
-Test <- function (y) {
+test <- function (y) {
   min(y) }
-test_rep <- apply(y_rep, 1, Test)
+test_rep <- apply(y_rep, 1, test)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Newcomb/figs","newcomb_test_hist.pdf"), height=4, width=5)
 ```
 ```{r }
-hist(test_rep, xlim=range(Test(newcomb$y), test_rep), breaks=20, yaxt="n",
+hist(test_rep, xlim=range(test(newcomb$y), test_rep), breaks=20, yaxt="n",
      xlab="", ylab="", main=NULL)
-lines(rep(Test(newcomb$y),2), c(0,n_sims), lwd=3)
+lines(rep(test(newcomb$y),2), c(0,n_sims), lwd=3)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) dev.off()

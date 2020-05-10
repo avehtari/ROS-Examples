@@ -11,6 +11,8 @@ and 15 in Regression and Other Stories.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
 ```
 
 **Load packages**
@@ -19,85 +21,37 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-```
 
-**Load and pre-process data**
-
-```{r }
-congress <- vector("list", 49)
-for (i in 1:49){
-  year <- 1896 + 2*(i-1)
-  file <- root("Congress/data",paste(year, ".asc", sep=""))
-  data_year <- matrix(scan(file), byrow=TRUE, ncol=5)
-  data_year <- cbind(rep(year, nrow(data_year)), data_year)
-  congress[[i]] <- data_year
-}
-
-i86 <- (1986-1896)/2 + 1
-cong86 <- congress[[i86]]
-cong88 <- congress[[i86+1]]
-cong90 <- congress[[i86+2]]
-#
-v86 <- cong86[,5]/(cong86[,5]+cong86[,6])
-bad86 <- cong86[,5]==-9 | cong86[,6]==-9
-v86[bad86] <- NA
-contested86 <- v86>.1 & v86<.9
-inc86 <- cong86[,4]
-inc86[inc86 == -9] <- 0
-#
-v88 <- cong88[,5]/(cong88[,5]+cong88[,6])
-bad88 <- cong88[,5]==-9 | cong88[,6]==-9
-v88[bad88] <- NA
-contested88 <- v88>.1 & v88<.9
-inc88 <- cong88[,4]
-inc88[inc88 == -9] <- 0
-#
-v90 <- cong90[,5]/(cong90[,5]+cong90[,6])
-bad90 <- cong90[,5]==-9 | cong90[,6]==-9
-v90[bad90] <- NA
-contested90 <- v90>.1 & v90<.9
-inc90 <- cong90[,4]
-inc90[inc90 == -9] <- 0
-```
-
-Impute uncontested elections
-
-```{r }
-uncontested_adj <- function(vote){
-  vote[vote < 0.1] <- 0.25
-  vote[vote > 0.9] <- 0.75
-  return(vote)
-}
-v86_adj <- uncontested_adj(v86)
-v88_adj <- uncontested_adj(v88)
-v90_adj <- uncontested_adj(v90)
+congress <- read.csv(root("Congress/data","congress.csv"))
+inconsistent <- (congress$inc88==(-1) & congress$v86 > 0.5) |  (congress$inc88==1 & congress$v86 < 0.5)
+head(congress)
 ```
 
 **Regression predicting 1988 from 1986**
 
 ```{r }
-data_88 <- data.frame(vote=v88_adj, past_vote=v86_adj, inc=inc88)
-fit_88 <- stan_glm(vote ~ past_vote + inc, data=data_88, refresh=0)
-print(fit_88, digits=2)
+data88 <- data.frame(vote=congress$v88_adj, past_vote=congress$v86_adj, inc=congress$inc88)
+fit88 <- stan_glm(vote ~ past_vote + inc, data=data88, refresh=0)
+print(fit88, digits=2)
 ```
 
 **Simulation for inferences and predictions of new data points**</br>
 **Predict from 1988 to 1990**
 
 ```{r }
-data_90 <- data.frame(past_vote=v88_adj, incumbency=inc90)
+data90 <- data.frame(past_vote=congress$v88_adj, inc=congress$inc90)
 ```
 
 **Simulate predictive simulations of the vector of new outcomes**
 
 ```{r }
-pred_90 <- posterior_predict(fit_88, data=data_90)
+pred90 <- posterior_predict(fit88, newdata=data90)
 ```
 
 **Simulate the number of elections predicted to be won by the Democrats in 1990**
 
 ```{r }
-dems_pred <- rowSums(pred_90 > 0.5)
+dems_pred <- rowSums(pred90 > 0.5)
 ```
 
 Alternately calculate that sum in a loop
@@ -106,7 +60,7 @@ Alternately calculate that sum in a loop
 n_sims <- 4000
 dems_pred <- rep(NA, n_sims)
 for (s in 1:n_sims) {
-  dems_pred[s] <- sum(pred_90[s,] > 0.5)
+  dems_pred[s] <- sum(pred90[s,] > 0.5)
 }
 ```
 
@@ -120,5 +74,57 @@ print(c(mean(dems_pred), sqrt(var(dems_pred))),digits=2)
 
 ```{r }
 hist(dems_pred)
+```
+
+**Graphs**
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf("hist88.pdf", height=3.2, width=4.1, colormodel="gray")
+```
+```{r }
+par(mar=c(3,0,1,0), mgp=c(1.5, .5, 0), tck=-.01)
+v88_hist <- ifelse(congress$v88<.1, .0001, ifelse(congress$v88>.9, .9999, congress$v88))
+hist(v88_hist, breaks=seq(0,1,.05),
+     xlab="Democratic share of the two-party vote", ylab="", yaxt="n", main="")
+mtext("Congressional elections in 1988", 3, 0)
+if (savefigs) dev.off()
+
+if (savefigs) pdf("cong.pdf", height=4, width=4, colormodel="gray")
+par(pty="s")
+par(mar=c(3,0,3,0), mgp=c(1.7, .5, 0), tck=-.01)
+plot(0, 0, xlim=c(0,1), ylim=c(0,1), type="n", xaxs="i", yaxs="i",
+  xlab="Democratic vote share in 1986", ylab="Democratic vote share in 1988")
+abline(0,1, lwd=.5)
+jitt <- function(vote){
+  n <- length(vote)
+  ifelse(vote<0.1, runif(n, 0.01, 0.04), ifelse(vote>0.9, runif(n, 0.96, 0.99), vote))
+}
+j_v86 <- jitt(congress$v86)
+j_v88 <- jitt(congress$v88)
+points(j_v86[congress$inc88==0], j_v88[congress$inc88==0], pch=1, cex=1)
+points(j_v86[congress$inc88==1], j_v88[congress$inc88==1], pch=16, cex=.8)
+points(j_v86[congress$inc88==-1], j_v88[congress$inc88==-1], pch=4, cex=.8)
+mtext("Raw data", 3, .7)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf("congclean.pdf", height=4, width=4, colormodel="gray")
+```
+```{r }
+par(pty="s")
+par(mar=c(3,0,3,0), mgp=c(1.7, .5, 0), tck=-.01)
+plot(0, 0, xlim=c(0,1), ylim=c(0,1), type="n", xaxs="i", yaxs="i",
+  xlab="Adjusted Dem. vote share in 1986", ylab="Adjusted Dem. vote share in 1988")
+abline(0,1, lwd=.5)
+points(congress$v86_adj[congress$inc88==0], congress$v88_adj[congress$inc88==0], pch=1, cex=1)
+points(congress$v86_adj[congress$inc88==1], congress$v88_adj[congress$inc88==1], pch=16, cex=.8)
+points(congress$v86_adj[congress$inc88==-1], congress$v88_adj[congress$inc88==-1], pch=4, cex=.8)
+mtext("Adjusted data", 3, .7)
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
 ```
 

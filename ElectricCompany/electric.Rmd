@@ -27,7 +27,8 @@ invlogit <- plogis
 **Load data**
 
 ```{r }
-electric <- read.table(root("ElectricCompany/data","electric.dat"), header=TRUE)
+electric_wide <- read.table(root("ElectricCompany/data","electric_wide.txt"), header=TRUE)
+head(electric_wide)
 ```
 
 **Plot of raw data**
@@ -45,17 +46,17 @@ par(mar=c(.2, .2, .2, .2))
 onlytext('Test scores in control classes')
 onlytext('Test scores in treated classes')
 par(mar=c(1, 1, 1, 1), lwd=0.7)
-attach(electric)
+attach(electric_wide)
 for (j in 1:4){
   onlytext(paste('Grade', j))
-  hist(control.Posttest[Grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
+  hist(control_posttest[grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
   axis(side=1, seq(0,125,50), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0)
-  text(2, 6.5, paste("mean =", round(mean(control.Posttest[Grade==j]))), adj=0)
-  text(2, 5, paste("  sd =", round(sd(control.Posttest[Grade==j]))), adj=0)
-  hist(treated.Posttest[Grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
+  text(2, 6.5, paste("mean =", round(mean(control_posttest[grade==j]))), adj=0)
+  text(2, 5, paste("  sd =", round(sd(control_posttest[grade==j]))), adj=0)
+  hist(treated_posttest[grade==j], breaks=seq(0,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,10))
   axis(side=1, seq(0,125,50), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0)
-  text(2, 6.5, paste("mean =", round(mean(treated.Posttest[Grade==j]))), adj=0)
-  text(2, 5, paste("  sd =", round(sd(treated.Posttest[Grade==j]))), adj=0)
+  text(2, 6.5, paste("mean =", round(mean(treated_posttest[grade==j]))), adj=0)
+  text(2, 5, paste("  sd =", round(sd(treated_posttest[grade==j]))), adj=0)
 }
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -79,12 +80,12 @@ onlytext('Treated\nclasses')
 par(mar=c(.2,.4,.2,.4), lwd=.5)
 for (j in 1:4){
   onlytext(paste('Grade', j))
-  hist(control.Posttest[Grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
+  hist(control_posttest[grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
   axis(side=1, seq(50,100,25), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0, lty="blank")
-  lines(rep(mean(control.Posttest[Grade==j]),2), c(0,11), lwd=2)
-  hist(treated.Posttest[Grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
+  lines(rep(mean(control_posttest[grade==j]),2), c(0,11), lwd=2)
+  hist(treated_posttest[grade==j], breaks=seq(40,125,5), xaxt='n', yaxt='n', main=NULL, col="gray", ylim=c(0,14))
   axis(side=1, seq(50,100,25), line=-.25, cex.axis=1, mgp=c(1,.2,0), tck=0, lty="blank")
-  lines(rep(mean(treated.Posttest[Grade==j]),2), c(0,11), lwd=2)
+  lines(rep(mean(treated_posttest[grade==j]),2), c(0,11), lwd=2)
 }
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -94,26 +95,26 @@ if (savefigs) dev.off()
 **Another plot**
 
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) postscript(root("ElectricCompany/figs","electricscatter1a.ps"), horizontal=T, height=4)
+if (savefigs) postscript(root("ElectricCompany/figs","electricscatter1a.ps"), horizontal=TRUE, height=4)
 ```
 ```{r }
 par(mfrow=c(1,4), pty="s")
 x.range <- cbind(c(5,40,40,40), c(25,125,125,125))
 for (j in 1:4){
-  ok <- Grade==j
-  x <- c(treated.Pretest[ok], control.Pretest[ok])
-  y <- c(treated.Posttest[ok], control.Posttest[ok])
+  ok <- grade==j
+  x <- c(treated_pretest[ok], control_pretest[ok])
+  y <- c(treated_posttest[ok], control_posttest[ok])
   t <- rep(c(1,0), rep(sum(ok),2))
-  plot(c(0,125), c(0,125), type="n", main=paste("grade",j), xaxs="i", yaxs="i",
+  plot(c(0,125), c(0,125), type="n", main=paste("Grade",j), xaxs="i", yaxs="i",
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0))
-  fit_1 <- stan_glm(y ~ x + t, data = electric, refresh = 0, 
-                    save_warmup = FALSE, open_progress = FALSE)
+  fit_1 <- stan_glm(y ~ x + t, data = electric_wide, refresh = 0, 
+                    save_warmup = FALSE, open_progress = FALSE, cores = 1)
   abline(coef(fit_1)[1], coef(fit_1)[2], lwd=.5, lty=2)
   abline(coef(fit_1)[1]+coef(fit_1)[3], coef(fit_1)[2], lwd=.5)
-  points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
-  points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
+  points(control_pretest[ok], control_posttest[ok], pch=20, cex=1.2)
+  points(treated_pretest[ok], treated_posttest[ok], pch=21, cex=1.2)
 }
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -123,25 +124,25 @@ if (savefigs) dev.off()
 **Yet another plot**
 
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) postscript(root("ElectricCompany/figs","electricscatter1b.ps"), horizontal=T, height=4)
+if (savefigs) postscript(root("ElectricCompany/figs","electricscatter1b.ps"), horizontal=TRUE, height=4)
 ```
 ```{r }
 par(mfrow=c(1,4), pty="s")
 for (j in 1:4){
-  ok <- Grade==j
-  x <- c(treated.Pretest[ok], control.Pretest[ok])
-  y <- c(treated.Posttest[ok], control.Posttest[ok])
+  ok <- grade==j
+  x <- c(treated_pretest[ok], control_pretest[ok])
+  y <- c(treated_posttest[ok], control_posttest[ok])
   t <- rep(c(1,0), rep(sum(ok),2))
-    plot(c(0,125),c(0,125), type="n", main=paste("grade",j),
+    plot(c(0,125),c(0,125), type="n", main=paste("Grade",j),
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0))
-  fit_1 <- stan_glm(y ~ x + t, data = electric, refresh = 0, 
-                    save_warmup = FALSE, open_progress = FALSE)
+  fit_1 <- stan_glm(y ~ x + t, data = electric_wide, refresh = 0, 
+                    save_warmup = FALSE, open_progress = FALSE, cores = 1)
   abline(coef(fit_1)[1], coef(fit_1)[2], lwd=.5, lty=2)
   abline(coef(fit_1)[1]+coef(fit_1)[3], coef(fit_1)[2], lwd=.5)
-  points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
-  points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
+  points(control_pretest[ok], control_posttest[ok], pch=20, cex=1.2)
+  points(treated_pretest[ok], treated_posttest[ok], pch=21, cex=1.2)
 }
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -151,26 +152,26 @@ if (savefigs) dev.off()
 **Plot more**
 
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) postscript(root("ElectricCompany/figs","electricscatter2.ps"), horizontal=T, height=4)
+if (savefigs) postscript(root("ElectricCompany/figs","electricscatter2.ps"), horizontal=TRUE, height=4)
 ```
 ```{r }
 par(mfrow=c(1,4), pty="s")
 for (j in 1:4){
-  ok <- Grade==j
-  x <- c(treated.Pretest[ok], control.Pretest[ok])
-  y <- c(treated.Posttest[ok], control.Posttest[ok])
+  ok <- grade==j
+  x <- c(treated_pretest[ok], control_pretest[ok])
+  y <- c(treated_posttest[ok], control_posttest[ok])
   t <- rep(c(1,0), rep(sum(ok),2))
-  plot(c(0,125),c(0,125), type="n", main=paste("grade",j), xaxs="i", yaxs="i",
+  plot(c(0,125),c(0,125), type="n", main=paste("Grade",j), xaxs="i", yaxs="i",
         xlab=expression(paste("pre-test, ",x[i])),
         ylab=expression(paste("post-test, ",y[i])),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0))
-  fit_1 <- stan_glm(y ~ x + t + x:t, data = electric, refresh = 0, 
-                    save_warmup = FALSE, open_progress = FALSE)
+  fit_1 <- stan_glm(y ~ x + t + x:t, data = electric_wide, refresh = 0, 
+                    save_warmup = FALSE, open_progress = FALSE, cores = 1)
   abline(coef(fit_1)[1], coef(fit_1)[2], lwd=.5, lty=2)
   abline(coef(fit_1)[1]+coef(fit_1)[3], coef(fit_1)[2]+coef(fit_1)[4], lwd=.5)
   ## lm.1 <- lm(y ~ x + t + x*t)
-  points(control.Pretest[ok], control.Posttest[ok], pch=20, cex=1.2)
-  points(treated.Pretest[ok], treated.Posttest[ok], pch=21, cex=1.2)
+  points(control_pretest[ok], control_posttest[ok], pch=20, cex=1.2)
+  points(treated_pretest[ok], treated_posttest[ok], pch=21, cex=1.2)
 }
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -180,14 +181,20 @@ if (savefigs) dev.off()
 **Linear model**
 
 ```{r }
-post_test <- c(treated.Posttest, control.Posttest)
-pre_test <- c(treated.Pretest, control.Pretest)
-grade <- rep(Grade, 2)
-treatment <- rep(c(1,0), rep(length(treated.Posttest),2))
+post_test <- c(treated_posttest, control_posttest)
+pre_test <- c(treated_pretest, control_pretest)
+grade <- rep(electric_wide$grade, 2)
+treatment <- rep(c(1,0), rep(length(treated_posttest),2))
+supp <- rep(NA, length(treatment))
+n_pairs <- nrow(electric_wide)
+pair_id <- rep(1:n_pairs, 2)
+supp[treatment==1] <- ifelse(supplement=="Supplement", 1, 0)
 n <- length(post_test)
-df <- data.frame(post_test, pre_test, grade, treatment)
-fit_3 <- stan_glm(post_test ~ treatment + pre_test + treatment:pre_test,
-                  subset=(grade==4), data=df, refresh=0)
+electric <- data.frame(post_test, pre_test, grade, treatment, supp, pair_id)
+#write.csv(electric, root("ElectricCompany/data","electric.csv"))
+#electric <- read.csv(root("ElectricCompany/data","electric.csv"))
+
+fit_3 <- stan_glm(post_test ~ treatment + pre_test + treatment:pre_test, subset=(grade==4), data=electric, refresh = 0)
 print(fit_3)
 ```
 
@@ -195,24 +202,22 @@ print(fit_3)
 
 ```{r }
 fit_4 <- stan_glm(post_test ~ treatment + pre_test + treatment * pre_test,
-                  subset = (grade==4), data=df, refresh = 0)
-sims_4 <- as.matrix(fit_4)
+                  subset = (grade==4), data=electric, refresh = 0)
+sim_4 <- as.matrix(fit_4)
 ```
 
 **Plot linear model**
 
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) postscript(root("ElectricCompany/figs","grade4.interactions.ps"), horizontal=T, height=3.8, width=5)
+if (savefigs) postscript(root("ElectricCompany/figs","grade4.interactions.ps"), horizontal=TRUE, height=3.8, width=5)
 ```
 ```{r }
-n_sims <- nrow(sims_4)
 plot(0, 0, xlim=range(pre_test[grade==4]), ylim=c(-5,10),
        xlab="pre-test", ylab="treatment effect", main="treatment effect in grade 4")
 abline(0, 0, lwd=.5, lty=2)
-for (s in sample(n_sims, 20))
-  curve(sims_4[s,2] + sims_4[s,4]*x, lwd=.5, col="gray", add=TRUE)
-est_4 <- apply(sims_4, 2, median)
-curve(est_4[2] + est_4[4]*x, lwd=0.5, add=TRUE)
+for (i in 1:20)
+  curve(sim_4[i,2] + sim_4[i,4]*x, lwd=.5, col="gray", add=TRUE)
+curve(coef(fit_4)[2] + coef(fit_4)[4]*x, lwd=.5, add=TRUE)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) dev.off()
@@ -221,10 +226,11 @@ if (savefigs) dev.off()
 **Mean effect**
 
 ```{r }
+n_sims <- 1000
 effect <- array(NA, c(n_sims, sum(grade==4)))
-for (s in 1:n_sims)
-  effect[s,] <- sims_4[s,2] + sims_4[s,4]*pre_test[grade==4]
-avg_effect <- rowMeans(effect)
+for (i in 1:n_sims)
+  effect[i,] <- sim_4[i,2] + sim_4[i,4]*pre_test[grade==4]
+mean_effect <- rowMeans(effect)
 ```
 
 **Plot repeated regression results**
@@ -235,12 +241,12 @@ est2 <- rep(NA,4)
 se1 <- rep(NA,4)
 se2 <- rep(NA,4)
 for (k in 1:4) {
-    fit_1 <- stan_glm(post_test ~ treatment, subset=(grade==k), data = df,
+    fit_1 <- stan_glm(post_test ~ treatment, subset=(grade==k), data = electric,
                       refresh = 0, save_warmup = FALSE, 
-                      open_progress = FALSE)
+                      open_progress = FALSE, cores = 1)
     fit_2 <- stan_glm(post_test ~ treatment + pre_test, subset=(grade==k),
-                      data = df, refresh = 0, save_warmup = FALSE, 
-                      open_progress = FALSE)
+                      data = electric, refresh = 0, save_warmup = FALSE, 
+                      open_progress = FALSE, cores = 1)
     est1[k] <- coef(fit_1)[2]
     est2[k] <- coef(fit_2)[2]
     se1[k] <- se(fit_1)[2]
@@ -296,21 +302,13 @@ regression.2tables <- function (name, est1, est2, se1, se2, label1, label2, file
 regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", root("ElectricCompany/figs","electric.ests.ps"))
 ```
 ```{r }
-# don't plot to file
 regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", NA)
-```
-
-**Analyze replace/supplement**
-
-```{r }
-supp <- c(as.numeric(electric[,"Supplement."])-1, rep(NA,nrow(electric)))
-# supp=0 for replace, 1 for supplement, NA for control
 ```
 
 **Plot replace/supplement**
 
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) postscript(root("ElectricCompany/figs","electricsupp1.ps"), horizontal=T, height=2.6)
+if (savefigs) postscript(root("ElectricCompany/figs","electricsupp1.ps"), horizontal=TRUE, height=2.6)
 ```
 ```{r }
 jitter.binary <- function (a, jitt=.05){
@@ -318,28 +316,28 @@ jitter.binary <- function (a, jitt=.05){
 }
 par(mfrow=c(1,4))
 for (k in 1:4){
-  cat(paste("grade",k,":\n"))
+  cat(paste("Grade",k,":\n"))
   ok <- (grade==k)&(!is.na(supp))
-  fit_supp <- stan_glm(supp ~ pre_test, family=binomial(link="logit"),
-                       subset=ok, data=df, refresh = 0, 
-                       save_warmup = FALSE, open_progress = FALSE)
-  print(fit_supp)
-  sims.glm.supp <- as.matrix(fit_supp)
+  glm_supp <- stan_glm(supp ~ pre_test, family=binomial(link="logit"),
+                       subset=ok, data=electric, refresh = 0, 
+                       save_warmup = FALSE, open_progress = FALSE, cores = 1)
+  print(glm_supp)
+  sims.glm.supp <- as.matrix(glm_supp)
   plot(range(pre_test[ok]), c(0,1), type="n", xlab="Pre-test score",
-        ylab="", main=paste("grade", k),
+        ylab="", main=paste("Grade", k),
         cex.axis=1.5, cex.lab=1.5, cex.main=1.8, mgp=c(2.5,.7,0), yaxt="n")
   axis(2, c(0,1), c("     Replace","Supp    "), cex.axis=1.5, mgp=c(2.5,.7,0))
   for (l in 1:20)
-      curve(invlogit(sims.glm.supp[l,1] + sims.glm.supp[l,2]*x), lwd=.5, col="gray", add=T)
+      curve(invlogit(sims.glm.supp[l,1] + sims.glm.supp[l,2]*x), lwd=.5, col="gray", add=TRUE)
   points(pre_test[supp==1&ok], jitter.binary(supp[supp==1&ok]), pch=21) #  supp:  open circle
   points(pre_test[supp==0&ok], jitter.binary(supp[supp==0&ok]), pch=20)# replace:  dot
-  curve(invlogit(coef(fit_supp)[1] + coef(fit_supp)[2]*x), lwd=.5, add=T)
-  fit_supp <- stan_glm(post_test ~ supp + pre_test,
-                       subset=((grade==k)&!is.na(supp)), data=df, refresh = 0, 
-                       save_warmup = FALSE, open_progress = FALSE)
-  print(fit_supp)
-  est1[k] <- coef(fit_supp)[2]
-  se1[k] <- se(fit_supp)[2]
+  curve(invlogit(coef(glm_supp)[1] + coef(glm_supp)[2]*x), lwd=.5, add=TRUE)
+  glm_supp <- stan_glm(post_test ~ supp + pre_test,
+                       subset=((grade==k)&!is.na(supp)), data=electric, refresh = 0, 
+                       save_warmup = FALSE, open_progress = FALSE, cores = 1)
+  print(glm_supp)
+  est1[k] <- coef(glm_supp)[2]
+  se1[k] <- se(glm_supp)[2]
 }
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -385,7 +383,6 @@ regression.2tablesA <- function (name, est1, se1, label1, file, bottom=FALSE){
 regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", root("ElectricCompany/figs","electricsupp2.ps"))
 ```
 ```{r }
-# don't plot to file
 regression.2tablesA(paste("Grade", 1:4), est1, se1, "Estimated effect of supplement,\ncompared to replacement", NA)
 ```
 
