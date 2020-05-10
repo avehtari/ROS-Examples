@@ -52,22 +52,26 @@ if (savefigs) color_scheme_set(scheme = "gray")
 #' 
 
 #' **Load data**
-# use the merged data with students having both math and Portuguese language grades
-data <- read.table(root("Student/data","student-merged.csv"),sep=";",header=TRUE)
-# select only students with non-zero third year math grade
-data <- data[data$G3mat>0,]
-# We simplify by dropping categorical variables and present all
-# ordinal predictors as numeric values. 
-data[,1:26] <- apply(t(1:26),2,function (x) { as.numeric(data[,x]) })
-# Pick columns to make models for third grade mathematics grade.
-# Use G3por to make a model for third grade Portuguese language grade.
-data_G3mat <- as.data.frame(data[,c("G3mat","school","sex","age","address","famsize","Pstatus","Medu","Fedu","traveltime","studytime","failures","schoolsup","famsup","paid","activities", "nursery", "higher", "internet", "romantic","famrel","freetime","goout","Dalc","Walc","health","absences")])
+# Use the merged data with students having both math and Portuguese language grades
+data <- read.csv(root("Student/data","student-merged.csv"))
+head(data)
+grades <- c("G1mat","G2mat","G3mat","G1por","G2por","G3por")
+predictors <- c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","traveltime","studytime","failures","schoolsup","famsup","paid","activities", "nursery", "higher", "internet", "romantic","famrel","freetime","goout","Dalc","Walc","health","absences")
+p <- length(predictors)
+
+#' **Data for predicting the final math grade**
+#' 
+#' Pick columns to make models for third period mathematics grade G3mat and
+#' select only students with non-zero math grade
+#' (use G3por to make a model for third grade Portuguese language grade).
+data_G3mat <- subset(data, subset=G3mat>0, select=c("G3mat",predictors))
 n <- nrow(data_G3mat)
-p <- ncol(data_G3mat)-1
 
 #' ## Default weak prior on original coefficients
 #' 
-#' **Fit a regression model with default weak priors**
+#' **Fit a regression model with default weak priors**</br>
+#' Dot (.) in the formula means all other columns execpt what is
+#' already on the left of ~.
 fit0 <- stan_glm(G3mat ~ ., data = data_G3mat, seed = SEED, refresh=0)
 
 #' **Plot posterior marginals of coefficients**
@@ -89,10 +93,9 @@ if (savefigs)
 
 #' Standardize all predictors for easier comparison of relevances as
 #' discussed in Section 12.1.
-datastd <- data
-datastd[,1:26] <- scale(data[,1:26])
-datastd_G3mat <- as.data.frame(datastd[,c("G3mat","school","sex","age","address","famsize","Pstatus","Medu","Fedu","traveltime","studytime","failures","schoolsup","famsup","paid","activities", "nursery", "higher", "internet", "romantic","famrel","freetime","goout","Dalc","Walc","health","absences")])
-
+datastd_G3mat <- data_G3mat
+datastd_G3mat[,predictors] <-scale(data_G3mat[,predictors])
+                   
 #' ## Default weak prior on coefficients
 #' 
 #' **Fit a regression model with default weak priors**
@@ -181,8 +184,8 @@ if (savefigs)
 #' **Prior predictive checking by looking at the prior on Bayesian $R^2$**
 ppR2<-numeric()
 for (i in 1:4000) {
-  sigma2 <- 0.7*rexp(1, rate=1/sd(data$G3mat))^2
-  muvar <- var(as.matrix(datastd_G3mat[,2:27]) %*% rnorm(26, sd=sd(data$G3mat)/sqrt(26)*sqrt(0.3)))
+  sigma2 <- 0.7*rexp(1, rate=1/sd(datastd_G3mat$G3mat))^2
+  muvar <- var(as.matrix(datastd_G3mat[,2:27]) %*% rnorm(26, sd=sd(datastd_G3mat$G3mat)/sqrt(26)*sqrt(0.3)))
   ppR2[i] <- muvar/(muvar+sigma2)
 }
 ggplot()+geom_histogram(aes(x=ppR2), breaks=seq(0,1,length.out=50)) +
@@ -193,7 +196,7 @@ ggplot()+geom_histogram(aes(x=ppR2), breaks=seq(0,1,length.out=50)) +
 #' **Fit a regression model with a weakly informative prior scaled
 #' with the number of covariates**
 fit2 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED,
-                 prior=normal(scale=sd(data$G3mat)/sqrt(26)*sqrt(0.3),
+                 prior=normal(scale=sd(datastd_G3mat$G3mat)/sqrt(26)*sqrt(0.3),
                               autoscale=FALSE),
                  refresh=0)
 
@@ -255,11 +258,11 @@ if (savefigs)
 #' previous model but using $p_0$ for scaling. We can then simulate
 #' from this prior and examine the corresponding prior for $R^2$
 p0 <- 6
-slab_scale <- sd(data$G3mat)/sqrt(p0)*sqrt(0.3)
+slab_scale <- sd(datastd_G3mat$G3mat)/sqrt(p0)*sqrt(0.3)
 #
 ppR2<-numeric()
 for (i in 1:4000) {
-  sigma2 <- 0.7*rexp(1,rate=1/sd(data$G3mat))^2;
+  sigma2 <- 0.7*rexp(1,rate=1/sd(datastd_G3mat$G3mat))^2;
   global_scale <- p0 / (p - p0) * sqrt(sigma2) / sqrt(n)
   z <- rnorm(p)
   lambda <- rcauchy(p)
@@ -285,7 +288,7 @@ ggplot()+geom_histogram(aes(x=ppR2), breaks=seq(0,1,length.out=50)) +
 
 #' **Fit a regression model with regularized horseshoe prior**</br>
 p0 <- 6
-slab_scale <- sd(data$G3mat)/sqrt(p0)*sqrt(0.3)
+slab_scale <- sd(datastd_G3mat$G3mat)/sqrt(p0)*sqrt(0.3)
 # global scale without sigma, as the scaling by sigma happens in stan_glm
 global_scale <- p0 / (p - p0) / sqrt(n)
 fit3 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED,
