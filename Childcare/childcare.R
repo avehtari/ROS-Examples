@@ -4,9 +4,8 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#'  Generate code and figures for Infant Health and Development
-#'  Program (IHDP) example in GHV. See Chapter 20 in Regression and
-#'  Other Stories.
+#'  Code and figures for Infant Health and Development Program (IHDP)
+#'  example. See Chapter 20 in Regression and Other Stories.
 #' 
 #' -------------
 #' 
@@ -23,12 +22,12 @@ library("rstan")
 library("arm")
 library("rstanarm")
 library("survey")
-source(root("ChildCare/library","matching.R"))
-source(root("ChildCare/library","balance.R"))
-source(root("ChildCare/library","estimation.R"))
+source(root("Childcare/library","matching.R"))
+source(root("Childcare/library","balance.R"))
+source(root("Childcare/library","estimation.R"))
 
 #' **Load data**
-cc2 <- read.csv(root("ChildCare/data","cc2.csv"))
+cc2 <- read.csv(root("Childcare/data","cc2.csv"))
 head(cc2)
 
 #' **Figure 20.9:** See ps_fit_1 MwoR, prior to step 4
@@ -36,7 +35,7 @@ head(cc2)
 #' **Figure 20.10:** displays a scatter plot of birthweight versus test
 #' scores at age 3 with observations displayed in different colors.
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ChildCare/figs","ppvt.bw.pdf"), height=3.6,width=4.2)
+if (savefigs) pdf(root("Childcare/figs","ppvt.bw.pdf"), height=3.6,width=4.2)
 #+
 par(mfrow=c(1,1))
 tmp <- lm(ppvtr.36~bw+treat,data=cc2)$coef
@@ -52,7 +51,7 @@ if (savefigs) dev.off()
 #' **Figure 20.11:** Overlap plot of mother's education & age of child
 #' (months).
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ChildCare/figs","age.educ.freq.AZC.f20.11.pdf"), height=4, width=6)
+if (savefigs) pdf(root("Childcare/figs","age.educ.freq.AZC.f20.11.pdf"), height=4, width=6)
 #+
 par(mfrow=c(1,2))
 hist(cc2$educ[cc2$treat==0],xlim=c(0,5),main="",border="darkgrey",breaks=c(.5,1.5,2.5,3.5,4.5),mgp=c(2,.5,0),xlab="mother's education",freq=TRUE)
@@ -131,8 +130,8 @@ ps_fit_1 <- stan_glm(ps_spec, family=binomial(link='logit'), data=cc2, algorithm
 ps_fit_1.st <- stan_glm(ps_spec.st, family=binomial(link='logit'), data=cc2, algorithm='optimizing', refresh=0)
 
 #' extracting (logit) pscores from the fit
-pscores <- apply(posterior_linpred(ps_fit_1, type='link'), 2, mean)
-pscores.st <- apply(posterior_linpred(ps_fit_1.st, type='link'), 2, mean)
+pscores <- apply(posterior_epred(ps_fit_1), 2, mean)
+pscores.st <- apply(posterior_epred(ps_fit_1.st), 2, mean)
 
 #' **Step 3: Matching**
 #'
@@ -169,7 +168,7 @@ bal_nr.wr.st <- balance(rawdata=cc2[, union(covs, covs.nr.st)], treat=cc2$treat,
 
 #' Balance for all covariates, not just those used in propensity score model
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ChildCare/figs","balance.both.azc.pdf"), width=11, height=8.5)
+if (savefigs) pdf(root("Childcare/figs","balance.both.azc.pdf"), width=11, height=8.5)
 #+
 pts <- bal_nr$diff.means.raw[,4]
 pts2 <- bal_nr$diff.means.matched[,4]
@@ -210,7 +209,7 @@ if (savefigs) dev.off()
 #'
 #' **Figure 20.13**
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ChildCare/figs","balance.cont.binary.AZC.pdf"), width=10, height=6)
+if (savefigs) pdf(root("Childcare/figs","balance.cont.binary.AZC.pdf"), width=10, height=6)
 #+
 par(mfrow=c(1,2))
 mar1 <- c(5, 4, 6, 2)
@@ -286,7 +285,7 @@ if (savefigs) dev.off()
 #' Overlap of propensity scores before/after matching with replacement.
 #' Pscores from original model.
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ChildCare/figs","ps.overlap.dens.AZC.pdf"), width=11, height=8.5)
+if (savefigs) pdf(root("Childcare/figs","ps.overlap.dens.AZC.pdf"), width=11, height=8.5)
 #+
 par(mfrow=c(1,2), cex.main=1.3, cex.lab=1.3)
 # Plot the overlapping histograms for pscores before matching, density
@@ -316,7 +315,7 @@ ps3.mod <- glm(treat ~ unemp.rt, data=cc2,family=binomial)
 pscores3 <- predict(ps3.mod, type="link")
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("ChildCare/figs","bad.pscore.overlap.AZC.pdf"), width=11, height=8.5)
+if (savefigs) pdf(root("Childcare/figs","bad.pscore.overlap.AZC.pdf"), width=11, height=8.5)
 #+
 par(mar=c(8,3,4,3), cex=1.4, cex.lab=1.2)
 # Plot the overlapping histograms for pscore3, density
@@ -473,87 +472,87 @@ sds.mwr <- sapply(cont_vars, function(x){
     tapply(matched.wr[,x], matched.wr$treat, sd)
 })
 
-sd.ratios <- lapply(list(sds.um, sds.mwor, sds.mwr), function(mat){
-    apply(mat, 2, function(col){
-        col[2] / col[1]
-    })
-})
+## sd.ratios <- lapply(list(sds.um, sds.mwor, sds.mwr), function(mat){
+##     apply(mat, 2, function(col){
+##         col[2] / col[1]
+##     })
+## })
 
-sd.table <- round(data.frame(
-    unmatched=sd.ratios[[1]],
-    MWOR=sd.ratios[[2]],
-    MWR=sd.ratios[[3]]), 2)
+## sd.table <- round(data.frame(
+##     unmatched=sd.ratios[[1]],
+##     MWOR=sd.ratios[[2]],
+##     MWR=sd.ratios[[3]]), 2)
 
-#' try with ps_fit_2
-sds.mwor2 <- sapply(cont_vars, function(x){
-    tapply(matched2[,x], matched2$treat, sd)
-})
-mwr.ind2 <- rep(cc2$row.names, times=matches2_wr$cnts)
-matched2_wr <- cc2[mwr.ind2, ]
-sds.mwr2 <- sapply(cont_vars, function(x){
-    tapply(matched2_wr[,x], matched2_wr$treat, sd)
-})
+## #' try with ps_fit_2
+## sds.mwor2 <- sapply(cont_vars, function(x){
+##     tapply(matched2[,x], matched2$treat, sd)
+## })
+## mwr.ind2 <- rep(cc2$row.names, times=matches2_wr$cnts)
+## matched2_wr <- cc2[mwr.ind2, ]
+## sds.mwr2 <- sapply(cont_vars, function(x){
+##     tapply(matched2_wr[,x], matched2_wr$treat, sd)
+## })
 
-sd.ratios2 <- lapply(list(sds.um, sds.mwor2, sds.mwr2), function(mat){
-    apply(mat, 2, function(col){
-        col[2] / col[1]
-    })
-})
+## sd.ratios2 <- lapply(list(sds.um, sds.mwor2, sds.mwr2), function(mat){
+##     apply(mat, 2, function(col){
+##         col[2] / col[1]
+##     })
+## })
 
-sd.table2 <- round(data.frame(
-    unmatched=sd.ratios2[[1]],
-    MWOR=sd.ratios2[[2]],
-    MWR=sd.ratios2[[3]]), 2)
+## sd.table2 <- round(data.frame(
+##     unmatched=sd.ratios2[[1]],
+##     MWOR=sd.ratios2[[2]],
+##     MWR=sd.ratios2[[3]]), 2)
 
-#' genetic matching
-mgen_1 <- readRDS('models/mgen_1.rds')
-mgen_1.wr <- readRDS('models/mgen_1_wr.rds')
-matched_mgen <- cc2[c(mgen_1$matches[,1], mgen_1$matches[,2]),]
-matched_wr_mgen <- cc2[c(mgen_1.wr$matches[,1], mgen_1.wr$matches[,2]),]
+## #' genetic matching
+## mgen_1 <- readRDS('models/mgen_1.rds')
+## mgen_1.wr <- readRDS('models/mgen_1_wr.rds')
+## matched_mgen <- cc2[c(mgen_1$matches[,1], mgen_1$matches[,2]),]
+## matched_wr_mgen <- cc2[c(mgen_1.wr$matches[,1], mgen_1.wr$matches[,2]),]
 
-sds.mwor_mgen <- sapply(cont_vars, function(x){
-    tapply(matched_mgen[,x], matched_mgen$treat, sd)
-})
-sds.mwr_mgen <- sapply(cont_vars, function(x){
-    tapply(matched_wr_mgen[,x], matched_wr_mgen$treat, sd)
-})
+## sds.mwor_mgen <- sapply(cont_vars, function(x){
+##     tapply(matched_mgen[,x], matched_mgen$treat, sd)
+## })
+## sds.mwr_mgen <- sapply(cont_vars, function(x){
+##     tapply(matched_wr_mgen[,x], matched_wr_mgen$treat, sd)
+## })
 
-sd.ratios4 <- lapply(list(sds.um, sds.mwor_mgen, sds.mwr_mgen), function(mat){
-    apply(mat, 2, function(col){
-        col[2] / col[1]
-    })
-})
+## sd.ratios4 <- lapply(list(sds.um, sds.mwor_mgen, sds.mwr_mgen), function(mat){
+##     apply(mat, 2, function(col){
+##         col[2] / col[1]
+##     })
+## })
 
-sd.table4 <- round(data.frame(
-    unmatched=sd.ratios4[[1]],
-    MWOR=sd.ratios4[[2]],
-    MWR=sd.ratios4[[3]]), 2)
-#          unmatched MWOR  MWR
-# bw            0.50 0.65 0.74
-# preterm       0.95 0.77 0.90
-# dayskidh      2.07 0.81 0.65
-# age           0.07 0.08 0.09
-# momage        1.86 1.70 1.88
+## sd.table4 <- round(data.frame(
+##     unmatched=sd.ratios4[[1]],
+##     MWOR=sd.ratios4[[2]],
+##     MWR=sd.ratios4[[3]]), 2)
+## #          unmatched MWOR  MWR
+## # bw            0.50 0.65 0.74
+## # preterm       0.95 0.77 0.90
+## # dayskidh      2.07 0.81 0.65
+## # age           0.07 0.08 0.09
+## # momage        1.86 1.70 1.88
 
-mgen_2 <- readRDS('models/mgen_2.rds')
-mgen_2.wr <- readRDS('models/mgen_2_wr.rds')
-matched_mgen2 <- cc2[c(mgen_2$matches[,1], mgen_2$matches[,2]),]
-matched_wr_mgen2 <- cc2[c(mgen_2.wr$matches[,1], mgen_2.wr$matches[,2]),]
+## mgen_2 <- readRDS('models/mgen_2.rds')
+## mgen_2.wr <- readRDS('models/mgen_2_wr.rds')
+## matched_mgen2 <- cc2[c(mgen_2$matches[,1], mgen_2$matches[,2]),]
+## matched_wr_mgen2 <- cc2[c(mgen_2.wr$matches[,1], mgen_2.wr$matches[,2]),]
 
-sds.mwor_mgen2 <- sapply(cont_vars, function(x){
-    tapply(matched_mgen2[,x], matched_mgen2$treat, sd)
-})
-sds.mwr_mgen2 <- sapply(cont_vars, function(x){
-    tapply(matched_wr_mgen2[,x], matched_wr_mgen2$treat, sd)
-})
+## sds.mwor_mgen2 <- sapply(cont_vars, function(x){
+##     tapply(matched_mgen2[,x], matched_mgen2$treat, sd)
+## })
+## sds.mwr_mgen2 <- sapply(cont_vars, function(x){
+##     tapply(matched_wr_mgen2[,x], matched_wr_mgen2$treat, sd)
+## })
 
-sd.ratios4.2 <- lapply(list(sds.um, sds.mwor_mgen2, sds.mwr_mgen2), function(mat){
-    apply(mat, 2, function(col){
-        col[2] / col[1]
-    })
-})
+## sd.ratios4.2 <- lapply(list(sds.um, sds.mwor_mgen2, sds.mwr_mgen2), function(mat){
+##     apply(mat, 2, function(col){
+##         col[2] / col[1]
+##     })
+## })
 
-sd.table4.2 <- round(data.frame(
-    unmatched=sd.ratios4.2[[1]],
-    MWOR=sd.ratios4.2[[2]],
-    MWR=sd.ratios4.2[[3]]), 2)
+## sd.table4.2 <- round(data.frame(
+##     unmatched=sd.ratios4.2[[1]],
+##     MWOR=sd.ratios4.2[[2]],
+##     MWR=sd.ratios4.2[[3]]), 2)
