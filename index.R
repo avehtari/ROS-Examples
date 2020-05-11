@@ -198,6 +198,7 @@
 #'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
 #'     - [earnings_compound.html](Earnings/earnings_compound.html) - Compound discrete-continuos model
 #'   - [RiskyBehavior/](https://github.com/avehtari/ROS-Examples/tree/master/RiskyBehavior/)
+#'     - [risky.html](RiskyBehavior/risky.html) Risky behavior data.
 #'   - [NES/](https://github.com/avehtari/ROS-Examples/tree/master/NES/)
 #'   - [Lalonde/](https://github.com/avehtari/ROS-Examples/tree/master/Lalonde/)
 #'   - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
@@ -394,6 +395,7 @@
 #'   - [Restaurant/](https://github.com/avehtari/ROS-Examples/tree/master/Restaurant/)
 #'     - [restaurant.html](Restaurant/restaurant.html) - Demonstration of using Stan for optimization
 #'   - [RiskyBehavior/](https://github.com/avehtari/ROS-Examples/tree/master/RiskyBehavior/)
+#'     - [risky.html](RiskyBehavior/risky.html) Risky behavior data.
 #'   - [Roaches/](https://github.com/avehtari/ROS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Rodents/](https://github.com/avehtari/ROS-Examples/tree/master/Rodents/)
