@@ -82,13 +82,12 @@ fit_logistic <- stan(file = stanfile_golf_logistic, data = golf_data,
 print(fit_logistic)
 
 #' **Post-processing**
-sims_logistic <- extract(fit_logistic)
-a_hat <- median(sims_logistic$a)
-b_hat <- median(sims_logistic$b)
+sims_logistic <- as.matrix(fit_logistic)
+a_hat <- median(sims_logistic[,"a"])
+b_hat <- median(sims_logistic[,"b"])
 
 #' **Plot logistic regression result**<br>
 #' The result is indistinguishable from rstanarm logistic model.
-#+ eval=FALSE, include=FALSE
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
     plot(x, y/n, xlim=c(0, 1.1*max(x)), ylim=c(0, 1.02),
@@ -108,8 +107,8 @@ fit_trig <- stan(file = stanfile_golf_trig, data = golf_data, refresh = 0)
 print(fit_trig)
 
 #' Post-processing
-sims_trig <- extract(fit_trig)
-sigma_hat <- median(sims_trig$sigma)
+sims_trig <- as.matrix(fit_trig)
+sigma_hat <- median(sims_trig[,"sigma"])
 
 #' **Plot geometry based model result**
 #+ eval=FALSE, include=FALSE
@@ -143,9 +142,9 @@ with(golf, {
          main="Custom nonlinear model fit in Stan")
     segments(x, y/n + se, x, y/n-se, lwd=.5)
     x_grid <- seq(R-r, 1.1*max(x), .01)
-    n_sims <- length(sims_trig$sigma)
+    n_sims <- length(sims_trig[,"sigma"])
     for (s in sample(n_sims, 20)){
-        p_grid <- 2*pnorm(asin((R-r)/x_grid) / sims_trig$sigma[s]) - 1
+        p_grid <- 2*pnorm(asin((R-r)/x_grid) / sims_trig[s,"sigma"]) - 1
         lines(c(0, R-r, x_grid), c(1, 1, p_grid), lwd=0.5)
     }
     text(18.5, .26, "Geometry-based model,\n post draws of sigma")
