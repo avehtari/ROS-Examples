@@ -296,15 +296,15 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 
 #' **Load data**
 lowbwt <- read.table(root("LowBwt/data","lowbwt.dat"), header=TRUE)
-lowbwt$race <- factor(lowbwt$race)
 (n <- nrow(lowbwt))
+head(lowbwt)
 
 #' **Predict low birth weight**
-fit <- stan_glm(low ~ age + lwt + race + smoke,
+fit_1 <- stan_glm(low ~ age + lwt + factor(race) + smoke,
                 family=binomial(link="logit"), data=lowbwt, refresh=0)
 
 #' **Median Bayesian R2**
-round(median(bayesR2<-bayes_R2(fit)), 2)
+round(median(bayesR2<-bayes_R2(fit_1)), 2)
 
 #' **Plot posterior of Bayesian R2**
 #+ message=FALSE, error=FALSE, warning=FALSE
@@ -322,10 +322,10 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 #' 
 
 #' **Predict birth weight**
-fit <- stan_glm(bwt ~ age + lwt + race + smoke, data=lowbwt, refresh=0)
+fit_2 <- stan_glm(bwt ~ age + lwt + factor(race) + smoke, data=lowbwt, refresh=0)
 
 #' **Median Bayesian R2**
-round(median(bayesR2<-bayes_R2(fit)), 2)
+round(median(bayesR2<-bayes_R2(fit_2)), 2)
 
 #' **Plot posterior of Bayesian R2**
 #+ message=FALSE, error=FALSE, warning=FALSE
@@ -341,8 +341,9 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 #' 
 
 #' **Load children's test scores data**
-kidiq <- read.dta(file=root("KidIQ/data","kidiq.dta"))
+kidiq <- read.csv(root("KidIQ/data","kidiq.csv"))
 (n <- nrow(kidiq))
+head(kidiq)
 
 #' **Predict test score**
 fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq,
@@ -394,19 +395,15 @@ mcmc_hist(data.frame(bayesR2n), binwidth=0.01) + pxl +
 #' 
 
 #' **Load data**
-earnings_all <- read.csv(root("Earnings/data","earnings.csv")) 
-earnings_all$positive <- earnings_all$earn > 0
-(n_all <- nrow(earnings_all))
-# only non-zero earnings
-earnings <- earnings_all[earnings_all$positive, ]
+earnings <- read.csv(root("Earnings/data","earnings.csv"))
 (n <- nrow(earnings))
-earnings$log_earn <- log(earnings$earn)
+head(earnings)
 
 #' **Bayesian logistic regression on non-zero earnings**</br>
 #' Predict using height and sex
-fit_1a <- stan_glm(positive ~ height + male,
+fit_1a <- stan_glm((earn>0) ~ height + male,
                    family = binomial(link = "logit"),
-                   data = earnings_all, refresh=0)
+                   data = earnings, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit_1a)), 3)
@@ -420,9 +417,9 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.002) + pxl +
     geom_vline(xintercept=median(bayesR2))
 
 #' **Bayesian probit regression on non-zero earnings**</br>
-fit_1p <- stan_glm(positive ~ height + male,
+fit_1p <- stan_glm((earn>0) ~ height + male,
                    family = binomial(link = "probit"),
-                   data = earnings_all, refresh=0)
+                   data = earnings, refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2), 3)
@@ -447,7 +444,8 @@ bayesplot_grid(p1,p2)
 #' 
 
 #' **Bayesian model on positive earnings on log scale**
-fit_1b <- stan_glm(log_earn ~ height + male, data = earnings, refresh=0)
+fit_1b <- stan_glm(log(earn) ~ height + male, data = earnings, subset=earn>0,
+                   refresh=0)
 
 #' **Median Bayesian R2**
 round(median(bayesR2<-bayes_R2(fit_1b)), 3)
