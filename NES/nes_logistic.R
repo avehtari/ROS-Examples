@@ -63,7 +63,8 @@ postpred <- posterior_predict(fit_1, newdata=new)
 #' was more popular among people with income level 5 than among people
 #' with income level 4
 mean(epred[,5] > epred[,4])
-#' 95\% posterior distribution for the difference in support for Bush, comparing people in the richest to the poorest category
+#' 95\% posterior distribution for the difference in support for Bush,
+#' comparing people in the richest to the second-richest category
 quantile(epred[,5] - epred[,4], c(0.025, 0.975))
 
 #' **Fake data example**
