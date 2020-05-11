@@ -130,8 +130,8 @@ ps_fit_1 <- stan_glm(ps_spec, family=binomial(link='logit'), data=cc2, algorithm
 ps_fit_1.st <- stan_glm(ps_spec.st, family=binomial(link='logit'), data=cc2, algorithm='optimizing', refresh=0)
 
 #' extracting (logit) pscores from the fit
-pscores <- apply(posterior_epred(ps_fit_1), 2, mean)
-pscores.st <- apply(posterior_epred(ps_fit_1.st), 2, mean)
+pscores <- apply(posterior_linpred(ps_fit_1), 2, mean)
+pscores.st <- apply(posterior_linpred(ps_fit_1.st), 2, mean)
 
 #' **Step 3: Matching**
 #'
