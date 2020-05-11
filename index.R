@@ -222,6 +222,8 @@
 #' ### 19  Causal inference using regression on the treatment variable
 #'   - [ElectricCompany/](https://github.com/avehtari/ROS-Examples/tree/master/ElectricCompany/)
 #'     - [electric.html](ElectricCompany/electric.html) - Analysis of "Electric company" data
+#'   - [Incentives/]((https://github.com/avehtari/ROS-Examples/tree/master/Incentives/))
+#'     - [incentives.html](Incentives/incentives.html) - Simple analysis of incentives data
 #'   - [Cows/](https://github.com/avehtari/ROS-Examples/tree/master/Cows/)
 #' 
 #' ### 20  Observational studies with all confounders assumed to be measured
@@ -304,6 +306,7 @@
 #'     - [earnings_regression.html](Earnings/earnings_regression.html) - Predict respondents' yearly earnings using survey data from 1990.
 #'     - [earnings_bootstrap.html](Earnings/earnings_bootstrap.html) - Bootstrapping to simulate the sampling distribution
 #'     - [earnings_compound.html](Earnings/earnings_compound.html) - Compound discrete-continuos model
+#'     - [height_and_weight.html](Earnings/height_and_weight.html) - Predict weight
 #'   - [ElectionsEconomy/](https://github.com/avehtari/ROS-Examples/tree/master/ElectionsEconomy/)
 #'     - [bayes.html](ElectionsEconomy/bayes.html) - Demonstration of Bayesian information aggregation
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
@@ -333,6 +336,8 @@
 #'   - [Imputation/](https://github.com/avehtari/ROS-Examples/tree/master/Imputation/)
 #'     - [imputation.html](Imputation/imputation.html) - Regression-based imputation for the Social Indicators Survey
 #'     - [imputation_gg.html](Imputation/imputation_gg.html) - Regression-based imputation for the Social Indicators Survey, dplyr/ggplot version
+#'   - [Incentives/]((https://github.com/avehtari/ROS-Examples/tree/master/Incentives/))
+#'     - [incentives.html](Incentives/incentives.html) - Simple analysis of incentives data
 #'   - [Influence/](https://github.com/avehtari/ROS-Examples/tree/master/Influence/)
 #'     - [influence.html](Influence/influence.html) - Influence of individual points in a fitted regression
 #'   - [Interactions/](https://github.com/avehtari/ROS-Examples/tree/master/Interactions/)
@@ -407,6 +412,3 @@
 #'     - [student.html](Student/student.html) - Models for regression coefficients
 #'   - [Unemployment/](https://github.com/avehtari/ROS-Examples/tree/master/Unemployment/)
 #'     - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
-#'   - [Earnings/](https://github.com/avehtari/ROS-Examples/tree/master/Earnings/)
-#'     - [heightweight.html](Earnings/heightweight.html) - Illustrate central limit theorem and normal distribution
-#'     - [height_and_weight.html](Earnings/height_and_weight.html) - Predict weight
