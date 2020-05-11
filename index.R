@@ -4,7 +4,11 @@
 #' date: "`r format(Sys.Date())`"
 #' ---
 
-#' Index for the code and data for the book [Regression and Other Stories](http://www.stat.columbia.edu/~gelman/regression/)
+#' Index for the code and data for the book Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020).
+#'
+#' The book has been sent to the publisher and will be available soon.
+#' 
+#' - [Cambridge University Press page](https://www.cambridge.org/core/books/regression-and-other-stories/DD20DD6C9057118581076E54E40C372C)
 #'
 #' - [Code and data by chapters](#by_chapters)
 #' - [Code and data folders alphabetically](#alphabetically)
