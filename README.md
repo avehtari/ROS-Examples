@@ -1,6 +1,6 @@
 # Regression and Other Stories - Data and code
 
-"Regression and Other Stories" (by Andrew Gelman, Jennifer Hill, and Aki Vehtari) and "Applied Regression and Multilevel Models" (by Andrew Gelman, Jennifer Hill, Ben Goodrich, Jonah Gabry, and Aki Vehtari) together represent the updated and expanded second edition of "Data Analysis Using Regression and Multilevel/Hierarchical Models."
+Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020)
 
 [Regression and Other Stories book home page](http://www.stat.columbia.edu/~gelman/regression/)
 
