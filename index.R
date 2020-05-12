@@ -6,6 +6,15 @@
 
 #' Index for the code and data for the book Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020).
 #'
+#' Many textbooks on regression focus on theory and the simplest of
+#' examples. Real statistical problems, however, are complex and
+#' subtle. This is not a book about the theory of regression. It is a
+#' book about how to use regression to solve real problems of
+#' comparison, estimation, prediction, and causal inference. It
+#' focuses on practical issues such as sample size and missing data
+#' and a wide range of goals and techniques. It jumps right in to
+#' methods and computer code you can use fresh out of the box.
+#'
 #' The book has been sent to the publisher and will be available soon.
 #' 
 #' - [Cambridge University Press page](https://www.cambridge.org/core/books/regression-and-other-stories/DD20DD6C9057118581076E54E40C372C)
