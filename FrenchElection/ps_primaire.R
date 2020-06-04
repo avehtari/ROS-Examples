@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: French Election"
 #' author: "Andrew Gelman, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' French Election data.
@@ -12,14 +19,14 @@
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Load data**
+#' #### Load data
 ps <- read.table(root("FrenchElection/data","ps_primaire.txt"), header=TRUE)
 
-#' **Analyze**
+#' #### Analyze
 J <- nrow(ps)
 n1 <- ps[J,2]
 n2 <- ps[J,3] - ps[J,2]

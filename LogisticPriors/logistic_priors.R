@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Logistic regression priors"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Effect of priors in logistic regression. See Chapter 13 in
@@ -13,11 +20,11 @@
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
-#' **Load packages**
+#' #### Load packages
 library("arm")
 library("rstanarm")
 
-#' **Define a function running glm and stan_glm with simulated data**<br>
+#' #### Define a function running glm and stan_glm with simulated data<br>
 #' Arguments are the number of simulated observations, and prior
 #' parameters a and
 bayes_sim <- function(n, a=-2, b=0.8){
@@ -32,7 +39,7 @@ bayes_sim <- function(n, a=-2, b=0.8){
   print(stan_fit, digits=1)
 }
 
-#' **Fit models to an increasing number of observations**
+#' #### Fit models to an increasing number of observations
 set.seed(363852)
 bayes_sim(10)
 bayes_sim(100)

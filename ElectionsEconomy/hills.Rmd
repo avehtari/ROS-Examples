@@ -2,6 +2,17 @@
 title: "Regression and Other Stories: Elections Economy"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
+output:
+  html_document:
+    theme: readable
+    code_download: true
 ---
 Present uncertainty in parameter estimates. See Chapter 7 in
 Regression and Other Stories.
@@ -15,7 +26,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -24,14 +35,14 @@ library("arm")
 library("rstanarm")
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 head(hibbs)
 ```
 
-**Likelihood for 2 parameters**
+## Likelihood for 2 parameters
 
 ```{r }
 M1 <- lm(vote ~ growth, data = hibbs)
@@ -39,7 +50,7 @@ display(M1)
 summ <- summary(M1)
 ```
 
-**Plot likelihood (a, b| y)**
+#### Plot likelihood (a, b| y)
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
@@ -79,7 +90,7 @@ mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
 if (savefigs) dev.off()
 ```
 
-**Plot maximum likelihood estimate and std errs**
+#### Plot maximum likelihood estimate and std errs
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
@@ -95,7 +106,7 @@ points(summ$coef[1,1], summ$coef[2,1], pch=19)
 if (savefigs) dev.off()
 ```
 
-**Plot maximum likelihood estimate and covariance**
+#### Plot maximum likelihood estimate and covariance
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
@@ -118,7 +129,7 @@ lines (xx, yy)
 if (savefigs) dev.off()
 ```
 
-**Bayesian model with flat prior**
+## Bayesian model with flat prior
 
 ```{r }
 M3 <- stan_glm(vote ~ growth, data = hibbs, 
@@ -129,7 +140,7 @@ a <- sims[,1]
 b <- sims[,2]
 ```
 
-**Plot posterior draws**
+#### Plot posterior draws
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)

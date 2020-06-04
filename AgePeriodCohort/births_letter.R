@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: AgePeriodCohort"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Age-Period-Cohort - Age adjustment: additional plots.  See Chapter

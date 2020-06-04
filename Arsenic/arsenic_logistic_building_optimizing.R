@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Arsenic"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Building a logistic regression model: wells in Bangladesh. See
@@ -21,42 +28,42 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 library("loo")
 invlogit <- plogis
 
-#' **Load data**
+#' #### Load data
 wells <- read.csv(root("Arsenic/data","wells.csv"))
 wells$y <- wells$switch
 n <- nrow(wells)
 
-#' ### Null model
+#' ## Null model
 #' 
 
-#' **Log-score for coin flipping**
+#' #### Log-score for coin flipping
 prob <- 0.5
 round(log(prob)*sum(wells$y) + log(1-prob)*sum(1-wells$y),1)
 
-#' **Log-score for intercept model**
+#' #### Log-score for intercept model
 round(prob <- mean(wells$y),2)
 round(log(prob)*sum(wells$y) + log(1-prob)*sum(1-wells$y),1)
 
-#' ### A single predictor
+#' ## A single predictor
 #'
 
-#' **Fit a model using distance to the nearest safe well**
+#' #### Fit a model using distance to the nearest safe well
 #+ results='hide'
 fit_1 <- stan_glm(y ~ dist, family = binomial(link = "logit"), data=wells, algorithm='optimizing')
 #'
 print(fit_1, digits=3)
 summary(fit_1, digits=3)
-#' LOO log score
+#' #### LOO log score
 (loo1 <- loo(fit_1))
 
-#' **Histogram of distances**
+#' #### Histogram of distances
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.distances.bnew.ps"),
                          height=3, width=4, horizontal=TRUE)
@@ -66,19 +73,19 @@ hist(wells$dist, breaks=seq(0,10+max(wells$dist),10), freq=TRUE,
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Scale distance in meters to distance in 100 meters**
+#' #### Scale distance in meters to distance in 100 meters
 wells$dist100 <- wells$dist/100
 
-#' **Fit a model using scaled distance to the nearest safe well**
+#' #### Fit a model using scaled distance to the nearest safe well
 #+ results='hide'
 fit_2 <- stan_glm(y ~ dist100, family = binomial(link = "logit"), data=wells, algorithm='optimizing')
 #'
 print(fit_2, digits=2)
 summary(fit_2, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo2 <- loo(fit_2, save_psis = TRUE))
 
-#' **Plot model fit**
+#' #### Plot model fit
 jitter_binary <- function(a, jitt=.05){
   a + (1-2*a)*runif(length(a),0,jitt)
 }
@@ -94,7 +101,7 @@ points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot uncertainty in the estimated coefficients**
+#' #### Plot uncertainty in the estimated coefficients
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitfit.scatterplot.ps"),
                          height=3.5, width=3.5, horizontal=TRUE)
@@ -109,7 +116,7 @@ axis(2, seq(-1,0,.5), mgp=c(1.5,.5,0))
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot uncertainty in the estimated predictions**
+#' #### Plot uncertainty in the estimated predictions
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitfit.1new.b.ps"),
                          height=3.5, width=4, horizontal=TRUE)
@@ -127,10 +134,10 @@ points(wells$dist, jitter_binary(wells$y), pch=20, cex=.1)
 if (savefigs) dev.off()
 
 
-#' ### Two predictors
+#' ## Two predictors
 #' 
 
-#' **Histogram of arsenic levels**
+#' #### Histogram of arsenic levels
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.levels.a.ps"),
                          height=3, width=4, horizontal=TRUE)
@@ -140,25 +147,25 @@ hist(wells$arsenic, breaks=seq(0,.25+max(wells$arsenic),.25), freq=TRUE,
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Fit a model using scaled distance and arsenic level**
+#' #### Fit a model using scaled distance and arsenic level
 #+ results='hide'
 fit_3 <- stan_glm(y ~ dist100 + arsenic, family = binomial(link = "logit"),
                   data=wells, algorithm='optimizing')
 #'
 print(fit_3, digits=2)
 summary(fit_3, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo3 <- loo(fit_3, save_psis = TRUE))
-#' Compare models
+#' #### Compare models
 loo_compare(loo2, loo3)
 
-#' **Average improvement in LOO predictive probabilities**<br>
+#' #### Average improvement in LOO predictive probabilities<br>
 #' from dist100 to dist100 + arsenic
 pred2 <- loo_predict(fit_2, psis_object = loo2$psis_object)$value
 pred3 <- loo_predict(fit_3, psis_object = loo3$psis_object)$value
 round(mean(c(pred3[wells$y==1]-pred2[wells$y==1],pred2[wells$y==0]-pred3[wells$y==0])),3)
 
-#' **Plot model fits**
+#' #### Plot model fits
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.2variables.a.ps"),
                          height=3.5, width=4, horizontal=TRUE)
@@ -188,22 +195,22 @@ text(2, .6, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ### Interaction
+#' ## Interaction
 #' 
 
-#' **Fit a model using scaled distance, arsenic level, and an interaction**
+#' #### Fit a model using scaled distance, arsenic level, and an interaction
 #+ results='hide'
 fit_4 <- stan_glm(y ~ dist100 + arsenic + dist100:arsenic,
                   family = binomial(link="logit"), data = wells, algorithm='optimizing')
 #'
 print(fit_4, digits=2)
 summary(fit_4, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo4 <- loo(fit_4))
-#' Compare models
+#' #### Compare models
 loo_compare(loo3, loo4)
 
-#' **Centering the input variables**
+#' #### Centering the input variables
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
 fit_5 <- stan_glm(y ~ c_dist100 + c_arsenic + c_dist100:c_arsenic,
@@ -212,7 +219,7 @@ fit_5 <- stan_glm(y ~ c_dist100 + c_arsenic + c_dist100:c_arsenic,
 print(fit_5, digits=2)
 summary(fit_5, digits=2)
 
-#' **Plot model fits**
+#' #### Plot model fits
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.interact.a.ps"),
                          height=3.5, width=4, horizontal=TRUE)
@@ -242,35 +249,35 @@ text (2, .6, "if dist = 50", adj=0, cex=.8)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ### More predictors
+#' ## More predictors
 #' 
 
-#' **Adding social predictors**
+#' #### Adding social predictors
 #+ results='hide'
 fit_6 <- stan_glm(y ~ dist100 + arsenic + educ4 + assoc,
                   family = binomial(link="logit"), data = wells, algorithm='optimizing')
 #'
 print(fit_6, digits=2)
 summary(fit_6, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo6 <- loo(fit_6))
-#' Compare models
+#' #### Compare models
 loo_compare(loo4, loo6)
 
-#' **Remove assoc**
+#' #### Remove assoc
 #+ results='hide'
 fit_7 <- stan_glm(y ~ dist100 + arsenic + educ4,
                   family = binomial(link="logit"), data = wells, algorithm='optimizing')
 #'
 print(fit_7, digits=2)
 summary(fit_7, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo7 <- loo(fit_7))
-#' Compare models
+#' #### Compare models
 loo_compare(loo4, loo7)
 loo_compare(loo6, loo7)
 
-#' **Add interactions with education**
+#' #### Add interactions with education
 #+ results='hide'
 wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
 fit_8 <- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
@@ -279,24 +286,24 @@ fit_8 <- stan_glm(y ~ c_dist100 + c_arsenic + c_educ4 +
 #'
 print(fit_8, digits=2)
 summary(fit_8, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo8 <- loo(fit_8, save_psis=TRUE))
-#' Compare models
+#' #### Compare models
 loo_compare(loo3, loo8)
 loo_compare(loo7, loo8)
 
 
 
 
-#' **Average improvement in LOO predictive probabilities**<br>
+#' #### Average improvement in LOO predictive probabilities</br>
 #' from dist100 + arsenic to dist100 + arsenic + educ4 + dist100:educ4 + arsenic:educ4
 pred8 <- loo_predict(fit_8, psis_object = loo8$psis_object)$value
 round(mean(c(pred8[wells$y==1]-pred3[wells$y==1],pred3[wells$y==0]-pred8[wells$y==0])),3)
 
-#' ### Transformation of variable
+#' ## Transformation of variable
 #' 
 
-#' **Fit a model using scaled distance and log arsenic level**
+#' #### Fit a model using scaled distance and log arsenic level
 wells$log_arsenic <- log(wells$arsenic)
 #+ results='hide'
 fit_3a <- stan_glm(y ~ dist100 + log_arsenic, family = binomial(link = "logit"),
@@ -304,24 +311,24 @@ fit_3a <- stan_glm(y ~ dist100 + log_arsenic, family = binomial(link = "logit"),
 #'
 print(fit_3a, digits=2)
 summary(fit_3a, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo3a <- loo(fit_3a))
-#' Compare models
+#' #### Compare models
 loo_compare(loo3, loo3a)
 
-#' **Fit a model using scaled distance, log arsenic level, and an interaction**<br>
+#' #### Fit a model using scaled distance, log arsenic level, and an interaction<br>
 #+ results='hide'
 fit_4a <- stan_glm(y ~ dist100 + log_arsenic + dist100:log_arsenic,
                   family = binomial(link = "logit"), data = wells, algorithm='optimizing')
 #'
 print(fit_4a, digits=2)
 summary(fit_4a, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo4a <- loo(fit_4a))
-#' Compare models
+#' #### Compare models
 loo_compare(loo3a, loo4a)
 
-#' **Add interactions with education**
+#' #### Add interactions with education
 wells$c_log_arsenic <- wells$log_arsenic - mean(wells$log_arsenic)
 #+ results='hide'
 fit_8a <- stan_glm(y ~ c_dist100 + c_log_arsenic + c_educ4 +
@@ -330,7 +337,7 @@ fit_8a <- stan_glm(y ~ c_dist100 + c_log_arsenic + c_educ4 +
 #'
 print(fit_8a, digits=2)
 summary(fit_8a, digits=2)
-#' LOO log score
+#' #### LOO log score
 (loo8a <- loo(fit_8a, save_psis=TRUE))
-#' Compare models
+#' #### Compare models
 loo_compare(loo8, loo8a)

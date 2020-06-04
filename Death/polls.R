@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Death penalty poll"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Death penalty poll - Proportion of American adults supporting the death
@@ -15,13 +22,13 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("ggplot2")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 
-#' **Load data**
+#' #### Load data
 polls <- matrix(scan(root("Death/data","polls.dat")), ncol=5, byrow=TRUE)
 support <- polls[,3]/(polls[,3]+polls[,4])
 year <-  polls[,1] + (polls[,2]-6)/12
@@ -38,7 +45,7 @@ pop <- hom/hom.rate
 state.abbrs <- row.names(death)
 std.err.rate <- sqrt((err+1)*(ds+1-err)/((ds+2)^2*(ds+3)))
 
-#' **Percentage support for the death penalty**
+#' #### Percentage support for the death penalty
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Death/figs","polls.ps"), horizontal=TRUE)
 #+
@@ -49,11 +56,12 @@ plot(year, support*100, xlab="Year",
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version
+#' #### ggplot version
 poll <- data.frame(support, year)
 ggplot(aes(x = year, y = support*100), data = poll) + geom_line() +
     labs(x= "Year", y = "Percentage support for the death penalty")
 
+#' #### Rate of reversal of death sentences
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Death/figs","states.ps"), horizontal=TRUE)
 #+
@@ -68,7 +76,7 @@ for (i in 1:length(ds)){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version
+#' #### ggplot version
 poll <- data.frame(ds, hom, err.rate, std.err.rate, state.abbrs)
 ggplot(aes(x = ds/hom, y = err.rate,
            ymin = err.rate - std.err.rate, ymax = err.rate + std.err.rate),
@@ -77,6 +85,7 @@ ggplot(aes(x = ds/hom, y = err.rate,
          y = "Rate of reversal of death sentences") +
     geom_text(aes(label=state.abbrs), hjust = "right", nudge_x=-0.0005)
 
+#' #### Percentage support for the death penalty
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Death/figs","deathpolls.ps"), horizontal=TRUE)
 #+
@@ -89,7 +98,7 @@ for (i in 1:nrow(polls))
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version
+#' #### ggplot version
 poll <- data.frame(support, year, sd = sqrt(support*(1-support)/1000))
 ggplot(aes(x = year, y = support*100,
            ymin = 100*(support-sd), ymax =  100*(support+sd)),

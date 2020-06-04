@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Simple least square regression"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Linear least squares regression with a single predictor. See
 Chapters 6 and 7 in Regression and Other Stories.

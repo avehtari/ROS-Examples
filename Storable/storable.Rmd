@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Storable"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Ordered categorical data analysis with a study from experimental
 economics, on the topic of ``storable votes''. See Chapter 15 in
@@ -16,7 +23,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -27,7 +34,7 @@ library("rstanarm")
 invlogit<-plogis
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 data_2player <- read.csv(root("Storable/data","2playergames.csv"))
@@ -38,7 +45,7 @@ data_all$factor_vote <- factor(data_all$vote, levels = c(1, 2, 3), labels = c("1
 head(data_all)
 ```
 
-**Simple analysis using data from just one person**
+#### Simple analysis using data from just one person
 
 ```{r }
 data_401 <- subset(data_2player, person == 401, select = c("vote", "value"))
@@ -49,7 +56,7 @@ fit_1 <- stan_polr(factor_vote ~ value, data = data_401,
 print(fit_1, digits=2)
 ```
 
-**6 people**
+#### 6 people
 
 ```{r }
 plotted <- c(101, 303, 409, 405, 504, 112)
@@ -73,7 +80,7 @@ for (i in 1:n_plotted){
 }
 ```
 
-**Graph**
+#### Graph
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Storable/figs","sampledata4.pdf"), height=5, width=8)

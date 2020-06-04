@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Poisson Example"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Demonstrate Poisson regression. See Chapter 15 in
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -24,7 +31,7 @@ library("MASS")
 #' Set random seed for reproducability
 SEED <- 3579
 
-#' **Simulate fake data**
+#' ## Simulate fake data
 n <- 100
 x <- runif(n, -2, 2)
 a <- 1
@@ -34,9 +41,9 @@ y <- rpois(n, exp(linpred))
 fake <- data.frame(x=x, y=y)
 head(fake)
 
-#' ### Poisson regression
+#' ## Poisson regression
 #'
-#' **Fit Poisson regression model**
+#' #### Fit Poisson regression model
 fit_fake <- stan_glm(y ~ x, family=poisson(link="log"), data=fake, refresh=0)
 print(fit_fake)
 
@@ -52,7 +59,7 @@ points(x, y, pch=20, cex=.6)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ### Overdispersion
+#' ## Overdispersion
 #' 
 phi_grid <- c(0.1, 1, 10)
 K <- length(phi_grid)

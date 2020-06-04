@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: FakeKCV"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Demonstration of $K$-fold cross-validation using simulated
@@ -13,14 +20,14 @@
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
-#' **Load packages**
+#' #### Load packages
 library("MASS")      # needed for mvrnorm()
 library("rstanarm")
 library("loo")
 #' Set random seed for reproducability
 SEED <- 1754
 
-#' **Generate fake data**
+#' #### Generate fake data
 #'
 #' $60\times 30$ matrix representing 30 predictors that are random but
 #' not independent; rather, we draw them from a multivariate normal
@@ -35,7 +42,7 @@ b <- c(c(-1, 1, 2), rep(0,k-3))
 y <- X %*% b + rnorm(n)*2
 fake <- data.frame(X, y)
 
-#' **Weakly informative prior**
+#' #### Weakly informative prior
 fit_1 <- stan_glm(y ~ ., prior=normal(0, 10, autoscale=FALSE),
                   data=fake, seed=SEED, refresh=0)
 (loo_1 <- loo(fit_1))
@@ -44,7 +51,7 @@ fit_1 <- stan_glm(y ~ ., prior=normal(0, 10, autoscale=FALSE),
 #' can run slower, but more robust K-fold-CV
 kfold_1 <- kfold(fit_1)
 
-#' **An alternative weakly informative prior**<br>
+#' #### An alternative weakly informative prior<br>
 #' The regularized horseshoe prior `hs()` is weakly informative,
 #' stating that it is likely that only small number of predictors are
 #' relevant, but we don't know which ones.
@@ -58,11 +65,11 @@ fit_2 <- stan_glm(y ~ ., prior=hs_prior, data=fake, seed=SEED,
 #' value, and thus we run again slower, but more robust K-fold-CV
 kfold_2 <- kfold(fit_2)
 
-#' **Comparison of models**
+#' #### Comparison of models
 loo_compare(loo_1,loo_2)
 loo_compare(kfold_1,kfold_2)
 
-#' As PSIS-LOO fails is underestimates the difference between the
-#' models. The Pareto k diagnostic correctly identified the problem,
-#' and more robust K-fold-CV shows that by using a better prior we can
-#' get better predictions.
+#' As PSIS-LOO fails, PSIS-LOO comparison underestimates the
+#' difference between the models. The Pareto k diagnostic correctly
+#' identified the problem, and more robust K-fold-CV shows that by
+#' using a better prior we can get better predictions.

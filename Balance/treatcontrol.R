@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Balance"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Figures for hypothetical example of zero causal effect but positive
@@ -16,11 +23,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Plot figures**
+#' #### Plot figures
 bell <- function(filename, mu, sd, lo, hi, ymax){
   if (savefigs) pdf(filename, height = 3, width = 9)
   par(mar = c(4,0,3,0))

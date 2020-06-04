@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Coop"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Coop - Example of hypothesis testing. See Chapter 4 in Regression
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Load data**
+#' #### Load data
 data <- read.table(root("Coop/data","Riverbay.csv"), header=FALSE, sep=",")
 votes <- data[,2:7]
 candidate_totals <- votes[,6]
@@ -39,7 +46,7 @@ n_candidates <- length(candidate_totals)
 actual <- rep(NA, n_candidates)
 expected <- rep(NA, n_candidates)
 
-#' Plot
+#' #### Plot
 #+ fig.width=8, fig.height=8
 par(mfrow=c(6,5), mar=c(3,4,2,0), pty="m")
 for (i in winners) {
@@ -51,7 +58,7 @@ for (i in winners) {
   expected[i] <- sqrt(mean(p_hat*(1-p_hat)/extras_voters))
 }
 
-#' Plot
+#' #### Plot
 par(mfrow=c(1,2))
 par(pty="s")
 plot(expected, actual, xlim=range(expected,actual),
@@ -61,7 +68,7 @@ abline(0,1)
 plot(candidate_totals, actual)
 points(candidate_totals, expected, col="red")
 
-#' Plot
+#' #### Plot
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Coop/figs","coop1.ps"), height=3.5, horizontal=TRUE)
 #+ eval=FALSE
@@ -100,7 +107,7 @@ points(candidate_totals, expected, pch=20, cex=2)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **chi^2 tests**
+#' #### chi^2 tests
 chisq <- rep(NA, nrow(extras))
 for (i in 1:nrow(extras)){
   observed <- rbind(extras[i,], extras_voters-extras[i,])

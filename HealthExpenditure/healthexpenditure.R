@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Health Expenditure"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Health Expenditure - Discovery through graphs of data and
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Load data**
+#' #### Load data
 read.page <- function (datapage){
   variables.keep <- paste ("X", 1960:2007, sep="")
   data <- read.csv (datapage, skip=3)
@@ -58,7 +65,7 @@ expend <- expend$recent.data
 life <- life$recent.data
 doctor <- doctor$recent.data
 
-#' **Scatterplot**
+#' #### Scatterplot
 #+ eval=FALSE, include=FALSE
 png(root("HealthExpenditure/figs","healthscatter.png"), height=600, width=700)
 #+
@@ -71,7 +78,7 @@ text(expend, life, countries, col=color)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot  scatterplot, excluding some countries**
+#' #### Plot  scatterplot, excluding some countries
 removec <- countries %in% c("Netherlands", "Belgium", "Germany",
   "Ireland", "Iceland", "Greece", "Italy", "Sweden", "UK")
 #+ eval=FALSE, include=FALSE

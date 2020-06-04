@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Residuals"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Plotting the data and fitted model. See Chapter 11 in Regression
@@ -15,14 +22,14 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
-#' **Simple model with const term, one pre-treatment predictor, and treatment indicator**
+#' ## Simple model with const term, one pre-treatment predictor, and treatment indicator
 #'
-#' **Fake data**
+#' #### Fake data
 N <- 100
 x <- runif(N, 0, 1)
 z <- sample(c(0, 1), N, replace=TRUE)
@@ -32,10 +39,10 @@ theta <- 5
 sigma <- 2
 y <- a + b*x + theta*z +  rnorm(N, 0, sigma)
 fake <- data.frame(x=x, y=y, z=z)
-#' **Model**
+#' #### Model
 fit <- stan_glm(y ~ x + z, data=fake, refresh = 0)
 
-#' **Plot Predictor vs Outcome**
+#' #### Plot Predictor vs Outcome
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Residuals/figs","resid_0a.pdf"), height=3.5, width=9)
 #+
@@ -48,9 +55,9 @@ for (i in 0:1){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **More complicated model with multiple pre-treatment predictors.**
+#' ## More complicated model with multiple pre-treatment predictors.
 #'
-#' **Fake data**
+#' #### Fake data
 #' 
 #' Creating the linear predictor from the fitted multiple regression
 #' model
@@ -64,10 +71,10 @@ theta <- 10
 sigma <- 5
 y <- a + X %*% b + theta*z +  rnorm(N, 0, sigma)
 fake <- data.frame(X=X, y=y, z=z)
-#' **Model**
+#' #### Model
 fit <- stan_glm(y ~ X + z, data=fake, refresh = 0)
 
-#' **Plot Predictor vs Outcome**
+#' #### Plot Predictor vs Outcome
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Residuals/figs","resid_0b.pdf"), height=4, width=9)
 #+
@@ -82,7 +89,7 @@ abline(0, 1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot Predictor vs Residual**
+#' #### Plot Predictor vs Residual
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Residuals/figs","resid_0c.pdf"), height=3.5, width=9)
 #+

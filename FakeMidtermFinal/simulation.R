@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Fake midterm and final exam"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Fake dataset of 1000 students' scores on a midterm and final
@@ -15,10 +22,10 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rstanarm")
 
-#' **Simulate fake data**
+#' #### Simulate fake data
 n <- 1000
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
@@ -30,7 +37,7 @@ midterm <- true_ability + noise_1
 final <- true_ability + noise_2
 exams <- data.frame(midterm, final)
 
-#' **Linear regression**
+#' #### Linear regression
 #' 
 #' The option `refresh = 0` supresses the default Stan sampling
 #' progress output. This is useful for small data with fast
@@ -39,7 +46,7 @@ exams <- data.frame(midterm, final)
 fit_1 <- stan_glm(final ~ midterm, data=exams, refresh = 0)
 print(fit_1, digits=2)
 
-#' **Plot midterm and final exam scores**
+#' #### Plot midterm and final exam scores
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(here("FakeMidtermFinal/figs","FakeMidtermFinal1.pdf"), height=4, width=4)
 #+

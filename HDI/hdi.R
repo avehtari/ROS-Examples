@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Human Development Index"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Human Development Index - Looking at data in different ways. See
@@ -15,19 +22,19 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("foreign")
 library("maps")
 
-#' **Load data**
+#' #### Load data
 hdi <- read.table(root("HDI/data","hdi.dat"), header=TRUE)
 head(hdi)
 votes <- read.dta(root("HDI/data","state vote and income, 68-00.dta"))
 head(votes)
 
-#' **Pre-process**
+#' #### Pre-process
 income2000 <- votes[votes[,"st_year"]==2000, "st_income"]
 state.income <- c(income2000[1:8],NA,income2000[9:50])
 state.abb.long <- c(state.abb[1:8],"DC",state.abb[9:50])
@@ -41,7 +48,7 @@ for (i in 1:51){
 }
 no.dc <- state.abb.long != "DC"
 
-#' **Plot average state income and Human Development Index**
+#' #### Plot average state income and Human Development Index
 #+ eval=FALSE, include=FALSE
 if (savefigs) png(root("HDI/figs","hdi1.png"), height=400, width=400)
 #+
@@ -52,7 +59,7 @@ text(state.income, hdi.ordered, state.abb.long)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot rank of average state income and  Human Development Index**
+#' #### Plot rank of average state income and  Human Development Index
 #+ eval=FALSE, include=FALSE
 if (savefigs) png(root("HDI/figs","hdi2.png"), height=400, width=400)
 #+
@@ -65,7 +72,7 @@ if (savefigs) dev.off()
 #+
 print(cor(rank(hdi.ordered[no.dc]),rank(state.income[no.dc])), digits=2)
 
-#' **Plot a map of Human Devlopment index**
+#' #### Plot a map of Human Devlopment index
 statemaps <- function(a, grayscale=FALSE, ...){
   if (length(a)==51){
     no.dc <- c(1:8,10:51)

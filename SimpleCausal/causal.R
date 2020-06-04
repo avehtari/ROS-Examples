@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: SimpleCausal"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Simple graphs illustrating regression for causal inference. See
@@ -15,23 +22,23 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
 
-#' **Simulated data from linear model**
+#' ## Simulated data from linear model
 N <- 50
 x <- runif(N, 1, 5)
 y <- rnorm(N, 10 + 3*x, 3)
 x_binary <- ifelse(x<3, 0, 1)
 data <- data.frame(N, x, y, x_binary)
 
-#' **Regression with binary predictor**
+#' #### Regression with binary predictor
 lm_1a <- lm(y ~ x_binary, data = data)
 display(lm_1a)
 
-#' **Plots**
+#' #### Plots
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("SimpleCausal/figs","overview_1a.pdf"), height=3.5, width=4.5)
 #+
@@ -43,7 +50,7 @@ text(0.3, 13, paste("Estimated treatment effect is\nslope of fitted line: ", fro
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Classical regression with continuous predictor**
+#' #### Regression with continuous predictor
 lm_1b <- lm(y ~ x, data = data)
 display(lm_1b)
 
@@ -57,11 +64,11 @@ text(3.2, 15, paste("Estimated treatment\neffect per unit of x is\nslope of fitt
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Simulated data from nonlinear model**
+#' ## Simulated data from nonlinear model
 y <- rnorm(N, 5 + 30*exp(-x), 2)
 data$y <- y
 
-#' **Classical regression with continuous predictor**
+#' #### Classical regression with continuous predictor
 lm_2a <- lm(y ~ x, data = data)
 display(lm_2a)
 
@@ -83,7 +90,7 @@ abline(coef(lm_2a)[1], coef(lm_2a)[2])
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Simulated data from two groups**
+#' ## Simulated data from two groups
 N <- 100
 xx <- rnorm(N, 0, 1)^2
 z <- rep(0:1, N/2)

@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Poststratification 2"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Demonstrate poststratification with simulated census and poll data
@@ -11,12 +18,12 @@
 #' -------------
 #' 
 
-#' **Load packages**
+#' #### Load packages
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rstanarm")
 invlogit <- plogis
 
-#' **Create some fake data**
+#' ## Simulate fake data
 #'
 #' Create an empty poststratification table, with rows for each of the
 #' $2 \times 4 \times 4$ sorts of people.
@@ -55,8 +62,7 @@ for (j in 1:prod(J)){
     p_response_age[poststrat[j,2]] * p_response_eth[poststrat[j,3]]
 }
 
-#' Sample from the assumed population with the assumed nonresponse
-#' probabilities
+#' Sample from the assumed population with the assumed nonresponse probabilities
 n <- 1000
 people <- sample(prod(J), n, replace=TRUE, prob=poststrat$N*p_response)
 # For respondent i, people[i] is that person's poststrat cell,
@@ -84,7 +90,7 @@ for (j in 1:prod(J)){
 #' Simulate the fake data:
 y <- rbinom(n, 1, prob_yes[people])
 
-#' **Regression**
+#' ## Linear model
 sex <- poststrat[people,1]
 age <- poststrat[people,2]
 eth <- poststrat[people,3]
@@ -93,12 +99,12 @@ fit <- stan_glm(y ~ factor(sex) + factor(age) + factor(eth),
                 family=binomial(link="logit"), data=fake, refresh=0)
 print(fit)
 
-#' **Prediction**
+#' #### Prediction
 pred_sim <- posterior_epred(fit, newdata=as.data.frame(poststrat))
 pred_est <- colMeans(pred_sim)
 round(cbind(poststrat, prob_yes, pred_est), 2)
 
-#' **Poststratification**
+#' #### Poststratification
 poststrat_est <- sum(poststrat$N*pred_est)/sum(poststrat$N)
 round(poststrat_est, 2)
 #' plus uncertainty

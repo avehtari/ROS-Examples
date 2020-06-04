@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Roaches"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Analyse the effect of integrated pest management on reducing
@@ -16,7 +23,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -32,14 +39,14 @@ if (savefigs) color_scheme_set(scheme = "gray")
 #' Set random seed for reproducability
 SEED <- 3579
 
-#' **Load data**
+#' #### Load data
 data(roaches)
 (n <- nrow(roaches))
 #' scale the number of roaches by 100
 roaches$roach100 <- roaches$roach1 / 100
 head(roaches)
 
-#' ### Negative-binomial model
+#' ## Negative-binomial model
 #'
 #' negative-binomial model is over-dispersed compared to Poisson
 #' 
@@ -49,7 +56,7 @@ prior_summary(fit_1)
 print(fit_1, digits=2)
 loo_1 <- loo(fit_1)
 
-#' **Graphical posterior predictive checking**
+#' #### Graphical posterior predictive checking
 yrep_1 <- posterior_predict(fit_1)
 n_sims <- nrow(yrep_1)
 sims_display <- sample(n_sims, 100)
@@ -58,14 +65,14 @@ ppc_1 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_1[sims_display,]+1))+
   theme(axis.line.y = element_blank())
 ppc_1
 
-#' **Predictive checking with test statistic**<br>
+#' #### Predictive checking with test statistic<br>
 #' ppc with proportion of zero counts test statistic
 ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==0))
 #' or
 print(mean(roaches$y==0), digits=2)
 print(mean(yrep_1==0), digits=2)
 
-#' **Predictive checking with test statistic**<br>
+#' #### Predictive checking with test statistic<br>
 #' ppc with proportion of counts of 1 test statistic
 ppc_stat(y=roaches$y, yrep=yrep_1, stat=function(y) mean(y==1))
 #' or
@@ -84,7 +91,7 @@ ppc_stat(y=roaches$y, yrep=yrep_1, stat=max)
 print(max(roaches$y), digits=2)
 print(max(yrep_1), digits=2)
 
-#' ### Poisson model
+#' ## Poisson model
 #' 
 #' Poisson is a special case of negative-binomial
 #' 
@@ -96,7 +103,7 @@ loo_2 <- loo(fit_2)
 
 loo_compare(loo_1, loo_2)
 
-#' **Graphical posterior predictive checking**<br>
+#' #### Graphical posterior predictive checking<br>
 #'
 #' instead of y, we plot log10(y+1) to better show the differences in
 #' the shape of the predictive distribution
@@ -115,14 +122,14 @@ pbg <- bayesplot_grid(ppc_2, ppc_1,
                       titles = c("Poisson", "negative-binomial"))
 if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_12.pdf"), pbg, height=3, width=9, colormode="gray")
 
-#' **Predictive checking with test statistic**<br>
+#' #### Predictive checking with test statistic<br>
 #' test statistic used is the proportion of zero counts
 ppc_stat(y=roaches$y, yrep=yrep_2, stat=function(y) mean(y==0))
 #' or
 print(mean(roaches$y==0), digits=2)
 print(mean(yrep_2==0), digits=2)
 
-#' ### Zero-inflated negative-binomial model
+#' ## Zero-inflated negative-binomial model
 #'
 #' Zero-inflated negative-binomial model is mixture of two models
 #'  - logistic regression to model the proportion of extra zero counts
@@ -142,7 +149,7 @@ print(fit_3)
 loo_3 <- loo(fit_3)
 loo_compare(loo_1, loo_3)
 
-#' **Graphical posterior predictive checking**
+#' #### Graphical posterior predictive checking
 yrep_3 <- posterior_predict(fit_3)
 ppc_3 <- ppc_dens_overlay(log10(roaches$y+1), log10(yrep_3[sims_display,]+1))+
   xlab('log10(y+1)') +
@@ -151,7 +158,7 @@ ppc_3
 #+ eval=FALSE, include=FALSE
 if (savefigs) ggsave(root("Roaches/figs","roaches_ppc_3.pdf"), ppc_3, height=3, width=4.5, colormode="gray")
 
-#' **Predictive checking with test statistic**<br>
+#' #### Predictive checking with test statistic<br>
 #' ppc with zero count test statistic
 ppc_stat(y=roaches$y, yrep=yrep_3, stat=function(y) mean(y==0))
 #' or

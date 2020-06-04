@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Arsenic model residuals"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Binned residual plots for a logistic regression model: wells in
@@ -15,19 +22,20 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 library("loo")
 invlogit <- plogis
 
-#' **Load data**
+#' #### Load data
 wells <- read.csv(root("Arsenic/data","wells.csv"))
 head(wells)
 n <- nrow(wells)
 
-#' **Predict switching with distance, arsenic, education and intercations**
+#' ## Predict switching
+#' with distance, arsenic, education and intercations
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
 wells$c_arsenic <- wells$arsenic - mean(wells$arsenic)
 wells$c_educ4 <- wells$educ4 - mean(wells$educ4)
@@ -37,13 +45,13 @@ fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ4 +
                   family = binomial(link="logit"), data = wells)
 pred8 <- fitted(fit_8)
 
-#' **Error rates**
+#' #### Error rates
 error_rate_null <- mean(round(abs(wells$switch-mean(pred8))))
 round(error_rate_null, 2)
 error_rate <- mean(round(abs(wells$switch-pred8)))
 round(error_rate, 2)
 
-#' ### Residual plot
+#' ## Residual plot
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsa.ps"),
                          height=3.5, width=4, horizontal=TRUE)
@@ -55,10 +63,10 @@ points(pred8, wells$switch-pred8, pch=20, cex=.2)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ### Binned residual plots
+#' ## Binned residual plots
 #'
 
-#' Function for binning residuals
+#' #### Function for binning residuals
 binned_resids <- function (x, y, nclass=sqrt(length(x))){
   breaks.index <- floor(length(x)*(1:(nclass-1))/nclass)
   breaks <- c (-Inf, sort(x)[breaks.index], Inf)
@@ -78,7 +86,7 @@ binned_resids <- function (x, y, nclass=sqrt(length(x))){
   return (list (binned=output, xbreaks=xbreaks))
 }
 
-#' **Binned residual plot with respect to predicted probability**
+#' #### Binned residual plot with respect to predicted probability
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsb.ps"),
                          height=3.5, width=4, horizontal=T)
@@ -94,7 +102,7 @@ points(br8[,1], br8[,2], pch=20, cex=.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Binned residual plots with respect to predictors**
+#' #### Binned residual plots with respect to predictors
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","logitresids.2a.ps"),
                          height=3.5, width=4, horizontal=T)
@@ -125,7 +133,7 @@ points (br[,1], br[,2], pch=20, cex=.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Predict switching with distance, log(arsenic), education and intercations**
+#' #### Predict switching with distance, log(arsenic), education and intercations
 #' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
@@ -133,7 +141,7 @@ fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ4 +
                       dist100:educ4 + log_arsenic:educ4,
                    family = binomial(link="logit"), data = wells)
 
-#' **Predict switching with distance, log(arsenic), education and intercations**
+#' #### Predict switching with distance, log(arsenic), education and intercations
 #' Use non-centered predictors for easier plotting
 #+ results='hide'
 wells$log_arsenic <- log(wells$arsenic)
@@ -142,11 +150,11 @@ fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ4 +
                    family = binomial(link="logit"), data = wells)
 pred8b <- fitted(fit_8b)
 
-#' **Error rate**
+#' #### Error rate
 error_rate <- mean(round(abs(wells$switch-pred8b)))
 round(error_rate, 2)
 
-#' **Plots for log model**
+#' #### Plots for log model
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logmodel.ps"),
                          height=3.5, width=4, horizontal=TRUE)

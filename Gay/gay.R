@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Gay"
 #' author: "Andrew Gelman, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Nonlinear models (loess, spline, GP, and BART) and political
@@ -16,7 +23,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -24,7 +31,7 @@ library("rstanarm")
 options(mc.cores = parallel::detectCores())
 library("dbarts")
 
-#' **Define common plot functions**
+#' #### Define common plot functions
 gay_plot <- function(fit=NULL, question=NULL, title=NULL, savefigs=FALSE) {
   if (savefigs) pdf(root("Gay/figs",paste("gay", index, ".pdf", sep="")), height=4.5, width=6)
   par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
@@ -75,11 +82,12 @@ gay_plot_2 <- function(fit=NULL, question=NULL, title=NULL, m=NULL) {
   lines(age, colMeans(fit[,ok]), lwd=2)
 }
 
-#' **Two different questions**
+#' #### Two different questions
 question <- c("Support for same-sex marriage", "Do you know any gay people?")
 variable <- c("gayFavorStateMarriage", "gayKnowSomeone")
 index <- 0
 
+#' #### Loop over two different questions
 #' Prepare variables to store results
 gay <- as.list(rep(NA, 2))
 gay_sum <- as.list(rep(NA, 2))
@@ -89,8 +97,6 @@ gay_spline <- as.list(rep(NA, 2))
 gay_GP <- as.list(rep(NA, 2))
 gay_bart <- as.list(rep(NA, 2))
 gay_spline_2 <- as.list(rep(NA, 2))
-
-#' **Loop over two different questions**
 for (j in 1:2){
   
   # Prepare the data
@@ -148,7 +154,7 @@ for (j in 1:2){
   gay_spline_2[[j]] <- stan_gamm4(I(y/n) ~ s(age + male), data=gay_sum_2[[j]])
 }
 
-#' **New graphs**
+#' #### New graphs
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Gay/figs","gay10.pdf"), height=4, width=10)
 #+

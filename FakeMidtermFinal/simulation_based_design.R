@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Fake dataset of a randomized experiment on student grades"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Fake dataset of a randomized experiment on student grades. See
@@ -15,10 +22,10 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rstanarm")
 
-#' **First simulation**
+#' #### First simulation
 n <- 100
 y_if_control <- rnorm(n, 60, 20)
 y_if_treated <- y_if_control + 5
@@ -35,7 +42,7 @@ fake$x <- rnorm(n, 50, 20)
 fit_1b <- stan_glm(y ~ z + x, data=fake, refresh=0)
 print(fit_1b)
 
-#' **Simulation with realistic pre-test**
+#' #### Simulation with realistic pre-test
 n <- 100
 true_ability <- rnorm(n, 50, 16)
 x <- true_ability + rnorm(n, 0, 12)
@@ -49,7 +56,7 @@ fit_2b <- stan_glm(y ~ z + x, data=fake_2, refresh=0)
 print(fit_2a)
 print(fit_2b)
 
-#' **Simulating selection bias in treatment assignment**
+#' #### Simulating selection bias in treatment assignment
 invlogit <- plogis
 z <- rbinom(n, 1, invlogit(-(x-50)/20))
 

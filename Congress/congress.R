@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Congress"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Predictive uncertainty for congressional elections. See Chapters 10
@@ -15,27 +22,28 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
+#' #### Load data
 congress <- read.csv(root("Congress/data","congress.csv"))
 inconsistent <- (congress$inc88==(-1) & congress$v86 > 0.5) |  (congress$inc88==1 & congress$v86 < 0.5)
 head(congress)
 
-#' **Regression predicting 1988 from 1986**
+#' ## Regression predicting 1988 from 1986
 data88 <- data.frame(vote=congress$v88_adj, past_vote=congress$v86_adj, inc=congress$inc88)
 fit88 <- stan_glm(vote ~ past_vote + inc, data=data88, refresh=0)
 print(fit88, digits=2)
 
-#' **Simulation for inferences and predictions of new data points**</br>
-#' **Predict from 1988 to 1990**
+#' ## Simulation for inferences and predictions of new data points
+#' #### Predict from 1988 to 1990
 data90 <- data.frame(past_vote=congress$v88_adj, inc=congress$inc90)
-#' **Simulate predictive simulations of the vector of new outcomes**
+#' #### Simulate predictive simulations of the vector of new outcomes
 pred90 <- posterior_predict(fit88, newdata=data90)
 
-#' **Simulate the number of elections predicted to be won by the Democrats in 1990**
+#' #### Simulate the number of elections predicted to be won by the Democrats in 1990
 dems_pred <- rowSums(pred90 > 0.5)
 #' Alternately calculate that sum in a loop
 n_sims <- 4000
@@ -44,13 +52,13 @@ for (s in 1:n_sims) {
   dems_pred[s] <- sum(pred90[s,] > 0.5)
 }
 
-#' **Our posterior mean and sd of how many districts the Dems will win**
+#' #### Our posterior mean and sd of how many districts the Dems will win
 print(c(mean(dems_pred), sqrt(var(dems_pred))),digits=2)
-#' **Histogram of how many districts the Dems will win**
+#' #### Histogram of how many districts the Dems will win
 hist(dems_pred)
 
 
-#' **Graphs**
+#' ## Graphs
 
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf("hist88.pdf", height=3.2, width=4.1, colormodel="gray")

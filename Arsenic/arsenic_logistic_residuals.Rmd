@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Arsenic model residuals"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Binned residual plots for a logistic regression model: wells in
 Bangladesh. See Chapter 14 in Regression and Other Stories.
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -25,7 +32,7 @@ library("loo")
 invlogit <- plogis
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 wells <- read.csv(root("Arsenic/data","wells.csv"))
@@ -33,7 +40,8 @@ head(wells)
 n <- nrow(wells)
 ```
 
-**Predict switching with distance, arsenic, education and intercations**
+## Predict switching
+with distance, arsenic, education and intercations
 
 ```{r }
 wells$c_dist100 <- wells$dist100 - mean(wells$dist100)
@@ -47,7 +55,7 @@ fit_8 <- stan_glm(switch ~ c_dist100 + c_arsenic + c_educ4 +
 pred8 <- fitted(fit_8)
 ```
 
-**Error rates**
+#### Error rates
 
 ```{r }
 error_rate_null <- mean(round(abs(wells$switch-mean(pred8))))
@@ -56,7 +64,7 @@ error_rate <- mean(round(abs(wells$switch-pred8)))
 round(error_rate, 2)
 ```
 
-### Residual plot
+## Residual plot
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsa.ps"),
@@ -72,9 +80,9 @@ points(pred8, wells$switch-pred8, pch=20, cex=.2)
 if (savefigs) dev.off()
 ```
 
-### Binned residual plots
+## Binned residual plots
 
-Function for binning residuals
+#### Function for binning residuals
 
 ```{r }
 binned_resids <- function (x, y, nclass=sqrt(length(x))){
@@ -97,7 +105,7 @@ binned_resids <- function (x, y, nclass=sqrt(length(x))){
 }
 ```
 
-**Binned residual plot with respect to predicted probability**
+#### Binned residual plot with respect to predicted probability
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logitresidsb.ps"),
@@ -117,7 +125,7 @@ points(br8[,1], br8[,2], pch=20, cex=.5)
 if (savefigs) dev.off()
 ```
 
-**Binned residual plots with respect to predictors**
+#### Binned residual plots with respect to predictors
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) postscript(root("Arsenic/figs","logitresids.2a.ps"),
@@ -155,7 +163,7 @@ points (br[,1], br[,2], pch=20, cex=.5)
 if (savefigs) dev.off()
 ```
 
-**Predict switching with distance, log(arsenic), education and intercations**
+#### Predict switching with distance, log(arsenic), education and intercations
 Use non-centered predictors for easier plotting
 
 ```{r results='hide'}
@@ -165,7 +173,7 @@ fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ4 +
                    family = binomial(link="logit"), data = wells)
 ```
 
-**Predict switching with distance, log(arsenic), education and intercations**
+#### Predict switching with distance, log(arsenic), education and intercations
 Use non-centered predictors for easier plotting
 
 ```{r results='hide'}
@@ -176,14 +184,14 @@ fit_8b <- stan_glm(switch ~ dist100 + log_arsenic + educ4 +
 pred8b <- fitted(fit_8b)
 ```
 
-**Error rate**
+#### Error rate
 
 ```{r }
 error_rate <- mean(round(abs(wells$switch-pred8b)))
 round(error_rate, 2)
 ```
 
-**Plots for log model**
+#### Plots for log model
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) postscript(root("Arsenic/figs","arsenic.logmodel.ps"),

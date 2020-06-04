@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Unemployment"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Time series fit and posterior predictive model checking for
@@ -16,7 +23,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -27,11 +34,11 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 # grayscale figures for the book
 if (savefigs) color_scheme_set(scheme = "gray")
 
-#' **Load data**
+#' #### Load data
 unemp <- read.table(root("Unemployment/data","unemp.txt"), header=TRUE)
 head(unemp)
 
-#' **Plot the unemployment rate**
+#' #### Plot the unemployment rate
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Unemployment/figs","unemployment1.pdf"), height=3, width=4.5)
 #+
@@ -45,18 +52,18 @@ axis(2, c(0,5,10), paste (c(0,5,10), "%", sep=""))
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Fit a 1st-order autogregression**
+#' #### Fit a 1st-order autogregression
 n <- nrow(unemp)
 unemp$y_lag <- c(NA, unemp$y[1:(n-1)])
 fit_lag <- stan_glm(y ~ y_lag, data=unemp, refresh=0)
 print(fit_lag, digits=2)
 
-#' **Simulate replicated datasets using posterior predict**
+#' #### Simulate replicated datasets using posterior predict
 y_rep <- posterior_predict(fit_lag)
 y_rep <- cbind(unemp$y[1], y_rep)
 n_sims <- nrow(y_rep)
 
-#' **Simulate replicated datasets "manually"**
+#' #### Simulate replicated datasets "manually"
 sims <- as.matrix(fit_lag)
 n_sims <- nrow(sims)
 y_rep <- array(NA, c(n_sims, n))
@@ -67,7 +74,7 @@ for (s in 1:n_sims){
   }
 }
 
-#' **Plot the simulated unemployment rate series**
+#' #### Plot the simulated unemployment rate series
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Unemployment/figs","unemployment2.pdf"), height=4.5, width=7.5)
 #+
@@ -82,7 +89,7 @@ for (s in sort(sample(n_sims, 15))){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Numerical posterior predictive check**
+#' #### Numerical posterior predictive check
 test <- function (y){
   n <- length(y)
   y_lag <- c(NA, y[1:(n-1)])
@@ -93,5 +100,5 @@ test_y <- test(unemp$y)
 test_rep <- apply(y_rep, 1, test)
 print(mean(test_rep > test_y))
 print(quantile(test_rep, c(.1,.5,.9)))
-#' **Plot test statistic for data and histogram of test statistics for replications**
+#' #### Plot test statistic for data and histogram of test statistics for replications
 ppc_stat(y=unemp$y, yrep=y_rep, stat=test, binwidth = 1) + scale_y_continuous(breaks=NULL)

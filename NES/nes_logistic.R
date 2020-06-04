@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: National election study"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Logistic regression, identifiability, and separation. See Chapters
@@ -15,14 +22,14 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
 library("foreign")
 
-#' **Load data**
+#' #### Load data
 nes <- read.table(root("NES/data","nes.txt"), header=TRUE)
 head(nes)
 
@@ -30,15 +37,15 @@ head(nes)
 ok <- nes$year==1992 & !is.na(nes$rvote) & !is.na(nes$dvote) & (nes$rvote==1 | nes$dvote==1)
 nes92 <- nes[ok,]
 
-#' ### A single predictor logistic regression
+#' ## A single predictor logistic regression
 #' 
 
-#' **Logistic regression of vote preference on income**
+#' #### Logistic regression of vote preference on income
 fit_1 <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=nes92,
                   refresh=0)
 print(fit_1)
 
-#' **Predictions**
+#' #### Predictions
 new <- data.frame(income=5)
 #' Predict vote preference point estimate
 pred <- predict(fit_1, type="response", newdata=new)
@@ -53,7 +60,7 @@ print(c(mean(epred), sd(epred)), digits=2)
 postpred <- posterior_predict(fit_1, newdata=new)
 print(c(mean(postpred), sd(postpred)), digits=2)
 
-#' **Prediction given a range of input values**
+#' #### Prediction given a range of input values
 new <- data.frame(income=1:5)
 pred <- predict(fit_1, type="response", newdata=new)
 linpred <- posterior_linpred(fit_1, newdata=new)
@@ -67,14 +74,14 @@ mean(epred[,5] > epred[,4])
 #' comparing people in the richest to the second-richest category
 quantile(epred[,5] - epred[,4], c(0.025, 0.975))
 
-#' **Fake data example**
+#' ## Fake data example
 data <- data.frame(rvote=rep(c(0,1), 10), income=1:20)
 fit_f <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data,
                   refresh=0)
 new <- data.frame(income=5)
 predict <- posterior_predict(fit_f, newdata=new)
 
-#' **Plot jittered data and prediction from the logistic regression**
+#' #### Plot jittered data and prediction from the logistic regression
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("NES/figs","income1a.pdf"), height=2.8, width=3.8)
 #+
@@ -96,7 +103,7 @@ points(income_jitt, vote_jitt, pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot jittered data and prediction with uncertainties**
+#' #### Plot jittered data and prediction with uncertainties
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("NES/figs","income1b.pdf"), height=2.8, width=3.8)
 #+
@@ -120,7 +127,7 @@ points(income_jitt, vote_jitt, pch=20, cex=.1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Series of regressions for different years**
+#' #### Series of regressions for different years
 yrs <- seq(1952, 2000, 4)
 n_yrs <- length(yrs)
 fits <- array(NA, c(n_yrs, 3), dimnames <- list(yrs, c("year", "coef", "se")))
@@ -137,7 +144,7 @@ for (j in 1:n_yrs){
   fits[j,] <- c(yr, coef(fit_y)[2], se(fit_y)[2])
 }
 
-#' **Plot the series of regression**
+#' #### Plot the series of regression
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("NES/figs","incomeseries.pdf"), height=3.4, width=4.9)
 #+
@@ -152,10 +159,10 @@ abline(0,0,lwd=.5, lty=2)
 if (savefigs) dev.off()
 
 
-#' ### Predictive accuracy and log score for logistic regression
+#' ## Predictive accuracy and log score for logistic regression
 #' 
 
-#' **Estimate the with-in sample predictive accuracy**
+#' #### Estimate the with-in sample predictive accuracy
 predp <- fitted(fit_1)
 round(c(mean(predp[nes92$rvote==1]), mean(1-predp[nes92$rvote==0])), 3)
 
@@ -168,10 +175,10 @@ round(sum(log(c(predp[nes92$rvote==1], 1-predp[nes92$rvote==0]))), 1)
 loo(fit_1)
 
 
-#' ### Identifiability and separation
+#' ## Identifiability and separation
 #' 
 
-#' **Illustrate nonidentifiability of logistic regression**<br>
+#' #### Illustrate nonidentifiability of logistic regression<br>
 #' Use "black" as a predictor (nonidentifiability in 1964)
 #+ results='hide'
 fits_2 <- array(NA, c(n_yrs, 4, 2, 2), dimnames <- list(yrs, c("Intercept", "female", "black", "income"), c("coef", "se"), c("glm", "bayes")))
@@ -192,7 +199,7 @@ for (j in 1:n_yrs){
   print(fit_bayes)
 }
 
-#' **Plot illustration on nonidentifiability of logistic regression**
+#' #### Plot illustration on nonidentifiability of logistic regression
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("NES/figs","separation_compare.pdf"), height=2.8, width=8.3)
 #+ fig.width=9, fig.height=6

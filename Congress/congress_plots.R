@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Congress"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Predictive uncertainty for congressional elections. See Chapter 2
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 
-#' **Load and pre-process data**
+#' #### Load and pre-process data
 congress <- vector("list", 49)
 for (i in 1:49){
   year <- 1896 + 2*(i-1)

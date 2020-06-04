@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: RiskyBehavior"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 
 Data from a randomized trial targeting couples at high risk of HIV

@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Simple regression"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Linear regression with a single predictor. See Chapters 6 and 7 in
@@ -15,14 +22,14 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
-#' #### Fitting a regression using a data frame in R
+#' ## Fitting a regression using a data frame in R
 #' 
-#' **Simulate fake data**
+#' #### Simulate fake data
 x <- 1:20
 n <- length(x)
 a <- 0.2
@@ -34,7 +41,7 @@ set.seed(2141)
 y <- a + b*x + sigma*rnorm(n)
 fake <- data.frame(x, y)
 
-#' **Linear regression model**
+#' #### Linear regression model
 #' 
 #' The option `refresh = 0` supresses the default Stan sampling
 #' progress output. This is useful for small data with fast
@@ -43,7 +50,7 @@ fake <- data.frame(x, y)
 fit_1 <- stan_glm(y ~ x, data = fake, seed=2141, refresh = 0)
 print(fit_1, digits=2)
 
-#' **Plot for the book**
+#' #### Plot for the book
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Simplest/figs","simple.pdf"), height=4, width=5.5)
 #+
@@ -58,9 +65,9 @@ text(x_bar, a_hat + b_hat*x_bar, paste("   y =", round(a_hat, 2), "+", round(b_h
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' #### Formulating comparisons as regression models
+#' ## Formulating comparisons as regression models
 #' 
-#' **Simulate fake data**
+#' #### Simulate fake data
 n_0 <- 200
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
@@ -71,14 +78,14 @@ round(y_0, 1)
 round(mean(y_0), 2)
 round(sd(y_0)/sqrt(n), 2)
 
-#' **Estimating the mean is the same as regressing on a constant term**
+#' #### Estimating the mean is the same as regressing on a constant term
 #+ results='hide'
 fit_2 <- stan_glm(y_0 ~ 1, data = fake_0, seed=2141, refresh = 0,
                   prior_intercept = NULL, prior = NULL, prior_aux = NULL)
 #+
 print(fit_2)
 
-#' **Simulate fake data**
+#' #### Simulate fake data
 n_1 <- 300
 # set the random seed to get reproducible results
 # change the seed to experiment with variation due to random noise
@@ -92,7 +99,7 @@ print(diff)
 
 print(se)
 
-#' **Estimating a difference is the same as regressing on an indicator variable**
+#' #### Estimating a difference is the same as regressing on an indicator variable
 n <- n_0 + n_1
 y <- c(y_0, y_1)
 x <- c(rep(0, n_0), rep(1, n_1))
@@ -101,7 +108,7 @@ fit_3 <- stan_glm(y ~ x, data = fake, seed=2141, refresh = 0,
                   prior_intercept = NULL, prior = NULL, prior_aux = NULL)
 print(fit_3)
 
-#' **Plot for the book**
+#' #### Plot for the book
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Simplest/figs","simplest_1.pdf"), height=4, width=5)
 #+
@@ -117,7 +124,7 @@ text(.95, 1 + mean(y[x==1]), expression(paste(bar(y)[1], " = 8.38")), col="gray3
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Repeat with flat priors**
+#' #### Repeat with flat priors
 fit_3b <- stan_glm(y ~ x, data = fake, seed=2141, refresh = 0,
                   prior=NULL, prior_intercept=NULL, prior_aux=NULL)
 print(fit_3b)

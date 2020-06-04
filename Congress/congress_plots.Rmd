@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Congress"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Predictive uncertainty for congressional elections. See Chapter 2
 in Regression and Other Stories.
@@ -15,14 +22,14 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
 root<-has_dirname("RAOS-Examples")$make_fix_file()
 ```
 
-**Load and pre-process data**
+#### Load and pre-process data
 
 ```{r }
 congress <- vector("list", 49)
