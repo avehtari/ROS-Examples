@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Golf"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Gold putting accuracy: Fitting a nonlinear model using Stan. See
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstan")
@@ -23,14 +30,14 @@ rstan_options(auto_write = TRUE)
 library("rstanarm")
 invlogit <- plogis
 
-#' **Set up the data**
+#' #### Set up the data
 golf <- read.table(root("Golf/data","golf.txt"), header=TRUE, skip=2)
 golf$se <- with(golf, sqrt((y/n)*(1-y/n)/n))
 r <- (1.68/2)/12
 R <- (4.25/2)/12
 golf_data <- list(x=golf$x, y=golf$y, n=golf$n, J=nrow(golf), r=r, R=R)
 
-#' **Plot data**
+#' #### Plot data
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Golf/figs","golf0.pdf"), height=5, width=7)
 #'
@@ -47,15 +54,15 @@ with(golf, {
 if (savefigs) dev.off()
 
 
-#' **Fit a logistic regression model with rstanarm**
+#' ## Logistic regression model with rstanarm
 fit1 <- stan_glm(cbind(y, n-y) ~ x, family=binomial(link="logit"), data=golf,
                  refresh = 0)
 
-#' **Post-processing**
+#' #### Post-processing
 a_hat <- fit1$coefficients[1]
 b_hat <- fit1$coefficients[2]
 
-#' **Plot logistic regression result**
+#' #### Plot logistic regression result
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Golf/figs","golf1.pdf"), height=5, width=7)
 #+
@@ -74,19 +81,19 @@ with(golf, {
 if (savefigs) dev.off()
 
 
-#' **Fit a logistic regression model with rstan**
+#' ## Logistic regression model with rstan
 stanfile_golf_logistic <- root("Golf","golf_logistic.stan")
 writeLines(readLines(stanfile_golf_logistic))
 fit_logistic <- stan(file = stanfile_golf_logistic, data = golf_data,
                      refresh = 0)
 print(fit_logistic)
 
-#' **Post-processing**
+#' #### Post-processing
 sims_logistic <- as.matrix(fit_logistic)
 a_hat <- median(sims_logistic[,"a"])
 b_hat <- median(sims_logistic[,"b"])
 
-#' **Plot logistic regression result**<br>
+#' #### Plot logistic regression result<br>
 #' The result is indistinguishable from rstanarm logistic model.
 par(mar=c(3,3,2,1), mgp=c(1.7,.5,0), tck=-.02)
 with(golf, {
@@ -100,17 +107,17 @@ with(golf, {
                           round(a_hat, 2), ", b = ", round(b_hat, 2), sep=""))
 })
 
-#' **Fit the geometry based nonlinear model**
+#' ## Geometry based nonlinear model
 stanfile_golf_trig <- root("Golf","golf_trig.stan")
 writeLines(readLines(stanfile_golf_trig))
 fit_trig <- stan(file = stanfile_golf_trig, data = golf_data, refresh = 0)
 print(fit_trig)
 
-#' Post-processing
+#' #### Post-processing
 sims_trig <- as.matrix(fit_trig)
 sigma_hat <- median(sims_trig[,"sigma"])
 
-#' **Plot geometry based model result**
+#' #### Plot geometry based model result
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Golf/figs","golf2.pdf"), height=5, width=7)
 #+
@@ -130,7 +137,7 @@ with(golf, {
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot geometry based model posterior draws of sigma**
+#' #### Plot geometry based model posterior draws of sigma
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Golf/figs","golf2a.pdf"), height=5, width=7)
 #+
@@ -152,7 +159,7 @@ with(golf, {
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot two models in same figure**
+#' #### Plot two models in same figure
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Golf/figs","golf3.pdf"), height=5, width=7)
 #+

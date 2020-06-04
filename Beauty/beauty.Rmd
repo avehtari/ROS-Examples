@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Beauty and Teaching Quality"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Hamermesh and Parker (2005) data on student evaluations of
 instructors’ beauty and teaching quality for several courses at the
@@ -15,7 +22,7 @@ Stories.
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -26,30 +33,30 @@ library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 beauty <- read.csv(root("Beauty/data","beauty.csv"))
 head(beauty)
 ```
 
-### Do more beautiful profs get higher evaluations?
+## Do more beautiful profs get higher evaluations?
 
-**Make a scatterplot of data**
+#### Make a scatterplot of data
 
 ```{r }
 par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(beauty$beauty, beauty$eval)
 ```
 
-**Fit a linear regression**
+#### Fit a linear regression
 
 ```{r }
 fit_1 <- stan_glm(eval ~ beauty, data=beauty, refresh=0)
 print(fit_1, digits=2)
 ```
 
-**Make a scatterplot with regression lines**
+#### Make a scatterplot with regression lines
 
 ```{r }
 # Labeling the axes
@@ -63,7 +70,7 @@ curve(coefs[1] + coefs[2]*x + sigma, lty=2, add=TRUE)
 curve(coefs[1] + coefs[2]*x - sigma, lty=2, add=TRUE)
 ```
 
-ggplot version
+#### ggplot version
 
 ```{r }
 ggplot(data=beauty, aes(beauty, eval)) +
@@ -81,8 +88,8 @@ ggplot(data=beauty, aes(beauty, eval)) +
   )
 ```
 
-### Do things differ for male and female profs?  
-Parallel regression lines
+## Do things differ for male and female profs?  
+#### Parallel regression lines
 
 ```{r }
 fit_2 <- stan_glm(eval ~ beauty + female, data=beauty, refresh=0)
@@ -90,7 +97,7 @@ print(fit_2, digits=2)
 coefs2 <- coef(fit_2)
 ```
 
-**Make several subplots**
+#### Make several subplots
 
 ```{r }
 # Set up a 2x2 grid of plots
@@ -114,7 +121,7 @@ points(beauty$beauty[beauty$female==1], beauty$eval[beauty$female==1], col="red"
 curve(coefs2[1] + coefs2[2]*x + coefs2[3]*1, add=TRUE, col="red")
 ```
 
-ggplot versions
+#### ggplot versions
 
 ```{r }
 # Men 
@@ -148,8 +155,8 @@ bayesplot_grid(
 )
 ```
 
-### Do things differ for male and female profs?  
-**Non-parallel regression lines**
+## Do things differ for male and female profs?  
+#### Non-parallel regression lines
 
 ```{r }
 fit_3 <- stan_glm(eval ~ beauty + female + beauty*female, data=beauty, refresh=0)
@@ -157,7 +164,7 @@ print(fit_3, digits=2)
 coefs3 <- coef(fit_3)
 ```
 
-**Make two subplots**
+#### Make two subplots
 
 ```{r }
 # Set up a new 1x2 grid of plots
@@ -180,7 +187,7 @@ curve(coefs3[1] + coefs3[2]*x + coefs3[3]*1 +coefs3[4]*x*1,
        lwd=2, col="black", add=TRUE)
 ```
 
-ggplot version
+#### ggplot version
 
 ```{r }
 # we can add to the gg_male and gg_female plots we already made above
@@ -196,29 +203,29 @@ bayesplot_grid(
 )
 ```
 
-### More models
-**Add age**
+## More models
+#### Add age
 
 ```{r }
 fit_4 <- stan_glm(eval ~ beauty + female + age, data=beauty, refresh=0)
 print(fit_4, digits=2)
 ```
 
-**Add minority**
+#### Add minority
 
 ```{r }
 fit_5 <- stan_glm(eval ~ beauty + female + minority, data=beauty, refresh=0)
 print(fit_5, digits=2)
 ```
 
-**Add nonenglish**
+#### Add nonenglish
 
 ```{r }
 fit_6 <- stan_glm(eval ~ beauty + female + nonenglish, data=beauty, refresh=0)
 print(fit_6, digits=2)
 ```
 
-**Add nonenglish and lower**
+#### Add nonenglish and lower
 
 ```{r }
 fit_7 <- stan_glm(eval ~ beauty + female + nonenglish + lower,
@@ -226,8 +233,8 @@ fit_7 <- stan_glm(eval ~ beauty + female + nonenglish + lower,
 print(fit_7, digits=2)
 ```
 
-### Go back to simple model, add course indicators
-**Include course indicators in a regression**
+## Simple model with course indicators
+#### Include course indicators in a regression
 
 ```{r }
 fit_8 <- stan_glm(eval ~ beauty + factor(course_id), data=beauty, refresh=0)

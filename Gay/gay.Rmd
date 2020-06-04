@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Gay"
 author: "Andrew Gelman, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Nonlinear models (loess, spline, GP, and BART) and political
 attitudes as a function of age. See Chapter 22 in Regression and
@@ -16,7 +23,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -27,7 +34,7 @@ options(mc.cores = parallel::detectCores())
 library("dbarts")
 ```
 
-**Define common plot functions**
+#### Define common plot functions
 
 ```{r }
 gay_plot <- function(fit=NULL, question=NULL, title=NULL, savefigs=FALSE) {
@@ -81,7 +88,7 @@ gay_plot_2 <- function(fit=NULL, question=NULL, title=NULL, m=NULL) {
 }
 ```
 
-**Two different questions**
+#### Two different questions
 
 ```{r }
 question <- c("Support for same-sex marriage", "Do you know any gay people?")
@@ -89,6 +96,7 @@ variable <- c("gayFavorStateMarriage", "gayKnowSomeone")
 index <- 0
 ```
 
+#### Loop over two different questions
 Prepare variables to store results
 
 ```{r }
@@ -100,11 +108,6 @@ gay_spline <- as.list(rep(NA, 2))
 gay_GP <- as.list(rep(NA, 2))
 gay_bart <- as.list(rep(NA, 2))
 gay_spline_2 <- as.list(rep(NA, 2))
-```
-
-**Loop over two different questions**
-
-```{r }
 for (j in 1:2){
   
   # Prepare the data
@@ -163,7 +166,7 @@ for (j in 1:2){
 }
 ```
 
-**New graphs**
+#### New graphs
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Gay/figs","gay10.pdf"), height=4, width=10)

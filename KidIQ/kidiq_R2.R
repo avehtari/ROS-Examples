@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: KidIQ Bayes-R2 and LOO-R2"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Linear regression and Bayes-R2 and LOO-R2. See Chapter 11 in
@@ -17,7 +24,7 @@
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -29,36 +36,36 @@ library(reshape2)
 # for reproducability
 SEED<-1507
 
-#' ### Compare different models with LOO-CV
-#' 
-
-#' **Load children's test scores data**
+#' #### Load children's test scores data
 kidiq <- read.csv(root("KidIQ/data","kidiq.csv"))
 head(kidiq)
 
-#' **A single binary predictor**
+#' ## Compare different models
+#'
+
+#' #### A single binary predictor
 fit_1 <- stan_glm(kid_score ~ mom_hs, data=kidiq,
                   seed=SEED, refresh=0)
 loo_1 <- loo(fit_1)
 print(loo_1)
 
-#' **Two predictors**
+#' #### Two predictors
 fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq,
                   seed=SEED, refresh=0)
 loo_3 <- loo(fit_3)
 print(loo_3)
 
-#' **Compare models based on expected log predictive density**
+#' #### Compare models based on expected log predictive density
 loo_compare(loo_1, loo_3)
 
-#' **Bayes-R2**<br>
+#' #### Bayes-R2<br>
 #' Median Bayes-R2 increases
 br2_1<-bayes_R2(fit_1)
 br2_3<-bayes_R2(fit_3)
 round(median(br2_1),3)
 round(median(br2_3),3)
 
-#' **Plot Bayes-R2 posteriors**<br>
+#' #### Plot Bayes-R2 posteriors<br>
 #' Increase in R2 is clear
 df <- melt(data.frame(fit_3=br2_1,fit_3n=br2_3))
 ggplot(df, aes(x=value, linetype=variable)) +
@@ -68,35 +75,35 @@ ggplot(df, aes(x=value, linetype=variable)) +
     annotate("text", x = 0.107, y = 16.2, label = "kid_score ~ mom_hs") +
     annotate("text", x = 0.28, y = 13.2, label = "kid_score ~ mom_hs + mom_iq")
 
-#' **R2 with LOO-CV**<br>
+#' #### R2 with LOO-CV<br>
 #' LOO-R2 are smaller, but the difference is still large.
 round(median(loo_R2(fit_1)),3)
 round(median(loo_R2(fit_3)),3)
 
-#' **Add five pure noise predictors to the data
+#' ## Add five pure noise predictors to the data
 set.seed(SEED)
 n=nrow(kidiq)
 kidiqr <- kidiq
 kidiqr$noise <- array(rnorm(5*n), c(n,5))
 
-#' **Linear regression with additional noise predictors**
+#' #### Linear regression with additional noise predictors
 #+ results='hide'
 fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr,
                    seed=SEED, refresh=0)
 
-#' **Linear regression with interaction**
+#' #### Linear regression with interaction
 #+ results='hide'
 fit_4 <- stan_glm(kid_score ~ mom_hs + mom_iq + mom_iq:mom_hs, data=kidiq,
                   seed=SEED, refresh=0)
 
-#' **Bayes-R2**<br>
+#' #### Bayes-R2<br>
 #' Median Bayes-R2 increases, but...
 br2_3<-bayes_R2(fit_3)
 br2_3n<-bayes_R2(fit_3n)
 round(median(br2_3),3)
 round(median(br2_3n),3)
 
-#' **Plot Bayes-R2 posteriors**<br>
+#' #### Plot Bayes-R2 posteriors<br>
 #' Median Bayes-R2 increases, but that increase is negligible
 #' compared to the uncertainty
 df <- melt(data.frame(fit_3=br2_3,fit_3n=br2_3n))
@@ -107,7 +114,7 @@ ggplot(df, aes(x=value, linetype=variable)) +
     annotate("text", x = 0.15, y = 11.5, label = "kid_score ~ mom_hs + mom_iq") +
     annotate("text", x = 0.285, y = 12, label = "kid_score ~ mom_hs + mom_iq +\n noise")
 
-#' **R2 with LOO-CV**<br>
+#' #### R2 with LOO-CV<br>
 #' LOO-R2 decreases when five noise predictors are addded
 round(median(loo_R2(fit_3)),3)
 round(median(loo_R2(fit_3n)),3)

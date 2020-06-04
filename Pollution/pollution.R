@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Pollution"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' A pollution data set. See Chapter 12 in Regression and Other

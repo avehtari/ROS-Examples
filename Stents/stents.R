@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Stents"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Stents - comparing distributions. See Chapter 3 in
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Exercise time**
+#' #### Exercise time
 n <- c(104,90)
 y_bar_pre <- c(528.0, 490.0)
 y_bar_post <- c(556.3, 501.8)
@@ -48,12 +55,12 @@ round(ses, 1)
 round(diffs/ses, 1)
 round(2*pnorm(-diffs/ses), 2)
 
-#' **Bootstrap**
+#' #### Bootstrap
 z <- (diffs/ses)[3]
 print(1-pnorm(1.96 - z))
 print(pnorm(-1.96 - z))
 
-#' **Treadmill score**
+#' #### Treadmill score
 n <- c(104,90)
 y_bar_pre <- c(4.24, 4.18)
 y_bar_post <- c(5.46, 4.28)
@@ -82,7 +89,7 @@ round(ses, 1)
 round(diffs/ses, 1)
 round(2*pnorm(-diffs/ses), 2)
 
-#' **Graph showing distribution shift**
+#' #### Graph showing distribution shift
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf("stents_shift_1.pdf", height=3, width=6)
 #+ 

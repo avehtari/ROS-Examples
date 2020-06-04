@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Bayesian $R^2$"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Bayesian $R^2$. See Chapter 11 in Regression and Other Stories.
@@ -14,6 +21,8 @@
 #' -------------
 #' 
 
+#' ## Introduction
+#'
 #' Gelman, Goodrich, Gabry, and Vehtari (2018) define Bayesian $R^2$ as
 #' $$
 #' R^2 = \frac{\mathrm{Var}_{\mu}}{\mathrm{Var}_{\mu}+\mathrm{Var}_\mathrm{res}},
@@ -42,7 +51,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -57,9 +66,9 @@ set.seed(SEED)
 # grayscale figures for the book
 if (savefigs) color_scheme_set(scheme = "gray")
 
-#' # Function for Bayesian R-squared for stan_glm models. 
+#' #### Function for Bayesian R-squared for stan_glm models. 
 #' 
-#' **Bayes-R2 function using modelled (approximate) residual variance**
+#' Bayes-R2 function using modelled (approximate) residual variance
 bayes_R2 <- function(fit) {
   mupred <- rstanarm::posterior_linpred(fit, transform = TRUE)
   var_mupred <- apply(mupred, 1, var)
@@ -71,14 +80,12 @@ bayes_R2 <- function(fit) {
   var_mupred / (var_mupred + sigma2)
 }
 
-#' # Experiments
-
 #' ## Toy data with n=5
 x <- 1:5 - 3
 y <- c(1.7, 2.6, 2.5, 4.4, 3.8) - 3
 xy <- data.frame(x,y)
 
-#' **Lsq fit**
+#' #### Lsq fit
 fit <- lm(y ~ x, data = xy)
 ols_coef <- coef(fit)
 yhat <- ols_coef[1] + ols_coef[2] * x
@@ -87,7 +94,7 @@ rsq_1 <- var(yhat)/(var(y))
 rsq_2 <- var(yhat)/(var(yhat) + var(r))
 round(c(rsq_1, rsq_2), 3)
 
-#' **Bayes fit**
+#' #### Bayes fit
 fit_bayes <- stan_glm(y ~ x, data = xy,
   prior_intercept = normal(0, 0.2, autoscale = FALSE),
   prior = normal(1, 0.2, autoscale = FALSE),
@@ -97,10 +104,10 @@ fit_bayes <- stan_glm(y ~ x, data = xy,
 posterior <- as.matrix(fit_bayes, pars = c("(Intercept)", "x"))
 post_means <- colMeans(posterior)
 
-#' **Median Bayesian R^2**
+#' #### Median Bayesian R^2
 round(median(bayesR2<-bayes_R2(fit_bayes)), 2)
 
-#' **Figures**
+#' #### Figures
 #'
 #' The first section of code below creates plots using base R graphics. </br>
 #' Below that there is code to produce the plots using ggplot2.
@@ -109,7 +116,7 @@ round(median(bayesR2<-bayes_R2(fit_bayes)), 2)
 keep <- sample(nrow(posterior), 20)
 samp_20_draws <- posterior[keep, ]
 
-#' **Base graphics version**
+#' #### Base graphics version
 
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf("fig/rsquared1a.pdf", height=4, width=5)
@@ -165,7 +172,7 @@ points(x, y, pch = 20, col = "black")
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **ggplot version**
+#' #### ggplot version
 theme_update(
   plot.title = element_text(face = "bold", hjust = 0.5), 
   axis.text = element_text(size = rel(1.1))
@@ -234,7 +241,7 @@ plot(fig_1b)
 #+ eval=FALSE, include=FALSE
 if (savefigs) ggsave("fig/rsquared1b-gg.pdf", width = 5, height = 4)
 
-#' **Bayesian R^2 Posterior and median**
+#' #### Bayesian R^2 Posterior and median
 mcmc_hist(data.frame(bayesR2), binwidth=0.02) + xlim(c(0,1)) +
     scale_y_continuous(breaks=NULL) +
     xlab('Bayesian R2') +
@@ -250,10 +257,10 @@ data <- data.frame(rvote=y, income=1:20)
 fit_logit <- stan_glm(rvote ~ income, family=binomial(link="logit"), data=data,
                       refresh=0)
 
-#' **Median Bayesian R^2**
+#' #### Median Bayesian R^2
 round(median(bayesR2<-bayes_R2(fit_logit)), 2)
 
-#' **Plot posterior of Bayesian R^2**
+#' #### Plot posterior of Bayesian R^2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0,1)
 mcmc_hist(data.frame(bayesR2), binwidth=0.02) + pxl +
@@ -266,21 +273,21 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.02) + pxl +
 #' Predicting the yields of mesquite bushes, n=46
 #' 
 
-#' **Load data**
+#' #### Load data
 mesquite <- read.table(root("Mesquite/data","mesquite.dat"), header=TRUE)
 mesquite$canopy_volume <- mesquite$diam1 * mesquite$diam2 * mesquite$canopy_height
 mesquite$canopy_area <- mesquite$diam1 * mesquite$diam2
 mesquite$canopy_shape <- mesquite$diam1 / mesquite$diam2
 (n <- nrow(mesquite))
 
-#' **Predict log weight model with log canopy volume, log canopy shape, and group**
+#' #### Predict log weight model with log canopy volume, log canopy shape, and group
 fit_5 <- stan_glm(log(weight) ~ log(canopy_volume) + log(canopy_shape) +
     group, data=mesquite, refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2<-bayes_R2(fit_5)), 2)
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0.6, 0.95)
 mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
@@ -294,19 +301,19 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 #' This data was also used by Tjur (2009)
 #' 
 
-#' **Load data**
+#' #### Load data
 lowbwt <- read.table(root("LowBwt/data","lowbwt.dat"), header=TRUE)
 (n <- nrow(lowbwt))
 head(lowbwt)
 
-#' **Predict low birth weight**
+#' #### Predict low birth weight
 fit_1 <- stan_glm(low ~ age + lwt + factor(race) + smoke,
                 family=binomial(link="logit"), data=lowbwt, refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2<-bayes_R2(fit_1)), 2)
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0, 0.3)
 mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
@@ -321,13 +328,13 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 #' Below we use the continuos valued birth weight.
 #' 
 
-#' **Predict birth weight**
+#' #### Predict birth weight
 fit_2 <- stan_glm(bwt ~ age + lwt + factor(race) + smoke, data=lowbwt, refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2<-bayes_R2(fit_2)), 2)
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0, 0.36)
 mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
@@ -340,19 +347,19 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
 #' Children's test scores data, n=434
 #' 
 
-#' **Load children's test scores data**
+#' #### Load children's test scores data
 kidiq <- read.csv(root("KidIQ/data","kidiq.csv"))
 (n <- nrow(kidiq))
 head(kidiq)
 
-#' **Predict test score**
+#' #### Predict test score
 fit_3 <- stan_glm(kid_score ~ mom_hs + mom_iq, data=kidiq,
                   seed=SEED, refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2<-bayes_R2(fit_3)), 2)
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0.05, 0.35)
 mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
@@ -361,18 +368,18 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.01) + pxl +
     geom_vline(xintercept=median(bayesR2))
 
 
-#' **Add five pure noise predictors to the data**
+#' #### Add five pure noise predictors to the data
 set.seed(1507)
 n <- nrow(kidiq)
 kidiqr <- kidiq
 kidiqr$noise <- array(rnorm(5*n), c(n,5))
 
-#' **Linear regression with additional noise predictors**
+#' #### Linear regression with additional noise predictors
 fit_3n <- stan_glm(kid_score ~ mom_hs + mom_iq + noise, data=kidiqr,
                    seed=SEED, refresh=0)
 print(fit_3n)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2n<-bayes_R2(fit_3n)), 2)
 
 #' Median Bayesian R2 is higher with additional noise predictors, but
@@ -380,7 +387,7 @@ round(median(bayesR2n<-bayes_R2(fit_3n)), 2)
 #' practically relevant.
 #' 
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0.05, 0.35)
 mcmc_hist(data.frame(bayesR2n), binwidth=0.01) + pxl +
@@ -394,21 +401,21 @@ mcmc_hist(data.frame(bayesR2n), binwidth=0.01) + pxl +
 #' logistic regression n=1374, linear regression n=1187
 #' 
 
-#' **Load data**
+#' #### Load data
 earnings <- read.csv(root("Earnings/data","earnings.csv"))
 (n <- nrow(earnings))
 head(earnings)
 
-#' **Bayesian logistic regression on non-zero earnings**</br>
+#' #### Bayesian logistic regression on non-zero earnings</br>
 #' Predict using height and sex
 fit_1a <- stan_glm((earn>0) ~ height + male,
                    family = binomial(link = "logit"),
                    data = earnings, refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2<-bayes_R2(fit_1a)), 3)
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0.02, 0.11)
 mcmc_hist(data.frame(bayesR2), binwidth=0.002) + pxl +
@@ -416,16 +423,16 @@ mcmc_hist(data.frame(bayesR2), binwidth=0.002) + pxl +
     xlab('Bayesian R2') +
     geom_vline(xintercept=median(bayesR2))
 
-#' **Bayesian probit regression on non-zero earnings**</br>
+#' #### Bayesian probit regression on non-zero earnings</br>
 fit_1p <- stan_glm((earn>0) ~ height + male,
                    family = binomial(link = "probit"),
                    data = earnings, refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2), 3)
 round(median(bayesR2p<-bayes_R2(fit_1p)), 3)
 
-#' **Compare logistic and probit models using new Bayesian R2**
+#' #### Compare logistic and probit models using new Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0.02, 0.11)
 p1<-mcmc_hist(data.frame(bayesR2), binwidth=0.002) + pxl +
@@ -443,14 +450,14 @@ bayesplot_grid(p1,p2)
 #' logit and probit.
 #' 
 
-#' **Bayesian model on positive earnings on log scale**
+#' #### Bayesian model on positive earnings on log scale
 fit_1b <- stan_glm(log(earn) ~ height + male, data = earnings, subset=earn>0,
                    refresh=0)
 
-#' **Median Bayesian R2**
+#' #### Median Bayesian R2
 round(median(bayesR2<-bayes_R2(fit_1b)), 3)
 
-#' **Plot posterior of Bayesian R2**
+#' #### Plot posterior of Bayesian R2
 #+ message=FALSE, error=FALSE, warning=FALSE
 pxl<-xlim(0.02, 0.15)
 mcmc_hist(data.frame(bayesR2), binwidth=0.002) + pxl +

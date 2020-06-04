@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Elections Economy -- model checking"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Elections Economy -- model checking. Checking the model-fitting
 procedure using fake-data simulation. See Chapter 7 in Regression
@@ -14,7 +21,7 @@ and Other Stories.
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -22,14 +29,14 @@ root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 head(hibbs)
 ```
 
-**Step 1: Creating the pretend world**
+#### Step 1: Creating the pretend world
 
 ```{r }
 a <- 46.2
@@ -39,7 +46,7 @@ x <- hibbs$growth
 n <- length(x)
 ```
 
-**Step 2: Simulating fake data**
+#### Step 2: Simulating fake data
 
 ```{r }
 set.seed(1)
@@ -47,7 +54,7 @@ y <- a + b*x + rnorm(n, 0, sigma)
 fake <- data.frame(x, y)
 ```
 
-**Step 3: Fitting the model and comparing fitted to pretend values**
+#### Step 3: Fitting the model and comparing fitted to pretend values
 
 ```{r results='hide'}
 fit <- stan_glm(y ~ x, data = fake, refresh = 0)
@@ -63,7 +70,7 @@ cat(paste("50% coverage: ", cover_50, "\n"))
 cat(paste("90% coverage: ", cover_90, "\n"))
 ```
 
-**Step 4:  Embedding the simulation in a loop**
+#### Step 4:  Embedding the simulation in a loop
 
 ```{r results='hide'}
 n_fake <- 1000

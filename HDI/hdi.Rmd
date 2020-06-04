@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Human Development Index"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Human Development Index - Looking at data in different ways. See
 Chapter 2 in Regression and Other Stories.
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -24,7 +31,7 @@ library("foreign")
 library("maps")
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 hdi <- read.table(root("HDI/data","hdi.dat"), header=TRUE)
@@ -33,7 +40,7 @@ votes <- read.dta(root("HDI/data","state vote and income, 68-00.dta"))
 head(votes)
 ```
 
-**Pre-process**
+#### Pre-process
 
 ```{r }
 income2000 <- votes[votes[,"st_year"]==2000, "st_income"]
@@ -50,7 +57,7 @@ for (i in 1:51){
 no.dc <- state.abb.long != "DC"
 ```
 
-**Plot average state income and Human Development Index**
+#### Plot average state income and Human Development Index
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) png(root("HDI/figs","hdi1.png"), height=400, width=400)
@@ -65,7 +72,7 @@ text(state.income, hdi.ordered, state.abb.long)
 if (savefigs) dev.off()
 ```
 
-**Plot rank of average state income and  Human Development Index**
+#### Plot rank of average state income and  Human Development Index
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) png(root("HDI/figs","hdi2.png"), height=400, width=400)
@@ -83,7 +90,7 @@ if (savefigs) dev.off()
 print(cor(rank(hdi.ordered[no.dc]),rank(state.income[no.dc])), digits=2)
 ```
 
-**Plot a map of Human Devlopment index**
+#### Plot a map of Human Devlopment index
 
 ```{r }
 statemaps <- function(a, grayscale=FALSE, ...){

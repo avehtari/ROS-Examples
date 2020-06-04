@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Pew"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Miscellaneous analyses using raw Pew data. See Chapter 2 in
@@ -15,21 +22,21 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("foreign")
 
-#' **Load data**
+#' #### Load data
 pew_pre <- read.dta(root("Pew/data","pew_research_center_june_elect_wknd_data.dta"))
 n <- nrow(pew_pre)
 
-#' **Glance data**
+#' #### Glance data
 table(pew_pre[,"date"])
 which_question <- ifelse(!is.na(pew_pre$heat2), 2, ifelse (!is.na(pew_pre$heat4), 4, 0))
 table(pew_pre$date, which_question)
 
-#' **Create vote intention variable "rvote" using variables heat2 and heat4 from Pew**
+#' #### Create vote intention variable "rvote" using variables heat2 and heat4 from Pew
 numeric_heat2 <- as.numeric(pew_pre$heat2)
 numeric_heat4 <- as.numeric(pew_pre$heat4)
 rvote <- rep (NA, n)
@@ -44,7 +51,7 @@ for (i in 1:n){
   }
 }
 
-#' **Certain to have registered to vote?**
+#' #### Certain to have registered to vote?
 registered <- ifelse(pew_pre$regicert=="absolutely certain", 1, 0)
 registered[is.na(registered)] <- 0
 

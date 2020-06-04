@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: ChildCare"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #'  Code and figures for Infant Health and Development Program (IHDP)
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstan")
@@ -26,14 +33,12 @@ source(root("Childcare/library","matching.R"))
 source(root("Childcare/library","balance.R"))
 source(root("Childcare/library","estimation.R"))
 
-#' **Load data**
+#' #### Load data
 cc2 <- read.csv(root("Childcare/data","cc2.csv"))
 head(cc2)
 
-#' **Figure 20.9:** See ps_fit_1 MwoR, prior to step 4
-
-#' **Figure 20.10:** displays a scatter plot of birthweight versus test
-#' scores at age 3 with observations displayed in different colors.
+#' #### Figure: displays a scatter plot of birthweight versus test scores
+#' at age 3 with observations displayed in different colors.
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Childcare/figs","ppvt.bw.pdf"), height=3.6,width=4.2)
 #+
@@ -48,8 +53,9 @@ curve(tmp[1]+tmp[3]+tmp[2]*x,add=T)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Figure 20.11:** Overlap plot of mother's education & age of child
-#' (months).
+#' ## Plots
+#' 
+#' #### Figure: Overlap plot of mother's education & age of child (months).
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Childcare/figs","age.educ.freq.AZC.f20.11.pdf"), height=4, width=6)
 #+
@@ -62,11 +68,9 @@ hist(cc2$age[cc2$treat==1],xlim=c(0,110),xlab="",breaks=seq(0,110,10),freq=TRUE,
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
+#' ## Subclassification / Stratification
 
-#' ### Subclassification / Stratification
-
-#' **Figure 20.12:** Table of stratified treatment effect estimate
-#' table.
+#' #### Figure: Table of stratified treatment effect estimate table.
 edu <- list(cc2$lths, cc2$hs, cc2$ltcoll, cc2$college)
 # mean difference
 y.trt <- sapply(edu, FUN=function(x) {
@@ -96,24 +100,22 @@ rownames(tes) <- c('lths', 'hs', 'ltcoll', 'college')
 colnames(tes) <- c('te', 'n.trt', 'n.ctrl', 'se')
 round(tes, 1)
 
-#' **Estimands and subclassification**
+#' ## Estimands and subclassification
 #' 
-#' **Equation 20.4:** ATE
-# ATE
+#' #### ATE
 (9.3* 1358 + 4.1 * 1820 + 7.9* 837 + 4.6* 366) / (1358+1820+837+366)
-# standard error
+#' standard error
 (1.5^2* 1358^2 + 1.9^2 * 1738^2 + 2.4^2* 789^2 + 2.3^2 * 366^2) / ((1358+1820+837+366)^2)
 
 
-#' **Equation 20.5:** ATT
-# ATT
+#' #### ATT
 round((9.3* 126 + 4.1 * 82 + 7.9* 48 + 4.6* 34) / (126+82+48+34), 1)
-# standard error
+#' standard error
 round((1.5^2* 126^2 + 1.9^2 * 82^2 + 2.4^2* 48^2 + 2.3^2 * 34^2) / ((126+82+48+34)^2),2)
 
-#' ### Propensity Score Matching
+#' ## Propensity Score Matching
 #'
-#' **Step 2: Estimating the propensity score**
+#' #### Step 2: Estimating the propensity score
 #' 
 #' these are the no redundancy covariates with and without state covariates
 covs.nr <- c('bwg', 'hispanic', 'black', 'b.marr', 'lths', 'hs', 'ltcoll', 'work.dur', 'prenatal', 'sex', 'first', 'bw', 'preterm', 'momage', 'dayskidh')
@@ -124,7 +126,7 @@ ps_spec <- formula(treat ~ bw + bwg + hispanic + black + b.marr + lths + hs + lt
 #' pscore estimation formula with states added
 ps_spec.st <- update(ps_spec, . ~ . + st5 + st9 + st12 + st25 + st36 + st42 + st48 + st53)
 
-#' Estimation of pscores using stan_glm
+#' #### Estimation of pscores using stan_glm
 set.seed(1234)
 ps_fit_1 <- stan_glm(ps_spec, family=binomial(link='logit'), data=cc2, algorithm='optimizing', refresh=0)
 ps_fit_1.st <- stan_glm(ps_spec.st, family=binomial(link='logit'), data=cc2, algorithm='optimizing', refresh=0)
@@ -133,7 +135,7 @@ ps_fit_1.st <- stan_glm(ps_spec.st, family=binomial(link='logit'), data=cc2, alg
 pscores <- apply(posterior_linpred(ps_fit_1), 2, mean)
 pscores.st <- apply(posterior_linpred(ps_fit_1.st), 2, mean)
 
-#' **Step 3: Matching**
+#' #### Step 3: Matching
 #'
 #' matching without replacement, original formula
 matches <- matching(z=cc2$treat, score=pscores, replace=FALSE)
@@ -151,7 +153,7 @@ matched.st <- cc2[matches.st$match.ind,]
 matches.st.wr <- matching(z=cc2$treat, score=pscores.st, replace=TRUE)
 wts.st.wr <- matches.st.wr$cnts
 
-#' **Step 4: Balance and overlap**
+#' #### Step 4: Balance and overlap
 #'
 #' Balance plots for all covariates specified in STEP 1 (in the book)
 covs <- c('bw', 'preterm', 'dayskidh', 'sex', 'first', 'age', 'black', 'hispanic', 'white', 'b.marr', 'lths', 'hs', 'ltcoll', 'college', 'work.dur', 'prenatal', 'momage')
@@ -160,12 +162,11 @@ bal_nr <- balance(rawdata=cc2[,covs], treat=cc2$treat, matched=matches$cnts, est
 bal_nr.wr <- balance(rawdata=cc2[,covs], treat=cc2$treat, matched=matches.wr$cnts, estimand='ATT')
 bal_nr.wr.st <- balance(rawdata=cc2[, union(covs, covs.nr.st)], treat=cc2$treat, matched=matches.st.wr$cnts, estimand='ATT')
 
-#' **Figure 20.9:** Balance plot
+#' ## Balance plot
 #'
 #' Labeled cov names, ps_fit_1 MwoR.
 #' No state variables included.
-#' Manual plot code based on the code in balance.R.
-
+#' 
 #' Balance for all covariates, not just those used in propensity score model
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Childcare/figs","balance.both.azc.pdf"), width=11, height=8.5)
@@ -201,13 +202,13 @@ axis(2, at=1:K, labels=longcovnames[1:K],
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Step 4: Diagnostics for balance and overlap**
+#' #### Step 4: Diagnostics for balance and overlap
 #'
 #' Separate balance plots for continuous and binary variables.
 #' Labelled cov names, ps_fit_1 MWR.
 #' Manual plot code based on the code in balance.R.
 #'
-#' **Figure 20.13**
+#' #### Figure
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Childcare/figs","balance.cont.binary.AZC.pdf"), width=10, height=6)
 #+
@@ -280,9 +281,8 @@ axis(2, at=8:12, labels=longcovnames[8:12],
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Figure 20.14**
+#' #### Figure: Overlap of propensity scores before/after matching with replacement.
 #'
-#' Overlap of propensity scores before/after matching with replacement.
 #' Pscores from original model.
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Childcare/figs","ps.overlap.dens.AZC.pdf"), width=11, height=8.5)
@@ -305,11 +305,7 @@ sum(pscores[cc2$treat==0] < -20)
 #' pscore matching check
 sum(pscores[cc2$treat==1] > max(pscores[cc2$treat==0]))
 
-#' **Figure 20.15:** a LaTex table.
-
-#' **Figure 20.16**
-#'
-#' Example: good overlap, bad pscore.
+#' #### Figure: Example: good overlap, bad pscore.
 set.seed(20)
 ps3.mod <- glm(treat ~ unemp.rt, data=cc2,family=binomial) 
 pscores3 <- predict(ps3.mod, type="link")
@@ -326,7 +322,7 @@ hist(pscores3[cc2$treat==1], freq=FALSE, add=TRUE)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Step 5: Estimating a treatment effect using the restructured data.
+#' #### Step 5: Estimating a treatment effect using the restructured data.
 te_spec_nr <- update(ps_spec, ppvtr.36 ~ treat + .)
 
 #' treatment effect without replacement
@@ -368,9 +364,9 @@ summary(reg_te)['treat', 1:2]
 summary(reg_te.st)['treat', 1:2]
 
 
-#' ### Finding a Improved pscore Model
+#' ## Improved pscore Model
 #' 
-#' Find an improved pscore model using an interaction or squared term.
+#' Improved pscore model using an interaction or squared term.
 #' 
 #' transformed variables
 cc2$bwT = (cc2$bw-1500)^2
@@ -401,13 +397,12 @@ plot.balance(bal_2.wr, which.covs='cont', main='ps_fit_2')
 plot.balance(bal_nr, which.covs='binary', main='ps_fit_1')
 plot.balance(bal_2.wr, which.covs='binary', main='ps_fit_2')
 
-#' **New figure**
+#' #### Figure: side by side binary/continuous
 #' 
-#' side by side binary/continuous, ps_fit_2.wr
 plot.balance(bal_2.wr, longcovnames=cov_names)
 
 
-#' Treatment effect
+#' #### Treatment effect
 te_spec2 <- formula(ppvtr.36 ~ treat + hispanic + black + b.marr + lths + hs + ltcoll + work.dur + prenatal + momage + sex + first + preterm + dayskidh + bw + income)
 te_spec2 <- te_spec_nr
 set.seed(8)
@@ -421,7 +416,7 @@ summary(reg_ps2)['treat', 1:2]
 summary(reg_ps2.wr)$coef['treat', 1:2]
 
 
-#' Geographic information using ps_spec2
+#' #### Geographic information using ps_spec2
 ps_spec2.st <- update(ps_spec2, . ~ . + st5 + st9 + st12 + st25 + st36 + st42 + st48 + st53)
 
 set.seed(8)
@@ -432,7 +427,7 @@ matches2.st <- matching(z=cc2$treat, score=pscores_2.st, replace=FALSE)
 matched2.st <- cc2[matches2.st$match.ind,]
 matches2.st_wr <- matching(z=cc2$treat, score=pscores_2.st, replace=TRUE)
 
-#' Treatment effect estimate
+#' #### Treatment effect estimate
 te_spec2.st <- update(te_spec2, . ~ . + st5 + st9 + st12 + st25 + st36 + st42 + st48 + st53)
 set.seed(8)
 # MwoR
@@ -444,7 +439,7 @@ summary(reg_ps2.st)['treat', 1:2]
 summary(reg_ps2.st.wr)$coef['treat', 1:2]
 
 
-#' **IPTW (including state indicators)**
+#' #### IPTW (including state indicators)
 wt.iptw <- inv.logit(pscores) / (1 - inv.logit(pscores))
 wt.iptw[cc2$treat==0] <- wt.iptw[cc2$treat==0] * (sum(wt.iptw[cc2$treat==0]) / sum(cc2$treat==0))
 wt.iptw[cc2$treat==1] <- 1
@@ -455,7 +450,7 @@ reg_ps.iptw <- svyglm(te_spec_nr, design=ps_fit_iptw_design, data=cc2)
 summary(reg_ps.iptw)$coef['treat', 1:2]
 
 
-#' **Section 20.8, Beyond balance in means**
+#' ## Beyond balance in means
 #'
 #' Table of ratio of standard deviations across treatment & control
 #' groups for unmatched, MWOR, MWR.
@@ -471,88 +466,3 @@ matched.wr <- cc2[mwr.ind, ]
 sds.mwr <- sapply(cont_vars, function(x){
     tapply(matched.wr[,x], matched.wr$treat, sd)
 })
-
-## sd.ratios <- lapply(list(sds.um, sds.mwor, sds.mwr), function(mat){
-##     apply(mat, 2, function(col){
-##         col[2] / col[1]
-##     })
-## })
-
-## sd.table <- round(data.frame(
-##     unmatched=sd.ratios[[1]],
-##     MWOR=sd.ratios[[2]],
-##     MWR=sd.ratios[[3]]), 2)
-
-## #' try with ps_fit_2
-## sds.mwor2 <- sapply(cont_vars, function(x){
-##     tapply(matched2[,x], matched2$treat, sd)
-## })
-## mwr.ind2 <- rep(cc2$row.names, times=matches2_wr$cnts)
-## matched2_wr <- cc2[mwr.ind2, ]
-## sds.mwr2 <- sapply(cont_vars, function(x){
-##     tapply(matched2_wr[,x], matched2_wr$treat, sd)
-## })
-
-## sd.ratios2 <- lapply(list(sds.um, sds.mwor2, sds.mwr2), function(mat){
-##     apply(mat, 2, function(col){
-##         col[2] / col[1]
-##     })
-## })
-
-## sd.table2 <- round(data.frame(
-##     unmatched=sd.ratios2[[1]],
-##     MWOR=sd.ratios2[[2]],
-##     MWR=sd.ratios2[[3]]), 2)
-
-## #' genetic matching
-## mgen_1 <- readRDS('models/mgen_1.rds')
-## mgen_1.wr <- readRDS('models/mgen_1_wr.rds')
-## matched_mgen <- cc2[c(mgen_1$matches[,1], mgen_1$matches[,2]),]
-## matched_wr_mgen <- cc2[c(mgen_1.wr$matches[,1], mgen_1.wr$matches[,2]),]
-
-## sds.mwor_mgen <- sapply(cont_vars, function(x){
-##     tapply(matched_mgen[,x], matched_mgen$treat, sd)
-## })
-## sds.mwr_mgen <- sapply(cont_vars, function(x){
-##     tapply(matched_wr_mgen[,x], matched_wr_mgen$treat, sd)
-## })
-
-## sd.ratios4 <- lapply(list(sds.um, sds.mwor_mgen, sds.mwr_mgen), function(mat){
-##     apply(mat, 2, function(col){
-##         col[2] / col[1]
-##     })
-## })
-
-## sd.table4 <- round(data.frame(
-##     unmatched=sd.ratios4[[1]],
-##     MWOR=sd.ratios4[[2]],
-##     MWR=sd.ratios4[[3]]), 2)
-## #          unmatched MWOR  MWR
-## # bw            0.50 0.65 0.74
-## # preterm       0.95 0.77 0.90
-## # dayskidh      2.07 0.81 0.65
-## # age           0.07 0.08 0.09
-## # momage        1.86 1.70 1.88
-
-## mgen_2 <- readRDS('models/mgen_2.rds')
-## mgen_2.wr <- readRDS('models/mgen_2_wr.rds')
-## matched_mgen2 <- cc2[c(mgen_2$matches[,1], mgen_2$matches[,2]),]
-## matched_wr_mgen2 <- cc2[c(mgen_2.wr$matches[,1], mgen_2.wr$matches[,2]),]
-
-## sds.mwor_mgen2 <- sapply(cont_vars, function(x){
-##     tapply(matched_mgen2[,x], matched_mgen2$treat, sd)
-## })
-## sds.mwr_mgen2 <- sapply(cont_vars, function(x){
-##     tapply(matched_wr_mgen2[,x], matched_wr_mgen2$treat, sd)
-## })
-
-## sd.ratios4.2 <- lapply(list(sds.um, sds.mwor_mgen2, sds.mwr_mgen2), function(mat){
-##     apply(mat, 2, function(col){
-##         col[2] / col[1]
-##     })
-## })
-
-## sd.table4.2 <- round(data.frame(
-##     unmatched=sd.ratios4.2[[1]],
-##     MWOR=sd.ratios4.2[[2]],
-##     MWR=sd.ratios4.2[[3]]), 2)

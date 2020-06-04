@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: National election study"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Fitting the same regression to many datasets. See Chapter 10 in
@@ -15,17 +22,17 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 library("foreign")
 
-#' **Load data**
+#' #### Load data
 data <- read.table(root("NES/data","nes.txt"))
 head(data)
 
-#' **Partyid model to illustrate repeated model use (secret weapon)**
+#' #### Partyid model to illustrate repeated model use (secret weapon)
 regress_year <- function (yr) {
   this_year <- data[data$year==yr,]
   fit <- stan_glm(partyid7 ~ real_ideo + race_adj + factor(age_discrete) +
@@ -41,7 +48,7 @@ for (yr in seq(1972,2000,4)){
 }
 yrs <- seq(1972,2000,4)
 
-#' **Plot**
+#' #### Plot
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("NES/figs","partyid_1.pdf"), height=2.5, width=7.5)
 #+

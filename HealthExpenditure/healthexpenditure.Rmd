@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Health Expenditure"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Health Expenditure - Discovery through graphs of data and
 models. See Chapter 2 in Regression and Other Stories.
@@ -15,14 +22,14 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 read.page <- function (datapage){
@@ -64,7 +71,7 @@ life <- life$recent.data
 doctor <- doctor$recent.data
 ```
 
-**Scatterplot**
+#### Scatterplot
 
 ```{r eval=FALSE, include=FALSE}
 png(root("HealthExpenditure/figs","healthscatter.png"), height=600, width=700)
@@ -81,7 +88,7 @@ text(expend, life, countries, col=color)
 if (savefigs) dev.off()
 ```
 
-**Plot  scatterplot, excluding some countries**
+#### Plot  scatterplot, excluding some countries
 
 ```{r }
 removec <- countries %in% c("Netherlands", "Belgium", "Germany",

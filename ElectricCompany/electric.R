@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Electric Company"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Analysis of "Electric company" data. See Chapters 1, 16, 19 and 20
@@ -15,17 +22,17 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 invlogit <- plogis
 
-#' **Load data**
+#' #### Load data
 electric_wide <- read.table(root("ElectricCompany/data","electric_wide.txt"), header=TRUE)
 head(electric_wide)
 
-#' **Plot of raw data**
+#' #### Plot of raw data
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","electricdata.ps"), horizontal=FALSE, height=7, width=6)
 #+
@@ -53,7 +60,7 @@ for (j in 1:4){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot the data the other way**
+#' #### Plot the data the other way
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","electricdata.horizontal.ps"), horizontal=F, height=6, width=7)
 #+
@@ -78,7 +85,7 @@ for (j in 1:4){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Another plot**
+#' #### Another plot
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","electricscatter1a.ps"), horizontal=TRUE, height=4)
 #+
@@ -103,7 +110,7 @@ for (j in 1:4){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Yet another plot**
+#' #### Yet another plot
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","electricscatter1b.ps"), horizontal=TRUE, height=4)
 #+
@@ -127,7 +134,7 @@ for (j in 1:4){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot more**
+#' #### Plot more
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","electricscatter2.ps"), horizontal=TRUE, height=4)
 #+
@@ -152,7 +159,7 @@ for (j in 1:4){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Linear model**
+#' #### Linear model
 post_test <- c(treated_posttest, control_posttest)
 pre_test <- c(treated_pretest, control_pretest)
 grade <- rep(electric_wide$grade, 2)
@@ -169,12 +176,12 @@ electric <- data.frame(post_test, pre_test, grade, treatment, supp, pair_id)
 fit_3 <- stan_glm(post_test ~ treatment + pre_test + treatment:pre_test, subset=(grade==4), data=electric, refresh = 0)
 print(fit_3)
 
-#' **Another linear model**
+#' #### Another linear model
 fit_4 <- stan_glm(post_test ~ treatment + pre_test + treatment * pre_test,
                   subset = (grade==4), data=electric, refresh = 0)
 sim_4 <- as.matrix(fit_4)
 
-#' **Plot linear model**
+#' #### Plot linear model
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","grade4.interactions.ps"), horizontal=TRUE, height=3.8, width=5)
 #+
@@ -187,14 +194,14 @@ curve(coef(fit_4)[2] + coef(fit_4)[4]*x, lwd=.5, add=TRUE)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Mean effect**
+#' #### Mean effect
 n_sims <- 1000
 effect <- array(NA, c(n_sims, sum(grade==4)))
 for (i in 1:n_sims)
   effect[i,] <- sim_4[i,2] + sim_4[i,4]*pre_test[grade==4]
 mean_effect <- rowMeans(effect)
 
-#' **Plot repeated regression results**
+#' #### Plot repeated regression results
 est1 <- rep(NA,4)
 est2 <- rep(NA,4)
 se1 <- rep(NA,4)
@@ -261,7 +268,7 @@ regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on tre
 #+
 regression.2tables(paste("Grade", 1:4), est1, est2, se1, se2, "Regression on treatment indicator", "Regression on treatment indicator,\ncontrolling for pre-test", NA)
 
-#' **Plot replace/supplement**
+#' #### Plot replace/supplement
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("ElectricCompany/figs","electricsupp1.ps"), horizontal=TRUE, height=2.6)
 #+

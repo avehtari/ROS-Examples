@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Elections Economy"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Predicting presidential vote share from the economy. See Chapters
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -24,11 +31,11 @@ library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 
-#' **Load data**
+#' #### Load data
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
 head(hibbs)
 
-#' ### Graphing the bread and peace model
+#' ## Graphing the bread and peace model
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsdots.pdf"), height=4.5, width=7.5, colormodel="gray")
 #+
@@ -84,7 +91,7 @@ abline(50, 0, lwd=.5, col="gray")
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ### Linear regression
+#' ## Linear regression
 #'
 #' The option `refresh = 0` supresses the default Stan sampling
 #' progress output. This is useful for small data with fast
@@ -100,10 +107,10 @@ prior_summary(M1)
 #' summary of the convergence diagnostics for MCMC sampling.
 summary(M1)
 
-#' **Posterior interval**
+#' #### Posterior interval
 round(posterior_interval(M1),1)
 
-#' **Plot regression line**
+#' #### Plot regression line
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline.pdf"), height=4.5, width=5, colormodel="gray")
 #+
@@ -118,7 +125,7 @@ text(2.7, 53.5, paste("y =", fround(coef(M1)[1],1), "+", fround(coef(M1)[2],1), 
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot prediction given 2% growth**
+#' #### Plot prediction given 2% growth
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict.pdf"), height=3.5, width=6.5, colormodel="gray")
 #+
@@ -137,7 +144,7 @@ text(50.7, .025, "Predicted\n72% chance\nof Clinton victory", adj=0)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot data and linear fit**
+#' #### Plot data and linear fit
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2a.pdf"), height=4.5, width=5, colormodel="gray")
 #+
@@ -151,7 +158,7 @@ text(2.7, 53.5, paste("y =", fround(coef(M1)[1],1), "+", fround(coef(M1)[2],1), 
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot data and range of possible linear fits**
+#' #### Plot data and range of possible linear fits
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2b.pdf"), height=4.5, width=5, colormodel="gray")
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
@@ -167,53 +174,53 @@ with(hibbs, points(growth, vote, pch=20))
 if (savefigs) dev.off()
 
 
-#' ### Illustrate computations
+#' ## Illustrate computations
 
-#' **Extract the simulations**
+#' #### Extract the simulations
 sims <- as.matrix(M1)
 a <- sims[,1]
 b <- sims[,2]
 sigma <- sims[,3]
 n_sims <- nrow(sims)
 
-#' **Median and mean absolute deviation (MAD_SD)**
+#' #### Median and mean absolute deviation (MAD_SD)
 Median <- apply(sims, 2, median)
 MAD_SD <- apply(sims, 2, mad)
 print(cbind(Median, MAD_SD))
 
-#' **Median and mean absolute deviation (MAD_SD) for a derived quantity a/b**
+#' #### Median and mean absolute deviation (MAD_SD) for a derived quantity a/b
 a <- sims[,1]
 b <- sims[,2]
 z <- a/b
 print(median(z))
 print(mad(z))
 
-#' **Point prediction given 2% growth**
+#' #### Point prediction given 2% growth
 new <- data.frame(growth=2.0)
 y_point_pred <- predict(M1, newdata=new)
 
-#' **Alternative way to compute the point prediction**
+#' #### Alternative way to compute the point prediction
 a_hat <- coef(M1)[1]
 b_hat <- coef(M1)[2]
 y_point_pred <- a_hat + b_hat*new
 
-#' **Uncertainty in prediction given 2% growth**
+#' #### Uncertainty in prediction given 2% growth
 y_linpred <- posterior_linpred(M1, newdata=new)
 
-#' **Do same computation "manually"**
+#' #### Do same computation "manually"
 a <- sims[,1]
 b <- sims[,2]
 y_linpred <- a + b*new
 
-#' **Predictive uncertainty**
+#' #### Predictive uncertainty
 y_pred <- posterior_predict(M1, newdata=new)
 
-#' **Predictive uncertainty manually**
+#' #### Predictive uncertainty manually
 sigma <- sims[,3]
 n_sims <- nrow(sims)
 y_pred <- as.numeric(a + b*new) + rnorm(n_sims, 0, sigma)
 
-#' **Summarize predictions**
+#' #### Summarize predictions
 Median <- median(y_pred)
 MAD_SD <- mad(y_pred)
 win_prob <- mean(y_pred > 50)
@@ -221,15 +228,16 @@ cat("Predicted Clinton percentage of 2-party vote: ", round(Median,1),
   ", with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2),
   sep="")
 
-#' **Summarize predictions graphically**
+#' #### Summarize predictions graphically
 hist(y_pred)
 
-#' **Predict for many new values**
+#' #### Predict for many new values
 new_grid <- data.frame(growth=seq(-2.0, 4.0, 0.5))
 y_point_pred_grid <- predict(M1, newdata=new_grid)
 y_linpred_grid <- posterior_linpred(M1, newdata=new_grid)
 y_pred_grid <- posterior_predict(M1, newdata=new_grid)
 
+#' #### Plots
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_1.pdf"), height=4, width=10, colormodel="gray")
 #+
@@ -253,11 +261,12 @@ plot(a, b, xlab="a", ylab="b", main="Posterior draws of the regression coefficie
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version
+#' #### ggplot version
 ggplot(data.frame(a = sims[, 1], b = sims[, 2]), aes(a, b)) +
   geom_point(size = 1) +
   labs(title = "Posterior draws of the regression coefficients a, b")
 
+#' #### More plotting
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_2b.pdf"), height=4.5, width=5, colormodel="gray")
 #+
@@ -276,7 +285,7 @@ with(hibbs, {
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version
+#' #### ggplot version
 ggplot(hibbs, aes(x = growth, y = vote)) +
   geom_abline(
     intercept = sims[1:100, 1],
@@ -306,7 +315,7 @@ ggplot(hibbs, aes(x = growth, y = vote)) +
   )
 
 
-#' **Add more uncertainty**
+#' #### Add more uncertainty
 x <- rnorm(n_sims, 2.0, 0.3)
 y_hat <- a + b*x
 y_pred <- rnorm(n_sims, y_hat, sigma)
@@ -317,6 +326,7 @@ win_prob <- mean(y_pred > 50)
 cat("Predicted Clinton percentage of 2-party vote: ", round(Median, 1), ",
   with s.e. ", round(MAD_SD, 1), "\nPr (Clinton win) = ", round(win_prob, 2), sep="", "\n")
 
+#' #### More plotting
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbspredict_bayes_3.pdf"), height=3.5, width=6)
 #+
@@ -328,7 +338,7 @@ axis(1, seq(40,65,5), paste(seq(40,65,5),"%",sep=""))
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' ggplot version
+#' #### ggplot version
 qplot(y_pred, binwidth = 1) +
     labs(
     x ="Clinton share of the two-party vote",
@@ -336,7 +346,8 @@ qplot(y_pred, binwidth = 1) +
   ) +
   theme(axis.line.y = element_blank())
 
-#' **Bayesian inference and prior information**<br/>
+#' #### Bayesian inference and prior information
+#' 
 #' Combining information from a forecast and a poll.
 #' Hypothetical forecast and data.
 theta_hat_prior <- 0.524
@@ -353,12 +364,11 @@ theta_hat_bayes <-
 
 se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
 
-#' Ramp up the data variance
+#' #### Ramp up the data variance
 se_data <- .075
 print((theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2)/(1/se_prior^2 + 1/se_data^2))
 
-
-#' ### Comparison to `lm()`
+#' ## Comparison to `lm()`
 M1a <- lm(vote ~ growth, data=hibbs)
 print(M1a)
 summary(M1a)

@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Logistic regression graphs"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Different ways of displaying logistic regression. See Chapter 14 in
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
@@ -23,7 +30,7 @@ options(mc.cores = parallel::detectCores())
 logit <- qlogis
 invlogit <- plogis
 
-#' **Simulate fake data from logit model**
+#' #### Simulate fake data from logit model
 n <- 50
 a <- 2
 b <- 3
@@ -34,12 +41,12 @@ y <- rbinom(n, 1, invlogit(a + b*x))
 fake_1 <- data.frame(x, y)
 head(fake_1)
 
-#' **Fit the model and save the coefficient estimates**
+#' #### Fit the model and save the coefficient estimates
 fit_1 <- stan_glm(y ~ x, family=binomial(link="logit"), data=fake_1, refresh=0)
 a_hat <- coef(fit_1)[1]
 b_hat <- coef(fit_1)[2]
 
-#' **Graph data and underying and fitted logistic curves**
+#' #### Graph data and underying and fitted logistic curves
 shifted <- function(a, delta=0.008) return(ifelse(a==0, delta, ifelse(a==1, 1 - delta, a)))
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("LogitGraphs/figs","logitgraph1a.pdf"), height=4.5, width=6)
@@ -57,7 +64,7 @@ text(x0, invlogit(-1.5), paste("   Fitted curve,   \n   y = invlogit(", round(a_
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Binned plot**
+#' #### Binned plot
 K <- 5
 bins <- as.numeric(cut(x, K))
 x_bar <- rep(NA, K)
@@ -75,7 +82,7 @@ points(x_bar, shifted(y_bar, 0.02), pch=21, cex=1.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Logistic regression as function of two predictors**
+#' #### Logistic regression as function of two predictors
 n <- 100
 beta <- c(2, 3, 4) # arbitrary choice of true coefficients in the model
 x1 <- rnorm(n, 0, 0.4) # somewhat arbitary choice of scale of data, set so there will be a good mix of 0's and 1's
@@ -83,11 +90,11 @@ x2 <- rnorm(n, -0.5, 0.4)
 y <- rbinom(n, 1, invlogit(cbind(rep(1, n), x1, x2) %*% beta))
 fake_2 <- data.frame(x1, x2, y)
 
-#' **Fit the model and save the coefficient estimates**
+#' #### Fit the model and save the coefficient estimates
 fit_2 <- stan_glm(y ~ x1 + x2, family=binomial(link="logit"), data=fake_2, refresh=0)
 beta_hat <- coef(fit_2)
 
-#' **Graph data and discrimination lines**
+#' #### Graph data and discrimination lines
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("LogitGraphs/figs","logitgraph2.pdf"), height=5, width=6)
 #+

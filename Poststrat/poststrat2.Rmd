@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Poststratification 2"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Demonstrate poststratification with simulated census and poll data
 See Chapter 17 in Regression and Other Stories.
@@ -9,14 +16,14 @@ See Chapter 17 in Regression and Other Stories.
 
 -------------
 
-**Load packages**
+#### Load packages
 
 ```{r setup, message=FALSE, error=FALSE, warning=FALSE}
 library("rstanarm")
 invlogit <- plogis
 ```
 
-**Create some fake data**
+## Simulate fake data
 
 Create an empty poststratification table, with rows for each of the
 $2 \times 4 \times 4$ sorts of people.
@@ -64,8 +71,7 @@ for (j in 1:prod(J)){
 }
 ```
 
-Sample from the assumed population with the assumed nonresponse
-probabilities
+Sample from the assumed population with the assumed nonresponse probabilities
 
 ```{r }
 n <- 1000
@@ -105,7 +111,7 @@ Simulate the fake data:
 y <- rbinom(n, 1, prob_yes[people])
 ```
 
-**Regression**
+## Linear model
 
 ```{r }
 sex <- poststrat[people,1]
@@ -117,7 +123,7 @@ fit <- stan_glm(y ~ factor(sex) + factor(age) + factor(eth),
 print(fit)
 ```
 
-**Prediction**
+#### Prediction
 
 ```{r }
 pred_sim <- posterior_epred(fit, newdata=as.data.frame(poststrat))
@@ -125,7 +131,7 @@ pred_est <- colMeans(pred_sim)
 round(cbind(poststrat, prob_yes, pred_est), 2)
 ```
 
-**Poststratification**
+#### Poststratification
 
 ```{r }
 poststrat_est <- sum(poststrat$N*pred_est)/sum(poststrat$N)

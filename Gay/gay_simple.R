@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Gay"
 #' author: "Andrew Gelman, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Simple models (linear and discretized age) and attitudes as a
@@ -15,11 +22,12 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
+#' #### Load data
 data <- read.csv(root("Gay/data","naes04.csv"))
 age <- seq(18,91)
 response <- as.character(data[,"gayFavorStateMarriage"])
@@ -40,16 +48,16 @@ age_cutpoints <- c(0, seq(29, 79, 10), 100)
 age_discrete <- cut(age, age_cutpoints)
 gay_total <- data.frame(support, age, age_discrete)
 
-#' **Fit linear regression model**
+#' #### Fit linear regression model
 fit_linear <- stan_glm(support ~ age, data=gay_total, refresh=0)
 print(fit_linear)
 
-#' **Fit discretized age model**
+#' #### Fit discretized age model
 fit_binned <- stan_glm(support ~ factor(age_discrete), data=gay_total, refresh=0)
 print(fit_binned)
 
 
-#' **Plot linear regression model**
+#' #### Plot linear regression model
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Gay/figs","gay_simple_1a.pdf"), height=3.5, width=5)
 #+
@@ -62,7 +70,7 @@ abline(coef(fit_linear)[1], coef(fit_linear)[2], lwd=2)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot discretized age model**
+#' #### Plot discretized age model
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Gay/figs","gay_simple_1b.pdf"), height=3.5, width=5)
 #+

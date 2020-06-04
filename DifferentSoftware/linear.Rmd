@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Different software options"
 author: "Andrew Gelman, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 
 Linear regression using different software options. See Appendix B in
@@ -14,7 +21,7 @@ Regression and Other Stories.
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("arm")
@@ -22,7 +29,7 @@ library("rstanarm")
 library("brms")
 ```
 
-**Create fake data**
+## Create fake data
 
 ```{r }
 N <- 100
@@ -35,14 +42,14 @@ y <- X %*% b + rnorm(N, 0, sigma)
 dat <- data.frame(y, x1, x2)
 ```
 
-**Fit and display using lm, listing predictors one at a time**
+## Fit and display using lm, listing predictors one at a time
 
 ```{r }
 fit1 <- lm(y ~ x1 + x2, data = dat)
 display(fit1)
 ```
 
-**Extract estimates and uncertainties**
+#### Extract estimates and uncertainties
 
 ```{r }
 b_hat <- coef(fit1)
@@ -50,28 +57,28 @@ b_se <- se.coef(fit1)
 print(cbind(b_hat, b_se), digits=3)
 ```
 
-**Fit and display using lm, using matrix of predictors**
+## Fit and display using lm, using matrix of predictors
 
 ```{r }
 fit2 <- lm(y ~ X)
 display(fit2)
 ```
 
-**Fit and display using stan_glm**
+## Fit and display using stan_glm
 
 ```{r }
 fit3 <- stan_glm(y ~ x1 + x2, data = dat, refresh = 0)
 print(fit3, digits=2)
 ```
 
-**Run again just to see some simulation variability**
+#### Run again just to see some simulation variability
 
 ```{r }
 fit3 <- stan_glm(y ~ x1 + x2, data = dat, refresh = 0)
 print(fit3, digits=2)
 ```
 
-**Extract estimates and uncertainties**
+#### Extract estimates and uncertainties
 
 ```{r }
 b_hat <- coef(fit3)
@@ -79,7 +86,7 @@ b_se <- se(fit3)
 print(cbind(b_hat, b_se), digits=3)
 ```
 
-**Fit and display using brms**<br>
+## Fit and display using brms<br>
 This will take longer as the model is not pre-compiled as in stan_glm.
 
 ```{r }

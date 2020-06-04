@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Last letters of names"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Last letters of names - Distributions of last letters of names of
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Load data**
+#' #### Load data
 allnames <- read.csv(root("Names/data","SSA-longtail-names.csv"))
 girl <- as.vector(allnames$sex)=="F"
 names <- as.vector(allnames$name)
@@ -36,7 +43,7 @@ counts.adj <- ifelse(counts==0, 2, counts)
 counts.adj.norm <- colRenorm(counts.adj)/colSums(counts.adj)
 #'
 
-#' **Remove Laura's list of bad names**
+#' #### Remove Laura's list of bad names
 error.names <- as.matrix(read.csv(root("Names/data","ErrorNames.csv")))
 error.names.girl <- error.names[,2]=="F"
 bad.girl.names <- error.names[error.names.girl,1]

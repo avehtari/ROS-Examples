@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Pearson and Lee Heights"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 #'
 
@@ -16,25 +23,25 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 library("HistData")
 
-#' **Load data**
+#' #### Load data
 heights <- read.table(root("PearsonLee/data","Heights.txt"), header=TRUE)
 n <- nrow(heights)
 head(heights)
 
-#' **Linear regression**
+#' #### Linear regression
 fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, refresh = 0)
 #+
 print(fit_1, digits=2)
 a_hat <- coef(fit_1)[1]
 b_hat <- coef(fit_1)[2]
 
-#' **Plot mothers' and daughters' heights**
+#' #### Plot mothers' and daughters' heights
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
 #+
@@ -52,7 +59,7 @@ for (i in x){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot mothers' and daughters' heights with jitter**
+#' #### Plot mothers' and daughters' heights with jitter
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
 #+
@@ -68,7 +75,7 @@ for (i in x){
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot mothers' and daughters' heights and fitted regression line**
+#' #### Plot mothers' and daughters' heights and fitted regression line
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
 #+
@@ -88,7 +95,7 @@ mtext("Mothers' and daughters' heights,\naverage of data, and fitted regression 
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot fitted regression line and the average of the data**
+#' #### Plot fitted regression line and the average of the data
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
 #+
@@ -110,7 +117,7 @@ mtext("The fitted regression line and the average of the data      ", side=3, li
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot fitted regression line**
+#' #### Plot fitted regression line
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
 #+
@@ -127,7 +134,7 @@ mtext(paste("The line, y =", round(a_hat), "+", round(b_hat, 2), "x"), side=3, l
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot data and fitted regression line in the context of the data**
+#' #### Plot data and fitted regression line in the context of the data
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)
 #+

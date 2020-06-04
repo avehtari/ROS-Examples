@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Introclass"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Plot residuals vs.\ predicted values, or residuals vs.\ observed
@@ -15,16 +22,16 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
 
-#' **Load data**
+#' #### Load data
 introclass <- read.table(root("Introclass/data","gradesW4315.dat"), header=TRUE)
 head(introclass)
 
-#' **Fit linear regression model**
+#' ## Linear regression model
 #' 
 #' The option `refresh = 0` supresses the default Stan sampling
 #' progress output. This is useful for small data with fast
@@ -33,7 +40,7 @@ head(introclass)
 fit_1 <- stan_glm(final ~ midterm, data = introclass, refresh = 0)
 print(fit_1)
 
-#' **Compute residuals**<br>
+#' #### Compute residuals<br>
 #' compute predictions from simulations
 sims <- as.matrix(fit_1)
 predicted <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
@@ -41,7 +48,7 @@ predicted <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
 predicted <- predict(fit_1)
 resid <- introclass$final - predicted
 
-#' **Plot residuals vs predicted**
+#' #### Plot residuals vs predicted
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Introclass/figs","fakeresid1a.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
@@ -52,7 +59,7 @@ abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot residuals vs observed**
+#' #### Plot residuals vs observed
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Introclass/figs","fakeresid1b.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
@@ -62,7 +69,7 @@ abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Simulate fake data**
+#' ## Simulated fake data
 a <- 65
 b <- 0.7
 sigma <- 15
@@ -70,7 +77,7 @@ n <- nrow(introclass)
 introclass$final_fake <- a + b*introclass$midterm + rnorm(n, 0, 15)
 fit_fake <- stan_glm(final_fake ~ midterm, data = introclass, refresh = 0)
 
-#' **Compute residuals**
+#' #### Compute residuals
 #' compute predictions from simulations
 sims <- as.matrix(fit_fake)
 predicted_fake <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
@@ -78,7 +85,7 @@ predicted_fake <- colMeans(sims[,1] + sims[,2] %*% t(introclass$midterm))
 predicted_fake <- predict(fit_fake)
 resid_fake <- introclass$final_fake - predicted_fake
 
-#' **Plot residuals vs predicted**
+#' #### Plot residuals vs predicted
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Introclass/figs","fakeresid2a.ps"), height=3.8, width=4.5, colormodel="gray")
 #+
@@ -88,7 +95,7 @@ abline(0, 0, col="gray", lwd=.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot residuals vs observed**
+#' #### Plot residuals vs observed
 #+ eval=FALSE, include=FALSE
 if (savefigs) postscript(root("Introclass/figs","fakeresid2b.ps"), height=3.8, width=4.5, colormodel="gray")
 #+

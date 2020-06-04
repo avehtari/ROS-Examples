@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Influence"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Plot influence of individual points in a fitted regression. See
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Fake data**
+#' #### Fake data
 x <- seq(2, 12, 1)
 n <- length(x)
 a <- 1
@@ -30,7 +37,7 @@ least_squares_fit <- lm(y ~ x)
 a_hat <- coef(least_squares_fit)[1]
 b_hat <- coef(least_squares_fit)[2]
 
-#' Plot histogram of the data
+#' #### Plot histogram of the data
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Influence/figs","influence1.pdf"), height=4, width=5)
 #+

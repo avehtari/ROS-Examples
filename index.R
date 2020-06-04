@@ -1,10 +1,19 @@
 #' ---
-#' title: "Regression and Other Stories: Index"
+#' title: "Regression and Other Stories"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 3
+#'     toc_float: true
 #' ---
+#' 
 
-#' Index for the code and data for the book Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020).
+#' ## Book information
+#' 
+#' Home page for the book Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020), including the code and data.
 #'
 #' Back cover text: *Many textbooks on regression focus on theory and
 #' the simplest of examples. Real statistical problems, however, are
@@ -16,7 +25,7 @@
 #' right in to methods and computer code you can use fresh out of the
 #' box.*
 #'
-#' The book has been sent to the publisher and will be available soon.
+#' The book has been sent to the publisher and will be available in July 2020.
 #' 
 #' - [Cambridge University Press page](https://www.cambridge.org/core/books/regression-and-other-stories/DD20DD6C9057118581076E54E40C372C)
 #'
@@ -37,11 +46,11 @@
 #' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
 #' 
 #' -------------
+#'
 #' 
-
-#' ## <a id="by_chapters"></a>Code and data by chapters
+#' ## Code and data by chapters<a id="by_chapters"></a>
+#'
 #' 
-
 #' ### 1  Introduction
 #'   - [ElectionsEconomy/](https://github.com/avehtari/ROS-Examples/tree/master/ElectionsEconomy/)
 #'     - [hibbs.html](ElectionsEconomy/hibbs.html) - Predicting presidential vote share from the economy
@@ -277,7 +286,7 @@
 #'
 #' -------------
 #' 
-#' ## <a id="alphabetically"></a>Code and data alphabetically
+#' ## Code and data alphabetically<a id="alphabetically"></a>
 #' 
 #'   - [AcademyAwards/](https://github.com/avehtari/ROS-Examples/tree/master/AcademyAwards/)
 #'   - [AgePeriodCohort/](https://github.com/avehtari/ROS-Examples/tree/master/AgePeriodCohort/)

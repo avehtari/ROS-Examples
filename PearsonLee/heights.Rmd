@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Pearson and Lee Heights"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 
 The heredity of height. Published in 1903 by Karl Pearson and Alice
@@ -16,7 +23,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -25,7 +32,7 @@ library("rstanarm")
 library("HistData")
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 heights <- read.table(root("PearsonLee/data","Heights.txt"), header=TRUE)
@@ -33,7 +40,7 @@ n <- nrow(heights)
 head(heights)
 ```
 
-**Linear regression**
+#### Linear regression
 
 ```{r }
 fit_1 <- stan_glm(daughter_height ~ mother_height, data = heights, refresh = 0)
@@ -44,7 +51,7 @@ a_hat <- coef(fit_1)[1]
 b_hat <- coef(fit_1)[2]
 ```
 
-**Plot mothers' and daughters' heights**
+#### Plot mothers' and daughters' heights
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee1.pdf"), height=4.5, width=4.5)
@@ -66,7 +73,7 @@ for (i in x){
 if (savefigs) dev.off()
 ```
 
-**Plot mothers' and daughters' heights with jitter**
+#### Plot mothers' and daughters' heights with jitter
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee2.pdf"), height=4.5, width=4.5)
@@ -86,7 +93,7 @@ for (i in x){
 if (savefigs) dev.off()
 ```
 
-**Plot mothers' and daughters' heights and fitted regression line**
+#### Plot mothers' and daughters' heights and fitted regression line
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee3a.pdf"), height=4.5, width=4.5)
@@ -110,7 +117,7 @@ mtext("Mothers' and daughters' heights,\naverage of data, and fitted regression 
 if (savefigs) dev.off()
 ```
 
-**Plot fitted regression line and the average of the data**
+#### Plot fitted regression line and the average of the data
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee3b.pdf"), height=4.5, width=4.5)
@@ -136,7 +143,7 @@ mtext("The fitted regression line and the average of the data      ", side=3, li
 if (savefigs) dev.off()
 ```
 
-**Plot fitted regression line**
+#### Plot fitted regression line
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee4a.pdf"), height=4, width=4.5)
@@ -157,7 +164,7 @@ mtext(paste("The line, y =", round(a_hat), "+", round(b_hat, 2), "x"), side=3, l
 if (savefigs) dev.off()
 ```
 
-**Plot data and fitted regression line in the context of the data**
+#### Plot data and fitted regression line in the context of the data
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("PearsonLee/figs","PearsonLee4b.pdf"), height=4, width=4.5)

@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Student"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Models for regression coefficients. See Chapter 12 in
 Regression and Other Stories.
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -39,7 +46,7 @@ SEED <- 2132
 if (savefigs) color_scheme_set(scheme = "gray")
 ```
 
-In this section we consider regression with more than handful of
+Here we consider regression with more than handful of
 predictors. We demonstrate the usefulness of standardization of
 predictors and models for regression coefficients.
 
@@ -57,7 +64,7 @@ school, going out with friends, workday alcohol consumption,
 weekend alcohol consumption, current health status, and number of
 school absences.
 
-**Load data**
+#### Load data
 
 ```{r }
 # Use the merged data with students having both math and Portuguese language grades
@@ -68,7 +75,7 @@ predictors <- c("school","sex","age","address","famsize","Pstatus","Medu","Fedu"
 p <- length(predictors)
 ```
 
-**Data for predicting the final math grade**
+#### Data for predicting the final math grade
 
 Pick columns to make models for third period mathematics grade G3mat and
 select only students with non-zero math grade
@@ -81,7 +88,8 @@ n <- nrow(data_G3mat)
 
 ## Default weak prior on original coefficients
 
-**Fit a regression model with default weak priors**</br>
+#### Fit a regression model with default weak priors
+
 Dot (.) in the formula means all other columns execpt what is
 already on the left of ~.
 
@@ -89,7 +97,7 @@ already on the left of ~.
 fit0 <- stan_glm(G3mat ~ ., data = data_G3mat, seed = SEED, refresh=0)
 ```
 
-**Plot posterior marginals of coefficients**
+#### Plot posterior marginals of coefficients
 
 ```{r }
 p0 <- mcmc_areas(as.matrix(fit0), pars=vars(-'(Intercept)',-sigma),
@@ -119,13 +127,13 @@ datastd_G3mat[,predictors] <-scale(data_G3mat[,predictors])
 
 ## Default weak prior on coefficients
 
-**Fit a regression model with default weak priors**
+#### Fit a regression model with default weak priors
 
 ```{r }
 fit1 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED, refresh=0)
 ```
 
-**Plot posterior marginals of coefficients**
+#### Plot posterior marginals of coefficients
 
 ```{r }
 p1 <- mcmc_areas(as.matrix(fit1), pars=vars(-'(Intercept)',-sigma),
@@ -144,14 +152,14 @@ standardized to have equal standard deviation, the uncertainties on
 the relevances are similar. For example, it is now easier to see
 that absences has relatively high relevance compared to other
 predictors in the model.
-**Compare Bayesian $R^2$ and LOO $R^2$**
+#### Compare Bayesian $R^2$ and LOO $R^2$
 
 ```{r }
 round(median(bayes_R2(fit1)), 2)
 round(median(loo_R2(fit1)), 2)
 ```
 
-**Compute LOO log score**
+#### Compute LOO log score
 
 ```{r }
 (loo1 <- loo(fit1))
@@ -172,7 +180,7 @@ which in this case is approximately 3.3 which is much less than
 what is the corresponding prior distribution for explained variance
 $R^2$.
 
-**Bayesian $R^2$ distribution**
+#### Bayesian $R^2$ distribution
 
 ```{r }
 ggplot() + geom_histogram(aes(x=bayes_R2(fit1)), breaks=seq(0,1,length.out=100)) +
@@ -181,7 +189,7 @@ ggplot() + geom_histogram(aes(x=bayes_R2(fit1)), breaks=seq(0,1,length.out=100))
   labs(x="Bayesian R^2", y="")
 ```
 
-**Prior predictive checking by looking at the prior on Bayesian $R^2$**</br>
+#### Prior predictive checking by looking at the prior on Bayesian $R^2$</br>
 
 ```{r }
 ppR2<-numeric()
@@ -219,7 +227,7 @@ highly informative for the explained variance.
 
 ## Weakly informative prior scaled with the number of covariates
 
-**Prior predictive checking by looking at the prior on Bayesian $R^2$**
+#### Prior predictive checking by looking at the prior on Bayesian $R^2$
 
 ```{r }
 ppR2<-numeric()
@@ -234,8 +242,7 @@ ggplot()+geom_histogram(aes(x=ppR2), breaks=seq(0,1,length.out=50)) +
   labs(x="Prior predictive Bayesian R^2",y="")
 ```
 
-**Fit a regression model with a weakly informative prior scaled
-with the number of covariates**
+#### Fit a regression model with a weakly informative prior scaled with the number of covariates
 
 ```{r }
 fit2 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED,
@@ -247,14 +254,14 @@ fit2 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED,
 When we compare Bayesian $R^2$ and LOO $R^2$, we see the difference
 is much smaller and LOO $R^2$ has improved slightly.
 
-**Compare Bayesian $R^2$ and LOO $R^2$**
+#### Compare Bayesian $R^2$ and LOO $R^2$
 
 ```{r }
 round(median(loo_R2(fit2)), 2)
 round(median(bayes_R2(fit2)), 2)
 ```
 
-**Bayesian $R^2$ distribution**
+#### Bayesian $R^2$ distribution
 
 ```{r }
 ggplot()+geom_histogram(aes(x=bayes_R2(fit2)), breaks=seq(0,1,length.out=100)) +
@@ -280,19 +287,19 @@ if (savefigs)
 Comparison of the LOO log score reveals that the new model has
 better leave-one-out prediction.
 
-**Compute LOO log score**
+#### Compute LOO log score
 
 ```{r }
 (loo2 <- loo(fit2))
 ```
 
-**Compare models**
+#### Compare models
 
 ```{r }
 loo_compare(loo1,loo2)
 ```
 
-**Plot posterior marginals of coefficients**
+#### Plot posterior marginals of coefficients
 
 ```{r }
 p2 <- mcmc_areas(as.matrix(fit2), pars=vars(-'(Intercept)',-sigma),
@@ -347,7 +354,7 @@ variance $R^2$ than is implicitly assumed by the default wide
 prior. The horseshoe prior favors simpler models, but is quite flat
 around most $R^2$ values.
 
-**Fit a regression model with regularized horseshoe prior**</br>
+#### Fit a regression model with regularized horseshoe prior</br>
 
 ```{r }
 p0 <- 6
@@ -359,7 +366,7 @@ fit3 <- stan_glm(G3mat ~ ., data = datastd_G3mat, seed = SEED,
                  refresh=0)
 ```
 
-**Compare Bayesian $R^2$ and LOO $R^2$**
+#### Compare Bayesian $R^2$ and LOO $R^2$
 
 ```{r }
 round(median(loo_R2(fit3)), 2)
@@ -373,20 +380,20 @@ common that the data do not have strong information about how many
 predictors are relevant and then different types of priors can
 produce similar predictive accuracies.
 
-**Compute LOO log score**
+#### Compute LOO log score
 
 ```{r }
 (loo3 <- loo(fit3))
 ```
 
-**Compare models**
+#### Compare models
 
 ```{r }
 loo_compare(loo1,loo3)
 loo_compare(loo2,loo3)
 ```
 
-**Bayesian $R^2$ distribution**
+#### Bayesian $R^2$ distribution
 
 ```{r }
 ggplot()+geom_histogram(aes(x=bayes_R2(fit3)), breaks=seq(0,1,length.out=100)) +
@@ -409,7 +416,7 @@ if (savefigs)
   ggsave(root("Student/figs","student_fit3_R2.pdf"), pp3, height=3, width=3, colormodel="gray")
 ```
 
-**Plot posterior marginals of coefficients**
+#### Plot posterior marginals of coefficients
 
 ```{r }
 p3 <- mcmc_areas(as.matrix(fit3), pars=vars(-'(Intercept)',-sigma),
@@ -448,14 +455,14 @@ observing more students it might be possible to learn regression
 coefficients for other predictors with sufficient small uncertainty
 so that predictions for new students could be improved.
 
-**Compare Bayesian $R^2$ and LOO $R^2$**
+#### Compare Bayesian $R^2$ and LOO $R^2$
 
 ```{r }
 round(median(loo_R2(fit4)), 2)
 round(median(bayes_R2(fit4)), 2)
 ```
 
-**Bayesian $R^2$ distribution**
+#### Bayesian $R^2$ distribution
 
 ```{r }
 ggplot()+geom_histogram(aes(x=bayes_R2(fit4)), breaks=seq(0,1,length.out=100)) +
@@ -464,13 +471,13 @@ ggplot()+geom_histogram(aes(x=bayes_R2(fit4)), breaks=seq(0,1,length.out=100)) +
   labs(x="Bayesian R^2",y="")
 ```
 
-**Compute LOO log score**
+#### Compute LOO log score
 
 ```{r }
 (loo4 <- loo(fit4))
 ```
 
-**Compare models**
+#### Compare models
 
 ```{r }
 loo_compare(loo3,loo4)
@@ -478,7 +485,7 @@ loo_compare(loo2,loo4)
 loo_compare(loo1,loo4)
 ```
 
-**Plot posterior marginals of coefficients**
+#### Plot posterior marginals of coefficients
 
 ```{r }
 p4 <- mcmc_areas(as.matrix(fit4), pars=vars(-'(Intercept)',-sigma),

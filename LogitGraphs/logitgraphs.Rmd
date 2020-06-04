@@ -2,6 +2,13 @@
 title: "Regression and Other Stories: Logistic regression graphs"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Different ways of displaying logistic regression. See Chapter 14 in
 Regression and Other Stories.
@@ -15,7 +22,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
 ```{r }
 library("rprojroot")
@@ -26,7 +33,7 @@ logit <- qlogis
 invlogit <- plogis
 ```
 
-**Simulate fake data from logit model**
+#### Simulate fake data from logit model
 
 ```{r }
 n <- 50
@@ -40,7 +47,7 @@ fake_1 <- data.frame(x, y)
 head(fake_1)
 ```
 
-**Fit the model and save the coefficient estimates**
+#### Fit the model and save the coefficient estimates
 
 ```{r }
 fit_1 <- stan_glm(y ~ x, family=binomial(link="logit"), data=fake_1, refresh=0)
@@ -48,7 +55,7 @@ a_hat <- coef(fit_1)[1]
 b_hat <- coef(fit_1)[2]
 ```
 
-**Graph data and underying and fitted logistic curves**
+#### Graph data and underying and fitted logistic curves
 
 ```{r }
 shifted <- function(a, delta=0.008) return(ifelse(a==0, delta, ifelse(a==1, 1 - delta, a)))
@@ -72,7 +79,7 @@ text(x0, invlogit(-1.5), paste("   Fitted curve,   \n   y = invlogit(", round(a_
 if (savefigs) dev.off()
 ```
 
-**Binned plot**
+#### Binned plot
 
 ```{r }
 K <- 5
@@ -96,7 +103,7 @@ points(x_bar, shifted(y_bar, 0.02), pch=21, cex=1.5)
 if (savefigs) dev.off()
 ```
 
-**Logistic regression as function of two predictors**
+#### Logistic regression as function of two predictors
 
 ```{r }
 n <- 100
@@ -107,14 +114,14 @@ y <- rbinom(n, 1, invlogit(cbind(rep(1, n), x1, x2) %*% beta))
 fake_2 <- data.frame(x1, x2, y)
 ```
 
-**Fit the model and save the coefficient estimates**
+#### Fit the model and save the coefficient estimates
 
 ```{r }
 fit_2 <- stan_glm(y ~ x1 + x2, family=binomial(link="logit"), data=fake_2, refresh=0)
 beta_hat <- coef(fit_2)
 ```
 
-**Graph data and discrimination lines**
+#### Graph data and discrimination lines
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("LogitGraphs/figs","logitgraph2.pdf"), height=5, width=6)

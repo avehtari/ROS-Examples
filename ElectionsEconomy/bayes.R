@@ -2,6 +2,13 @@
 #' title: "Regression and Other Stories: Elections Economy - Bayes"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Demonstration of Bayesian information aggregation. See Chapter 9 in
@@ -15,11 +22,11 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
+#' #### Load packages
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Calculations**<br>
+#' ## Calculations
 #'
 #' Prior based on a previously-fitted model using economic and
 #' political condition.
@@ -29,14 +36,14 @@ se_prior <- 0.041
 #' Democratic candidate
 n <- 400
 y <- 190
-#' Data estimate
+#' #### Data estimate
 theta_hat_data <- y/n
 se_data <- sqrt((y/n)*(1-y/n)/n)
-#' Bayes estimate
+#' #### Bayes estimate
 theta_hat_bayes <- (theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2) / (1/se_prior^2 + 1/se_data^2)
 se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
 
-#' **Figures for the book**
+#' ## Figures
 #'
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","prior_data_posterior_a.pdf", height=3, width=5.5))
