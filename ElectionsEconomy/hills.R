@@ -9,10 +9,6 @@
 #'     toc_depth: 2
 #'     toc_float: true
 #'     code_download: true
-#' output:
-#'   html_document:
-#'     theme: readable
-#'     code_download: true
 #' ---
 
 #' Present uncertainty in parameter estimates. See Chapter 7 in
