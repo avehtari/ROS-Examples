@@ -13,6 +13,10 @@
 #' Home page for the book Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020), including the code and data.
 #'
 #' ## Book information
+#'
+#'<div style= "float:right;position: relative;">
+#' ![](ROS_frontcover.png)
+#'</div>
 #' 
 #' Back cover text: *Many textbooks on regression focus on theory and
 #' the simplest of examples. Real statistical problems, however, are
