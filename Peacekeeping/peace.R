@@ -70,7 +70,7 @@ par(mfrow=c(1,2), mar=c(3,5,3,0), mgp=c(1.5,.5,0), tck=-.01)
 subset <- ok & peacekeepers
 hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("With peacekeeping:  ", round(100*mean(censored[subset])), "% of countries stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
 subset <- ok & !peacekeepers
-hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("Without peackeeping:  ", round(100*mean(censored[subset])), "% stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
+hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("Without peacekeeping:  ", round(100*mean(censored[subset])), "% stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
