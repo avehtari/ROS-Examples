@@ -1,6 +1,6 @@
 # Regression and Other Stories - Data and code
 
-Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020)
+Regression and Other Stories by [Andrew Gelman](http://www.stat.columbia.edu/~gelman/), [Jennifer Hill](https://steinhardt.nyu.edu/people/jennifer-hill), and [Aki Vehtari](https://users.aalto.fi/~ave/) (2020)
 
 [Regression and Other Stories book home page](http://www.stat.columbia.edu/~gelman/regression/)
 

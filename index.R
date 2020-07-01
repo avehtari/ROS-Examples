@@ -10,7 +10,7 @@
 
 #' # {.tabset}
 #' 
-#' Home page for the book Regression and Other Stories by Andrew Gelman, Jennifer Hill, and Aki Vehtari (2020), including the code and data.
+#' Home page for the book Regression and Other Stories by [Andrew Gelman](http://www.stat.columbia.edu/~gelman/), [Jennifer Hill](https://steinhardt.nyu.edu/people/jennifer-hill), and [Aki Vehtari](https://users.aalto.fi/~ave/), including the code and data.
 #'
 #' ## Book information
 #'
