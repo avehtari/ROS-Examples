@@ -210,7 +210,7 @@
 #'
 #' #### 15  Other generalized linear models
 #'   - [PoissonExample/](https://github.com/avehtari/ROS-Examples/tree/master/PoissonExample/)
-#'     - [PoissonExample.html](PoissonExample/PoissonExample.html) - Demonstrate Poisson regression with simulated data.
+#'     - [PoissonExample.html](PoissonExample/poisson_regression.html) - Demonstrate Poisson regression with simulated data.
 #'   - [Roaches/](https://github.com/avehtari/ROS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Storable/](https://github.com/avehtari/ROS-Examples/tree/master/Storable/) 
