@@ -151,7 +151,7 @@ for (j in 1:2){
   gay_plot(gay_bart_fit, question=question[j], title="Bart fit and uncertainty", savefigs = savefigs)
 
   # Another spline
-  gay_spline_2[[j]] <- stan_gamm4(I(y/n) ~ s(age + male), data=gay_sum_2[[j]])
+  gay_spline_2[[j]] <- stan_gamm4(I(y/n) ~ s(age, male), data=gay_sum_2[[j]])
 }
 
 #' #### New graphs
