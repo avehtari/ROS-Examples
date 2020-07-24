@@ -91,7 +91,7 @@ y_0 <- rnorm(n_0, 2.0, 5.0)
 fake_0 <- data.frame(y_0)
 round(y_0, 1)
 round(mean(y_0), 2)
-round(sd(y_0)/sqrt(n), 2)
+round(sd(y_0)/sqrt(n_0), 2)
 ```
 
 #### Estimating the mean is the same as regressing on a constant term

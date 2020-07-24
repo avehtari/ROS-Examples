@@ -12,7 +12,7 @@
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
 #' Read in data from wave 3 of the Social Indicators Survey
 wave3 <- read.table(root("Imputation/data","siswave3v4impute3.csv"), header=TRUE, sep=",")

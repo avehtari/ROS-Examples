@@ -69,7 +69,7 @@ pred <- predict(fit_1, type="response", newdata=new)
 print(pred, digits=2)
 ```
 
-Linear predictor with uncertaintt
+Linear predictor with uncertainty
 
 ```{r }
 linpred <- posterior_linpred(fit_1, newdata=new)
