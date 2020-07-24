@@ -210,7 +210,7 @@
 #'
 #' #### 15  Other generalized linear models
 #'   - [PoissonExample/](https://github.com/avehtari/ROS-Examples/tree/master/PoissonExample/)
-#'     - [PoissonExample.html](PoissonExample/PoissonExample.html) - Demonstrate Poisson regression with simulated data.
+#'     - [PoissonExample.html](PoissonExample/poisson_regression.html) - Demonstrate Poisson regression with simulated data.
 #'   - [Roaches/](https://github.com/avehtari/ROS-Examples/tree/master/Roaches/)
 #'     - [roaches.html](Roaches/roaches.html) - Analyse the effect of integrated pest management on reducing cockroach levels in urban apartments
 #'   - [Storable/](https://github.com/avehtari/ROS-Examples/tree/master/Storable/) 
@@ -262,7 +262,7 @@
 #'     - [sesame.html](Sesame/sesame.html) - Causal analysis of Sesame Street experiment
 #'   - [Bypass/](https://github.com/avehtari/ROS-Examples/tree/master/Pypass/)
 #'   - [ChileSchools/](https://github.com/avehtari/ROS-Examples/tree/master/ChileSchools/)
-#'     - [chile_schools.html](ChileSchools/chile_schoolse.html) - ChileSchools example.
+#'     - [chile_schools.html](ChileSchools/chile_schools.html) - ChileSchools example.
 #' 
 #' #### 22  Advanced regression and multilevel models
 #'   - [Golf/](https://github.com/avehtari/ROS-Examples/tree/master/Golf/)
@@ -318,7 +318,7 @@
 #' - [Childcare/](https://github.com/avehtari/ROS-Examples/tree/master/Childcare/)
 #'   - [childcare.html](Childcare/childcare.html) - Infant Health and Development Program (IHDP) example.
 #' - [ChileSchools/](https://github.com/avehtari/ROS-Examples/tree/master/ChileSchools/)
-#'   - [chile_schools.html](ChileSchools/chile_schoolse.html) - ChileSchools example.
+#'   - [chile_schools.html](ChileSchools/chile_schools.html) - ChileSchools example.
 #' - [Coins/](https://github.com/avehtari/ROS-Examples/tree/master/Coins/)
 #' - [Congress/](https://github.com/avehtari/ROS-Examples/tree/master/Congress/)
 #'   - [congress.html](Congress/congress.html) - Predictive uncertainty for congressional elections
