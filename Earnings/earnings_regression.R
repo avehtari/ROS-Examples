@@ -33,7 +33,7 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 # grayscale figures for the book
 if (savefigs) color_scheme_set(scheme = "gray")
 
-#' Set random seed for reproducability
+#' Set random seed for reproducibility
 SEED <- 7783
 
 #' #### Load data

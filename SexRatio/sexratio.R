@@ -72,7 +72,7 @@ fit_post <- stan_glm(y ~ x, data = sexratio,
 prior_summary(fit_post)
 print(fit_post)
 
-#' #### Plot Posterior simulations under weakly informative abd informative prior
+#' #### Plot Posterior simulations under weakly informative and informative prior
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("SexRatio/figs","sexratio_bayes_2.pdf"), height=8, width=10)
 #+
