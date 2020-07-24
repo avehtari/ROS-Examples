@@ -50,7 +50,7 @@ new <- data.frame(income=5)
 #' Predict vote preference point estimate
 pred <- predict(fit_1, type="response", newdata=new)
 print(pred, digits=2)
-#' Linear predictor with uncertaintt
+#' Linear predictor with uncertainty
 linpred <- posterior_linpred(fit_1, newdata=new)
 print(c(mean(linpred), sd(linpred)), digits=2)
 #' Expected outcome with uncertainty
