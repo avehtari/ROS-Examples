@@ -137,7 +137,7 @@ test_rep <- apply(y_rep, 1, test)
 if (savefigs) pdf(root("Newcomb/figs","newcomb_test_hist.pdf"), height=4, width=5)
 ```
 ```{r }
-hist(test_rep, xlim=range(test(newcomb$y), test_rep), breaks=20, yaxt="n",
+hist(test_rep, xlim=c(-50,20), breaks=20, yaxt="n",
      xlab="", ylab="", main=NULL)
 lines(rep(test(newcomb$y),2), c(0,n_sims), lwd=3)
 ```
