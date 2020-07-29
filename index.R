@@ -28,7 +28,8 @@
 #' right in to methods and computer code you can use fresh out of the
 #' box.*
 #'
-#' The book has been sent to the publisher and will be available in July 2020.
+#' The book has been avaibale in Europe since 23 July 2020, and the
+#' books to other parts of the world are in transit.
 #' 
 #' - [Cambridge University Press page](https://www.cambridge.org/fi/academic/subjects/statistics-probability/statistical-theory-and-methods/regression-and-other-stories)
 #'
@@ -39,6 +40,32 @@
 #' 
 #' -------------
 #'
+#' ### Contents
+#' 
+#' 1. Introduction
+#' 2. Data and measurement
+#' 3. Some basic methods in mathematics and probability
+#' 4. Generative models and statistical inference
+#' 5. Simulation
+#' 6. Background on regression modeling
+#' 7. Linear regression with a single predictor
+#' 8. Fitting regression models
+#' 9. Prediction and Bayesian inference 
+#' 10. Linear regression with multiple predictors
+#' 11. Assumptions, diagnostics, and model evaluation
+#' 12. Transformations
+#' 13. Logistic regression
+#' 14. Working with logistic regression
+#' 15. Other generalized linear models
+#' 16. Design and sample size decisions
+#' 17. Poststratification and missing-data imputation
+#' 18. Causal inference basics and randomized experiments
+#' 19. Causal inference using regression on the treatment variable
+#' 21. More advanced topics in causal inference
+#' 22. Advanced regression and multilevel models
+#'
+#' -------------
+#' 
 #' ## Code and data {.tabset}
 #' 
 #' ### Code and data by chapters<a id="by_chapters"></a>
