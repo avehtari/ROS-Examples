@@ -30,7 +30,7 @@
 #'
 #' The book has been sent to the publisher and will be available in July 2020.
 #' 
-#' - [Cambridge University Press page](https://www.cambridge.org/core/books/regression-and-other-stories/DD20DD6C9057118581076E54E40C372C)
+#' - [Cambridge University Press page](https://www.cambridge.org/fi/academic/subjects/statistics-probability/statistical-theory-and-methods/regression-and-other-stories)
 #'
 #' - [Sample exams](https://github.com/avehtari/ROS-Examples/tree/master/Exams/)
 #' - See also an article [Teaching Bayes to Graduate Students in Political Science, Sociology, Public Health, Education, Economics, ...](http://www.stat.columbia.edu/~gelman/research/published/teachingbayes.pdf)
