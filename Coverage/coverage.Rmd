@@ -2,20 +2,32 @@
 title: "Regression and Other Stories: Coverage"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
+Coverage - Illustration of coverage of intervals. See Chapter 4 in
+Regression and Other Stories.
 
-```{r include=FALSE}
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
 ```
-```{r setup, message=FALSE, error=FALSE, warning=FALSE, eval=FALSE, include=FALSE}
-# This library is needed only when saving the figure, and thus not loaded for the notebook
+```{r eval=FALSE, include=FALSE}
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 ```
 
-**Simulate**
+#### Simulate
 
 ```{r }
 n_rep <- 100
@@ -30,7 +42,7 @@ for (i in 1:n_rep){
 }
 ```
 
-**Plot**
+#### Plot
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Coverage/figs","coverage.pdf"), height=4, width=8)

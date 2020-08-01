@@ -2,38 +2,49 @@
 #' title: "Regression and Other Stories: Elections Economy -- model checking"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Checking the model-fitting procedure using fake-data simulation.
+#' Elections Economy -- model checking. Checking the model-fitting
+#' procedure using fake-data simulation. See Chapter 7 in Regression
+#' and Other Stories.
 #' 
 #' -------------
 #' 
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
-#' **Load data**
+#' #### Load data
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
+head(hibbs)
 
-#' **Step 1: Creating the pretend world**
+#' #### Step 1: Creating the pretend world
 a <- 46.2
 b <- 3.1
 sigma <- 3.8
 x <- hibbs$growth
 n <- length(x)
 
-#' **Step 2: Simulating fake data**
+#' #### Step 2: Simulating fake data
 set.seed(1)
 y <- a + b*x + rnorm(n, 0, sigma)
 fake <- data.frame(x, y)
 
-#' **Step 3: Fitting the model and comparing fitted to pretend values**
+#' #### Step 3: Fitting the model and comparing fitted to pretend values
 #+ results='hide'
-fit <- stan_glm(y ~ x, data = fake)
+fit <- stan_glm(y ~ x, data = fake, refresh = 0)
 #+
 print(fit)
 
@@ -44,7 +55,7 @@ cover_90 <- as.numeric(b > pi90[1] & b < pi90[2])
 cat(paste("50% coverage: ", cover_50, "\n"))
 cat(paste("90% coverage: ", cover_90, "\n"))
 
-#' **Step 4:  Embedding the simulation in a loop**
+#' #### Step 4:  Embedding the simulation in a loop
 #+ results='hide'
 n_fake <- 1000
 cover_50 <- rep(NA, n_fake)
@@ -59,10 +70,9 @@ for (s in 1:n_fake){
   set.seed(s)
   y <- a + b*x + rnorm(n, 0, sigma)
   fake <- data.frame(x, y)
-  output <- capture.output(
-      fit <- stan_glm(y ~ x, data = fake, warmup = 500, iter = 1500, refresh = 0,
+  fit <- stan_glm(y ~ x, data = fake, warmup = 500, iter = 1500, refresh = 0,
                       save_warmup = FALSE, cores = 1, open_progress = FALSE,
-                      seed = s))
+                      seed = s)
   pi50 <- posterior_interval(fit, prob = 0.5)['x',]
   pi68 <- posterior_interval(fit, prob = 0.68)['x',]
   pi90 <- posterior_interval(fit, prob = 0.9)['x',]

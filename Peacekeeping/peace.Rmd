@@ -2,33 +2,42 @@
 title: "Regression and Other Stories: Peacekeeping"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
 Outcomes after civil war in countries with and without United
-Nations peacekeeping
+Nations peacekeeping. See Chapter 1 in Regression and Other
+Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
-**Load packages**
+#### Load packages
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("foreign")
 ```
 
-**Load data**
+#### Load data
 
 ```{r }
 peace <- read.dta(root("Peacekeeping/data","pk&pkept_old.dta"))
 ```
 
-**What percentage of countries had returned to civil wars:**
+#### What percentage of countries had returned to civil wars:
 
 ```{r }
 censored <- peace$morewar==0
@@ -63,7 +72,7 @@ print(median(delay[ok & !censored & !peacekeepers]))
 
 -------------
 
-Plot
+#### Plot
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Peacekeeping/figs","peacekeeping_1.pdf"), height=4, width=10)
@@ -73,7 +82,7 @@ par(mfrow=c(1,2), mar=c(3,5,3,0), mgp=c(1.5,.5,0), tck=-.01)
 subset <- ok & peacekeepers
 hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("With peacekeeping:  ", round(100*mean(censored[subset])), "% of countries stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
 subset <- ok & !peacekeepers
-hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("Without peackeeping:  ", round(100*mean(censored[subset])), "% stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
+hist(delay[subset & !censored], xlim=c(0,8), breaks=seq(0,8,.5), xlab="Years until return of war", ylab="", main=paste("Without peacekeeping:  ", round(100*mean(censored[subset])), "% stayed at peace.\nFor others, histogram of time until civil war returned:", sep=""), cex.main=.9, cex.axis=.9, cex.lab=.9)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) dev.off()
@@ -145,9 +154,9 @@ time <- as.numeric (cfdate)
 hist(time[peacekeepers&ok])
 hist(time[!peacekeepers&ok])
 
-minidata <- cbind (cfdate, faildate, peacekeepers, round(badness,2), round(delay,2), censored)[ok,]
-rownames (minidata) <- peace$cname[ok]
-colnames (minidata) <- c ("cfdate", "faildate", "peacekeepers?", "badness", "delay", "censored?")
-write.csv(minidata, "minidata.csv")
+## minidata <- cbind (cfdate, faildate, peacekeepers, round(badness,2), round(delay,2), censored)[ok,]
+## rownames (minidata) <- peace$cname[ok]
+## colnames (minidata) <- c ("cfdate", "faildate", "peacekeepers?", "badness", "delay", "censored?")
+## write.csv(minidata, "minidata.csv")
 ```
 

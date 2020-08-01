@@ -2,33 +2,41 @@
 #' title: "Regression and Other Stories: Pew"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Miscellaneous analyses using raw Pew data
+#' Miscellaneous analyses using raw Pew data. See Chapter 2 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("foreign")
 
-#' **Load data**
+#' #### Load data
 pew_pre <- read.dta(root("Pew/data","pew_research_center_june_elect_wknd_data.dta"))
 n <- nrow(pew_pre)
 
-#' **Glance data**
-table (pew_pre[,"date"])
+#' #### Glance data
+table(pew_pre[,"date"])
 which_question <- ifelse(!is.na(pew_pre$heat2), 2, ifelse (!is.na(pew_pre$heat4), 4, 0))
 table(pew_pre$date, which_question)
 
-#' **Create vote intention variable "rvote" using variables heat2 and heat4 from Pew**
+#' #### Create vote intention variable "rvote" using variables heat2 and heat4 from Pew
 numeric_heat2 <- as.numeric(pew_pre$heat2)
 numeric_heat4 <- as.numeric(pew_pre$heat4)
 rvote <- rep (NA, n)
@@ -43,15 +51,15 @@ for (i in 1:n){
   }
 }
 
-#' **Certain to have registered to vote?**
+#' #### Certain to have registered to vote?
 registered <- ifelse(pew_pre$regicert=="absolutely certain", 1, 0)
 registered[is.na(registered)] <- 0
 
 #' Date
 early <- pew_pre$date < 90008
 late <- pew_pre$date > 90008
-month <- floor (pew_pre$date/10000)
-day <- floor (pew_pre$date/100) - 100*month
+month <- floor(pew_pre$date/10000)
+day <- floor(pew_pre$date/100) - 100*month
 day.numeric <- month*31 + day
 poll.id <- ifelse (month==6, 1,
              ifelse (month==7 & day<28, 2,
@@ -64,7 +72,7 @@ poll.id <- ifelse (month==6, 1,
 n.poll.id <- max(poll.id)
 
 #' State (1-51, in alfa order, including DC)
-stnum <- as.numeric (pew_pre$state)
+stnum <- as.numeric(pew_pre$state)
 
 #' Identify out DC
 state.abb.long <- c(state.abb[1:8], "DC", state.abb[9:50])
@@ -129,7 +137,7 @@ ideology.label <- c("Very liberal", "Liberal", "Moderate", "Conservative", "Very
 n.ideology <- max(ideology, na.rm=TRUE)
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","pid.pdf"), height=4.5, width=5.5, colormodel="gray")
 #+
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")
@@ -154,7 +162,7 @@ mtext("Self-declared party identification, by income", side=3, line=1, cex=1.2)
 if (savefigs) dev.off()
 
 #+ eval=FALSE, include=FALSE
-if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5)
+if (savefigs) pdf(root("Pew/figs","ideology.pdf"), height=4.5, width=5.5, colormodel="gray")
 #+
 par(mar=c(3,2,2.5,1), mgp=c(1.5,.7,0), tck=-.01)
 plot(c(1,n.inc), c(0,1), xaxs="i", yaxs="i", type="n", xlab="", ylab="", xaxt="n", yaxt="n")

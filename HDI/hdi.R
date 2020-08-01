@@ -2,23 +2,39 @@
 #' title: "Regression and Other Stories: Human Development Index"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Human Development Index - Looking at data in different ways
+#' Human Development Index - Looking at data in different ways. See
+#' Chapter 2 in Regression and Other Stories.
 #' 
 #' -------------
 #' 
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("foreign")
 library("maps")
 
-#' **Load data**
+#' #### Load data
 hdi <- read.table(root("HDI/data","hdi.dat"), header=TRUE)
+head(hdi)
 votes <- read.dta(root("HDI/data","state vote and income, 68-00.dta"))
+head(votes)
+
+#' #### Pre-process
 income2000 <- votes[votes[,"st_year"]==2000, "st_income"]
 state.income <- c(income2000[1:8],NA,income2000[9:50])
 state.abb.long <- c(state.abb[1:8],"DC",state.abb[9:50])
@@ -32,31 +48,31 @@ for (i in 1:51){
 }
 no.dc <- state.abb.long != "DC"
 
-#' **Plot average state income and Human Development Index**
+#' #### Plot average state income and Human Development Index
 #+ eval=FALSE, include=FALSE
-png(root("HDI/figs","hdi1.png"), height=400, width=400)
+if (savefigs) png(root("HDI/figs","hdi1.png"), height=400, width=400)
 #+
 par(mar=c(3,3,2.5,1), mgp=c(1.5,.2,0), tck=-.01, pty="s")
 plot(state.income, hdi.ordered,
      xlab="Average state income in 2000", ylab="Human Development Index", type="n")
 text(state.income, hdi.ordered, state.abb.long)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 
-#' **Plot rank of average state income and  Human Development Index**
+#' #### Plot rank of average state income and  Human Development Index
 #+ eval=FALSE, include=FALSE
-png(root("HDI/figs","hdi2.png"), height=400, width=400)
+if (savefigs) png(root("HDI/figs","hdi2.png"), height=400, width=400)
 #+
 par(mar=c(3,3,2.5,1), mgp=c(1.5,.2,0), tck=-.01, pty="s")
 plot(rank(state.income[no.dc]), rank(hdi.ordered[no.dc]),
      xlab="Rank of average state income in 2000", ylab="Rank of Human Development Index", type="n")
 text(rank(state.income[no.dc]), rank(hdi.ordered[no.dc]), state.abb)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()
 #+
 print(cor(rank(hdi.ordered[no.dc]),rank(state.income[no.dc])), digits=2)
 
-#' **Plot a map of Human Devlopment index**
+#' #### Plot a map of Human Devlopment index
 statemaps <- function(a, grayscale=FALSE, ...){
   if (length(a)==51){
     no.dc <- c(1:8,10:51)
@@ -90,7 +106,7 @@ statemaps <- function(a, grayscale=FALSE, ...){
  }
 }
 #+ eval=FALSE, include=FALSE
-png(root("HDI/figs","hdi3.png"), height=300, width=400)
+if (savefigs) png(root("HDI/figs","hdi3.png"), height=300, width=400)
 #+
 par(mar=c(0,0,0,0))
 statemaps(ifelse (can==1, "darkgreen", ifelse (can==2, "green4",
@@ -100,4 +116,4 @@ mtext("Human Development Index by State", line=-2)
 mtext("(Colors indicate number of states you need to drive through to reach the Canadian border.)",
       side=1, cex=.75, line=-2)
 #+ eval=FALSE, include=FALSE
-dev.off()
+if (savefigs) dev.off()

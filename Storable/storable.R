@@ -2,45 +2,52 @@
 #' title: "Regression and Other Stories: Storable"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
 #' Ordered categorical data analysis with a study from experimental
-#' economics, on the topic of ``storable votes.''
+#' economics, on the topic of ``storable votes''. See Chapter 15 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("rstan")
 rstan_options(auto_write = TRUE)
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 invlogit<-plogis
 
-#' **Load data**
+#' #### Load data
 data_2player <- read.csv(root("Storable/data","2playergames.csv"))
 data_3player <- read.csv(root("Storable/data","3playergames.csv"))
 data_6player <- read.csv(root("Storable/data","6playergames.csv"))
 data_all <- rbind(data_2player, data_3player, data_6player)
 data_all$factor_vote <- factor(data_all$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
+head(data_all)
 
-#' **Simple analysis using data from just one person**
+#' #### Simple analysis using data from just one person
 data_401 <- subset(data_2player, person == 401, select = c("vote", "value"))
 data_401$factor_vote <- factor(data_401$vote, levels = c(1, 2, 3), labels = c("1", "2", "3"), ordered=TRUE)
-#+ results='hide'
+head(data_401)
 fit_1 <- stan_polr(factor_vote ~ value, data = data_401,
-                   prior = R2(0.5, "mean"))
-#+
+                   prior = R2(0.3, "mean"), refresh = 0)
 print(fit_1, digits=2)
 
-#' **6 people**
+#' #### 6 people
 plotted <- c(101, 303, 409, 405, 504, 112)
 story <- c("Perfectly monotonic",
            "One fuzzy and one sharp cutpoint",
@@ -55,15 +62,13 @@ for (i in 1:n_plotted){
   #ok <- data_all[,"person"]==plotted[i]
   data[[i]] <- subset(data_all, person == plotted[i], 
                       select = c("vote", "factor_vote", "value"))
-  output <- capture.output(
-      fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
-                            prior=R2(0.3, "mean"),
-                            cores = 1, open_progress = FALSE,
-                            warmup = 2000, iter = 4000,
-                            adapt_delta = 0.99999999))
+    fit[[i]] <- stan_polr(factor_vote ~ value, data=data[[i]],
+                          prior=R2(0.3, "mean"), refresh = 0,
+                          cores = 1, open_progress = FALSE,
+                          adapt_delta = 0.9999)
 }
 
-#' **Graph**
+#' #### Graph
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Storable/figs","sampledata4.pdf"), height=5, width=8)
 #+
@@ -82,7 +87,7 @@ for (i in 1:n_plotted){
   temp <- seq(0, 100, 0.1)
   prob <- array(NA, c(length(temp), n_cutpoints+1))
   expected <- rep(NA, length(temp))
-  prob[,1] <- 1 - invlogit((temp-cutpoints[1]/s))
+  prob[,1] <- 1 - invlogit((temp-cutpoints[1])/s)
   expected <- 1*prob[,1]
   for (i_cut in 2:n_cutpoints){
     prob[,i_cut] <- invlogit((temp-cutpoints[i_cut-1])/s) -

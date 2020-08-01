@@ -2,23 +2,31 @@
 #' title: "Regression and Other Stories: CausalDiagram"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Plot causal diagram
+#' Plot a causal diagram. See Chapter 19 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Plot causal diagram**
+#' #### Plot causal diagram
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("CausalDiagram/figs","diagram1.pdf"), height=4.5, width=10)
 #+

@@ -2,23 +2,31 @@
 #' title: "Regression and Other Stories: AgePeriodCohort"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
 #' ---
 
-#' Age-Period-Cohort - Age adjustment
+#' Age-Period-Cohort - Demonstration of age adjustment to estimate
+#' trends in mortality rates. See Chapter 3 in Regression and Other
+#' Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Load data**
+#' #### Load data
 births <- read.table(root("AgePeriodCohort/data","births.txt"), header=TRUE)
 mean_age_45_54 <- function(yr){
   ages <- 45:54
@@ -27,15 +35,15 @@ mean_age_45_54 <- function(yr){
 }
 for (yr in 1989:2015) print(mean_age_45_54(yr), digits=3)
 
-#' **Calculation**
+#' #### Calculation
 print((.5/10)* (.006423 - .003064)/.003064, digits=3)
 
-#' **From life table**
+#' #### From life table
 deathpr_by_age <- c(.003064, .003322, .003589, .003863, .004148, .004458, .004800, .005165, .005554, .005971)
 deathpr_male <- c(.003244, .003571, .003926, .004309, .004719, .005156, .005622, .006121, .006656, .007222)
 deathpr_female <- c(.002069, .002270, .002486, .002716, .002960, .003226, .003505, .003779, .004040, .004301)
                     
-#' **Sum it up**
+#' #### Sum it up
 pop <- read.csv(root("AgePeriodCohort/data","US-EST00INT-ALLDATA.csv"))
 years <- 1989:2013
 deathpr_1 <- rep(NA, length(years))

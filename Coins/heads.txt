@@ -1,0 +1,7 @@
+heads.csv has data from a coin-flipping experiment done in a previous
+class. Each student flipped a coin 10 times and we have a count of the
+number of students who saw exactly 0, 1, 2, \ldots, 10 heads. See
+Appendix B in Regression and Other Stories.
+
+x     - how many heads was seen
+count - count of students who saw exactly x heads

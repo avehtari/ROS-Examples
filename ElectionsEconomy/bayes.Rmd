@@ -1,0 +1,99 @@
+---
+title: "Regression and Other Stories: Elections Economy - Bayes"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
+---
+Demonstration of Bayesian information aggregation. See Chapter 9 in
+Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+# switch this to TRUE to save figures in separate files
+savefigs <- FALSE
+```
+
+#### Load packages
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+```
+
+## Calculations
+
+Prior based on a previously-fitted model using economic and
+political condition.
+
+```{r }
+theta_hat_prior <- 0.524
+se_prior <- 0.041
+```
+
+Survey of 400 people, of whom 190 say they will vote for the
+Democratic candidate
+
+```{r }
+n <- 400
+y <- 190
+```
+
+#### Data estimate
+
+```{r }
+theta_hat_data <- y/n
+se_data <- sqrt((y/n)*(1-y/n)/n)
+```
+
+#### Bayes estimate
+
+```{r }
+theta_hat_bayes <- (theta_hat_prior/se_prior^2 + theta_hat_data/se_data^2) / (1/se_prior^2 + 1/se_data^2)
+se_bayes <- sqrt(1/(1/se_prior^2 + 1/se_data^2))
+```
+
+## Figures
+
+
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("ElectionsEconomy/figs","prior_data_posterior_a.pdf", height=3, width=5.5))
+```
+```{r }
+par(mar=c(3,1,1,1), mgp=c(1.5, 0.5, 0), tck=-.02)
+plot(0, 0, xlim=c(0.37, 0.67), ylim=c(0, 20), xlab=expression(theta), xaxt="n", ylab="", yaxs="i", yaxt="n", bty="n", cex.lab=1.2)
+axis(1, seq(0.3, 0.7, 0.1))
+curve(dnorm(x, theta_hat_prior, se_prior), n=1000, add=TRUE)
+text(0.588, 5, "Prior")
+curve(dnorm(x, theta_hat_data, se_data), n=1000, add=TRUE)
+text(0.420, 8, "Likelihood")
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) pdf(root("ElectionsEconomy/figs","prior_data_posterior_b.pdf", height=3, width=5.5))
+```
+```{r }
+par(mar=c(3,1,1,1), mgp=c(1.5, 0.5, 0), tck=-.02)
+plot(0, 0, xlim=c(0.37, 0.67), ylim=c(0, 20), xlab=expression(theta), xaxt="n", ylab="", yaxs="i", yaxt="n", bty="n", cex.lab=1.2)
+axis(1, seq(0.3, 0.7, 0.1))
+curve(dnorm(x, theta_hat_prior, se_prior), n=1000, add=TRUE, col="gray30")
+text(0.588, 5, "Prior")
+curve(dnorm(x, theta_hat_data, se_data), n=1000, add=TRUE, col="gray30")
+text(0.420, 8, "Likelihood")
+curve(dnorm(x, theta_hat_bayes, se_bayes), n=1000, add=TRUE)
+text(0.525, 15, "Posterior")
+```
+```{r eval=FALSE, include=FALSE}
+if (savefigs) dev.off()
+```
+

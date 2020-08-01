@@ -2,20 +2,30 @@
 #' title: "Regression and Other Stories: Helicopters"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Example data file for helicopter flying time exercise
+#' Example data file for helicopter flying time exercise. See Chapter
+#' 1 in Regression and Other Stories.
 #' 
 #' -------------
 #' 
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
-library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
-#' **Load data**
+#' #### Load packages
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+
+#' #### Load data
 helicopters <- read.table(root("Helicopters/data","helicopters.txt"), header=TRUE)
 
-#' **Display the example data**
+#' #### Display the example data
 print(helicopters)

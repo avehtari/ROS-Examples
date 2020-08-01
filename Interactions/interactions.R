@@ -1,24 +1,32 @@
 #' ---
-#' title: "Regression and Other Stories: Interactions"
+#' title: "Regression and Other Stories: Interaction example"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Plot interaction example figure
+#' Plot interaction example figure. See Chapter 1 in Regression and
+#' Other Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Plot interaction example figure**
+#' #### Plot interaction example figure
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("Interactions/figs","interactions_male.pdf"), height=4, width=6)
 #+

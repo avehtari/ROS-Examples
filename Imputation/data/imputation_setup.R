@@ -12,7 +12,7 @@
 #' **Load libraries**
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
 #' Read in data from wave 3 of the Social Indicators Survey
 wave3 <- read.table(root("Imputation/data","siswave3v4impute3.csv"), header=TRUE, sep=",")
@@ -116,3 +116,6 @@ retirement_top <- topcode(retirement, 100)
 interest_top <- topcode(interest, 100)
 assistance_top <- topcode(assistance, 10)
 other_top <- topcode(other, 10)
+
+SIS <- data.frame(earnings, retirement, interest, assistance, other, male, over65, white, immig, educ_r, workmos, workhrs_top, any_ssi, any_welfare, any_charity)
+write.csv(SIS, root("Imputation/data","SIS.csv"), row.names=FALSE)

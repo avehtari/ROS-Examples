@@ -2,23 +2,41 @@
 title: "Regression and Other Stories: AgePeriodCohort"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
 ---
-Age-Period-Cohort - Age adjustment: additional plots
+Age-Period-Cohort - Age adjustment: additional plots.  See Chapter
+3 in Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
-
 ```
+
+**Load packages**
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+```
+
+**Initialize running the first part**
+
 ```{r results='hide'}
-source("births.R")
+source(root("AgePeriodCohort/births.R"))
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig1a.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig1a.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -31,7 +49,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig1b.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig1b.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -44,7 +62,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig1c.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig1c.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -60,7 +78,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig1c_grayscale.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig1c_grayscale.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -76,7 +94,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig2a.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig2a.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -89,7 +107,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig2b.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig2b.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -107,7 +125,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig2c.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig2c.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)
@@ -125,7 +143,7 @@ if (savefigs) dev.off()
 
 ```
 ```{r eval=FALSE, include=FALSE}
-if (savefigs) pdf("fig2c_grayscale.pdf", height=4, width=5)
+if (savefigs) pdf(root("AgePeriodCohort/figs","fig2c_grayscale.pdf"), height=4, width=5)
 ```
 ```{r }
 par(mar=c(2.5, 3, 3, .2), mgp=c(2,.5,0), tck=-.01)

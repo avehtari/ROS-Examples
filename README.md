@@ -1,6 +1,6 @@
 # Regression and Other Stories - Data and code
 
-"Regression and Other Stories" (by Andrew Gelman, Jennifer Hill, and Aki Vehtari) and "Applied Regression and Multilevel Models" (by Andrew Gelman, Jennifer Hill, Ben Goodrich, Jonah Gabry, and Aki Vehtari) together represent the updated and expanded second edition of "Data Analysis Using Regression and Multilevel/Hierarchical Models."
+Regression and Other Stories by [Andrew Gelman](http://www.stat.columbia.edu/~gelman/), [Jennifer Hill](https://steinhardt.nyu.edu/people/jennifer-hill), and [Aki Vehtari](https://users.aalto.fi/~ave/) (2020)
 
 [Regression and Other Stories book home page](http://www.stat.columbia.edu/~gelman/regression/)
 
@@ -8,5 +8,5 @@ This git repository has data and code for the examples and exercises in the book
 
 ## Index and notebooks in html
 
-For easier viewing the index and the notebooks in html are available at [avehtari.github.io/RAOS-Examples](https://avehtari.github.io/RAOS-Examples/).
+For easier viewing the index and the notebooks in html are available at [avehtari.github.io/ROS-Examples](https://avehtari.github.io/ROS-Examples/).
 

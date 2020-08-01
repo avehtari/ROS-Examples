@@ -3,21 +3,23 @@ title: "Regression and Other Stories: SimpleCausal"
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 date: "`r format(Sys.Date())`"
 ---
-Simple graphs illustrating regression for causal inference
+Simple graphs illustrating regression for causal inference. See
+Chapter 1 in Regression and Other Stories.
 
 -------------
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 ```
 
 **Load packages**
 
-```{r setup, message=FALSE, error=FALSE, warning=FALSE}
+```{r }
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
 ```
 
@@ -77,7 +79,7 @@ if (savefigs) dev.off()
 **Simulated data from nonlinear model**
 
 ```{r }
-y <- rnorm(N, 10 + 25*exp(-x), 3)
+y <- rnorm(N, 5 + 30*exp(-x), 2)
 data$y <- y
 ```
 
@@ -94,7 +96,7 @@ if (savefigs) pdf(root("SimpleCausal/figs","overview_2a.pdf"), height=3.5, width
 ```{r }
 par(mar=c(3, 3, 1.5, 1), mgp=c(1.7, .5, 0), tck=-.01)
 plot(x, y, xlab="Treatment level", ylab="Outcome measurement", pch=20, cex=.5, bty="l", main="Nonlinear treatment effect", cex.main=.9, cex.lab=.9, cex.axis=.9)
-curve(10 + 25*exp(-x), add=TRUE)
+curve(5 + 30*exp(-x), add=TRUE)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) dev.off()

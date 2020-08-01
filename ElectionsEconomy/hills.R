@@ -2,35 +2,42 @@
 #' title: "Regression and Other Stories: Elections Economy"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Present uncertainty in parameter estimates
+#' Present uncertainty in parameter estimates. See Chapter 7 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
 library("rstanarm")
-options(mc.cores = parallel::detectCores())
 
-#' **Load data**
+#' #### Load data
 hibbs <- read.table(root("ElectionsEconomy/data","hibbs.dat"), header=TRUE)
-colnames(hibbs) <- c("year", "growth", "vote", "inc", "other")
+head(hibbs)
 
-#' **Likelihood for 2 parameters**
+#' ## Likelihood for 2 parameters
 M1 <- lm(vote ~ growth, data = hibbs)
 display(M1)
 summ <- summary(M1)
 
-#' **Plot likelihood (a, b| y)**
+#' #### Plot likelihood (a, b| y)
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2a.pdf"), height=4, width=5)
 #+
@@ -66,7 +73,7 @@ mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot maximum likelihood estimate and std errs**
+#' #### Plot maximum likelihood estimate and std errs
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2b.pdf"), height=5, width=5)
 #+
@@ -78,7 +85,7 @@ points(summ$coef[1,1], summ$coef[2,1], pch=19)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Plot maximum likelihood estimate and covariance**
+#' #### Plot maximum likelihood estimate and covariance
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_2c.pdf"), height=5, width=5)
 #+
@@ -97,19 +104,20 @@ lines (xx, yy)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Bayesian model with flat prior**
-M3 <- stan_glm(vote ~ growth, data = hibbs,
-               prior_intercept=NULL, prior=NULL, prior_aux=NULL)
+#' ## Bayesian model with flat prior
+M3 <- stan_glm(vote ~ growth, data = hibbs, 
+               prior_intercept=NULL, prior=NULL, prior_aux=NULL,
+               refresh = 0)
 sims <- as.data.frame(M3)
 a <- sims[,1]
 b <- sims[,2]
 
-#' **Plot posterior draws**
+#' #### Plot posterior draws
 #+ eval=FALSE, include=FALSE
 if (savefigs) pdf(root("ElectionsEconomy/figs","hill_3c.pdf"), height=5, width=5)
 #+
 par(mar=c(3, 3, 3, 1), mgp=c(1.7, .5, 0), tck=-.01)
-plot(rng.x, rng.y, xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n")
+plot(c(39.8, 52.5), c(.3, 5.8), xlab="a", ylab="b", main="4000 posterior draws of (a, b)", type="n", cex.main=1.5, cex.lab=1.5, cex.axis=1.5)
 points(a, b, pch=20, cex=.2)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()

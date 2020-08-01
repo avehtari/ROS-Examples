@@ -1,0 +1,50 @@
+---
+title: "Regression and Other Stories: Restaurant"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    code_download: true
+---
+Demonstration of using Stan for optimization. See Appendix B in
+Regression and Other Stories.
+
+-------------
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
+```
+
+#### Load packages
+
+```{r }
+library("rprojroot")
+root<-has_dirname("ROS-Examples")$make_fix_file()
+library("rstan")
+rstan_options(auto_write = TRUE)
+```
+
+#### Show Stan code
+
+```{r }
+writeLines(readLines(root("Restaurant","restaurant.stan")))
+```
+
+#### Compile Stan code
+
+```{r results='hide'}
+resto <- stan_model(root("Restaurant","restaurant.stan"))
+```
+
+#### Optimize
+
+```{r }
+fit <- optimizing(resto)
+print(fit)
+```
+

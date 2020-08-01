@@ -2,23 +2,31 @@
 #' title: "Regression and Other Stories: Names"
 #' author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 #' date: "`r format(Sys.Date())`"
+#' output:
+#'   html_document:
+#'     theme: readable
+#'     toc: true
+#'     toc_depth: 2
+#'     toc_float: true
+#'     code_download: true
 #' ---
 
-#' Names - Distributions of names of American babies
+#' Names - Distributions of names of American babies. See Chapter 2 in
+#' Regression and Other Stories.
 #' 
 #' -------------
 #' 
 
-#+ include=FALSE
+#+ setup, include=FALSE
+knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 # switch this to TRUE to save figures in separate files
 savefigs <- FALSE
 
-#' **Load packages**
-#+ setup, message=FALSE, error=FALSE, warning=FALSE
+#' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
-#' **Load data**
+#' #### Load data
 allnames <- read.csv(root("Names/data","SSA-longtail-names.csv"))
 girl <- as.vector(allnames$sex)=="F"
 names <- as.vector(allnames$name)
@@ -34,7 +42,7 @@ totals <- rowMeans(counts.norm)
 counts.adj <- ifelse (counts==0, 2, counts)
 counts.adj.norm <- colRenorm(counts.adj)/colSums(counts.adj)
 
-#' **Compute stats**
+#' #### Compute stats
 N <- nrow(allnames)
 stats.labels <- c("avg.year", "avg.pop", "max.pop", "ratio", "year.of.max.pop",
   "volatility", "slope.1931.1965", "slope.1966.2000","slope.1931.2000",
@@ -114,7 +122,7 @@ namesplot <- function(a){
   }
 }
 
-#' **Plot stats**
+#' #### Plot stats
 girls50 <- name.subset(girl, 50)
 boys50 <- name.subset(!girl, 50)
 #+ eval=FALSE, include=FALSE
@@ -147,8 +155,8 @@ namesplot(boys70)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
-#' **Restrict to top 1000 and remove Laura's list of bad names**
-error.names <- as.matrix(read.csv(root("Names/data","Error Names.csv")))
+#' #### Restrict to top 1000 and remove Laura's list of bad names
+error.names <- as.matrix(read.csv(root("Names/data","ErrorNames.csv")))
 error.names.girl <- error.names[,2]=="F"
 bad.girl.names <- error.names[error.names.girl,1]
 bad.boy.names <- error.names[!error.names.girl,1]
