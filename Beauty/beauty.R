@@ -15,6 +15,10 @@
 #' instructors’ beauty and teaching quality for several courses at the
 #' University of Texas. See Chapter 10 in Regression and Other
 #' Stories.
+#'
+#' Hamermesh, D. S., and Parker, A. M. (2005).  Beauty in the
+#' classroom: Instructors' pulchritude and putative pedagogical
+#' productivity.  Economics of Education Review, 24:369-376.
 #' 
 #' -------------
 #' 
