@@ -67,15 +67,34 @@
 #' -------------
 #' 
 #' ## Code and data {.tabset}
+#'
+#'   - The code and data are provided to fully reproduce the examples
+#'     and figurs in the book.  They can be a good way to see what the
+#'     code does.
+#'   - Different people have different styles of code.  The code here
+#'     is not supposed to be a model.  The statistical analyses and
+#'     graphs in the book are intended to be models for good practice,
+#'     but the code here is meant to be simple with minimal dependencies.
+#'   - For learning R programming basics we recommend
+#'     - [Garrett Grolemund, Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
+#'   - For learning basic and advanced plotting using R  we recommend
+#'     - [Kieran Healy, Data Visualization - A practical introduction](https://socviz.co/)
+#'     - [Claus O. Wilke, Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
+#'     - [Antony Unwin, Graphical Data Analysis with R](http://www.gradaanwr.net/)    - [Hadley Wickham, ggplot2: Elegant Graphics for Data Analysis] (https://ggplot2-book.org/)
+#' 
+#' -------------
 #' 
 #' ### Code and data by chapters<a id="by_chapters"></a>
 #'
-#' The folders below (ending /) point to the code (.R and .Rmd) and
-#' data folders in github, and .html -files point to pretty
-#' notebooks. Most examples have cleaned data in csv file in data
-#' subfolder for easy experimenting. The data subfolders have also the
-#' raw data and *_setup.R file showing how the data cleaning has been
-#' done.
+#'   - The folders below (ending /) point to the code (.R and .Rmd)
+#'     and `data` folders (.csv or .txt) in github, and .html -files
+#'     point to knitted notebooks.
+#'   - Most examples have cleaned data in .csv file in `data` subfolder
+#'     for easy experimenting. For completeness and reproducibility, the
+#'     data subfolders have also the raw data and `*_setup.R` file showing
+#'     how the data pre-processing has been done (to do the exercises
+#'     and follow along with the examples, you don't need to worry about
+#'     the setup code).
 #' 
 #' -------------
 #' 
