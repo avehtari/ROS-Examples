@@ -23,6 +23,9 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 savefigs <- FALSE
 
 #' #### Load packages
+library("ggplot2")
+library("bayesplot")
+theme_set(bayesplot::theme_default(base_family = "sans"))
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
@@ -33,6 +36,10 @@ head(health)
 color <- ifelse(health$country %in% c("USA","Mexico"), "red","black")
 
 #' #### Scatterplot
+#'
+#' (see ggplot versions at the end)
+#' 
+#' All countries:
 #+ eval=FALSE, include=FALSE
 png(root("HealthExpenditure/figs","healthscatter.png"), height=600, width=700)
 #+
@@ -73,3 +80,20 @@ axis(1, seq(0,6000,2000))
 text(health$spending[!removec], health$lifespan[!removec], health$country[!removec], cex=.9)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
+
+#' #### ggplot versions
+#'
+#' All countries:
+# this could be further modified to include color in the dataframe
+ggplot(data=health, aes(x=spending, y=lifespan, label=country)) +
+  geom_text(color=color) +
+  labs(x="Health care spending (PPP US$)",
+       y="Life expectancy (years)")
+
+#' Selected countries:
+# this could be further modified to include color in the dataframe
+ggplot(data=subset(health, !removec),                   
+       aes(x=spending, y=lifespan, label=country)) +
+  geom_text(color=color[!removec]) +
+  labs(x="Health care spending (PPP US$)",
+       y="Life expectancy (years)")
