@@ -12,7 +12,7 @@
 #' 
 #' Home page for the book Regression and Other Stories by [Andrew Gelman](http://www.stat.columbia.edu/~gelman/), [Jennifer Hill](https://steinhardt.nyu.edu/people/jennifer-hill), and [Aki Vehtari](https://users.aalto.fi/~ave/), including the code and data.
 #'
-#' ## Book information
+#' ## Book information{.tabset}
 #'
 #'<div style= "float:right;position: relative;">
 #' ![](ROS_frontcover.png)
@@ -65,6 +65,20 @@
 #' 22. Advanced regression and multilevel models
 #'
 #' -------------
+#'
+#' ### Reviews
+#'
+#' *'Gelman, Hill and Vehtari provide an introductory regression book that hits an amazing trifecta: it motivates regression using real data examples, provides the necessary (but not superfluous) theory, and gives readers tools to implement these methods in their own work. The scope is ambitious - including introductions to causal inference and measurement - and the result is a book that I not only look forward to teaching from, but also keeping around as a reference for my own work.'* Elizabeth Tipton, Northwestern University
+#' 
+#' *'Regression and Other Stories is simply the best introduction to applied statistics out there. Filled with compelling real-world examples, intuitive explanations, and practical advice, the authors offer a delightfully modern perspective on the subject. It's an essential resource for students and practitioners across the statistical and social sciences.'* Sharad Goel, Department of Management Science and Engineering, Stanford University
+#' 
+#' *'With modern software it is very easy to fit complex regression models, and even easier to get their interpretation completely wrong. This wonderful book, summarising the authors' years of experience, stays away from mathematical proofs, and instead focuses on the insights to be gained by careful plotting and modelling of data. In particular the chapters on causal modelling, and the challenges of working with selected samples, provide some desperately needed lessons.'* David Spiegelhalter, University of Cambridge
+#' 
+#' *'Gelman and Hill, have done it again, this time with Aki Vehtari. They have written a textbook that should be on every applied quantitative researcher's bookshelf. Most importantly they explain how to do and interpret regression with real world, complicated examples. Practicing academics in addition to students will benefit from giving this book a close read.'* Christopher Winship, Harvard University, Massachusetts
+#'
+#' *'Overall this is a very modern, stats centred, engaging and careful book on the most common tool of statistical modelling!'* Christian P. Robert, Ceremade - Université Paris-Dauphine. The full review in a blog post [[The Art of] Regression and other stories](https://xianblog.wordpress.com/2020/07/23/the-art-of-regression-and-other-stories/).
+#'
+#' -------------
 #' 
 #' ## Code and data {.tabset}
 #'
@@ -80,7 +94,7 @@
 #'   - For learning basic and advanced plotting using R  we recommend
 #'     - [Kieran Healy, Data Visualization - A practical introduction](https://socviz.co/)
 #'     - [Claus O. Wilke, Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
-#'     - [Antony Unwin, Graphical Data Analysis with R](http://www.gradaanwr.net/)    - [Hadley Wickham, ggplot2: Elegant Graphics for Data Analysis] (https://ggplot2-book.org/)
+#'     - [Antony Unwin, Graphical Data Analysis with R](http://www.gradaanwr.net/)
 #' 
 #' -------------
 #' 
