@@ -78,6 +78,19 @@
 #'
 #' *'Overall this is a very modern, stats centred, engaging and careful book on the most common tool of statistical modelling!'* Christian P. Robert, Ceremade - Université Paris-Dauphine. The full review in a blog post [[The Art of] Regression and other stories](https://xianblog.wordpress.com/2020/07/23/the-art-of-regression-and-other-stories/).
 #'
+#' ### Errata
+#' 
+#' Errata (excluding minor typos) for the book.
+#'
+#' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
+#' 
+#' This list was last changed on 6 August 2020.
+#' 
+#' 1st (2020) printing
+#' 
+#' - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." should be "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
+#' - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
+#' 
 #' -------------
 #' 
 #' ## Code and data {.tabset}
