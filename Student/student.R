@@ -92,11 +92,10 @@ p0
 if (savefigs)
   ggsave(root("Student/figs","student_fit0_mcmc_areas.pdf"), p0, height=5, width=5, colormodel="gray")
 
-#' The above figure shows that after all predictors have been
-#' standardized to have equal standard deviation, the uncertainties on
-#' the relevances are similar. For example, it is now easier to see
-#' that {\tt absences} has relatively high relevance compared to other
-#' predictors in the model.
+#' The above figure shows that without standardization of predictors,
+#' it looks like there is a different amount of uncertainty on the
+#' relevance of the predictors. For example, it looks like `absences`
+#' has really small relevance and high certainty.
 #' 
 
 #' Standardize all predictors for easier comparison of relevances as
@@ -122,8 +121,9 @@ if (savefigs)
 #' The above figure shows that after all predictors have been
 #' standardized to have equal standard deviation, the uncertainties on
 #' the relevances are similar. For example, it is now easier to see
-#' that absences has relatively high relevance compared to other
+#' that `absences` has relatively high relevance compared to other
 #' predictors in the model.
+#' 
 
 #' #### Compare Bayesian $R^2$ and LOO $R^2$
 round(median(bayes_R2(fit1)), 2)
