@@ -86,10 +86,11 @@
 #'
 #' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
 #' 
-#' This list was last changed on 6 August 2020.
+#' This list was last changed on 8 August 2020.
 #' 
 #' 1st (2020) printing
-#' 
+#'
+#' - p. 11, the summary of the treatment-control comparison says "the treated units were 4.8 points higher than the controls, \bar{y} = 31.7 under the treatment and \bar{y} = 25.5 for the controls." The difference in shown means is 6.2 and not 4.8.  Not that these values change when rerunning the simulation. (thanks Desislava Petkova) 
 #' - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." should be "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
 #' - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
 #' 
