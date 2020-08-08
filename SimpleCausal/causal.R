@@ -13,6 +13,10 @@
 
 #' Simple graphs illustrating regression for causal inference. See
 #' Chapter 1 in Regression and Other Stories.
+#'
+#' The simulated data depends on the random seed, and thus the plots
+#' and numbers here and in the book may differ. You can experiment
+#' with the simulation variation by changing the seed.
 #' 
 #' -------------
 #' 
@@ -26,8 +30,11 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 library("arm")
+# for reproducibility of simulated data
+SEED <- 1151
 
 #' ## Simulated data from linear model
+set.seed(SEED)
 N <- 50
 x <- runif(N, 1, 5)
 y <- rnorm(N, 10 + 3*x, 3)
@@ -65,6 +72,7 @@ text(3.2, 15, paste("Estimated treatment\neffect per unit of x is\nslope of fitt
 if (savefigs) dev.off()
 
 #' ## Simulated data from nonlinear model
+set.seed(SEED)
 y <- rnorm(N, 5 + 30*exp(-x), 2)
 data$y <- y
 
@@ -91,6 +99,7 @@ abline(coef(lm_2a)[1], coef(lm_2a)[2])
 if (savefigs) dev.off()
 
 #' ## Simulated data from two groups
+set.seed(SEED)
 N <- 100
 xx <- rnorm(N, 0, 1)^2
 z <- rep(0:1, N/2)
