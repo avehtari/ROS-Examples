@@ -524,8 +524,13 @@
 #' - [Unemployment/](https://github.com/avehtari/ROS-Examples/tree/master/Unemployment/)
 #'   - [unemployment.html](Unemployment/unemployment.html) - Time series fit and posterior predictive model checking for unemployment series
 #'
-#' ### Download code and data<a id="alphabetically"></a>
+#' ### Download code and data<a id="Download"></a>
 #' 
 #' - [Git repo for the code and data](https://github.com/avehtari/ROS-Examples)
 #' - [Download all code and data as a ZIP file](https://github.com/avehtari/ROS-Examples/archive/master.zip)
+#'
+#' ### Python Bambi port of the code="Python"></a>
+#'
+#' Ravin Kumar and Osvaldo Martin are porting ROS examples to Python using bambmi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm. 
+#' - [Bambi resources](https://github.com/bambinos/Bambi_resources)
 #'
