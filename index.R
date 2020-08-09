@@ -531,6 +531,6 @@
 #'
 #' ### Python code<a id="Python"></a>
 #'
-#' Ravin Kumar and Osvaldo Martin are porting ROS examples to Python using bambmi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm. 
+#' Ravin Kumar and Osvaldo Martin are porting ROS examples to Python using bambi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm. 
 #' - [Bambi resources](https://github.com/bambinos/Bambi_resources)
 #'
