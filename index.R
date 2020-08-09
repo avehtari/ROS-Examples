@@ -529,8 +529,8 @@
 #' - [Git repo for the code and data](https://github.com/avehtari/ROS-Examples)
 #' - [Download all code and data as a ZIP file](https://github.com/avehtari/ROS-Examples/archive/master.zip)
 #'
-#' ### Python Bambi port of the code="Python"></a>
+#' ### Python code<a id="Python"></a>
 #'
-#' Ravin Kumar and Osvaldo Martin are porting ROS examples to Python using bambmi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm. 
+#' Ravin Kumar and Osvaldo Martin are porting ROS examples to Python using bambi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm. 
 #' - [Bambi resources](https://github.com/bambinos/Bambi_resources)
 #'
