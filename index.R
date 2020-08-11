@@ -38,7 +38,7 @@
 #' - [Sample exams](https://github.com/avehtari/ROS-Examples/tree/master/Exams/)
 #' - See also an article [Teaching Bayes to Graduate Students in Political Science, Sociology, Public Health, Education, Economics, ...](http://www.stat.columbia.edu/~gelman/research/published/teachingbayes.pdf)
 #'
-#' If you notice an error, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
+#' If you notice an error that is not mentioned in the errata below, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
 #' 
 #' -------------
 #'
@@ -107,10 +107,13 @@
 #'     but the code here is meant to be simple with minimal dependencies.
 #'   - For learning R programming basics we recommend
 #'     - [Garrett Grolemund, Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
-#'   - For learning basic and advanced plotting using R  we recommend
+#'   - For learning basic and advanced plotting using R we recommend
 #'     - [Kieran Healy, Data Visualization - A practical introduction](https://socviz.co/)
-#'     - [Claus O. Wilke, Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
 #'     - [Antony Unwin, Graphical Data Analysis with R](http://www.gradaanwr.net/)
+#'   - Further ideas for visualization
+#'     - [ggdist: Visualizations of distributions and uncertainty](https://mjskay.github.io/ggdist/)
+#'     - [tidybayes: Bayesian analysis + tidy data + geoms](http://mjskay.github.io/tidybayes/)
+#'     - [Claus O. Wilke, Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
 #' 
 #' -------------
 #' 
