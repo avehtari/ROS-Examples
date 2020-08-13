@@ -33,7 +33,7 @@
 #' 
 #' - [Cambridge University Press page](https://www.cambridge.org/fi/academic/subjects/statistics-probability/statistical-theory-and-methods/regression-and-other-stories)
 #'
-#' - [Podcast: a special episode of Learning Bayesian Statistics podcast featuring the ROS authors](https://www.youtube.com/watch?v=OJyoXJzxTGs) (other podcast sources at [Learning Bayesian Statistics podcast](https://learnbayesstats.anvil.app/))
+#' - [Podcast: a special episode of Learning Bayesian Statistics featuring the ROS authors (and a discount promo code)](https://www.youtube.com/watch?v=OJyoXJzxTGs) (other podcast sources at [Learning Bayesian Statistics podcast](https://learnbayesstats.anvil.app/))
 #' 
 #' - [Sample exams](https://github.com/avehtari/ROS-Examples/tree/master/Exams/)
 #' - See also an article [Teaching Bayes to Graduate Students in Political Science, Sociology, Public Health, Education, Economics, ...](http://www.stat.columbia.edu/~gelman/research/published/teachingbayes.pdf)
