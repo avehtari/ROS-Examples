@@ -73,6 +73,7 @@ Linear predictor with uncertainty
 
 ```{r }
 linpred <- posterior_linpred(fit_1, newdata=new)
+head(linpred)
 print(c(mean(linpred), sd(linpred)), digits=2)
 ```
 
@@ -80,6 +81,7 @@ Expected outcome with uncertainty
 
 ```{r }
 epred <- posterior_epred(fit_1, newdata=new)
+head(epred)
 print(c(mean(epred), sd(epred)), digits=2)
 ```
 
@@ -87,6 +89,7 @@ Predictive distribution for a new observation
 
 ```{r }
 postpred <- posterior_predict(fit_1, newdata=new)
+head(postpred)
 print(c(mean(postpred), sd(postpred)), digits=2)
 ```
 
@@ -96,8 +99,11 @@ print(c(mean(postpred), sd(postpred)), digits=2)
 new <- data.frame(income=1:5)
 pred <- predict(fit_1, type="response", newdata=new)
 linpred <- posterior_linpred(fit_1, newdata=new)
+head(linpred)
 epred <- posterior_epred(fit_1, newdata=new)
+head(epred)
 postpred <- posterior_predict(fit_1, newdata=new)
+head(postpred)
 ```
 
 the posterior probability, according to the fitted model, that Bush
