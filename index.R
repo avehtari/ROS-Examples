@@ -94,7 +94,7 @@
 #' - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." should be "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
 #' - p. 42, the last line, in "Linear transformations" section "Exercise 3.5" should be "Exercise 3.6". (thanks Ed Berry)
 #' - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
-#' - p. 55 "se_weighted_avg <- sqrt(sum(W*se)^2)" should be "se_weighted_avg <- sqrt(sum((W*se)^2))" (thanks to Desislava Petkova)
+#' - p. 55 `se_weighted_avg <- sqrt(sum(W*se)^2)` should be `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
 #' 
 #' -------------
 #' 
