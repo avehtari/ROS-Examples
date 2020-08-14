@@ -205,6 +205,8 @@ if (savefigs) dev.off()
 
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("ElectionsEconomy/figs","hibbsline2b.pdf"), height=4.5, width=5, colormodel="gray")
+```
+```{r }
 par(mar=c(3,3,2,.1), mgp=c(1.7,.5,0), tck=-.01)
 plot(c(-.7, 4.5), c(43,63), type="n", xlab="x", ylab="y", xaxt="n", yaxt="n", mgp=c(2,.5,0), main="Data and range of possible linear fits", bty="l", cex.lab=1.3, cex.main=1.3)
 axis(1, 0:4, cex.axis=1.3)
