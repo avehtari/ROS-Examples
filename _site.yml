@@ -1,0 +1,19 @@
+name: "Regression and Other Stories"
+output_dir: "."
+navbar:
+  title: "Regression and Other Stories"
+  left:
+    - text: "Book information"
+      href: index.html
+    - text: "Examples"
+      href: examples.html
+    - text: "Errata"
+      href: errata.html
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_collapse: false
+    toc_depth: 3
+    toc_float: true
