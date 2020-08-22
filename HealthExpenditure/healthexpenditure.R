@@ -27,7 +27,7 @@ library("ggplot2")
 library("bayesplot")
 theme_set(bayesplot::theme_default(base_family = "sans"))
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 #' #### Load data
 health <- read.table(root("HealthExpenditure/data","healthdata.txt"), header=TRUE)

@@ -24,7 +24,7 @@ savefigs <- FALSE
 
 #' #### Load packages
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 #' #### Load data
 births <- read.table(root("AgePeriodCohort/data","births.txt"), header=TRUE)

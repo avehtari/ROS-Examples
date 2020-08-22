@@ -24,7 +24,7 @@ savefigs <- FALSE
 
 #+ eval=FALSE, include=FALSE
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 #' #### Simulate
 n_rep <- 100
