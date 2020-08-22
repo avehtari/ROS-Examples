@@ -20,6 +20,11 @@
 #' three months was “number of unprotected sex acts.”. See Chapter 15
 #' in Regression and Other Stories.
 #' 
+#' Reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E.,
+#' Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a
+#' relationship-based HIV/STD prevention program for heterosexual
+#' couples. *American journal of public health*, **93**, 963--969.
+#'
 #' -------------
 #' 
 
