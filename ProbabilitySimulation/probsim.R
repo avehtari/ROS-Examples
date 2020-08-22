@@ -24,7 +24,7 @@ savefigs <- FALSE
 
 #' #### Load packages
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 #' #### Simulate how many girls in 400 births?
 n_girls <- rbinom(1, 400, 0.488)

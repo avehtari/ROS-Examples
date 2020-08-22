@@ -25,7 +25,7 @@ savefigs <- FALSE
 
 #' #### Load packages
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 #' #### Summary data of height and weight distributions of women and men
 height_counts_women <- c(80,107,296,695,1612,2680,4645,8201,9948,11733,10270,9942,6181,3990,2131,1154,245,257,0,0,0,0)*10339/74167

@@ -28,7 +28,7 @@ savefigs <- FALSE
 
 #' #### Load packages
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 
 #+ eval=FALSE, include=FALSE

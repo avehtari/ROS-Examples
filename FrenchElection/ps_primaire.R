@@ -21,7 +21,7 @@ knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
 
 #' #### Load packages
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 
 #' #### Load data
 ps <- read.table(root("FrenchElection/data","ps_primaire.txt"), header=TRUE)

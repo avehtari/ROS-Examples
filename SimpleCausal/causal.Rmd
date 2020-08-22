@@ -30,7 +30,7 @@ savefigs <- FALSE
 
 ```{r }
 library("rprojroot")
-root<-has_dirname("ROS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 library("arm")
 # for reproducibility of simulated data
 SEED <- 1151
