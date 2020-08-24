@@ -8,11 +8,10 @@ date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
 
 ## Information
 
-Home page for the book Regression and Other Stories by [Andrew Gelman](http://www.stat.columbia.edu/~gelman/), [Jennifer Hill](https://steinhardt.nyu.edu/people/jennifer-hill), and [Aki Vehtari](https://users.aalto.fi/~ave/), including [the code and data for the examples](examples.html).
-
-<div style= "float:right;position: relative;">
- ![](ROS_frontcover.png)
+<div style= "float:right;position: relative; margin-left:6px; margin-bottom:6px;">
+ ![](ROS_frontcover.png){ width=160 }
 </div>
+Home page for the book Regression and Other Stories by [Andrew Gelman](http://www.stat.columbia.edu/~gelman/), [Jennifer Hill](https://steinhardt.nyu.edu/people/jennifer-hill), and [Aki Vehtari](https://users.aalto.fi/~ave/), including [the code and data for the examples](examples.html).
 
 Back cover text: *Many textbooks on regression focus on theory and
 the simplest of examples. Real statistical problems, however, are
