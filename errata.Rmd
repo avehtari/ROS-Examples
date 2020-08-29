@@ -18,5 +18,6 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
 - p. 55 `se_weighted_avg <- sqrt(sum(W*se)^2)` should be `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
 - p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: "The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003)." Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. *American Journal of Public Health*, **93**, 963–969. 
+- p. 318, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert=
 
 -------------
