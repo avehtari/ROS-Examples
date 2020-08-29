@@ -119,8 +119,8 @@ abline(h=mean(y[x==0]), lty=2, col="gray50")
 abline(h=mean(y[x==1]), lty=2, col="gray50")
 abline(coef(fit_3)[1], coef(fit_3)[2])
 text(.5, -1 + coef(fit_3)[1] + .5*coef(fit_3)[2], paste("y =", round(coef(fit_3)[1], 2), "+", round(coef(fit_3)[2], 2), "x"), cex=.9, adj=0)
-text(.05, -1 + mean(y[x==0]), expression(paste(bar(y)[0], " = 2.68")), col="gray30", cex=.9, adj=0)
-text(.95, 1 + mean(y[x==1]), expression(paste(bar(y)[1], " = 8.38")), col="gray30", cex=.9, adj=1)
+text(.05, -1 + mean(y[x==0]), bquote(paste(bar(y)[0], " = ", .(round(mean(y[x==0]), 2)))), col="gray30", cex=.9, adj=0)
+text(.95, 1 + mean(y[x==1]), bquote(paste(bar(y)[1], " = ", .(round(mean(y[x==1]), 2)))), col="gray30", cex=.9, adj=1)
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
 
