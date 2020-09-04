@@ -27,8 +27,8 @@ library("rstanarm")
 
 ```{r }
 grades <- read.table(root("Introclass/data","gradesW4315.dat"), header=TRUE)
-introclass  <- data.frame(midterm = grades[,"Midterm"],
-                          final = grades[,"Final"])
+introclass  <- data.frame(midterm = grades[,"midterm"],
+                          final = grades[,"final"])
 ```
 
 **Fit linear regression model**
