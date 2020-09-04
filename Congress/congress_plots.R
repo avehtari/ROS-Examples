@@ -13,9 +13,9 @@
 
 #' Predictive uncertainty for congressional elections. See Chapter 2
 #' in Regression and Other Stories.
-#' 
+#'
 #' -------------
-#' 
+#'
 
 #+ setup, include=FALSE
 knitr::opts_chunk$set(message=FALSE, error=FALSE, warning=FALSE, comment=NA)
@@ -24,7 +24,7 @@ savefigs <- FALSE
 
 #' #### Load packages
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_dirname("ROS-Examples")$make_fix_file()
 
 #' #### Load and pre-process data
 congress <- vector("list", 49)
@@ -72,4 +72,3 @@ for (i in c(27, 37, 47)) {
 }
 #+ eval=FALSE, include=FALSE
 if (savefigs) dev.off()
-
