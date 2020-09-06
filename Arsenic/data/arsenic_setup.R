@@ -2,7 +2,7 @@
 
 # Load libraries
 library("rprojroot")
-root<-has_dirname("RAOS-Examples")$make_fix_file()
+root<-has_file(".ROS-Examples-root")$make_fix_file()
 library("foreign")
 
 # Read in the data
