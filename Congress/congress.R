@@ -53,7 +53,7 @@ for (s in 1:n_sims) {
 }
 
 #' #### Our posterior mean and sd of how many districts the Dems will win
-print(c(mean(dems_pred), sqrt(var(dems_pred))),digits=2)
+print(c(mean(dems_pred), sd(dems_pred)), digits=2)
 #' #### Histogram of how many districts the Dems will win
 hist(dems_pred)
 
