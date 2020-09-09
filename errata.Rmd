@@ -23,7 +23,9 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 174 "and so the log score is  $-\frac{1}{2}\log\sigma$" $\rightarrow$ "and so the log score is  $-\log\sigma$" (thanks to Matěj Grabovsky)
 - p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in [Student example](https://avehtari.github.io/ROS-Examples/Student/student.html) and shown below (thanks to Zhengchen Cai for reporting the issue)
  ![](Figure_12_11_correct.png){ width=800 }
- 
+
+- p. 217 First line in section 13.1 "The logistic function, logit(x)" $\rightarrow$ "The logit function, logit(x)" (thanks to VicentModesto)
+- p. 219 "The inverse logistic function is curved" $\rightarrow$ "The inverse logit function is curved" (thanks to VicentModesto)
 - p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: "The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003)." Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. *American Journal of Public Health*, **93**, 963–969.
 - p. 314 Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to misterblister)
 - p. 316, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert)
