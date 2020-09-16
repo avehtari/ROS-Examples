@@ -9,6 +9,8 @@ navbar:
       href: examples.html
     - text: "Errata"
       href: errata.html
+    - text: "R and visualization"
+      href: R_visualizaton.html
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 output:
   html_document:

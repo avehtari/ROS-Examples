@@ -14,16 +14,7 @@ date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
   is not supposed to be a model.  The statistical analyses and
   graphs in the book are intended to be models for good practice,
   but the code here is meant to be simple with minimal dependencies.
-- For learning R programming basics we recommend
-    - [Garrett Grolemund, Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
-- For learning basic and advanced plotting using R we recommend
-    - [Kieran Healy, Data Visualization - A practical introduction](https://socviz.co/)
-    - [Antony Unwin, Graphical Data Analysis with R](http://www.gradaanwr.net/)
-- Further ideas for visualization
-    - [ggdist: Visualizations of distributions and uncertainty](https://mjskay.github.io/ggdist/)
-    - [tidybayes: Bayesian analysis + tidy data + geoms](http://mjskay.github.io/tidybayes/)
-    - [Claus O. Wilke, Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
-
+- For R programming basics see Appendix A of Regression and Other Stories. If you want to learn more, see our recommendations for [R programming and visualization with R](R_visualizaton.html).
 
 - The folders below (ending /) point to the code (.R and .Rmd)
   and `data` folders (.csv or .txt) in github, and .html -files

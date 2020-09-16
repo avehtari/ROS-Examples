@@ -12,7 +12,7 @@
 <meta name="author" content="Andrew Gelman, Jennifer Hill, Aki Vehtari" />
 
 
-<title>Regression and Other Stories - Errata</title>
+<title>Regression and Other Stories - R and visualization</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,9 +20,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -252,69 +249,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -322,16 +256,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -372,7 +296,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
+<h1 class="title toc-ignore">Regression and Other Stories - R and visualization</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
 <h4 class="date">Page updated: 2020-09-06</h4>
 
@@ -380,34 +304,30 @@ div.tocify {
 
 
 <hr />
-<p>Errata (excluding minor typos) for the book.</p>
-<p>If you notice an error that is not mentioned in the errata below, submit an issue at <a href="https://github.com/avehtari/ROS-Examples/issues" class="uri">https://github.com/avehtari/ROS-Examples/issues</a> or send an email.</p>
-<div id="st-2020-printing" class="section level2">
-<h2>1st (2020) printing</h2>
+<div id="r-programming-and-visualization-with-r" class="section level2">
+<h2>R programming and visualization with R</h2>
 <ul>
-<li>p. 11, the summary of the treatment-control comparison says &quot;the treated units were 4.8 points higher than the controls, <span class="math inline">\(\bar{y} = 31.7\)</span> under the treatment and <span class="math inline">\(\bar{y} = 25.5\)</span> for the controls.&quot; The difference in shown means is 6.2 and not 4.8. Not that these values change when rerunning the simulation. (thanks Desislava Petkova)</li>
-<li>p. 39, in the second sentence of the first full paragraph, &quot;Figure 3.4 displays data on log metabolic rate vs. body mass indicating...&quot; <span class="math inline">\(\rightarrow\)</span> &quot;log metabolic rate vs. log body mass&quot; (thanks Ravi Shroff)</li>
-<li>p. 42, the last line, in &quot;Linear transformations&quot; section &quot;Exercise 3.5&quot; <span class="math inline">\(\rightarrow\)</span> &quot;Exercise 3.6&quot;. (thanks Ed Berry)</li>
-<li>p. 54, in &quot;Comparisons, visual and numerical&quot; subsection, &quot;Figure 4.2&quot; in the first sentence should be &quot;Figure 4.3.&quot; (thanks Ravi Shroff)</li>
-<li>p. 55 <code>se_weighted_avg &lt;- sqrt(sum(W*se)^2)</code> <span class="math inline">\(\rightarrow\)</span> <code>se_weighted_avg &lt;- sqrt(sum((W*se)^2))</code> (thanks to Desislava Petkova)</li>
-<li>p. 143 the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
-<li>p. 143 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
-<li>p. 159 &quot;as in Figure 11.2&quot; <span class="math inline">\(\rightarrow\)</span> &quot;as in Figure 11.3&quot; (thanks to Eam O'Brien)</li>
-<li>p. 174 &quot;and so the log score is <span class="math inline">\(-\frac{1}{2}\log\sigma\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;and so the log score is <span class="math inline">\(-\log\sigma\)</span>&quot; (thanks to Matěj Grabovsky)</li>
-<li><p>p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in <a href="https://avehtari.github.io/ROS-Examples/Student/student.html">Student example</a> and shown below (thanks to Zhengchen Cai for reporting the issue) <img src="Figure_12_11_correct.png" width="800" /></p></li>
-<li>p. 217 First line in section 13.1 &quot;The logistic function, logit(x)&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The logit function, logit(x)&quot; (thanks to VicentModesto)</li>
-<li>p. 219 &quot;The inverse logistic function is curved&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The inverse logit function is curved&quot; (thanks to VicentModesto)</li>
-<li>p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: &quot;The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003).&quot; Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. <em>American Journal of Public Health</em>, <strong>93</strong>, 963–969.</li>
-<li>p. 314 Following Equation (17.1) &quot;... did not include enough Republicans.&quot; <span class="math inline">\(\rightarrow\)</span> &quot;... included too many Democrats.&quot; (thanks to misterblister)</li>
-<li><p>p. 316, Figure 17.2 the values in the column <span class="math inline">\(N_j/N\)</span> should be <span class="math inline">\(0.16, 0.17, 0.19, 0.17, 0.16, 0.15\)</span> as in the code on the same page. (thanks to Noah Silbert)</p></li>
+<li>For R programming basics see Appendix A of Regression and Other Stories.</li>
+<li>For learning more about R programming we recommend
+<ul>
+<li><a href="https://rstudio-education.github.io/hopr/">Garrett Grolemund, Hands-On Programming with R</a></li>
+</ul></li>
+<li>For learning more about basic and advanced plotting using R we recommend
+<ul>
+<li><a href="https://socviz.co/">Kieran Healy, Data Visualization - A practical introduction</a></li>
+<li><a href="http://www.gradaanwr.net/">Antony Unwin, Graphical Data Analysis with R</a></li>
+</ul></li>
+<li>Further ideas for visualization
+<ul>
+<li><a href="https://mjskay.github.io/ggdist/">ggdist: Visualizations of distributions and uncertainty</a></li>
+<li><a href="http://mjskay.github.io/tidybayes/">tidybayes: Bayesian analysis + tidy data + geoms</a></li>
+<li><a href="https://serialmentor.com/dataviz/">Claus O. Wilke, Fundamentals of Data Visualization</a></li>
+</ul></li>
 </ul>
-<hr />
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -440,32 +360,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
