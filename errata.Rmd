@@ -15,8 +15,10 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 11, the summary of the treatment-control comparison says "the treated units were 4.8 points higher than the controls, $\bar{y} = 31.7$ under the treatment and $\bar{y} = 25.5$ for the controls." The difference in shown means is 6.2 and not 4.8.  Not that these values change when rerunning the simulation. (thanks Desislava Petkova) 
 - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." $\rightarrow$ "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
 - p. 42, the last line, in "Linear transformations" section "Exercise 3.5" $\rightarrow$ "Exercise 3.6". (thanks Ed Berry)
+- p. 43 "$\sigma_a,\sigma_b$" $\rightarrow$ $\sigma_u,\sigma_v$ (thanks to braden-scherting)
 - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
 - p. 55 `se_weighted_avg <- sqrt(sum(W*se)^2)` $\rightarrow$ `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
+- p. 61 "$T(y;\phi(y))$, for $j = 1,\dots, J$" $\rightarrow$ "$T(y;\phi_j(y))$, for $j = 1,\dots, J$" (thanks to Kenneth Tay)
 - p. 143 the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 143 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 159 "as in Figure 11.2" $\rightarrow$ "as in Figure 11.3" (thanks to Eam O'Brien)
@@ -29,5 +31,8 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: "The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003)." Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. *American Journal of Public Health*, **93**, 963–969.
 - p. 314 Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to misterblister)
 - p. 316, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert)
+- p. 371 "in Figure 19.4a" $\rightarrow$ "in Figure 19.4b" (thanks to Kenneth Tay)
+- p. 435 equation 21.7: "$\beta_2 *\mbox{math pre-test}_i$" $\rightarrow$ "$\beta_3 *\mbox{math pre-test}_i$" (thanks to Zhengchen Cai)
+- p. 447 "populations homogeneous in $w_i$" $\rightarrow$ "populations homogeneous in $x_i$" (thanks to Kenneth Tay)
 
 -------------
