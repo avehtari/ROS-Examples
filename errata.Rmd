@@ -12,17 +12,20 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 
 ## 1st (2020) printing
 
-- p. 11, the summary of the treatment-control comparison says "the treated units were 4.8 points higher than the controls, $\bar{y} = 31.7$ under the treatment and $\bar{y} = 25.5$ for the controls." The difference in shown means is 6.2 and not 4.8.  Not that these values change when rerunning the simulation. (thanks Desislava Petkova) 
+- p. 11, the summary of the treatment-control comparison says "the treated units were 4.8 points higher than the controls, $\bar{y} = 31.7$ under the treatment and $\bar{y} = 25.5$ for the controls." The difference in shown means is 6.2 and not 4.8.  Not that these values change when rerunning the simulation. (thanks Desislava Petkova)
+- p. 15, "multiplicative factor; see Exercise 3.8." $\rightarrow$ "multiplicative factor; see Exercise 4.8." (thanks to Omri Har-Shemesh and Juliette Unwin)
 - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." $\rightarrow$ "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
 - p. 42, the last line, in "Linear transformations" section "Exercise 3.5" $\rightarrow$ "Exercise 3.6". (thanks Ed Berry)
 - p. 43, "$\sigma_a,\sigma_b$" $\rightarrow$ $\sigma_u,\sigma_v$ (thanks to braden-scherting)
 - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
 - p. 55, `se_weighted_avg <- sqrt(sum(W*se)^2)` $\rightarrow$ `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
+- p. 57, last line: `n_C+n_T, 2` $\rightarrow$ `n_C+n_T-2` (thanks Justin Reppert)
 - p. 61, "$T(y;\phi(y))$, for $j = 1,\dots, J$" $\rightarrow$ "$T(y;\phi_j(y))$, for $j = 1,\dots, J$" (thanks to Kenneth Tay)
 - p. 73 `1.483*median(abs(y - median(z)))` $\rightarrow$ 1.483*median(abs(z - median(z)))
 - p. 83, Fig 6.1 "y = 0.49 + 0.27 * x" $\rightarrow$ "y = 0.4 + 0.27 * x"
 - p. 83, Fig 6.2 Estimate for $\sigma$ should be 0.49 (not 0.43)
 - p. 84, "which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance". The "9%" should be "10%".
+- p. 128, "Do Exercise 3.8" $\rightarrow$ "Do Exercise 4.8" (thanks to Omri Har-Shemesh and Juliette Unwin)
 - p. 143, the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 159, "as in Figure 11.2" $\rightarrow$ "as in Figure 11.3" (thanks to Eam O'Brien)
