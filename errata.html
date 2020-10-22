@@ -374,7 +374,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2020-10-13</h4>
+<h4 class="date">Page updated: 2020-10-22</h4>
 
 </div>
 
@@ -394,7 +394,8 @@ div.tocify {
 <li>p. 55, <code>se_weighted_avg &lt;- sqrt(sum(W*se)^2)</code> <span class="math inline">\(\rightarrow\)</span> <code>se_weighted_avg &lt;- sqrt(sum((W*se)^2))</code> (thanks to Desislava Petkova)</li>
 <li>p. 57, last line: <code>n_C+n_T, 2</code> <span class="math inline">\(\rightarrow\)</span> <code>n_C+n_T-2</code> (thanks Justin Reppert)</li>
 <li>p. 61, &quot;<span class="math inline">\(T(y;\phi(y))\)</span>, for <span class="math inline">\(j = 1,\dots, J\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;<span class="math inline">\(T(y;\phi_j(y))\)</span>, for <span class="math inline">\(j = 1,\dots, J\)</span>&quot; (thanks to Kenneth Tay)</li>
-<li>p. 73 <code>1.483*median(abs(y - median(z)))</code> <span class="math inline">\(\rightarrow\)</span> 1.483*median(abs(z - median(z)))</li>
+<li>p. 73, <code>1.483*median(abs(y - median(z)))</code> <span class="math inline">\(\rightarrow\)</span> 1.483*median(abs(z - median(z)))</li>
+<li>p. 73, <code>quantile(z, 0.25, 0.75)</code> <span class="math inline">\(\rightarrow\)</span> quantile(z, c(0.25, 0.75)) and <code>quantile(z, 0.025, 0.975)</code> <span class="math inline">\(\rightarrow\)</span> quantile(z, c(0.025, 0.975)) (thanks to Justin Reppert)</li>
 <li>p. 83, Fig 6.1 &quot;y = 0.49 + 0.27 * x&quot; <span class="math inline">\(\rightarrow\)</span> &quot;y = 0.4 + 0.27 * x&quot;</li>
 <li>p. 83, Fig 6.2 Estimate for <span class="math inline">\(\sigma\)</span> should be 0.49 (not 0.43)</li>
 <li>p. 84, &quot;which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance&quot;. The &quot;9%&quot; should be &quot;10%&quot;.</li>
@@ -403,6 +404,7 @@ div.tocify {
 <li>p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
 <li>p. 159, &quot;as in Figure 11.2&quot; <span class="math inline">\(\rightarrow\)</span> &quot;as in Figure 11.3&quot; (thanks to Eam O'Brien)</li>
 <li>p. 174, &quot;and so the log score is <span class="math inline">\(-\frac{1}{2}\log\sigma\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;and so the log score is <span class="math inline">\(-\log\sigma\)</span>&quot; (thanks to Matěj Grabovsky)</li>
+<li>p. 179, <code>fit_2 &lt;- update(fit_2, prior=hs())</code> <span class="math inline">\(\rightarrow\)</span> <code>fit_2 &lt;- update(fit_1, prior=hs())</code> (thanks to Omri Har-Shemesh)</li>
 <li><p>p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in <a href="https://avehtari.github.io/ROS-Examples/Student/student.html">Student example</a> and shown below (thanks to Zhengchen Cai for reporting the issue) <img src="Figure_12_11_correct.png" width="800" /></p></li>
 <li>p. 217, First line in section 13.1 &quot;The logistic function, logit(x)&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The logit function, logit(x)&quot; (thanks to VicentModesto)</li>
 <li>p. 219, &quot;The inverse logistic function is curved&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The inverse logit function is curved&quot; (thanks to VicentModesto)</li>
@@ -410,6 +412,7 @@ div.tocify {
 <li>p. 314, Following Equation (17.1) &quot;... did not include enough Republicans.&quot; <span class="math inline">\(\rightarrow\)</span> &quot;... included too many Democrats.&quot; (thanks to misterblister)</li>
 <li>p. 316, Figure 17.2 the values in the column <span class="math inline">\(N_j/N\)</span> should be <span class="math inline">\(0.16, 0.17, 0.19, 0.17, 0.16, 0.15\)</span> as in the code on the same page. (thanks to Noah Silbert)</li>
 <li>p. 371, &quot;in Figure 19.4a&quot; <span class="math inline">\(\rightarrow\)</span> &quot;in Figure 19.4b&quot; (thanks to Kenneth Tay)</li>
+<li>p. 385, equation number (20.1) should be for the second equation on the page <span class="math inline">\(y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i\)</span> (thanks to Matěj Grabovsky)</li>
 <li>p. 435, equation 21.7: &quot;<span class="math inline">\(\beta_2 *\mbox{math pre-test}_i\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;<span class="math inline">\(\beta_3 *\mbox{math pre-test}_i\)</span>&quot; (thanks to Zhengchen Cai)</li>
 <li><p>p. 447, &quot;populations homogeneous in <span class="math inline">\(w_i\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;populations homogeneous in <span class="math inline">\(x_i\)</span>&quot; (thanks to Kenneth Tay)</p></li>
 </ul>

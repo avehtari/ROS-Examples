@@ -21,7 +21,8 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 55, `se_weighted_avg <- sqrt(sum(W*se)^2)` $\rightarrow$ `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
 - p. 57, last line: `n_C+n_T, 2` $\rightarrow$ `n_C+n_T-2` (thanks Justin Reppert)
 - p. 61, "$T(y;\phi(y))$, for $j = 1,\dots, J$" $\rightarrow$ "$T(y;\phi_j(y))$, for $j = 1,\dots, J$" (thanks to Kenneth Tay)
-- p. 73 `1.483*median(abs(y - median(z)))` $\rightarrow$ 1.483*median(abs(z - median(z)))
+- p. 73, `1.483*median(abs(y - median(z)))` $\rightarrow$ 1.483*median(abs(z - median(z)))
+- p. 73, `quantile(z, 0.25, 0.75)` $\rightarrow$ quantile(z, c(0.25, 0.75)) and `quantile(z, 0.025, 0.975)` $\rightarrow$ quantile(z, c(0.025, 0.975)) (thanks to Justin Reppert)
 - p. 83, Fig 6.1 "y = 0.49 + 0.27 * x" $\rightarrow$ "y = 0.4 + 0.27 * x"
 - p. 83, Fig 6.2 Estimate for $\sigma$ should be 0.49 (not 0.43)
 - p. 84, "which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance". The "9%" should be "10%".
@@ -30,6 +31,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 159, "as in Figure 11.2" $\rightarrow$ "as in Figure 11.3" (thanks to Eam O'Brien)
 - p. 174, "and so the log score is  $-\frac{1}{2}\log\sigma$" $\rightarrow$ "and so the log score is  $-\log\sigma$" (thanks to Matěj Grabovsky)
+- p. 179, `fit_2 <- update(fit_2, prior=hs())` $\rightarrow$ `fit_2 <- update(fit_1, prior=hs())` (thanks to Omri Har-Shemesh)
 - p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in [Student example](https://avehtari.github.io/ROS-Examples/Student/student.html) and shown below (thanks to Zhengchen Cai for reporting the issue)
  ![](Figure_12_11_correct.png){ width=800 }
 
@@ -39,6 +41,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 314, Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to misterblister)
 - p. 316, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert)
 - p. 371, "in Figure 19.4a" $\rightarrow$ "in Figure 19.4b" (thanks to Kenneth Tay)
+- p. 385, equation number (20.1) should be for the second equation on the page $y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i$ (thanks to Matěj Grabovsky)
 - p. 435, equation 21.7: "$\beta_2 *\mbox{math pre-test}_i$" $\rightarrow$ "$\beta_3 *\mbox{math pre-test}_i$" (thanks to Zhengchen Cai)
 - p. 447, "populations homogeneous in $w_i$" $\rightarrow$ "populations homogeneous in $x_i$" (thanks to Kenneth Tay)
 
