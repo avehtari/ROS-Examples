@@ -203,7 +203,7 @@ y_point_pred <- predict(M1, newdata=new)
 #' #### Alternative way to compute the point prediction
 a_hat <- coef(M1)[1]
 b_hat <- coef(M1)[2]
-y_point_pred <- a_hat + b_hat*new
+y_point_pred <- a_hat + b_hat*as.numeric(new)
 
 #' #### Uncertainty in prediction given 2% growth
 y_linpred <- posterior_linpred(M1, newdata=new)
@@ -211,7 +211,7 @@ y_linpred <- posterior_linpred(M1, newdata=new)
 #' #### Do same computation "manually"
 a <- sims[,1]
 b <- sims[,2]
-y_linpred <- a + b*new
+y_linpred <- a + b*as.numeric(new)
 
 #' #### Predictive uncertainty
 y_pred <- posterior_predict(M1, newdata=new)
@@ -219,7 +219,7 @@ y_pred <- posterior_predict(M1, newdata=new)
 #' #### Predictive uncertainty manually
 sigma <- sims[,3]
 n_sims <- nrow(sims)
-y_pred <- as.numeric(a + b*new) + rnorm(n_sims, 0, sigma)
+y_pred <- a + b*as.numeric(new) + rnorm(n_sims, 0, sigma)
 
 #' #### Summarize predictions
 Median <- median(y_pred)
