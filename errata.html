@@ -374,7 +374,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2020-10-22</h4>
+<h4 class="date">Page updated: 2020-10-23</h4>
 
 </div>
 
@@ -399,6 +399,7 @@ div.tocify {
 <li>p. 83, Fig 6.1 &quot;y = 0.49 + 0.27 * x&quot; <span class="math inline">\(\rightarrow\)</span> &quot;y = 0.4 + 0.27 * x&quot;</li>
 <li>p. 83, Fig 6.2 Estimate for <span class="math inline">\(\sigma\)</span> should be 0.49 (not 0.43)</li>
 <li>p. 84, &quot;which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance&quot;. The &quot;9%&quot; should be &quot;10%&quot;.</li>
+<li>p. 116, the correct code should have <code>y_linpred &lt;- a + b*as.numeric(new)</code> and <code>y_pred &lt;- a + b*as.numeric(new) + rnorm(n_sims, 0, sigma)</code> (thanks to Nathan Hoffmann)</li>
 <li>p. 128, &quot;Do Exercise 3.8&quot; <span class="math inline">\(\rightarrow\)</span> &quot;Do Exercise 4.8&quot; (thanks to Omri Har-Shemesh and Juliette Unwin)</li>
 <li>p. 143, the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
 <li>p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
