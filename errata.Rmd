@@ -33,6 +33,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 159, "as in Figure 11.2" $\rightarrow$ "as in Figure 11.3" (thanks to Eam O'Brien)
 - p. 174, "and so the log score is  $-\frac{1}{2}\log\sigma$" $\rightarrow$ "and so the log score is  $-\log\sigma$" (thanks to Matěj Grabovsky)
 - p. 179, `fit_2 <- update(fit_2, prior=hs())` $\rightarrow$ `fit_2 <- update(fit_1, prior=hs())` (thanks to Omri Har-Shemesh)
+- p. 208, `/sqrt(0.3*26)` $\rightarrow$ `*sqrt(0.3/26)` (this is correct in the code in the web page, typo fix in the book thanks to Eugenia Migliavacca)
 - p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in [Student example](https://avehtari.github.io/ROS-Examples/Student/student.html) and shown below (thanks to Zhengchen Cai for reporting the issue)
  ![](Figure_12_11_correct.png){ width=800 }
 
