@@ -15,8 +15,10 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 11, the summary of the treatment-control comparison says "the treated units were 4.8 points higher than the controls, $\bar{y} = 31.7$ under the treatment and $\bar{y} = 25.5$ for the controls." The difference in shown means is 6.2 and not 4.8.  Not that these values change when rerunning the simulation. (thanks Desislava Petkova)
 - p. 15, "multiplicative factor; see Exercise 3.8." $\rightarrow$ "multiplicative factor; see Exercise 4.8." (thanks to Omri Har-Shemesh and Juliette Unwin)
 - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." $\rightarrow$ "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
+- p. 39, "The slope of the line is then 7.4/10 = 7.4." $\rightarrow$ "The slope of the line is then 7.4/10 = 0.74." (thanks to Jacob Warren)
 - p. 42, the last line, in "Linear transformations" section "Exercise 3.5" $\rightarrow$ "Exercise 3.6". (thanks Ed Berry)
 - p. 43, "$\sigma_a,\sigma_b$" $\rightarrow$ $\sigma_u,\sigma_v$ (thanks to braden-scherting)
+- p. 46,  "exactly 10 000 votes" $\rightarrow$ "exactly 100 000 votes" (thanks to Gal Matijevic)
 - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
 - p. 55, `se_weighted_avg <- sqrt(sum(W*se)^2)` $\rightarrow$ `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
 - p. 57, last line: `n_C+n_T, 2` $\rightarrow$ `n_C+n_T-2` (thanks Justin Reppert)
@@ -28,17 +30,20 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 84, "which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance". The "9%" should be "10%".
 - p. 116, the correct code should have `y_linpred <- a + b*as.numeric(new)` and `y_pred <- a + b*as.numeric(new) + rnorm(n_sims, 0, sigma)` (thanks to Nathan Hoffmann)
 - p. 128, "Do Exercise 3.8" $\rightarrow$ "Do Exercise 4.8" (thanks to Omri Har-Shemesh and Juliette Unwin)
+- p. 131, "the average or expected difference in outcome $y_k$" $\rightarrow$ "... $y$" (thanks to Yoav Kessler)
 - p. 143, the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 159, "as in Figure 11.2" $\rightarrow$ "as in Figure 11.3" (thanks to Eam O'Brien)
 - p. 174, "and so the log score is  $-\frac{1}{2}\log\sigma$" $\rightarrow$ "and so the log score is  $-\log\sigma$" (thanks to Matěj Grabovsky)
 - p. 179, `fit_2 <- update(fit_2, prior=hs())` $\rightarrow$ `fit_2 <- update(fit_1, prior=hs())` (thanks to Omri Har-Shemesh)
+- p. 183,  $\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$610$ $\rightarrow$  $\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$6100$ (thanks to Ravi Shroff)
 - p. 208, `/sqrt(0.3*26)` $\rightarrow$ `*sqrt(0.3/26)` (this is correct in the code in the web page, typo fix in the book thanks to Eugenia Migliavacca)
 - p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in [Student example](https://avehtari.github.io/ROS-Examples/Student/student.html) and shown below (thanks to Zhengchen Cai for reporting the issue)
  ![](Figure_12_11_correct.png){ width=800 }
 
 - p. 217, First line in section 13.1 "The logistic function, logit(x)" $\rightarrow$ "The logit function, logit(x)" (thanks to VicentModesto)
 - p. 219, "The inverse logistic function is curved" $\rightarrow$ "The inverse logit function is curved" (thanks to VicentModesto)
+- p. 241-242, in paragraphs starting "The steps go..." and "Figure 14.2...": $(4.0/4.1)x_1$ $\rightarrow$ $(4.4/4.1)x_1$ (thanks to Doug Davidson)
 - p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: "The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003)." Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. *American Journal of Public Health*, **93**, 963–969.
 - p. 314, Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to misterblister)
 - p. 316, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert)
