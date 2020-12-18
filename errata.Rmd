@@ -47,6 +47,8 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: "The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003)." Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. *American Journal of Public Health*, **93**, 963–969.
 - p. 314, Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to misterblister)
 - p. 316, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert)
+- p. 344, "...Figure 18.1 yields a naive estimated treatment effect of -12.5." $\rightarrow$ "...Figure 18.1 yields a naive estimated treatment effect of +12.5." (thanks to Michael McLaren)
+- p. 345, "difference in means, $155-147.5$" $\rightarrow$ "difference in means, $147.5 - 155$" (thanks to Michael McLaren)
 - p. 371, "in Figure 19.4a" $\rightarrow$ "in Figure 19.4b" (thanks to Kenneth Tay)
 - p. 385, equation number (20.1) should be for the second equation on the page $y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i$ (thanks to Matěj Grabovsky)
 - p. 435, equation 21.7: "$\beta_2 *\mbox{math pre-test}_i$" $\rightarrow$ "$\beta_3 *\mbox{math pre-test}_i$" (thanks to Zhengchen Cai)
