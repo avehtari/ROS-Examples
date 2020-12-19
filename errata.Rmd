@@ -17,7 +17,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 39, in the second sentence of the first full paragraph, "Figure 3.4 displays data on log metabolic rate vs. body mass indicating..." $\rightarrow$ "log metabolic rate vs. log body mass" (thanks Ravi Shroff)
 - p. 39, "The slope of the line is then 7.4/10 = 7.4." $\rightarrow$ "The slope of the line is then 7.4/10 = 0.74." (thanks to Jacob Warren)
 - p. 42, the last line, in "Linear transformations" section "Exercise 3.5" $\rightarrow$ "Exercise 3.6". (thanks Ed Berry)
-- p. 43, "$\sigma_a,\sigma_b$" $\rightarrow$ $\sigma_u,\sigma_v$ (thanks to braden-scherting)
+- p. 43, "$\sigma_a,\sigma_b$" $\rightarrow$ $\sigma_u,\sigma_v$ (thanks to Braden Scherting)
 - p. 46,  "exactly 10 000 votes" $\rightarrow$ "exactly 100 000 votes" (thanks to Gal Matijevic)
 - p. 54, in "Comparisons, visual and numerical" subsection, "Figure 4.2" in the first sentence should be "Figure 4.3." (thanks Ravi Shroff)
 - p. 55, `se_weighted_avg <- sqrt(sum(W*se)^2)` $\rightarrow$ `se_weighted_avg <- sqrt(sum((W*se)^2))` (thanks to Desislava Petkova)
