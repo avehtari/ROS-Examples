@@ -28,6 +28,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 83, Fig 6.1 "y = 0.49 + 0.27 * x" $\rightarrow$ "y = 0.4 + 0.27 * x"
 - p. 83, Fig 6.2 Estimate for $\sigma$ should be 0.49 (not 0.43)
 - p. 84, "which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance". The "9%" should be "10%".
+- p. 105, just before Maximum likelihood section "see Exercise 7.1" $\rightarrow$ "see Exercise 8.1" (thanks to Jacob Warren)
 - p. 116, the correct code should have `y_linpred <- a + b*as.numeric(new)` and `y_pred <- a + b*as.numeric(new) + rnorm(n_sims, 0, sigma)` (thanks to Nathan Hoffmann)
 - p. 128, "Do Exercise 3.8" $\rightarrow$ "Do Exercise 4.8" (thanks to Omri Har-Shemesh and Juliette Unwin)
 - p. 131, "the average or expected difference in outcome $y_k$" $\rightarrow$ "... $y$" (thanks to Yoav Kessler)
@@ -45,12 +46,15 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 219, "The inverse logistic function is curved" $\rightarrow$ "The inverse logit function is curved" (thanks to VicentModesto)
 - p. 241-242, in paragraphs starting "The steps go..." and "Figure 14.2...": $(4.0/4.1)x_1$ $\rightarrow$ $(4.4/4.1)x_1$ (thanks to Doug Davidson)
 - p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: "The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003)." Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. *American Journal of Public Health*, **93**, 963–969.
-- p. 314, Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to misterblister)
+- p. 314, Following Equation (17.1) "... did not include enough Republicans." $\rightarrow$ "... included too many Democrats." (thanks to Mark Fisher)
 - p. 316, Figure 17.2 the values in the column $N_j/N$ should be $0.16, 0.17, 0.19, 0.17, 0.16, 0.15$ as in the code on the same page. (thanks to Noah Silbert)
 - p. 344, "...Figure 18.1 yields a naive estimated treatment effect of -12.5." $\rightarrow$ "...Figure 18.1 yields a naive estimated treatment effect of +12.5." (thanks to Michael McLaren)
 - p. 345, "difference in means, $155-147.5$" $\rightarrow$ "difference in means, $147.5 - 155$" (thanks to Michael McLaren)
+- p. 345, at the bottom "More to the point, the $y_i^0$'s are 140, 140, 150, and 170 in the *control* group and 150, 160, 160, and 170 in the *treatment* group." $\rightarrow$ "More to the point, the $y_i^0$'s are 140, 140, 150, and 170 in the *treatment* group and 
+150, 160, 160, and 170 in the *control* group." (thanks to Ravi Shroff)
 - p. 371, "in Figure 19.4a" $\rightarrow$ "in Figure 19.4b" (thanks to Kenneth Tay)
 - p. 385, equation number (20.1) should be for the second equation on the page $y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i$ (thanks to Matěj Grabovsky)
+- p. 397, last line, in the standard error equation 1738 $\rightarrow$ 1820, 789 $\rightarrow$ 837, and 1.01 $\rightarrow$ 1.04 (thanks to Matěj Grabovsky)
 - p. 435, equation 21.7: "$\beta_2 *\mbox{math pre-test}_i$" $\rightarrow$ "$\beta_3 *\mbox{math pre-test}_i$" (thanks to Zhengchen Cai)
 - p. 447, "populations homogeneous in $w_i$" $\rightarrow$ "populations homogeneous in $x_i$" (thanks to Kenneth Tay)
 

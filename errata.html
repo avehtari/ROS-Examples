@@ -20,14 +20,21 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -39,11 +46,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -56,32 +58,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -91,10 +68,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -111,40 +84,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 66px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h2 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h3 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h4 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h5 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h6 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -172,7 +118,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -184,7 +130,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -195,10 +141,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -210,7 +169,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -336,13 +294,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -379,13 +337,13 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2020-12-19</h4>
+<h4 class="date">Page updated: 2021-02-21</h4>
 
 </div>
 
@@ -396,45 +354,48 @@ div.tocify {
 <div id="st-2020-printing" class="section level2">
 <h2>1st (2020) printing</h2>
 <ul>
-<li>p. 11, the summary of the treatment-control comparison says &quot;the treated units were 4.8 points higher than the controls, <span class="math inline">\(\bar{y} = 31.7\)</span> under the treatment and <span class="math inline">\(\bar{y} = 25.5\)</span> for the controls.&quot; The difference in shown means is 6.2 and not 4.8. Not that these values change when rerunning the simulation. (thanks Desislava Petkova)</li>
-<li>p. 15, &quot;multiplicative factor; see Exercise 3.8.&quot; <span class="math inline">\(\rightarrow\)</span> &quot;multiplicative factor; see Exercise 4.8.&quot; (thanks to Omri Har-Shemesh and Juliette Unwin)</li>
-<li>p. 39, in the second sentence of the first full paragraph, &quot;Figure 3.4 displays data on log metabolic rate vs. body mass indicating...&quot; <span class="math inline">\(\rightarrow\)</span> &quot;log metabolic rate vs. log body mass&quot; (thanks Ravi Shroff)</li>
-<li>p. 39, &quot;The slope of the line is then 7.4/10 = 7.4.&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The slope of the line is then 7.4/10 = 0.74.&quot; (thanks to Jacob Warren)</li>
-<li>p. 42, the last line, in &quot;Linear transformations&quot; section &quot;Exercise 3.5&quot; <span class="math inline">\(\rightarrow\)</span> &quot;Exercise 3.6&quot;. (thanks Ed Berry)</li>
-<li>p. 43, &quot;<span class="math inline">\(\sigma_a,\sigma_b\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\sigma_u,\sigma_v\)</span> (thanks to Braden Scherting)</li>
-<li>p. 46, &quot;exactly 10 000 votes&quot; <span class="math inline">\(\rightarrow\)</span> &quot;exactly 100 000 votes&quot; (thanks to Gal Matijevic)</li>
-<li>p. 54, in &quot;Comparisons, visual and numerical&quot; subsection, &quot;Figure 4.2&quot; in the first sentence should be &quot;Figure 4.3.&quot; (thanks Ravi Shroff)</li>
-<li>p. 55, <code>se_weighted_avg &lt;- sqrt(sum(W*se)^2)</code> <span class="math inline">\(\rightarrow\)</span> <code>se_weighted_avg &lt;- sqrt(sum((W*se)^2))</code> (thanks to Desislava Petkova)</li>
-<li>p. 57, last line: <code>n_C+n_T, 2</code> <span class="math inline">\(\rightarrow\)</span> <code>n_C+n_T-2</code> (thanks Justin Reppert)</li>
-<li>p. 61, &quot;<span class="math inline">\(T(y;\phi(y))\)</span>, for <span class="math inline">\(j = 1,\dots, J\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;<span class="math inline">\(T(y;\phi_j(y))\)</span>, for <span class="math inline">\(j = 1,\dots, J\)</span>&quot; (thanks to Kenneth Tay)</li>
-<li>p. 73, <code>1.483*median(abs(y - median(z)))</code> <span class="math inline">\(\rightarrow\)</span> 1.483*median(abs(z - median(z)))</li>
-<li>p. 73, <code>quantile(z, 0.25, 0.75)</code> <span class="math inline">\(\rightarrow\)</span> quantile(z, c(0.25, 0.75)) and <code>quantile(z, 0.025, 0.975)</code> <span class="math inline">\(\rightarrow\)</span> quantile(z, c(0.025, 0.975)) (thanks to Justin Reppert)</li>
-<li>p. 83, Fig 6.1 &quot;y = 0.49 + 0.27 * x&quot; <span class="math inline">\(\rightarrow\)</span> &quot;y = 0.4 + 0.27 * x&quot;</li>
-<li>p. 83, Fig 6.2 Estimate for <span class="math inline">\(\sigma\)</span> should be 0.49 (not 0.43)</li>
-<li>p. 84, &quot;which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance&quot;. The &quot;9%&quot; should be &quot;10%&quot;.</li>
-<li>p. 116, the correct code should have <code>y_linpred &lt;- a + b*as.numeric(new)</code> and <code>y_pred &lt;- a + b*as.numeric(new) + rnorm(n_sims, 0, sigma)</code> (thanks to Nathan Hoffmann)</li>
-<li>p. 128, &quot;Do Exercise 3.8&quot; <span class="math inline">\(\rightarrow\)</span> &quot;Do Exercise 4.8&quot; (thanks to Omri Har-Shemesh and Juliette Unwin)</li>
-<li>p. 131, &quot;the average or expected difference in outcome <span class="math inline">\(y_k\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;... <span class="math inline">\(y\)</span>&quot; (thanks to Yoav Kessler)</li>
-<li>p. 143, the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
-<li>p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)</li>
-<li>p. 159, &quot;as in Figure 11.2&quot; <span class="math inline">\(\rightarrow\)</span> &quot;as in Figure 11.3&quot; (thanks to Eam O'Brien)</li>
-<li>p. 174, &quot;and so the log score is <span class="math inline">\(-\frac{1}{2}\log\sigma\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;and so the log score is <span class="math inline">\(-\log\sigma\)</span>&quot; (thanks to Matěj Grabovsky)</li>
-<li>p. 179, <code>fit_2 &lt;- update(fit_2, prior=hs())</code> <span class="math inline">\(\rightarrow\)</span> <code>fit_2 &lt;- update(fit_1, prior=hs())</code> (thanks to Omri Har-Shemesh)</li>
-<li>p. 183, <span class="math inline">\(\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$610\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$6100\)</span> (thanks to Ravi Shroff)</li>
-<li>p. 208, <code>/sqrt(0.3*26)</code> <span class="math inline">\(\rightarrow\)</span> <code>*sqrt(0.3/26)</code> (this is correct in the code in the web page, typo fix in the book thanks to Eugenia Migliavacca)</li>
-<li><p>p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in <a href="https://avehtari.github.io/ROS-Examples/Student/student.html">Student example</a> and shown below (thanks to Zhengchen Cai for reporting the issue) <img src="Figure_12_11_correct.png" width="800" /></p></li>
-<li>p. 217, First line in section 13.1 &quot;The logistic function, logit(x)&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The logit function, logit(x)&quot; (thanks to VicentModesto)</li>
-<li>p. 219, &quot;The inverse logistic function is curved&quot; <span class="math inline">\(\rightarrow\)</span> &quot;The inverse logit function is curved&quot; (thanks to VicentModesto)</li>
-<li>p. 241-242, in paragraphs starting &quot;The steps go...&quot; and &quot;Figure 14.2...&quot;: <span class="math inline">\((4.0/4.1)x_1\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\((4.4/4.1)x_1\)</span> (thanks to Doug Davidson)</li>
-<li>p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: &quot;The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003).&quot; Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. <em>American Journal of Public Health</em>, <strong>93</strong>, 963–969.</li>
-<li>p. 314, Following Equation (17.1) &quot;... did not include enough Republicans.&quot; <span class="math inline">\(\rightarrow\)</span> &quot;... included too many Democrats.&quot; (thanks to misterblister)</li>
-<li>p. 316, Figure 17.2 the values in the column <span class="math inline">\(N_j/N\)</span> should be <span class="math inline">\(0.16, 0.17, 0.19, 0.17, 0.16, 0.15\)</span> as in the code on the same page. (thanks to Noah Silbert)</li>
-<li>p. 344, &quot;...Figure 18.1 yields a naive estimated treatment effect of -12.5.&quot; <span class="math inline">\(\rightarrow\)</span> &quot;...Figure 18.1 yields a naive estimated treatment effect of +12.5.&quot; (thanks to Michael McLaren)</li>
-<li>p. 345, &quot;difference in means, <span class="math inline">\(155-147.5\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;difference in means, <span class="math inline">\(147.5 - 155\)</span>&quot; (thanks to Michael McLaren)</li>
-<li>p. 371, &quot;in Figure 19.4a&quot; <span class="math inline">\(\rightarrow\)</span> &quot;in Figure 19.4b&quot; (thanks to Kenneth Tay)</li>
-<li>p. 385, equation number (20.1) should be for the second equation on the page <span class="math inline">\(y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i\)</span> (thanks to Matěj Grabovsky)</li>
-<li>p. 435, equation 21.7: &quot;<span class="math inline">\(\beta_2 *\mbox{math pre-test}_i\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;<span class="math inline">\(\beta_3 *\mbox{math pre-test}_i\)</span>&quot; (thanks to Zhengchen Cai)</li>
-<li><p>p. 447, &quot;populations homogeneous in <span class="math inline">\(w_i\)</span>&quot; <span class="math inline">\(\rightarrow\)</span> &quot;populations homogeneous in <span class="math inline">\(x_i\)</span>&quot; (thanks to Kenneth Tay)</p></li>
+<li>p. 11, the summary of the treatment-control comparison says “the treated units were 4.8 points higher than the controls, <span class="math inline">\(\bar{y} = 31.7\)</span> under the treatment and <span class="math inline">\(\bar{y} = 25.5\)</span> for the controls.” The difference in shown means is 6.2 and not 4.8. Not that these values change when rerunning the simulation. (thanks Desislava Petkova)</li>
+<li>p. 15, “multiplicative factor; see Exercise 3.8.” <span class="math inline">\(\rightarrow\)</span> “multiplicative factor; see Exercise 4.8.” (thanks to Omri Har-Shemesh and Juliette Unwin)</li>
+<li>p. 39, in the second sentence of the first full paragraph, “Figure 3.4 displays data on log metabolic rate vs. body mass indicating…” <span class="math inline">\(\rightarrow\)</span> “log metabolic rate vs. log body mass” (thanks Ravi Shroff)</li>
+<li>p. 39, “The slope of the line is then 7.4/10 = 7.4.” <span class="math inline">\(\rightarrow\)</span> “The slope of the line is then 7.4/10 = 0.74.” (thanks to Jacob Warren)</li>
+<li>p. 42, the last line, in “Linear transformations” section “Exercise 3.5” <span class="math inline">\(\rightarrow\)</span> “Exercise 3.6”. (thanks Ed Berry)</li>
+<li>p. 43, “<span class="math inline">\(\sigma_a,\sigma_b\)</span>” <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\sigma_u,\sigma_v\)</span> (thanks to Braden Scherting)</li>
+<li>p. 46, “exactly 10 000 votes” <span class="math inline">\(\rightarrow\)</span> “exactly 100 000 votes” (thanks to Gal Matijevic)</li>
+<li>p. 54, in “Comparisons, visual and numerical” subsection, “Figure 4.2” in the first sentence should be “Figure 4.3.” (thanks Ravi Shroff)</li>
+<li>p. 55, <code>se_weighted_avg &lt;- sqrt(sum(W*se)^2)</code> <span class="math inline">\(\rightarrow\)</span> <code>se_weighted_avg &lt;- sqrt(sum((W*se)^2))</code> (thanks to Desislava Petkova)</li>
+<li>p. 57, last line: <code>n_C+n_T, 2</code> <span class="math inline">\(\rightarrow\)</span> <code>n_C+n_T-2</code> (thanks Justin Reppert)</li>
+<li>p. 61, “<span class="math inline">\(T(y;\phi(y))\)</span>, for <span class="math inline">\(j = 1,\dots, J\)</span>” <span class="math inline">\(\rightarrow\)</span> “<span class="math inline">\(T(y;\phi_j(y))\)</span>, for <span class="math inline">\(j = 1,\dots, J\)</span>” (thanks to Kenneth Tay)</li>
+<li>p. 73, <code>1.483*median(abs(y - median(z)))</code> <span class="math inline">\(\rightarrow\)</span> 1.483*median(abs(z - median(z)))</li>
+<li>p. 73, <code>quantile(z, 0.25, 0.75)</code> <span class="math inline">\(\rightarrow\)</span> quantile(z, c(0.25, 0.75)) and <code>quantile(z, 0.025, 0.975)</code> <span class="math inline">\(\rightarrow\)</span> quantile(z, c(0.025, 0.975)) (thanks to Justin Reppert)</li>
+<li>p. 83, Fig 6.1 “y = 0.49 + 0.27 * x” <span class="math inline">\(\rightarrow\)</span> “y = 0.4 + 0.27 * x”</li>
+<li>p. 83, Fig 6.2 Estimate for <span class="math inline">\(\sigma\)</span> should be 0.49 (not 0.43)</li>
+<li>p. 84, “which returns the value R^2 = 0.10, meaning that the linear model accounts for only 9% of the variance”. The “9%” should be “10%”.</li>
+<li>p. 105, just before Maximum likelihood section “see Exercise 7.1” <span class="math inline">\(\rightarrow\)</span> “see Exercise 8.1” (thanks to Jacob Warren)</li>
+<li>p. 116, the correct code should have <code>y_linpred &lt;- a + b*as.numeric(new)</code> and <code>y_pred &lt;- a + b*as.numeric(new) + rnorm(n_sims, 0, sigma)</code> (thanks to Nathan Hoffmann)</li>
+<li>p. 128, “Do Exercise 3.8” <span class="math inline">\(\rightarrow\)</span> “Do Exercise 4.8” (thanks to Omri Har-Shemesh and Juliette Unwin)</li>
+<li>p. 131, “the average or expected difference in outcome <span class="math inline">\(y_k\)</span>” <span class="math inline">\(\rightarrow\)</span> “… <span class="math inline">\(y\)</span>” (thanks to Yoav Kessler)</li>
+<li>p. 143, the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O’Brien)</li>
+<li>p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O’Brien)</li>
+<li>p. 159, “as in Figure 11.2” <span class="math inline">\(\rightarrow\)</span> “as in Figure 11.3” (thanks to Eam O’Brien)</li>
+<li>p. 174, “and so the log score is <span class="math inline">\(-\frac{1}{2}\log\sigma\)</span>” <span class="math inline">\(\rightarrow\)</span> “and so the log score is <span class="math inline">\(-\log\sigma\)</span>” (thanks to Matěj Grabovsky)</li>
+<li>p. 179, <code>fit_2 &lt;- update(fit_2, prior=hs())</code> <span class="math inline">\(\rightarrow\)</span> <code>fit_2 &lt;- update(fit_1, prior=hs())</code> (thanks to Omri Har-Shemesh)</li>
+<li>p. 183, <span class="math inline">\(\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$610\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$6100\)</span> (thanks to Ravi Shroff)</li>
+<li>p. 208, <code>/sqrt(0.3*26)</code> <span class="math inline">\(\rightarrow\)</span> <code>*sqrt(0.3/26)</code> (this is correct in the code in the web page, typo fix in the book thanks to Eugenia Migliavacca)</li>
+<li><p>p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in <a href="https://avehtari.github.io/ROS-Examples/Student/student.html">Student example</a> and shown below (thanks to Zhengchen Cai for reporting the issue) <img src="Figure_12_11_correct.png" width="800" /></p></li>
+<li>p. 217, First line in section 13.1 “The logistic function, logit(x)” <span class="math inline">\(\rightarrow\)</span> “The logit function, logit(x)” (thanks to VicentModesto)</li>
+<li>p. 219, “The inverse logistic function is curved” <span class="math inline">\(\rightarrow\)</span> “The inverse logit function is curved” (thanks to VicentModesto)</li>
+<li>p. 241-242, in paragraphs starting “The steps go…” and “Figure 14.2…”: <span class="math inline">\((4.0/4.1)x_1\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\((4.4/4.1)x_1\)</span> (thanks to Doug Davidson)</li>
+<li>p. 288, Chapter 15 Bibliographic note is missing the reference to the RiskyBehavior data: “The HIV risk data (RiskyBehavior) used in exercises comes fromcomes from El-Bassel et al (2003).” Full reference: El-Bassel, N., Witte, S. S., Gilbert, L., Wu, E., Chang, M., Hill, J., and Steinglass, P. (2003). The efficacy of a relationship-based HIV/STD prevention program for heterosexual couples. <em>American Journal of Public Health</em>, <strong>93</strong>, 963–969.</li>
+<li>p. 314, Following Equation (17.1) “… did not include enough Republicans.” <span class="math inline">\(\rightarrow\)</span> “… included too many Democrats.” (thanks to Mark Fisher)</li>
+<li>p. 316, Figure 17.2 the values in the column <span class="math inline">\(N_j/N\)</span> should be <span class="math inline">\(0.16, 0.17, 0.19, 0.17, 0.16, 0.15\)</span> as in the code on the same page. (thanks to Noah Silbert)</li>
+<li>p. 344, “…Figure 18.1 yields a naive estimated treatment effect of -12.5.” <span class="math inline">\(\rightarrow\)</span> “…Figure 18.1 yields a naive estimated treatment effect of +12.5.” (thanks to Michael McLaren)</li>
+<li>p. 345, “difference in means, <span class="math inline">\(155-147.5\)</span>” <span class="math inline">\(\rightarrow\)</span> “difference in means, <span class="math inline">\(147.5 - 155\)</span>” (thanks to Michael McLaren)</li>
+<li>p. 345, at the bottom “More to the point, the <span class="math inline">\(y_i^0\)</span>’s are 140, 140, 150, and 170 in the <em>control</em> group and 150, 160, 160, and 170 in the <em>treatment</em> group.” <span class="math inline">\(\rightarrow\)</span> “More to the point, the <span class="math inline">\(y_i^0\)</span>’s are 140, 140, 150, and 170 in the <em>treatment</em> group and 150, 160, 160, and 170 in the <em>control</em> group.” (thanks to Ravi Shroff)</li>
+<li>p. 371, “in Figure 19.4a” <span class="math inline">\(\rightarrow\)</span> “in Figure 19.4b” (thanks to Kenneth Tay)</li>
+<li>p. 385, equation number (20.1) should be for the second equation on the page <span class="math inline">\(y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i\)</span> (thanks to Matěj Grabovsky)</li>
+<li>p. 397, last line, in the standard error equation 1738 <span class="math inline">\(\rightarrow\)</span> 1820, 789 <span class="math inline">\(\rightarrow\)</span> 837, and 1.01 <span class="math inline">\(\rightarrow\)</span> 1.04 (thanks to Matěj Grabovsky)</li>
+<li>p. 435, equation 21.7: “<span class="math inline">\(\beta_2 *\mbox{math pre-test}_i\)</span>” <span class="math inline">\(\rightarrow\)</span> “<span class="math inline">\(\beta_3 *\mbox{math pre-test}_i\)</span>” (thanks to Zhengchen Cai)</li>
+<li><p>p. 447, “populations homogeneous in <span class="math inline">\(w_i\)</span>” <span class="math inline">\(\rightarrow\)</span> “populations homogeneous in <span class="math inline">\(x_i\)</span>” (thanks to Kenneth Tay)</p></li>
 </ul>
 <hr />
 </div>
@@ -468,7 +429,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

@@ -20,14 +20,21 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -39,11 +46,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -56,32 +58,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -91,10 +68,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -111,40 +84,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 66px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h2 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h3 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h4 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h5 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h6 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -172,7 +118,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -184,7 +130,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -195,10 +141,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -210,7 +169,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -336,13 +294,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -379,13 +337,13 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Regression and Other Stories</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2020-11-24</h4>
+<h4 class="date">Page updated: 2021-02-11</h4>
 
 </div>
 
@@ -394,10 +352,7 @@ div.tocify {
 <div id="information" class="section level2">
 <h2>Information</h2>
 <div style="float:right;position: relative; margin-left:6px; margin-bottom:6px;">
-<div class="figure">
-<img src="ROS_frontcover.png" width="160" />
-
-</div>
+<p><img src="ROS_frontcover.png" width="160" /></p>
 </div>
 <p>Home page for the book Regression and Other Stories by <a href="http://www.stat.columbia.edu/~gelman/">Andrew Gelman</a>, <a href="https://steinhardt.nyu.edu/people/jennifer-hill">Jennifer Hill</a>, and <a href="https://users.aalto.fi/~ave/">Aki Vehtari</a>, including <a href="examples.html">the code and data for the examples</a>.</p>
 <p>Back cover text: <em>Many textbooks on regression focus on theory and the simplest of examples. Real statistical problems, however, are complex and subtle. This is not a book about the theory of regression. It is a book about how to use regression to solve real problems of comparison, estimation, prediction, and causal inference. It focuses on practical issues such as sample size and missing data and a wide range of goals and techniques. It jumps right in to methods and computer code you can use fresh out of the box.</em></p>
@@ -406,7 +361,7 @@ div.tocify {
 <li><p><a href="https://www.cambridge.org/fi/academic/subjects/statistics-probability/statistical-theory-and-methods/regression-and-other-stories">Cambridge University Press page</a></p></li>
 <li><p><a href="https://www.learnbayesstats.com/episode/20-regression-and-other-stories-with-andrew-gelman-jennifer-hill-aki-vehtari">Podcast: a special episode of Learning Bayesian Statistics featuring the ROS authors</a></p></li>
 <li><a href="https://github.com/avehtari/ROS-Examples/tree/master/Exams/">Sample exams</a></li>
-<li><p>See also an article <a href="http://www.stat.columbia.edu/~gelman/research/published/teachingbayes.pdf">Teaching Bayes to Graduate Students in Political Science, Sociology, Public Health, Education, Economics, ...</a></p></li>
+<li><p>See also an article <a href="http://www.stat.columbia.edu/~gelman/research/published/teachingbayes.pdf">Teaching Bayes to Graduate Students in Political Science, Sociology, Public Health, Education, Economics, …</a></p></li>
 </ul>
 <p>If you notice an error that is not mentioned in <a href="errata.html">the errata</a>, <a href="https://github.com/avehtari/ROS-Examples/issues">submit an issue</a> or send an email.</p>
 </div>
@@ -440,11 +395,11 @@ div.tocify {
 <div id="reviews" class="section level2">
 <h2>Reviews</h2>
 <ul>
-<li><p><em>'Gelman, Hill and Vehtari provide an introductory regression book that hits an amazing trifecta: it motivates regression using real data examples, provides the necessary (but not superfluous) theory, and gives readers tools to implement these methods in their own work. The scope is ambitious - including introductions to causal inference and measurement - and the result is a book that I not only look forward to teaching from, but also keeping around as a reference for my own work.'</em> Elizabeth Tipton, Northwestern University</p></li>
-<li><p><em>'Regression and Other Stories is simply the best introduction to applied statistics out there. Filled with compelling real-world examples, intuitive explanations, and practical advice, the authors offer a delightfully modern perspective on the subject. It's an essential resource for students and practitioners across the statistical and social sciences.'</em> Sharad Goel, Department of Management Science and Engineering, Stanford University</p></li>
-<li><p><em>'With modern software it is very easy to fit complex regression models, and even easier to get their interpretation completely wrong. This wonderful book, summarising the authors' years of experience, stays away from mathematical proofs, and instead focuses on the insights to be gained by careful plotting and modelling of data. In particular the chapters on causal modelling, and the challenges of working with selected samples, provide some desperately needed lessons.'</em> David Spiegelhalter, University of Cambridge</p></li>
-<li><p><em>'Gelman and Hill, have done it again, this time with Aki Vehtari. They have written a textbook that should be on every applied quantitative researcher's bookshelf. Most importantly they explain how to do and interpret regression with real world, complicated examples. Practicing academics in addition to students will benefit from giving this book a close read.'</em> Christopher Winship, Harvard University, Massachusetts</p></li>
-<li><p><em>'Overall this is a very modern, stats centred, engaging and careful book on the most common tool of statistical modelling!'</em> Christian P. Robert, Ceremade - Université Paris-Dauphine. The full review in a blog post <a href="https://xianblog.wordpress.com/2020/07/23/the-art-of-regression-and-other-stories/">[The Art of] Regression and other stories</a>.</p></li>
+<li><p><em>‘Gelman, Hill and Vehtari provide an introductory regression book that hits an amazing trifecta: it motivates regression using real data examples, provides the necessary (but not superfluous) theory, and gives readers tools to implement these methods in their own work. The scope is ambitious - including introductions to causal inference and measurement - and the result is a book that I not only look forward to teaching from, but also keeping around as a reference for my own work.’</em> Elizabeth Tipton, Northwestern University</p></li>
+<li><p><em>‘Regression and Other Stories is simply the best introduction to applied statistics out there. Filled with compelling real-world examples, intuitive explanations, and practical advice, the authors offer a delightfully modern perspective on the subject. It’s an essential resource for students and practitioners across the statistical and social sciences.’</em> Sharad Goel, Department of Management Science and Engineering, Stanford University</p></li>
+<li><p><em>‘With modern software it is very easy to fit complex regression models, and even easier to get their interpretation completely wrong. This wonderful book, summarising the authors’ years of experience, stays away from mathematical proofs, and instead focuses on the insights to be gained by careful plotting and modelling of data. In particular the chapters on causal modelling, and the challenges of working with selected samples, provide some desperately needed lessons.’</em> David Spiegelhalter, University of Cambridge</p></li>
+<li><p><em>‘Gelman and Hill, have done it again, this time with Aki Vehtari. They have written a textbook that should be on every applied quantitative researcher’s bookshelf. Most importantly they explain how to do and interpret regression with real world, complicated examples. Practicing academics in addition to students will benefit from giving this book a close read.’</em> Christopher Winship, Harvard University, Massachusetts</p></li>
+<li><p><em>‘Overall this is a very modern, stats centred, engaging and careful book on the most common tool of statistical modelling!’</em> Christian P. Robert, Ceremade - Université Paris-Dauphine. The full review in a blog post <a href="https://xianblog.wordpress.com/2020/07/23/the-art-of-regression-and-other-stories/">[The Art of] Regression and other stories</a>.</p></li>
 </ul>
 <hr />
 </div>
@@ -478,7 +433,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
