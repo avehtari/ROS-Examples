@@ -1,0 +1,83 @@
+Data Dictionary for Child Care example
+
+The IHDP intervention was implemented in the 1980’s and targeted low
+birth weight (less than 2500 grams), pre-term children.  They were
+recruited at the time of birth.  It provided high quality child care
+and other services in their first 3 years of life.  The comparison
+group was pulled from a survey conducted during the same time period
+called the National Survey of Longitudinal Youth.  At the time of the
+intervention many of the original survey participants (first recruited
+in 1979) had children. We have data from those children and their
+mothers for an overlapping set of variables (below) as the IHDP
+children.
+
+The intervention for low-birth-weight children is described by
+- Brooks-Gunn, J., Liaw, F. R., and Klebanov, P. K. (1992). Effects of
+  early intervention on cognitive function of low birth weight preterm
+  infants. Journal of Pediatrics 120, 350–359.
+- Hill, J. L., Brooks-Gunn, J., and Waldfogel, J. (2003). Sustained
+  effects of high participation in an early intervention for
+  low-birth-weight premature infants. Developmental Psychology 39,
+  730–744.
+
+Data columns
+
+"momage"   
+mom age at time of birth
+
+"b.marr"   
+indicator for whether mom was married at birth
+
+"momed"    
+mother’s education level at the time she gave birth
+
+"work.dur" 
+indicator for whether mom worked in the year before she gave birth
+
+"prenatal" 
+indicator for whether mom received prenatal care
+
+"cig"     
+ indicator for whether mom smoked cigarettes while pregnant
+
+"booze"    
+indicator for whether mom drank alcohol while pregnant
+
+"sex"      
+indicator for whether child was born male or female
+
+"first"    
+indicator for whether child was the first born for the mother
+
+"bw"       
+child’s birth weight
+
+"bwg"      
+indicator for whether child was born low birth weight
+
+"preterm" 
+number of weeks preterm child was born
+
+"black", "hispanic", "white"    
+indicators for child’s race/ethnicity
+
+"lths", "hs", "ltcoll", "college"  
+indicators for mother’s education at time of birth
+
+"dayskidh" 
+number of days child was in the hospital after being born
+
+"st5", "st9", "st12", "st25", "st36", "st42", "st48", "st53"    
+indicator for state where household resides 
+
+"st99"  
+indicator for whether family  was living in state served by the ihdp
+
+"income"   
+family income one year after the child was born
+
+"treat"   
+indicator for whether family was allowed to receive IHDP services (1 = yes) 
+
+"ppvtr.36"
+IQ measured at age 36 months
