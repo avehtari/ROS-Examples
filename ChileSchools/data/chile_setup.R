@@ -1,3 +1,9 @@
+#' Data are from
+#' Chay, K. Y., McEwan, P. J., and Urquiola, M. (2005). The central
+#' role of noise in evaluating interventions that use test scores to
+#' rank schools. American Economic Review 95, 1237–1258.
+#' 
+
 library("rprojroot")
 root<-has_dirname("ROS-Examples")$make_fix_file()
 
