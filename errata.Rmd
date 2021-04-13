@@ -16,6 +16,24 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 268, `offset=log(exposure)` $\rightarrow$ `offset=log(exposure2)` (thanks to A. Solomon Kurz)
 - p. 285, The numbers for the earnings model on p.285 should be the same as on p. 284 (thanks to David Galley)
 - p. 295, $n=(2.8* 0.49/0.1)^2=196$ $\rightarrow$ $n=(2.8* 0.5/0.1)^2=196$, where $0.5$ is used as a conservative estimate of the standard deviation (thanks to Solomon A. Kurz)
+- p. 299, $0.5/1.15 = 0.43$ $\rightarrow$ $0.5/1.25 = 0.4$ (thanks to Solomon A. Kurz)
+- p. 300, The paragraph starting "We illustrate with the example of the survey earnings and height discussed in Chapter 4." and the next two paragraphs have been edited to:\
+&nbsp;&nbsp;&nbsp;We illustrate with the survey of earnings and height discussed in Chapter 12.  The coefficient for the sex-earnings interaction in model (12.2) is plausible (a positive interaction, implying that an extra inch of height is worth 2\% more for men than for women), with a standard error of 1\%.\
+&nbsp;&nbsp;&nbsp;Extracting another significant figure from the fitted regression yields an estimated interaction of 0.018 with  standard error 0.015.  How large a sample size would have been needed for the coefficient on the interaction to be "statistically significant" at the conventional 95\% level?  A simple calculation uses the fact that standard errors are proportional to $1/\sqrt{n}$.  For a point estimate of 0.018 to be two standard errors from zero, it would need a standard error of 0.009, which would require the sample size to be increased by a factor of $(0.015/0.009)^2$.  The original survey had a sample of 1629; this implies a required sample size of $1629*(0.015/0.009)^2=4500$.\
+&nbsp;&nbsp;&nbsp;To perform a power calculation for this hypothetical larger survey of 4500 people,  we could suppose that the true
+$\beta$ for the interaction is equal to 0.018 and that the standard
+error is as we have just calculated.  With a standard error of 0.009
+the estimate from the regression would then be conventionally "statistically
+significant" only if $\hat{\beta}>0.018$ (or, in other direction, if
+$\hat{\beta}< -0.018$, but that latter possibility is highly unlikely
+given our assumptions).  If the true coefficient $\beta$ is 0.018, then we would expect $\hat{\beta}$ to
+exceed 0.018, and thus achieve statistical significance, with a
+probability of $\frac{1}{2}$---that is, 50\% power.  To get 80\% power, we need
+the true $\beta$ to be 2.8 standard errors from zero, so that there is
+an 80\% probability that $\hat{\beta}$ is at least 2 standard errors
+from zero.  If $\beta=0.018\%$, then its standard error would have to be
+no greater than $0.018/2.8$, so that the survey would need a sample
+size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 407, $\sum_{k=1}^K(X_{ik}-X_{jk})^2$ $\rightarrow$ $(\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}$ (thanks to Stefan Gehrig)
 
 ## 1st (2020) printing

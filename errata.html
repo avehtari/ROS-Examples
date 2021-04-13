@@ -343,7 +343,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2021-04-05</h4>
+<h4 class="date">Page updated: 2021-04-13</h4>
 
 </div>
 
@@ -358,6 +358,11 @@ div.tocify {
 <li>p. 268, <code>offset=log(exposure)</code> <span class="math inline">\(\rightarrow\)</span> <code>offset=log(exposure2)</code> (thanks to A. Solomon Kurz)</li>
 <li>p. 285, The numbers for the earnings model on p.285 should be the same as on p. 284 (thanks to David Galley)</li>
 <li>p. 295, <span class="math inline">\(n=(2.8* 0.49/0.1)^2=196\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(n=(2.8* 0.5/0.1)^2=196\)</span>, where <span class="math inline">\(0.5\)</span> is used as a conservative estimate of the standard deviation (thanks to Solomon A. Kurz)</li>
+<li>p. 299, <span class="math inline">\(0.5/1.15 = 0.43\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(0.5/1.25 = 0.4\)</span> (thanks to Solomon A. Kurz)</li>
+<li>p. 300, The paragraph starting “We illustrate with the example of the survey earnings and height discussed in Chapter 4.” and the next two paragraphs have been edited to:<br />
+   We illustrate with the survey of earnings and height discussed in Chapter 12. The coefficient for the sex-earnings interaction in model (12.2) is plausible (a positive interaction, implying that an extra inch of height is worth 2% more for men than for women), with a standard error of 1%.<br />
+   Extracting another significant figure from the fitted regression yields an estimated interaction of 0.018 with standard error 0.015. How large a sample size would have been needed for the coefficient on the interaction to be “statistically significant” at the conventional 95% level? A simple calculation uses the fact that standard errors are proportional to <span class="math inline">\(1/\sqrt{n}\)</span>. For a point estimate of 0.018 to be two standard errors from zero, it would need a standard error of 0.009, which would require the sample size to be increased by a factor of <span class="math inline">\((0.015/0.009)^2\)</span>. The original survey had a sample of 1629; this implies a required sample size of <span class="math inline">\(1629*(0.015/0.009)^2=4500\)</span>.<br />
+   To perform a power calculation for this hypothetical larger survey of 4500 people, we could suppose that the true <span class="math inline">\(\beta\)</span> for the interaction is equal to 0.018 and that the standard error is as we have just calculated. With a standard error of 0.009 the estimate from the regression would then be conventionally “statistically significant” only if <span class="math inline">\(\hat{\beta}&gt;0.018\)</span> (or, in other direction, if <span class="math inline">\(\hat{\beta}&lt; -0.018\)</span>, but that latter possibility is highly unlikely given our assumptions). If the true coefficient <span class="math inline">\(\beta\)</span> is 0.018, then we would expect <span class="math inline">\(\hat{\beta}\)</span> to exceed 0.018, and thus achieve statistical significance, with a probability of <span class="math inline">\(\frac{1}{2}\)</span>—that is, 50% power. To get 80% power, we need the true <span class="math inline">\(\beta\)</span> to be 2.8 standard errors from zero, so that there is an 80% probability that <span class="math inline">\(\hat{\beta}\)</span> is at least 2 standard errors from zero. If <span class="math inline">\(\beta=0.018\%\)</span>, then its standard error would have to be no greater than <span class="math inline">\(0.018/2.8\)</span>, so that the survey would need a sample size of <span class="math inline">\(1629*(2.8*0.015/0.018)^2=900\)</span>. (thanks to comment by Solomon A. Kurz)</li>
 <li>p. 407, <span class="math inline">\(\sum_{k=1}^K(X_{ik}-X_{jk})^2\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\((\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}\)</span> (thanks to Stefan Gehrig)</li>
 </ul>
 </div>
