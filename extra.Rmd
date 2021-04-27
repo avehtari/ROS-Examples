@@ -1,0 +1,17 @@
+---
+title: "Regression and Other Stories - Extra code"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
+output:
+  html_document:
+    theme: readable
+    toc: false
+---
+
+-------------
+
+## Additional code versions
+
+- [R + Tidyverse version by Bill Behrman](https://github.com/behrman/ros)
+- [R + brms + tidyverse version by Solomon A. Kurz](https://github.com/ASKurz/Working-through-Regression-and-other-stories) (work in progress)
+- [Python + Bambi version by Ravin Kumar, Tomás Capretto, and Osvaldo Martin](https://github.com/bambinos/Bambi_resources/tree/master/ROS) (work in progress)
