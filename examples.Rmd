@@ -428,9 +428,23 @@ date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
 - [Git repo for the code and data](https://github.com/avehtari/ROS-Examples)
 - [Download all code and data as a ZIP file](https://codeload.github.com/avehtari/ROS-Examples/zip/master)
 
+## Tidyverse code
+
+Bill Behrman has revised all the example code to use Tidyverse
+
+- [Regression and Other Stories - Tidyverse Examples](https://github.com/behrman/ros)
+- [Style guide used by Behrman](http://dcl-workflow.stanford.edu/style-guide.html)
+
+## brms + tidyverse code
+
+Solomon A. Kurz is revising all the example code to use brms and tidyverse
+
+- [Working through Regression and other stories](https://github.com/ASKurz/Working-through-Regression-and-other-stories)
+
 ## Python code
 
-Ravin Kumar and Osvaldo Martin are porting ROS examples to Python using bambi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm. 
+Ravin Kumar, Tomás Capretto, and Osvaldo Martin are porting ROS
+examples to Python using bambi (BAyesian Model-Building Interface)
+which has similar formula syntax as rstanarm and brms.
 
 - [Bambi resources](https://github.com/bambinos/Bambi_resources)
-

@@ -11,8 +11,6 @@ navbar:
       href: errata.html
     - text: "R and visualization"
       href: R_visualizaton.html
-    - text: "Extra"
-      href: extra.html
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 output:
   html_document:
