@@ -34,6 +34,7 @@ an 80\% probability that $\hat{\beta}$ is at least 2 standard errors
 from zero.  If $\beta=0.018\%$, then its standard error would have to be
 no greater than $0.018/2.8$, so that the survey would need a sample
 size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
+- p. 304 "only 44% of their children were girls" $\rightarrow$ "only 48% of their children were girls" (thanks to comment by Solomon A. Kurz)
 - p. 407, $\sum_{k=1}^K(X_{ik}-X_{jk})^2$ $\rightarrow$ $(\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}$ (thanks to Stefan Gehrig)
 
 ## 1st (2020) printing
@@ -64,6 +65,7 @@ size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 174, "and so the log score is  $-\frac{1}{2}\log\sigma$" $\rightarrow$ "and so the log score is  $-\log\sigma$" (thanks to Matěj Grabovsky)
 - p. 179, `fit_2 <- update(fit_2, prior=hs())` $\rightarrow$ `fit_2 <- update(fit_1, prior=hs())` (thanks to Omri Har-Shemesh)
 - p. 183,  $\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$610$ $\rightarrow$  $\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$6100$ (thanks to Ravi Shroff)
+- p. 190 "an expected positive difference of about 5% in the outcome variable" $\rightarrow$ "an expected positive difference of about 6% in the outcome variable"
 - p. 208, `/sqrt(0.3*26)` $\rightarrow$ `*sqrt(0.3/26)` (this is correct in the code in the web page, typo fix in the book thanks to Eugenia Migliavacca)
 - p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in [Student example](https://avehtari.github.io/ROS-Examples/Student/student.html) and shown below (thanks to Zhengchen Cai for reporting the issue)
  ![](Figure_12_11_correct.png){ width=800 }

@@ -295,12 +295,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -343,7 +343,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2021-04-13</h4>
+<h4 class="date">Page updated: 2021-06-24</h4>
 
 </div>
 
@@ -363,6 +363,7 @@ div.tocify {
    We illustrate with the survey of earnings and height discussed in Chapter 12. The coefficient for the sex-earnings interaction in model (12.2) is plausible (a positive interaction, implying that an extra inch of height is worth 2% more for men than for women), with a standard error of 1%.<br />
    Extracting another significant figure from the fitted regression yields an estimated interaction of 0.018 with standard error 0.015. How large a sample size would have been needed for the coefficient on the interaction to be “statistically significant” at the conventional 95% level? A simple calculation uses the fact that standard errors are proportional to <span class="math inline">\(1/\sqrt{n}\)</span>. For a point estimate of 0.018 to be two standard errors from zero, it would need a standard error of 0.009, which would require the sample size to be increased by a factor of <span class="math inline">\((0.015/0.009)^2\)</span>. The original survey had a sample of 1629; this implies a required sample size of <span class="math inline">\(1629*(0.015/0.009)^2=4500\)</span>.<br />
    To perform a power calculation for this hypothetical larger survey of 4500 people, we could suppose that the true <span class="math inline">\(\beta\)</span> for the interaction is equal to 0.018 and that the standard error is as we have just calculated. With a standard error of 0.009 the estimate from the regression would then be conventionally “statistically significant” only if <span class="math inline">\(\hat{\beta}&gt;0.018\)</span> (or, in other direction, if <span class="math inline">\(\hat{\beta}&lt; -0.018\)</span>, but that latter possibility is highly unlikely given our assumptions). If the true coefficient <span class="math inline">\(\beta\)</span> is 0.018, then we would expect <span class="math inline">\(\hat{\beta}\)</span> to exceed 0.018, and thus achieve statistical significance, with a probability of <span class="math inline">\(\frac{1}{2}\)</span>—that is, 50% power. To get 80% power, we need the true <span class="math inline">\(\beta\)</span> to be 2.8 standard errors from zero, so that there is an 80% probability that <span class="math inline">\(\hat{\beta}\)</span> is at least 2 standard errors from zero. If <span class="math inline">\(\beta=0.018\%\)</span>, then its standard error would have to be no greater than <span class="math inline">\(0.018/2.8\)</span>, so that the survey would need a sample size of <span class="math inline">\(1629*(2.8*0.015/0.018)^2=900\)</span>. (thanks to comment by Solomon A. Kurz)</li>
+<li>p. 304 “only 44% of their children were girls” <span class="math inline">\(\rightarrow\)</span> “only 48% of their children were girls” (thanks to comment by Solomon A. Kurz)</li>
 <li>p. 407, <span class="math inline">\(\sum_{k=1}^K(X_{ik}-X_{jk})^2\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\((\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}\)</span> (thanks to Stefan Gehrig)</li>
 </ul>
 </div>
@@ -395,6 +396,7 @@ div.tocify {
 <li>p. 174, “and so the log score is <span class="math inline">\(-\frac{1}{2}\log\sigma\)</span>” <span class="math inline">\(\rightarrow\)</span> “and so the log score is <span class="math inline">\(-\log\sigma\)</span>” (thanks to Matěj Grabovsky)</li>
 <li>p. 179, <code>fit_2 &lt;- update(fit_2, prior=hs())</code> <span class="math inline">\(\rightarrow\)</span> <code>fit_2 &lt;- update(fit_1, prior=hs())</code> (thanks to Omri Har-Shemesh)</li>
 <li>p. 183, <span class="math inline">\(\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$610\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$6100\)</span> (thanks to Ravi Shroff)</li>
+<li>p. 190 “an expected positive difference of about 5% in the outcome variable” <span class="math inline">\(\rightarrow\)</span> “an expected positive difference of about 6% in the outcome variable”</li>
 <li>p. 208, <code>/sqrt(0.3*26)</code> <span class="math inline">\(\rightarrow\)</span> <code>*sqrt(0.3/26)</code> (this is correct in the code in the web page, typo fix in the book thanks to Eugenia Migliavacca)</li>
 <li><p>p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in <a href="https://avehtari.github.io/ROS-Examples/Student/student.html">Student example</a> and shown below (thanks to Zhengchen Cai for reporting the issue) <img src="Figure_12_11_correct.png" width="800" /></p></li>
 <li>p. 217, First line in section 13.1 “The logistic function, logit(x)” <span class="math inline">\(\rightarrow\)</span> “The logit function, logit(x)” (thanks to VicentModesto)</li>
@@ -453,6 +455,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
