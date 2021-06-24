@@ -13,6 +13,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 ## 1st and 2nd (2021) printing
 
 - p. 231, $\log(-.595)$ $\rightarrow$ $\log(0.595)$ (thanks to Daniel Timar)
+- p. 267 `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)` $\tightarrow$ `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)` (thanks to Brian Bucher)
 - p. 268, `offset=log(exposure)` $\rightarrow$ `offset=log(exposure2)` (thanks to A. Solomon Kurz)
 - p. 285, The numbers for the earnings model on p.285 should be the same as on p. 284 (thanks to David Galley)
 - p. 295, $n=(2.8* 0.49/0.1)^2=196$ $\rightarrow$ $n=(2.8* 0.5/0.1)^2=196$, where $0.5$ is used as a conservative estimate of the standard deviation (thanks to Solomon A. Kurz)
@@ -36,6 +37,7 @@ no greater than $0.018/2.8$, so that the survey would need a sample
 size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 304 "only 44% of their children were girls" $\rightarrow$ "only 48% of their children were girls" (thanks to comment by Solomon A. Kurz)
 - p. 407, $\sum_{k=1}^K(X_{ik}-X_{jk})^2$ $\rightarrow$ $(\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}$ (thanks to Stefan Gehrig)
+- p. 324, "90% of African Americans" $\rightarrow$ "88% of African Americans" (thanks to Solomon A. Kurz)
 
 ## 1st (2020) printing
 
