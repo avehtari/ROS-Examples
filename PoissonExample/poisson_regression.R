@@ -69,7 +69,7 @@ fit_nb <- as.list(rep(NA, K))
 for (k in 1:K){
   y_nb[[k]] <- rnegbin(n, exp(linpred), phi_grid[k])
   fake_nb[[k]] <- data.frame(x=x, y=y_nb[[k]])
-  fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)
+  fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)
   print(fit_nb[[k]])
 }
 
