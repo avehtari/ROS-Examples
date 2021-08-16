@@ -12,7 +12,7 @@ output:
 
 ## R programming and visualization with R
 
-- For R programming basics see Appendix A of Regression and Other Stories.
+- For R programming basics see [Appendix A of Regression and Other Stories](Regression_and_Other_Stories_Appendix_A.pdf).
 - For learning more about R programming we recommend
     - [Garrett Grolemund, Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
 - For learning more about basic and advanced plotting using R we recommend
