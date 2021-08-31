@@ -32,40 +32,9 @@ root<-has_file(".ROS-Examples-root")$make_fix_file()
 #### Load data
 
 ```{r }
-allnames <- read.csv(root("Names/data","SSA-longtail-names.csv"))
+allnames <- read.csv(root("Names/data","allnames_clean.csv"))
 girl <- as.vector(allnames$sex)=="F"
 names <- as.vector(allnames$name)
-columns <- colnames(allnames)
-range <- (1:length(columns))[columns=="X1931"]:(1:length(columns))[columns=="X2000"]
-years <- 1931:2000
-colRenorm <- function(a){
-  a / matrix(colSums(a), nrow=nrow(a), ncol=ncol(a), byrow=TRUE)
-}
-counts <- as.matrix(allnames[,range])
-counts.norm <- colRenorm(counts)
-totals <- rowMeans(counts.norm)
-counts.adj <- ifelse(counts==0, 2, counts)
-counts.adj.norm <- colRenorm(counts.adj)/colSums(counts.adj)
-```
-
-
-#### Remove Laura's list of bad names
-
-```{r }
-error.names <- as.matrix(read.csv(root("Names/data","ErrorNames.csv")))
-error.names.girl <- error.names[,2]=="F"
-bad.girl.names <- error.names[error.names.girl,1]
-bad.boy.names <- error.names[!error.names.girl,1]
-N <- nrow(allnames)
-keep <- rep(TRUE, N)
-for (i in (1:N)) {
-  if (girl[i] & names[i] %in% bad.girl.names) keep[i] <- FALSE
-  if (!girl[i] & names[i] %in% bad.boy.names) keep[i] <- FALSE
-}
-
-allnames <- allnames[keep,]
-names <- names[keep]
-girl <- girl[keep]
 
 namelength <- nchar(names)
 lastletter <- substr(names, namelength, namelength)

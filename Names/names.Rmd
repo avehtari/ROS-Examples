@@ -29,10 +29,10 @@ library("rprojroot")
 root<-has_file(".ROS-Examples-root")$make_fix_file()
 ```
 
-#### Load data
+#### Load data NEW
 
 ```{r }
-allnames <- read.csv(root("Names/data","SSA-longtail-names.csv"))
+allnames <- read.csv(root("Names/data","allnames_clean.csv"))
 girl <- as.vector(allnames$sex)=="F"
 names <- as.vector(allnames$name)
 columns <- colnames(allnames)
@@ -184,27 +184,18 @@ namesplot(boys70)
 if (savefigs) dev.off()
 ```
 
-#### Restrict to top 1000 and remove Laura's list of bad names
+#### Restrict to top 1000
 
 ```{r }
-error.names <- as.matrix(read.csv(root("Names/data","ErrorNames.csv")))
-error.names.girl <- error.names[,2]=="F"
-bad.girl.names <- error.names[error.names.girl,1]
-bad.boy.names <- error.names[!error.names.girl,1]
 top1000 <- array(NA, c(N,length(years)))
 for (i in 1:length(years)){
   top1000[girl,i] <- counts[girl,i] >= rev(sort(counts[girl,i]))[1000]
   top1000[!girl,i] <- counts[!girl,i] >= rev(sort(counts[!girl,i]))[1000]
 }
 evertop1000 <- rowSums(top1000) > 0
-keep <- evertop1000
-for (i in (1:N)[evertop1000]){
-  if (girl[i] & names[i] %in% bad.girl.names) keep[i] <- FALSE
-  if (!girl[i] & names[i] %in% bad.boy.names) keep[i] <- FALSE
-}
 
-girls50new <- name.subset(girl & keep, 50)
-boys50new <- name.subset(!girl & keep, 50)
+girls50new <- name.subset(girl, 50)
+boys50new <- name.subset(!girl, 50)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Names/figs","girls50new.pdf"), height=8, width=8)
