@@ -31,6 +31,7 @@ allnames <- read.csv(root("Names/data","allnames_clean.csv"))
 girl <- as.vector(allnames$sex)=="F"
 names <- as.vector(allnames$name)
 
+#' #### Plot data
 namelength <- nchar(names)
 lastletter <- substr(names, namelength, namelength)
 firstletter <- substr(names, 1, 1)

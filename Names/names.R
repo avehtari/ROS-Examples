@@ -26,7 +26,7 @@ savefigs <- FALSE
 library("rprojroot")
 root<-has_file(".ROS-Examples-root")$make_fix_file()
 
-#' #### Load data NEW
+#' #### Load data
 allnames <- read.csv(root("Names/data","allnames_clean.csv"))
 girl <- as.vector(allnames$sex)=="F"
 names <- as.vector(allnames$name)
