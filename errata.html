@@ -14,7 +14,7 @@
 
 <title>Regression and Other Stories - Errata</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -343,7 +343,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2021-06-24</h4>
+<h4 class="date">Page updated: 2021-11-21</h4>
 
 </div>
 
@@ -354,6 +354,9 @@ div.tocify {
 <div id="st-and-2nd-2021-printing" class="section level2">
 <h2>1st and 2nd (2021) printing</h2>
 <ul>
+<li>p. 146, <span class="math inline">\(\mbox{RSS} = \sum_{i=1}^n(y_i - X\hat{\beta})^2\)</span> should be <span class="math inline">\(\mbox{RSS} = \sum_{i=1}^n(y_i - X_i\hat{\beta})^2\)</span> (thanks to Ravi Shroff)</li>
+<li>p. 167, the code line <code>y_rep[s,1] &lt;- y[1]</code> should be <code>y_rep[s,1] &lt;- unemp$y[1]</code> (thanks to Ravi Shroff)</li>
+<li>p. 181, ex 11.5(b) “Figure 10.2.” should be “Figure 11.2.” (thanks to Ravi Shroff)</li>
 <li>p. 231, <span class="math inline">\(\log(-.595)\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\log(0.595)\)</span> (thanks to Daniel Timar)</li>
 <li>p. 267 <code>fit_nb[[k]] &lt;- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)</code> <span class="math inline">\(\rightarrow\)</span> <code>fit_nb[[k]] &lt;- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)</code> (thanks to Brian Bucher)</li>
 <li>p. 268, <code>offset=log(exposure)</code> <span class="math inline">\(\rightarrow\)</span> <code>offset=log(exposure2)</code> (thanks to A. Solomon Kurz)</li>
@@ -365,6 +368,7 @@ div.tocify {
    Extracting another significant figure from the fitted regression yields an estimated interaction of 0.018 with standard error 0.015. How large a sample size would have been needed for the coefficient on the interaction to be “statistically significant” at the conventional 95% level? A simple calculation uses the fact that standard errors are proportional to <span class="math inline">\(1/\sqrt{n}\)</span>. For a point estimate of 0.018 to be two standard errors from zero, it would need a standard error of 0.009, which would require the sample size to be increased by a factor of <span class="math inline">\((0.015/0.009)^2\)</span>. The original survey had a sample of 1629; this implies a required sample size of <span class="math inline">\(1629*(0.015/0.009)^2=4500\)</span>.<br />
    To perform a power calculation for this hypothetical larger survey of 4500 people, we could suppose that the true <span class="math inline">\(\beta\)</span> for the interaction is equal to 0.018 and that the standard error is as we have just calculated. With a standard error of 0.009 the estimate from the regression would then be conventionally “statistically significant” only if <span class="math inline">\(\hat{\beta}&gt;0.018\)</span> (or, in other direction, if <span class="math inline">\(\hat{\beta}&lt; -0.018\)</span>, but that latter possibility is highly unlikely given our assumptions). If the true coefficient <span class="math inline">\(\beta\)</span> is 0.018, then we would expect <span class="math inline">\(\hat{\beta}\)</span> to exceed 0.018, and thus achieve statistical significance, with a probability of <span class="math inline">\(\frac{1}{2}\)</span>—that is, 50% power. To get 80% power, we need the true <span class="math inline">\(\beta\)</span> to be 2.8 standard errors from zero, so that there is an 80% probability that <span class="math inline">\(\hat{\beta}\)</span> is at least 2 standard errors from zero. If <span class="math inline">\(\beta=0.018\%\)</span>, then its standard error would have to be no greater than <span class="math inline">\(0.018/2.8\)</span>, so that the survey would need a sample size of <span class="math inline">\(1629*(2.8*0.015/0.018)^2=900\)</span>. (thanks to comment by Solomon A. Kurz)</li>
 <li>p. 304 “only 44% of their children were girls” <span class="math inline">\(\rightarrow\)</span> “only 48% of their children were girls” (thanks to comment by Solomon A. Kurz)</li>
+<li>p. 375, three regression equations (unnumbered, 19.2 and 19.3) are missing $+ $ from the beginning of RHS (right after <span class="math inline">\(=\)</span>). (thanks to Junhui Yang)</li>
 <li>p. 407, <span class="math inline">\(\sum_{k=1}^K(X_{ik}-X_{jk})^2\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\((\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}\)</span> (thanks to Stefan Gehrig)</li>
 <li>p. 324, “90% of African Americans” <span class="math inline">\(\rightarrow\)</span> “88% of African Americans” (thanks to Solomon A. Kurz)</li>
 </ul>
@@ -410,6 +414,7 @@ div.tocify {
 <li>p. 344, “…Figure 18.1 yields a naive estimated treatment effect of -12.5.” <span class="math inline">\(\rightarrow\)</span> “…Figure 18.1 yields a naive estimated treatment effect of +12.5.” (thanks to Michael McLaren)</li>
 <li>p. 345, “difference in means, <span class="math inline">\(155-147.5\)</span>” <span class="math inline">\(\rightarrow\)</span> “difference in means, <span class="math inline">\(147.5 - 155\)</span>” (thanks to Michael McLaren)</li>
 <li>p. 345, at the bottom “More to the point, the <span class="math inline">\(y_i^0\)</span>’s are 140, 140, 150, and 170 in the <em>control</em> group and 150, 160, 160, and 170 in the <em>treatment</em> group.” <span class="math inline">\(\rightarrow\)</span> “More to the point, the <span class="math inline">\(y_i^0\)</span>’s are 140, 140, 150, and 170 in the <em>treatment</em> group and 150, 160, 160, and 170 in the <em>control</em> group.” (thanks to Ravi Shroff)</li>
+<li>p. 349 “data presented in Figure 18.4” should be “data presented in Figure 18.3”</li>
 <li>p. 371, “in Figure 19.4a” <span class="math inline">\(\rightarrow\)</span> “in Figure 19.4b” (thanks to Kenneth Tay)</li>
 <li>p. 385, equation number (20.1) should be for the second equation on the page <span class="math inline">\(y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i\)</span> (thanks to Matěj Grabovsky)</li>
 <li>p. 397, last line, in the standard error equation 1738 <span class="math inline">\(\rightarrow\)</span> 1820, 789 <span class="math inline">\(\rightarrow\)</span> 837, and 1.01 <span class="math inline">\(\rightarrow\)</span> 1.04 (thanks to Matěj Grabovsky)</li>

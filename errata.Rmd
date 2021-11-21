@@ -12,6 +12,9 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 
 ## 1st and 2nd (2021) printing
 
+- p. 146, $\mbox{RSS} = \sum_{i=1}^n(y_i - X\hat{\beta})^2$ should be $\mbox{RSS} = \sum_{i=1}^n(y_i - X_i\hat{\beta})^2$ (thanks to Ravi Shroff)
+- p. 167, the code line `y_rep[s,1] <- y[1]` should be `y_rep[s,1] <- unemp$y[1]` (thanks to Ravi Shroff)
+- p. 181, ex 11.5(b) "Figure 10.2." should be "Figure 11.2." (thanks to Ravi Shroff)
 - p. 231, $\log(-.595)$ $\rightarrow$ $\log(0.595)$ (thanks to Daniel Timar)
 - p. 267 `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)` $\rightarrow$ `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)` (thanks to Brian Bucher)
 - p. 268, `offset=log(exposure)` $\rightarrow$ `offset=log(exposure2)` (thanks to A. Solomon Kurz)
@@ -36,6 +39,7 @@ from zero.  If $\beta=0.018\%$, then its standard error would have to be
 no greater than $0.018/2.8$, so that the survey would need a sample
 size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 304 "only 44% of their children were girls" $\rightarrow$ "only 48% of their children were girls" (thanks to comment by Solomon A. Kurz)
+- p. 375, three regression equations (unnumbered, 19.2 and 19.3) are missing $\alpha  + $ from the beginning of RHS (right after $=$). (thanks to Junhui Yang)
 - p. 407, $\sum_{k=1}^K(X_{ik}-X_{jk})^2$ $\rightarrow$ $(\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}$ (thanks to Stefan Gehrig)
 - p. 324, "90% of African Americans" $\rightarrow$ "88% of African Americans" (thanks to Solomon A. Kurz)
 
@@ -82,6 +86,7 @@ size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 345, "difference in means, $155-147.5$" $\rightarrow$ "difference in means, $147.5 - 155$" (thanks to Michael McLaren)
 - p. 345, at the bottom "More to the point, the $y_i^0$'s are 140, 140, 150, and 170 in the *control* group and 150, 160, 160, and 170 in the *treatment* group." $\rightarrow$ "More to the point, the $y_i^0$'s are 140, 140, 150, and 170 in the *treatment* group and 
 150, 160, 160, and 170 in the *control* group." (thanks to Ravi Shroff)
+- p. 349 "data presented in Figure 18.4" should be "data presented in Figure 18.3"
 - p. 371, "in Figure 19.4a" $\rightarrow$ "in Figure 19.4b" (thanks to Kenneth Tay)
 - p. 385, equation number (20.1) should be for the second equation on the page $y_i = \beta^*_0 + \beta^*_1z_i + \epsilon^*_i$ (thanks to Matěj Grabovsky)
 - p. 397, last line, in the standard error equation 1738 $\rightarrow$ 1820, 789 $\rightarrow$ 837, and 1.01 $\rightarrow$ 1.04 (thanks to Matěj Grabovsky)
