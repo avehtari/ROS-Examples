@@ -343,7 +343,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Errata</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2021-11-21</h4>
+<h4 class="date">Page updated: 2021-11-23</h4>
 
 </div>
 
@@ -355,8 +355,10 @@ div.tocify {
 <h2>1st and 2nd (2021) printing</h2>
 <ul>
 <li>p. 146, <span class="math inline">\(\mbox{RSS} = \sum_{i=1}^n(y_i - X\hat{\beta})^2\)</span> should be <span class="math inline">\(\mbox{RSS} = \sum_{i=1}^n(y_i - X_i\hat{\beta})^2\)</span> (thanks to Ravi Shroff)</li>
+<li>p. 150, ex 10.2b “for the treatment group and the control group,” <span class="math inline">\(\rightarrow\)</span> “for the treatment group,” (thanks to Jakob Staudt)</li>
 <li>p. 167, the code line <code>y_rep[s,1] &lt;- y[1]</code> should be <code>y_rep[s,1] &lt;- unemp$y[1]</code> (thanks to Ravi Shroff)</li>
 <li>p. 181, ex 11.5(b) “Figure 10.2.” should be “Figure 11.2.” (thanks to Ravi Shroff)</li>
+<li>p. 187, “a procedure that is equivalent to centering and rescaling is to leave” <span class="math inline">\(\rightarrow\)</span> “we can get the same inferences for the coefficients other than the intercept by leaving” (thanks to Ravi Shroff)</li>
 <li>p. 231, <span class="math inline">\(\log(-.595)\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(\log(0.595)\)</span> (thanks to Daniel Timar)</li>
 <li>p. 267 <code>fit_nb[[k]] &lt;- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)</code> <span class="math inline">\(\rightarrow\)</span> <code>fit_nb[[k]] &lt;- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)</code> (thanks to Brian Bucher)</li>
 <li>p. 268, <code>offset=log(exposure)</code> <span class="math inline">\(\rightarrow\)</span> <code>offset=log(exposure2)</code> (thanks to A. Solomon Kurz)</li>

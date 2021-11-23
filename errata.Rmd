@@ -13,8 +13,10 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 ## 1st and 2nd (2021) printing
 
 - p. 146, $\mbox{RSS} = \sum_{i=1}^n(y_i - X\hat{\beta})^2$ should be $\mbox{RSS} = \sum_{i=1}^n(y_i - X_i\hat{\beta})^2$ (thanks to Ravi Shroff)
+- p. 150, ex 10.2b "for the treatment group and the control group," $\rightarrow$ "for the treatment group," (thanks to Jakob Staudt)
 - p. 167, the code line `y_rep[s,1] <- y[1]` should be `y_rep[s,1] <- unemp$y[1]` (thanks to Ravi Shroff)
 - p. 181, ex 11.5(b) "Figure 10.2." should be "Figure 11.2." (thanks to Ravi Shroff)
+- p. 187, "a procedure that is equivalent to centering and rescaling is to leave" $\rightarrow$ "we can get the same inferences for the coefficients other than the intercept by leaving" (thanks to Ravi Shroff)
 - p. 231, $\log(-.595)$ $\rightarrow$ $\log(0.595)$ (thanks to Daniel Timar)
 - p. 267 `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)` $\rightarrow$ `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)` (thanks to Brian Bucher)
 - p. 268, `offset=log(exposure)` $\rightarrow$ `offset=log(exposure2)` (thanks to A. Solomon Kurz)
