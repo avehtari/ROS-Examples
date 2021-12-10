@@ -10,7 +10,7 @@ Errata (excluding minor typos) for the book.
 
 If you notice an error that is not mentioned in the errata below, submit an issue at https://github.com/avehtari/ROS-Examples/issues or send an email.
 
-## 1st and 2nd (2021) printing
+## 1st and 2nd printing
 
 - p. 146, $\mbox{RSS} = \sum_{i=1}^n(y_i - X\hat{\beta})^2$ should be $\mbox{RSS} = \sum_{i=1}^n(y_i - X_i\hat{\beta})^2$ (thanks to Ravi Shroff)
 - p. 150, ex 10.2b "for the treatment group and the control group," $\rightarrow$ "for the treatment group," (thanks to Jakob Staudt)
@@ -45,7 +45,7 @@ size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 407, $\sum_{k=1}^K(X_{ik}-X_{jk})^2$ $\rightarrow$ $(\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}$ (thanks to Stefan Gehrig)
 - p. 324, "90% of African Americans" $\rightarrow$ "88% of African Americans" (thanks to Solomon A. Kurz)
 
-## 1st (2020) printing
+## 1st printing (original printing)
 
 - p. 11, the summary of the treatment-control comparison says "the treated units were 4.8 points higher than the controls, $\bar{y} = 31.7$ under the treatment and $\bar{y} = 25.5$ for the controls." The difference in shown means is 6.2 and not 4.8.  Not that these values change when rerunning the simulation. (thanks Desislava Petkova)
 - p. 15, "multiplicative factor; see Exercise 3.8." $\rightarrow$ "multiplicative factor; see Exercise 4.8." (thanks to Omri Har-Shemesh and Juliette Unwin)
