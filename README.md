@@ -18,6 +18,10 @@ library(rosdata)
 data(wells)
 head(wells)
 ```
+You can get the list of data sets with
+```
+?rosdata
+```
 
 ## Index and notebooks in html
 
