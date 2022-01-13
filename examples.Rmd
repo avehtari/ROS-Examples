@@ -25,6 +25,19 @@ date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
   how the data pre-processing has been done (to do the exercises
   and follow along with the examples, you don't need to worry about
   the setup code).
+- For easy access to data sets, there is an R package `rosdata`. You can install it with a command `remotes::install_github("avehtari/ROS-Examples",subdir = "rpackage")`. Then you can access data, for example, as
+`library(rosdata)`, `data(wells)`, `head(wells)`. You can get the list of data sets with `?rosdata`.
+
+- When running the notebooks, to avoid need to switch the working directory, `rprojroot` package is used to set the project root directory. The downloaded git repository can be placed anywhere you like and you can rename the ROS-Examples directory if you wish. When running the code, it is sufficient that the working directory is any directory in the ROS-Examples (or renamed). Running
+```
+library("rprojroot")
+root<-has_file(".ROS-Examples-root")$make_fix_file()
+```
+will find the file `.ROS-Examples-root` which is in the `ROS-Examples` directory, and will set the full path according to that. Then, for example,
+```
+wells <- read.csv(root("Arsenic/data","wells.csv"))
+```
+finds the `wells.csv` file, no matter where you have placed or renamed the `ROS-Examples` directory. When you switch to another example, there is no need to switch the working directory.
 
 -------------
 
