@@ -25,7 +25,7 @@ box.*
 
 The book has been published in July 2020.
 
-- [Cambridge University Press page](https://www.cambridge.org/fi/academic/subjects/statistics-probability/statistical-theory-and-methods/regression-and-other-stories)
+- [Buy Regression and Other Stories from Cambridge University Press](https://doi.org/10.1017/9781139161879)
 
 - [Podcast: a special episode of Learning Bayesian Statistics featuring the ROS authors](https://www.learnbayesstats.com/episode/20-regression-and-other-stories-with-andrew-gelman-jennifer-hill-aki-vehtari)
   
