@@ -10,12 +10,12 @@ navbar:
     - text: "Errata"
       href: errata.html
     - text: "R and visualization"
-      href: R_visualizaton.html
+      href: R_visualization.html
 author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
 output:
   html_document:
     theme: readable
     toc: true
     toc_collapse: false
-    toc_depth: 3
+    toc_depth: 2
     toc_float: true
