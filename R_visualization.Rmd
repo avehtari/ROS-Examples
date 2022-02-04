@@ -1,0 +1,20 @@
+---
+title: "Regression and Other Stories - R and visualization"
+author: "Andrew Gelman, Jennifer Hill, Aki Vehtari"
+date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
+---
+
+-------------
+
+## R programming and visualization with R
+
+- For R programming basics see [Appendix A of Regression and Other Stories](Regression_and_Other_Stories_Appendix_A.pdf).
+- For learning more about R programming we recommend
+    - [Garrett Grolemund, Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
+- For learning more about basic and advanced plotting using R we recommend
+    - [Kieran Healy, Data Visualization - A practical introduction](https://socviz.co/)
+    - [Antony Unwin, Graphical Data Analysis with R](http://www.gradaanwr.net/)
+- Further ideas for visualization
+    - [ggdist: Visualizations of distributions and uncertainty](https://mjskay.github.io/ggdist/)
+    - [tidybayes: Bayesian analysis + tidy data + geoms](http://mjskay.github.io/tidybayes/)
+    - [Claus O. Wilke, Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
