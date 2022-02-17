@@ -85,6 +85,9 @@ usethis::use_data(health, overwrite = TRUE)
 helicopters <- read.table("https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Helicopters/data/helicopters.txt", header=TRUE)
 usethis::use_data(helicopters, overwrite = TRUE)
 
+lowbwt <- read.table("https://raw.githubusercontent.com/avehtari/ROS-Examples/master/LowBwt/data/lowbwt.dat", header=TRUE)
+usethis::use_data(lowbwt, overwrite = TRUE)
+
 mesquite <- read.table("https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Mesquite/data/mesquite.dat", header=TRUE)
 usethis::use_data(mesquite, overwrite = TRUE)
 

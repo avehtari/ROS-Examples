@@ -172,6 +172,13 @@
 #' @source \url{https://github.com/avehtari/ROS-Examples/tree/master/Helicopters/data}
 "helicopters"
 
+#' @title lowbwt
+#' @description LowBwt data set for Mesquite example in Regression and Other Stories.
+#' @format data.frame: 46 obs. of 8 variables
+#' @source \url{https://github.com/avehtari/ROS-Examples/tree/master/LowBwt/data} These data come from  Hosmer and Lemeshow (2000) Applied Logistic Regression: Second Edition.  These data are copyrighted by John Wiley & Sons Inc. and must be acknowledged and used accordingly.
+#' 
+"lowbwt"
+
 #' @title mesquite
 #' @description Mesquite data set for Mesquite example in Regression and Other Stories.
 #' @format data.frame: 46 obs. of 8 variables
