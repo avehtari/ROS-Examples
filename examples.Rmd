@@ -9,7 +9,7 @@ date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
 ## Introduction
 
 - The code and data are provided to fully reproduce the examples
-  and figurs in the book.  They can be a good way to see what the
+  and figures in the book.  They can be a good way to see what the
   code does. Different people have different styles of code.  The code here
   is not supposed to be a model.  The statistical analyses and
   graphs in the book are intended to be models for good practice,
