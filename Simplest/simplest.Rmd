@@ -72,7 +72,7 @@ a_hat <- coef(fit_1)[1]
 b_hat <- coef(fit_1)[2]
 abline(a_hat, b_hat)
 x_bar <- mean(fake$x)
-text(x_bar, a_hat + b_hat*x_bar, paste("   y =", round(a_hat, 2), "+", round(b_hat, 2), "* x"), adj=0)
+text(x_bar, a_hat + b_hat*x_bar-0.2, paste("   y =", round(a_hat, 2), "+", round(b_hat, 2), "* x"), adj=0)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) dev.off()
