@@ -17,9 +17,11 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 - p. 167, the code line `y_rep[s,1] <- y[1]` should be `y_rep[s,1] <- unemp$y[1]` (thanks to Ravi Shroff)
 - p. 181, ex 11.5(b) "Figure 10.2." should be "Figure 11.2." (thanks to Ravi Shroff)
 - p. 187, "a procedure that is equivalent to centering and rescaling is to leave" $\rightarrow$ "we can get the same inferences for the coefficients other than the intercept by leaving" (thanks to Ravi Shroff)
+- p. 209, "$\frac{p_0}{D-p_0}\frac{\sigma}{\sqrt{n}}$, where $p_0$ is the expected number of relevant predictors" $\rightarrow$ "$\frac{p_0}{p-p_0}\frac{\sigma}{\sqrt{n}}$, where $p$ is the number of predictors, $p_0$ is the expected number of relevant predictors" (thanks to Roberto Viviani)
 - p. 231, $\log(-.595)$ $\rightarrow$ $\log(0.595)$ (thanks to Daniel Timar)
 - p. 267 `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake, refresh=0)` $\rightarrow$ `fit_nb[[k]] <- stan_glm(y ~ x, family=neg_binomial_2(link="log"), data=fake_nb[[k]], refresh=0)` (thanks to Brian Bucher)
 - p. 268, `offset=log(exposure)` $\rightarrow$ `offset=log(exposure2)` (thanks to A. Solomon Kurz)
+- p. 269, `y_rep_1 <- posterior_predict(fit_1)` $\rightarrow$ `yrep_1 <- posterior_predict(fit_1)` (thanks to Darci Kovacs)
 - p. 285, The numbers for the earnings model on p.285 should be the same as on p. 284 (thanks to David Galley)
 - p. 295, $n=(2.8* 0.49/0.1)^2=196$ $\rightarrow$ $n=(2.8* 0.5/0.1)^2=196$, where $0.5$ is used as a conservative estimate of the standard deviation (thanks to Solomon A. Kurz)
 - p. 299, $0.5/1.15 = 0.43$ $\rightarrow$ $0.5/1.25 = 0.4$ (thanks to Solomon A. Kurz)
@@ -39,7 +41,7 @@ the true $\beta$ to be 2.8 standard errors from zero, so that there is
 an 80\% probability that $\hat{\beta}$ is at least 2 standard errors
 from zero.  If $\beta=0.018\%$, then its standard error would have to be
 no greater than $0.018/2.8$, so that the survey would need a sample
-size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
+size of $1629*(2.8*0.015/0.018)^2=9000$. (thanks to comment by Solomon A. Kurz, and typo fix by Patrick Wen)
 - p. 304 "only 44% of their children were girls" $\rightarrow$ "only 48% of their children were girls" (thanks to comment by Solomon A. Kurz)
 - p. 375, three regression equations (unnumbered, 19.2 and 19.3) are missing $\alpha  + $ from the beginning of RHS (right after $=$). (thanks to Junhui Yang)
 - p. 407, $\sum_{k=1}^K(X_{ik}-X_{jk})^2$ $\rightarrow$ $(\sum_{k=1}^K(X_{ik}-X_{jk})^2)^{1/2}$ (thanks to Stefan Gehrig)
@@ -78,6 +80,7 @@ size of $1629*(2.8*0.015/0.018)^2=900$. (thanks to comment by Solomon A. Kurz)
 - p. 208, Figure 12.11 all top row subplots show the prior distribution for the regularized horseshoe prior. The correct subplot are produced by the R code in [Student example](https://avehtari.github.io/ROS-Examples/Student/student.html) and shown below (thanks to Zhengchen Cai for reporting the issue)
  ![](Figure_12_11_correct.png){ width=800 }
 
+- p. 213, Ex 12.11, "$\beta$ is 0.3" $\rightarrow$ $\beta$ is $-0.3$ (thanks t o Justin Gross)
 - p. 217, First line in section 13.1 "The logistic function, logit(x)" $\rightarrow$ "The logit function, logit(x)" (thanks to VicentModesto)
 - p. 219, "The inverse logistic function is curved" $\rightarrow$ "The inverse logit function is curved" (thanks to VicentModesto)
 - p. 241-242, in paragraphs starting "The steps go..." and "Figure 14.2...": $(4.0/4.1)x_1$ $\rightarrow$ $(4.4/4.1)x_1$ (thanks to Doug Davidson)
