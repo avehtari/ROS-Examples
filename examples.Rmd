@@ -461,3 +461,9 @@ examples to Python using bambi (BAyesian Model-Building Interface)
 which has similar formula syntax as rstanarm and brms.
 
 - [Bambi resources](https://github.com/bambinos/Bambi_resources)
+
+## Julia code
+
+Rob J. Goedman is porting ROS examples to Julia.
+
+- [RegressionAndOtherStories.jl](https://github.com/RegressionAndOtherStoriesJulia/RegressionAndOtherStories.jl)

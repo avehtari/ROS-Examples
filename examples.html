@@ -63,6 +63,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -83,6 +84,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -308,7 +312,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -343,7 +347,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Examples</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2022-02-23</h4>
+<h4 class="date">Page updated: 2022-02-24</h4>
 
 </div>
 
@@ -1144,6 +1148,13 @@ root&lt;-has_file(&quot;.ROS-Examples-root&quot;)$make_fix_file()</code></pre>
 <p>Ravin Kumar, Tomás Capretto, and Osvaldo Martin are porting ROS examples to Python using bambi (BAyesian Model-Building Interface) which has similar formula syntax as rstanarm and brms.</p>
 <ul>
 <li><a href="https://github.com/bambinos/Bambi_resources">Bambi resources</a></li>
+</ul>
+</div>
+<div id="julia-code" class="section level2">
+<h2>Julia code</h2>
+<p>Rob J. Goedman is porting ROS examples to Julia.</p>
+<ul>
+<li><a href="https://github.com/RegressionAndOtherStoriesJulia/RegressionAndOtherStories.jl">RegressionAndOtherStories.jl</a></li>
 </ul>
 </div>
 
