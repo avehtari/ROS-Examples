@@ -101,7 +101,6 @@ if (savefigs) dev.off()
 #' ## Simulated data from two groups
 set.seed(SEED)
 N <- 100
-xx <- rnorm(N, 0, 1)^2
 z <- rep(0:1, N/2)
 xx <- ifelse(z==0, rnorm(N, 0, 1.2)^2, rnorm(N, 0, .8)^2)
 yy <- rnorm(N, 20 + 5*xx + 10*z, 3)

@@ -1,6 +1,6 @@
 Package: rosdata
 Title: Data for Regression and Other Stories
-Version: 0.1
+Version: 0.1.1
 Authors@R: 
     c(person("Andrew", "Gelman", , "gelman@stat.columbia.edu", role = c("aut")),
     person("Jennifer", "Hill", , "", role = c("aut")),
