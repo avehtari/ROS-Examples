@@ -72,6 +72,7 @@ size of $1629*(2.8*0.015/0.018)^2=9000$. (thanks to comment by Solomon A. Kurz, 
 - p. 143, the correct values for mean and sd in the last column of Figure 10.7 are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 143, 3rd line from bottom the correct values for mean and sd mentioned in the text are 260.1 and 2.5 (thanks to Eam O'Brien)
 - p. 159, "as in Figure 11.2" $\rightarrow$ "as in Figure 11.3" (thanks to Eam O'Brien)
+- p. 170, "Even though $R^2$ is much lower in Figure 11.16a, the model fits the data just as well as in Figure 11.16b." $\rightarrow$ "Even though $R^2$ is much lower in Figure 11.16b, the model fits the data just as well as in Figure 11.16a."
 - p. 174, "and so the log score is  $-\frac{1}{2}\log\sigma$" $\rightarrow$ "and so the log score is  $-\log\sigma$" (thanks to Matěj Grabovsky)
 - p. 179, `fit_2 <- update(fit_2, prior=hs())` $\rightarrow$ `fit_2 <- update(fit_1, prior=hs())` (thanks to Omri Har-Shemesh)
 - p. 183,  $\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$610$ $\rightarrow$  $\$1600* 3.8=\$63* 97=\$101\,000\,000* 0.000\,060=\$6100$ (thanks to Ravi Shroff)
