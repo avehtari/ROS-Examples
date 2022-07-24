@@ -12,6 +12,7 @@ If you notice an error that is not mentioned in the errata below, submit an issu
 
 ## 1st and 2nd printing
 
+- p. 39. the weight and metabolisim values in the text did not match with values in Figure 3.4. The values in the text have been made to match more accurately the values in the Figure 3.4. See more details in Schmidt-Nielsen (1984).
 - p. 146, $\mbox{RSS} = \sum_{i=1}^n(y_i - X\hat{\beta})^2$ should be $\mbox{RSS} = \sum_{i=1}^n(y_i - X_i\hat{\beta})^2$ (thanks to Ravi Shroff)
 - p. 150, ex 10.2b "for the treatment group and the control group," $\rightarrow$ "for the treatment group," (thanks to Jakob Staudt)
 - p. 167, the code line `y_rep[s,1] <- y[1]` should be `y_rep[s,1] <- unemp$y[1]` (thanks to Ravi Shroff)
