@@ -80,7 +80,7 @@ persp(x, y, z,
   xlab="a", ylab="b", zlab="likelihood", d=2, box=FALSE, axes=TRUE, expand=.6) -> res
 text(trans3d(mean(rng.x), rng.y[1]-.12*(rng.y[2]-rng.y[1]), 0, pm = res), expression(beta[0]))
 text(trans3d(rng.x[1]-.08*(rng.x[2]-rng.x[1]), mean(rng.y), 0, pm = res), expression(beta[1]))
-mtext("likelihood, p(a, b |y)", side=3, line=-1.5)
+mtext("likelihood, p(y | a, b)", side=3, line=-1.5)
 ```
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) dev.off()
