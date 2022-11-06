@@ -77,3 +77,5 @@ box.*
 - *'Overall this is a very modern, stats centred, engaging and careful book on the most common tool of statistical modelling!'* Christian P. Robert, Ceremade - Université Paris-Dauphine. The full review in a blog post [[The Art of] Regression and other stories](https://xianblog.wordpress.com/2020/07/23/the-art-of-regression-and-other-stories/).
 
 -------------
+
+[](https://bayes.club/@avehtari){rel="me"}
