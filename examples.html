@@ -14,6 +14,7 @@
 
 <title>Regression and Other Stories - Examples</title>
 
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -29,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -144,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -177,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -186,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -347,7 +345,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Regression and Other Stories - Examples</h1>
 <h4 class="author">Andrew Gelman, Jennifer Hill, Aki Vehtari</h4>
-<h4 class="date">Page updated: 2022-02-24</h4>
+<h4 class="date">Page updated: 2022-11-06</h4>
 
 </div>
 
@@ -356,12 +354,12 @@ div.tocify {
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <ul>
-<li>The code and data are provided to fully reproduce the examples and figures in the book. They can be a good way to see what the code does. Different people have different styles of code. The code here is not supposed to be a model. The statistical analyses and graphs in the book are intended to be models for good practice, but the code here is meant to be simple with minimal dependencies.</li>
+<li><p>The code and data are provided to fully reproduce the examples and figures in the book. They can be a good way to see what the code does. Different people have different styles of code. The code here is not supposed to be a model. The statistical analyses and graphs in the book are intended to be models for good practice, but the code here is meant to be simple with minimal dependencies.</p></li>
 <li><p>For R programming basics see Appendix A of Regression and Other Stories. If you want to learn more, see our recommendations for <a href="R_visualizaton.html">R programming and visualization with R</a>.</p></li>
-<li>The folders below (ending /) point to the code (.R and .Rmd) and <code>data</code> folders (.csv or .txt) in github, and .html -files point to knitted notebooks.</li>
-<li>Most examples have cleaned data in .csv file in <code>data</code> subfolder for easy experimenting. For completeness and reproducibility, the data subfolders have also the raw data and <code>*_setup.R</code> file showing how the data pre-processing has been done (to do the exercises and follow along with the examples, you don’t need to worry about the setup code).</li>
+<li><p>The folders below (ending /) point to the code (.R and .Rmd) and <code>data</code> folders (.csv or .txt + codebooks) in github, and .html -files point to knitted notebooks.</p></li>
+<li><p>Most examples have cleaned data in .csv file in <code>data</code> subfolder for easy experimenting. For completeness and reproducibility, the data subfolders have also the raw data and <code>*_setup.R</code> file showing how the data pre-processing has been done (to do the exercises and follow along with the examples, you don’t need to worry about the setup code). Most <code>data</code> folders hve also some codebook explaining the column names.</p></li>
 <li><p>For easy access to data sets, there is an R package <code>rosdata</code>. You can install it with a command <code>remotes::install_github("avehtari/ROS-Examples",subdir = "rpackage")</code>. Then you can access data, for example, as <code>library(rosdata)</code>, <code>data(wells)</code>, <code>head(wells)</code>. You can get the list of data sets with <code>?rosdata</code>.</p></li>
-<li>When running the notebooks, to avoid need to switch the working directory, <code>rprojroot</code> package is used to set the project root directory. The downloaded git repository can be placed anywhere you like and you can rename the ROS-Examples directory if you wish. When running the code, it is sufficient that the working directory is any directory in the ROS-Examples (or renamed). Running</li>
+<li><p>When running the notebooks, to avoid need to switch the working directory, <code>rprojroot</code> package is used to set the project root directory. The downloaded git repository can be placed anywhere you like and you can rename the ROS-Examples directory if you wish. When running the code, it is sufficient that the working directory is any directory in the ROS-Examples (or renamed). Running</p></li>
 </ul>
 <pre><code>library(&quot;rprojroot&quot;)
 root&lt;-has_file(&quot;.ROS-Examples-root&quot;)$make_fix_file()</code></pre>

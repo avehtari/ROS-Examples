@@ -17,14 +17,15 @@ date: "Page updated: `r format.Date(file.mtime('index.Rmd'),'%Y-%m-%d')`"
 - For R programming basics see Appendix A of Regression and Other Stories. If you want to learn more, see our recommendations for [R programming and visualization with R](R_visualizaton.html).
 
 - The folders below (ending /) point to the code (.R and .Rmd)
-  and `data` folders (.csv or .txt) in github, and .html -files
+  and `data` folders (.csv or .txt + codebooks) in github, and .html -files
   point to knitted notebooks.
 - Most examples have cleaned data in .csv file in `data` subfolder
   for easy experimenting. For completeness and reproducibility, the
   data subfolders have also the raw data and `*_setup.R` file showing
   how the data pre-processing has been done (to do the exercises
   and follow along with the examples, you don't need to worry about
-  the setup code).
+  the setup code). Most `data` folders hve also some codebook explaining
+  the column names.
 - For easy access to data sets, there is an R package `rosdata`. You can install it with a command `remotes::install_github("avehtari/ROS-Examples",subdir = "rpackage")`. Then you can access data, for example, as
 `library(rosdata)`, `data(wells)`, `head(wells)`. You can get the list of data sets with `?rosdata`.
 
