@@ -34,6 +34,8 @@ box.*
 
 - [ROS online PDF](https://users.aalto.fi/~ave/ROS.pdf). This PDF is free to view and download for personal use only. Not for re-distribution, re-sale or use in derivative works.<br> With permission from Cambridge University Press. The linked version has corrections up to the date mentioned on the front page. It is best to link to and download from this site [https://avehtari.github.io/ROS-Examples/](https://avehtari.github.io/ROS-Examples/), so that you and others will get the latest corrections and see the extra online material.
 
+- [Active Statistics: Stories, Games, Problems, and Hands-on Demonstrations for Applied Regression and Causal Inference](https://avehtari.github.io/ActiveStatistics/). This book provides statistics instructors and students with complete classroom material for a one- or two-semester course based on Regression and Other Stories book. 
+
 - If you notice an error that is not mentioned in [the errata](errata.html), [submit an issue](https://github.com/avehtari/ROS-Examples/issues) or send an email.
 
 
