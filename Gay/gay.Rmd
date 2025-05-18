@@ -25,7 +25,7 @@ savefigs <- FALSE
 
 #### Load packages
 
-```{r }
+```{r}
 library("rprojroot")
 root<-has_file(".ROS-Examples-root")$make_fix_file()
 library("rstanarm")
@@ -36,7 +36,7 @@ library("dbarts")
 
 #### Define common plot functions
 
-```{r }
+```{r}
 gay_plot <- function(fit=NULL, question=NULL, title=NULL, savefigs=FALSE) {
   if (savefigs) pdf(root("Gay/figs",paste("gay", index, ".pdf", sep="")), height=4.5, width=6)
   par(mar=c(3,3,1,1), mgp=c(1.7, .5, 0), tck=-.01)
@@ -90,7 +90,7 @@ gay_plot_2 <- function(fit=NULL, question=NULL, title=NULL, m=NULL) {
 
 #### Two different questions
 
-```{r }
+```{r}
 question <- c("Support for same-sex marriage", "Do you know any gay people?")
 variable <- c("gayFavorStateMarriage", "gayKnowSomeone")
 index <- 0
@@ -99,7 +99,7 @@ index <- 0
 #### Loop over two different questions
 Prepare variables to store results
 
-```{r }
+```{r}
 gay <- as.list(rep(NA, 2))
 gay_sum <- as.list(rep(NA, 2))
 gay_sum_2 <- as.list(rep(NA, 2))
@@ -148,12 +148,12 @@ for (j in 1:2){
 
   # Splines
   gay_spline[[j]] <- stan_gamm4(I(y/n) ~ s(age), data=gay_sum[[j]], adapt_delta=0.99)
-  gay_spline_fit <- posterior_linpred(gay_spline[[j]], data.frame(age=gay_sum[[j]]$age))
+  gay_spline_fit <- posterior_linpred(gay_spline[[j]], newdata=data.frame(age=gay_sum[[j]]$age))
   gay_plot(gay_spline_fit, question=question[j], title="Spline fit and uncertainty", savefigs = savefigs)
 
   # GP represented with splines
   gay_GP[[j]] <- stan_gamm4(I(y/n) ~ age + s(age, bs="gp"), data=gay_sum[[j]], prior_smooth=student_t(df=4, scale=100), adapt_delta=0.99)
-  gay_GP_fit <- posterior_linpred(gay_GP[[j]], data.frame(age=gay_sum[[j]]$age))
+  gay_GP_fit <- posterior_linpred(gay_GP[[j]], newdata=data.frame(age=gay_sum[[j]]$age))
   gay_plot(gay_GP_fit, question=question[j], title="Gaussian process fit and uncertainty", savefigs = savefigs)
   # BART
   output <- capture.output(
@@ -171,7 +171,7 @@ for (j in 1:2){
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Gay/figs","gay10.pdf"), height=4, width=10)
 ```
-```{r }
+```{r}
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfrow=c(1,2))
 for (j in 1:2){
@@ -188,7 +188,7 @@ if (savefigs) dev.off()
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Gay/figs","gay11.pdf"), height=10, width=7)
 ```
-```{r }
+```{r}
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(4,2), oma=c(0,0,2.5,0))
 for (j in 1:2){
@@ -197,10 +197,10 @@ for (j in 1:2){
   gay_loess_fit <- matrix(gay_loess_fit, nrow=100, ncol=length(gay_loess_fit), byrow=TRUE)
   gay_plot_1(gay_loess_fit, question=question[j], title="Loess fit", k_bottom=4)
   k=2
-  gay_spline_fit <- posterior_linpred(gay_spline[[j]], data.frame(age=gay_sum[[j]]$age))
+  gay_spline_fit <- posterior_linpred(gay_spline[[j]], newdata=data.frame(age=gay_sum[[j]]$age))
   gay_plot_1(gay_spline_fit, question=question[j], title="Spline fit and uncertainty", k_bottom=4)
   k=3
-  gay_GP_fit <- posterior_linpred(gay_GP[[j]], data.frame(age=gay_sum[[j]]$age))
+  gay_GP_fit <- posterior_linpred(gay_GP[[j]], newdata=data.frame(age=gay_sum[[j]]$age))
   gay_plot_1(gay_GP_fit, question="Support for same-sex marriage", title="Gaussian process fit and uncertainty", k_bottom=4)
   k=4
   gay_bart_fit <- pnorm(gay_bart[[j]]$yhat.test)
@@ -216,11 +216,11 @@ if (savefigs) dev.off()
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Gay/figs","gay12.pdf"), height=8, width=10)
 ```
-```{r }
+```{r}
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(2,2))
 for (j in 1:2){
-  gay_spline_2_fit <- posterior_linpred(gay_spline_2[[j]], data.frame(age=gay_sum_2[[j]]$age, male=gay_sum_2[[j]]$male))
+  gay_spline_2_fit <- posterior_linpred(gay_spline_2[[j]], newdata=data.frame(age=gay_sum_2[[j]]$age, male=gay_sum_2[[j]]$male))
   for (m in 0:1){                    
     gay_plot_2(gay_spline_2_fit, question=question[j], title="2-dimensional spline fit", m=m)
   }
@@ -234,7 +234,7 @@ if (savefigs) dev.off()
 ```{r eval=FALSE, include=FALSE}
 if (savefigs) pdf(root("Gay/figs","gay13.pdf"), height=5.5, width=7)
 ```
-```{r }
+```{r}
 par(mar=c(3,2,1,1), mgp=c(1.7, .5, 0), tck=-.01)
 par(mfcol=c(2,2), oma=c(0,0,2.5,0))
 for (j in 1:2){
@@ -243,7 +243,7 @@ for (j in 1:2){
   gay_loess_fit <- matrix(gay_loess_fit, nrow=100, ncol=length(gay_loess_fit), byrow=TRUE)
   gay_plot_1(gay_loess_fit, question=question[j], title="Loess fit", k_bottom=2)
   k=2
-  gay_spline_fit <- posterior_linpred(gay_spline[[j]], data.frame(age=gay_sum[[j]]$age))
+  gay_spline_fit <- posterior_linpred(gay_spline[[j]], newdata=data.frame(age=gay_sum[[j]]$age))
   gay_plot_1(gay_spline_fit, question=question[j], title="Spline fit and uncertainty", k_bottom=2)
   k=3
 }
